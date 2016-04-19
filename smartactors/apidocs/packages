@@ -14,8 +14,6 @@ info.smart_tools.smartactors.core.actors.mailing
 info.smart_tools.smartactors.core.actors.mailing.email
 info.smart_tools.smartactors.core.actors.session
 info.smart_tools.smartactors.core.actors.connection
-info.smart_tools.smartactors.core.actors.debugger
-info.smart_tools.smartactors.core.actors.debugger.wrappers
 info.smart_tools.smartactors.core.actors.checkpoint
 info.smart_tools.smartactors.core.actors.checkpoint.impl.strategies.schedule_resolution
 info.smart_tools.smartactors.core.actors.checkpoint.impl.strategies.feedback
