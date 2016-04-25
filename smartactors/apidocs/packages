@@ -25,6 +25,7 @@ info.smart_tools.smartactors.core.actors.checkpoint.impl.actions
 info.smart_tools.smartactors.core.actors.checkpoint.impl.exceptions
 info.smart_tools.smartactors.core.actors.scheduler.wrappers
 info.smart_tools.smartactors.core.actors.scheduler
+info.smart_tools.smartactors.core.actors.error
 info.smart_tools.smartactors.core.actors.config_accessor
 info.smart_tools.smartactors.core.actors.service
 info.smart_tools.smartactors.core.validation

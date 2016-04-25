@@ -15,6 +15,7 @@ info.smart_tools.smartactors.core.actors.connection
 info.smart_tools.smartactors.core.actors.db_accessor
 info.smart_tools.smartactors.core.actors.debugger
 info.smart_tools.smartactors.core.actors.debugger.wrappers
+info.smart_tools.smartactors.core.actors.error
 info.smart_tools.smartactors.core.actors.mailing
 info.smart_tools.smartactors.core.actors.mailing.email
 info.smart_tools.smartactors.core.actors.scheduler
