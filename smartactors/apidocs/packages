@@ -27,6 +27,9 @@ info.smart_tools.smartactors.core.actors.scheduler.wrappers
 info.smart_tools.smartactors.core.actors.scheduler
 info.smart_tools.smartactors.core.actors.error
 info.smart_tools.smartactors.core.actors.config_accessor
+info.smart_tools.smartactors.core.actors.client.wrapper
+info.smart_tools.smartactors.core.actors.client
+info.smart_tools.smartactors.core.actors.client.strategy
 info.smart_tools.smartactors.core.actors.service
 info.smart_tools.smartactors.core.validation
 info.smart_tools.smartactors.core.routers
@@ -55,6 +58,7 @@ info.smart_tools.smartactors.core.services.endpoints.netty.http.get
 info.smart_tools.smartactors.core.services.endpoints.netty.http.get.response
 info.smart_tools.smartactors.core.services.endpoints.netty.http.get.exchange
 info.smart_tools.smartactors.core.services.endpoints.netty.http.get.util
+info.smart_tools.smartactors.core.services.endpoints.netty.http.client_handler
 info.smart_tools.smartactors.core.services.endpoints.netty.http.deserialize_strategy
 info.smart_tools.smartactors.core.services.execution
 info.smart_tools.smartactors.core.services.scheduling
