@@ -1,0 +1,10 @@
+info.smart_tools.smartactors.core.iobject
+info.smart_tools.smartactors.core.iobject.exception
+info.smart_tools.smartactors.core.ioc
+info.smart_tools.smartactors.core.ioc.exception
+info.smart_tools.smartactors.core.iscope
+info.smart_tools.smartactors.core.iscope.exception
+info.smart_tools.smartactors.core.iscope_provider
+info.smart_tools.smartactors.core.iscope_provider.exception
+info.smart_tools.smartactors.core.recursive_scope
+info.smart_tools.smartactors.core.scope_provider_implementation
