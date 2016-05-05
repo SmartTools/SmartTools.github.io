@@ -1,8 +1,8 @@
 info.smart_tools.smartactors.core
 info.smart_tools.smartactors.core.mailboxes
+info.smart_tools.smartactors.core.receivers
 info.smart_tools.smartactors.core.receivers.invocation
 info.smart_tools.smartactors.core.receivers.exchanging
-info.smart_tools.smartactors.core.receivers
 info.smart_tools.smartactors.core.wrapper_generator.annotations
 info.smart_tools.smartactors.core.wrapper_generator
 info.smart_tools.smartactors.core.wrapper_generator.strategy
