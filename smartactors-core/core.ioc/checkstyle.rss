@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 6,
+      <title>File: 2,
              Errors: 0,
              Warnings: 0,
              Infos: 0
@@ -46,63 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.ioc//checkstyle.html#info.smart_tools.smartactors.core.ioc.exception.ResolutionException.java">info/smart_tools/smartactors/core/ioc/exception/ResolutionException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.ioc//checkstyle.html#info.smart_tools.smartactors.core.ioc.IOC.java">info/smart_tools/smartactors/core/ioc/IOC.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.ioc//checkstyle.html#info.smart_tools.smartactors.core.ioc.IContainer.java">info/smart_tools/smartactors/core/ioc/IContainer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.ioc//checkstyle.html#info.smart_tools.smartactors.core.ioc.exception.RegistrationException.java">info/smart_tools/smartactors/core/ioc/exception/RegistrationException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.ioc//checkstyle.html#info.smart_tools.smartactors.core.ioc.exception.package-info.java">info/smart_tools/smartactors/core/ioc/exception/package-info.java</a>
                 </td>
                 <td>
                   0
