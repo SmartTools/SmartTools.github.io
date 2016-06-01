@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.iserver,info.smart_tools.smartactors.core.iserver.exception,ServerExecutionException,0,13,0,0,0,6,0,3,0,3
+core.iserver,info.smart_tools.smartactors.core.iserver.exception,ServerInitializeException,0,13,0,0,0,6,0,3,0,3
