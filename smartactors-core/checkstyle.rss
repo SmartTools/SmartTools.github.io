@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 79,
+      <title>File: 87,
              Errors: 0,
-             Warnings: 3,
+             Warnings: 5,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -53,6 +53,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask.java">info/smart_tools/smartactors/core/idatabase_task/IDatabaseTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -144,6 +158,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask.exception.package-info.java">info/smart_tools/smartactors/core/itask/exception/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.server_with_ioc.package-info.java">info/smart_tools/smartactors/core/server_with_ioc/package-info.java</a>
                 </td>
                 <td>
@@ -201,6 +229,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException.java">info/smart_tools/smartactors/core/iioccontainer/exception/RegistrationException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask.ITask.java">info/smart_tools/smartactors/core/itask/ITask.java</a>
                 </td>
                 <td>
                   0
@@ -298,6 +340,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask.package-info.java">info/smart_tools/smartactors/core/itask/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy.java">info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.java</a>
                 </td>
                 <td>
@@ -369,6 +425,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.IFieldName.java">info/smart_tools/smartactors/core/iobject/IFieldName.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.exception.package-info.java">info/smart_tools/smartactors/core/idatabase_task/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -858,6 +928,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.package-info.java">info/smart_tools/smartactors/core/idatabase_task/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.recursive_scope.ScopeFactory.java">info/smart_tools/smartactors/core/recursive_scope/ScopeFactory.java</a>
                 </td>
                 <td>
@@ -1103,6 +1187,34 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask.exception.TaskExecutionException.java">info/smart_tools/smartactors/core/itask/exception/TaskExecutionException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException.java">info/smart_tools/smartactors/core/idatabase_task/exception/TaskPrepareException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
