@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PluginLoader.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.plugin_loader_from_jar</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.plugin_loader_from_jar</a> &gt; <span class="el_source">PluginLoader.java</span></div><h1>PluginLoader.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.plugin_loader_from_jar;
+
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
+import info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
+import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+/**
+ * Implementation of {@link info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader}.
+ * &lt;pre&gt;
+ * Main features of implementation:
+ * - find implementation of {@link info.smart_tools.smartactors.core.iplugin.IPlugin} in given Jar file.
+ * - implementation of {@link info.smart_tools.smartactors.core.iplugin.IPlugin} should be has constructor with
+ * given parameters.
+ * &lt;/pre&gt;
+ */
+public class PluginLoader implements IPluginLoader&lt;String&gt; {
+
+    private static final String CLASS_EXTENSION = &quot;.class&quot;;
+
+    /** ClassLoader for load classes*/
+    private ExpansibleURLClassLoader classLoader;
+
+    /** Action to create instance of given class */
+    private IAction&lt;Class&gt; creator;
+
+    /** Visitor contains some handlers to handle success or fail loading execution */
+    private IPluginLoaderVisitor&lt;String&gt; visitor;
+
+    /**
+     * Constructor with two arguments
+     * @param classLoader instance of {@link ClassLoader}
+     * @param action instance of {@link IAction}
+     * @param visitor instance of {@link IPluginLoaderVisitor}
+     * @throws InvalidArgumentException if incoming argument are wrong
+     */
+    public PluginLoader(final ClassLoader classLoader, final IAction&lt;Class&gt; action, final IPluginLoaderVisitor&lt;String&gt; visitor)
+<span class="fc" id="L47">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L48" title="2 of 6 branches missed.">        if (null == action || null == classLoader || null == visitor) {</span>
+<span class="fc" id="L49">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+        }
+<span class="fc" id="L51">        this.creator = action;</span>
+<span class="fc" id="L52">        this.visitor = visitor;</span>
+        try {
+<span class="fc" id="L54">            this.classLoader = (ExpansibleURLClassLoader) classLoader;</span>
+<span class="fc" id="L55">        } catch (Throwable e) {</span>
+<span class="fc" id="L56">            throw new InvalidArgumentException(&quot;Could not cast given ClassLoader to the URLClassLoader.&quot;);</span>
+<span class="fc" id="L57">        }</span>
+<span class="fc" id="L58">    }</span>
+
+    @Override
+    public void loadPlugin(final String pathToJar)
+            throws PluginLoaderException {
+<span class="fc" id="L63">        JarFile jarFile = null;</span>
+        try {
+<span class="fc" id="L65">            jarFile = new JarFile(pathToJar);</span>
+<span class="fc" id="L66">            Enumeration&lt;JarEntry&gt; iterator = jarFile.entries();</span>
+<span class="fc" id="L67">            URL url = new URL(&quot;jar:file:&quot; + pathToJar + &quot;!/&quot;);</span>
+<span class="fc" id="L68">            this.classLoader.addUrl(url);</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            while (iterator.hasMoreElements()) {</span>
+<span class="fc" id="L71">                JarEntry je = iterator.nextElement();</span>
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">                if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {</span>
+<span class="nc" id="L73">                    continue;</span>
+                }
+<span class="fc" id="L75">                String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());</span>
+<span class="fc" id="L76">                className = className.replace('/', '.');</span>
+<span class="fc" id="L77">                Class clazz = classLoader.loadClass(className);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {</span>
+<span class="fc" id="L79">                    creator.execute(clazz);</span>
+                }
+<span class="fc" id="L81">            }</span>
+<span class="fc" id="L82">        } catch (Throwable e) {</span>
+<span class="fc" id="L83">            visitor.pluginLoadingFail(pathToJar, e);</span>
+<span class="fc" id="L84">            throw new PluginLoaderException(&quot;Plugin loading failed.&quot;, e);</span>
+        } finally {
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">            if (null != jarFile) {</span>
+                try {
+<span class="fc" id="L88">                    jarFile.close();</span>
+<span class="nc" id="L89">                } catch (IOException e) {</span>
+<span class="pc" id="L90">                    throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
+<span class="fc" id="L91">                }</span>
+            }
+        }
+<span class="fc" id="L94">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

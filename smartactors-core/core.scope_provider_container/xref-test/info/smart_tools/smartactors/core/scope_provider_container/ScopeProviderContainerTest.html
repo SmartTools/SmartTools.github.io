@@ -8,7 +8,7 @@
 <div id="overview"><a href="../../../../../../testapidocs/info/smart_tools/smartactors/core/scope_provider_container/ScopeProviderContainerTest.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.scope_provider_container;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobserver.IObserver;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScope;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScopeFactory;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope_provider_container.IScopeProviderContainer;
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>         IScope scope = mock(IScope.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         IScopeFactory factory = mock(IScopeFactory.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>         IScopeProviderContainer scopeProviderContainer = <strong class="jxr_keyword">new</strong> ScopeProviderContainer(factory);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>         IObserver observer = mock(IObserver.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         IAction observer = mock(IAction.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>         Object param = <strong class="jxr_keyword">new</strong> Object();
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>         when(factory.createScope(param)).thenReturn(scope);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>         doNothing().when(observer).execute(scope);
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         IScope scope = mock(IScope.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>         IScopeFactory factory = mock(IScopeFactory.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>         IScopeProviderContainer scopeProviderContainer = <strong class="jxr_keyword">new</strong> ScopeProviderContainer(factory);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         IObserver observer = mock(IObserver.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         IAction observer = mock(IAction.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         Object param = <strong class="jxr_keyword">new</strong> Object();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>         when(factory.createScope(param)).thenReturn(scope);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>         doNothing().when(observer).execute(scope);

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Feature.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.feature_manager</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.feature_manager</a> &gt; <span class="el_source">Feature.java</span></div><h1>Feature.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.feature_manager;
+
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
+import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+/**
+ * Implementation of {@link IFeature}.
+ */
+class Feature implements IFeature {
+    private Set&lt;String&gt; expectedFileNames;
+    private List&lt;File&gt; presentFiles;
+    private List&lt;IAction&lt;Collection&lt;File&gt;&gt;&gt; actions;
+    private boolean isListening;
+    private boolean isPresent;
+    private final Object lock;
+    private String name;
+    private IAction&lt;File&gt; fileHandleAction;
+    private IFilesystemTracker filesystemTracker;
+
+    /**
+     * Action to execute when filesystem tracker notifies feature about new files.
+     */
+<span class="fc" id="L35">    private class FileHandlerAction implements IAction&lt;File&gt; {</span>
+        @Override
+        public void execute(final File file)
+                throws ActionExecuteException {
+<span class="fc" id="L39">            synchronized (Feature.this.lock) {</span>
+<span class="fc" id="L40">                String fileName = file.getName();</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                if (expectedFileNames.contains(fileName)) {</span>
+<span class="fc" id="L43">                    presentFiles.add(file);</span>
+                }
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                if (presentFiles.size() != expectedFileNames.size()) {</span>
+<span class="fc" id="L47">                    return;</span>
+                }
+
+<span class="fc" id="L50">                Feature.this.isPresent = true;</span>
+<span class="fc" id="L51">                filesystemTracker.removeFileHandler(FileHandlerAction.this);</span>
+<span class="pc" id="L52">            }</span>
+
+<span class="fc" id="L54">            List&lt;ActionExecuteException&gt; exceptions = new LinkedList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            for (IAction&lt;Collection&lt;File&gt;&gt; action : actions) {</span>
+                try {
+<span class="fc" id="L58">                    action.execute(new ArrayList&lt;&gt;(presentFiles));</span>
+<span class="nc" id="L59">                } catch (InvalidArgumentException e) {</span>
+                    //TODO: may be need another action
+<span class="nc" id="L61">                    throw new ActionExecuteException(e);</span>
+<span class="fc" id="L62">                } catch (ActionExecuteException e) {</span>
+<span class="fc" id="L63">                    exceptions.add(e);</span>
+<span class="fc" id="L64">                }</span>
+<span class="fc" id="L65">            }</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (0 != exceptions.size()) {</span>
+<span class="fc" id="L68">                ActionExecuteException exception = new ActionExecuteException(</span>
+                        &quot;Error(s) occurred while executing actions specified for feature&quot;,
+<span class="fc" id="L70">                        exceptions.remove(0));</span>
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                for (ActionExecuteException e : exceptions) {</span>
+<span class="fc" id="L73">                    exception.addSuppressed(e);</span>
+<span class="fc" id="L74">                }</span>
+
+<span class="fc" id="L76">                throw exception;</span>
+            }
+<span class="fc" id="L78">        }</span>
+    }
+
+    /**
+     * The constructor.
+     *
+     * @param name                  name of the feature
+     * @param filesystemTracker     {@link IFilesystemTracker} instance to use
+     * @throws InvalidArgumentException if {@code name} is {@code null}
+     * @throws InvalidArgumentException if {@code filesystemTracker} is {@code null}
+     */
+    Feature(final String name, final IFilesystemTracker filesystemTracker)
+<span class="fc" id="L90">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L92">            throw new InvalidArgumentException(&quot;Feature name should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (null == filesystemTracker) {</span>
+<span class="fc" id="L96">            throw new InvalidArgumentException(&quot;File system tracker should not be null.&quot;);</span>
+        }
+
+<span class="fc" id="L99">        this.expectedFileNames = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L100">        this.presentFiles = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L101">        this.actions = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L102">        this.isListening = false;</span>
+<span class="fc" id="L103">        this.isPresent = false;</span>
+<span class="fc" id="L104">        this.lock = new Object();</span>
+<span class="fc" id="L105">        this.name = name;</span>
+<span class="fc" id="L106">        this.fileHandleAction = new FileHandlerAction();</span>
+<span class="fc" id="L107">        this.filesystemTracker = filesystemTracker;</span>
+<span class="fc" id="L108">    }</span>
+
+    @Override
+    public void requireFile(final String fileName)
+            throws FeatureManagementException {
+<span class="fc" id="L113">        synchronized (this.lock) {</span>
+<span class="pc bpc" id="L114" title="1 of 4 branches missed.">            if (isListening || isPresent) {</span>
+<span class="fc" id="L115">                throw new FeatureManagementException(&quot;requireFile() called after listening started.&quot;);</span>
+            }
+
+<span class="fc" id="L118">            expectedFileNames.add(fileName);</span>
+<span class="fc" id="L119">        }</span>
+<span class="fc" id="L120">    }</span>
+
+    @Override
+    public void whenPresent(final IAction&lt;Collection&lt;File&gt;&gt; action)
+            throws FeatureManagementException {
+<span class="fc" id="L125">        synchronized (this.lock) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            if (isPresent) {</span>
+                try {
+<span class="fc" id="L128">                    action.execute(presentFiles);</span>
+<span class="fc" id="L129">                } catch (ActionExecuteException e) {</span>
+<span class="fc" id="L130">                    throw new FeatureManagementException(&quot;Error occurred executing action for a feature that already is present:&quot;, e);</span>
+<span class="nc" id="L131">                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L132">                    throw new FeatureManagementException(&quot;Invalid function argument.&quot;, e);</span>
+<span class="fc" id="L133">                }</span>
+            } else {
+<span class="fc" id="L135">                actions.add(action);</span>
+            }
+<span class="fc" id="L137">        }</span>
+<span class="fc" id="L138">    }</span>
+
+    @Override
+    public void listen()
+            throws FeatureManagementException {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (0 == expectedFileNames.size()) {</span>
+<span class="fc" id="L144">            throw new FeatureManagementException(&quot;No files defined for this feature.&quot;);</span>
+        }
+
+<span class="fc" id="L147">        synchronized (this.lock) {</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (this.isListening) {</span>
+<span class="fc" id="L149">                throw new FeatureManagementException(&quot;listen() called twice.&quot;);</span>
+            }
+
+<span class="fc" id="L152">            this.filesystemTracker.addFileHandler(this.fileHandleAction);</span>
+
+<span class="fc" id="L154">            this.isListening = true;</span>
+<span class="fc" id="L155">        }</span>
+<span class="fc" id="L156">    }</span>
+
+    @Override
+    public String getName() {
+<span class="fc" id="L160">        return this.name;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -8,7 +8,7 @@
 <div id="overview"><a href="../../../../../../apidocs/info/smart_tools/smartactors/core/scope_provider/ScopeProvider.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.scope_provider;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobserver.IObserver;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScope;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScopeFactory;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope_provider_container.IScopeProviderContainer;
@@ -117,7 +117,7 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">     * @param handler handler for execute when event will be happened</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">     * @throws ScopeProviderException if any errors occurred</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IObserver&lt;IScope&gt; handler)
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IAction&lt;IScope&gt; handler)
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">throws</strong> ScopeProviderException {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>         container.subscribeOnCreationNewScope(handler);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>     }

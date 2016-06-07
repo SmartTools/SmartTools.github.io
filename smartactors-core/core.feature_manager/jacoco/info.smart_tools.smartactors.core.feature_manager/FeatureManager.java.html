@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FeatureManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.feature_manager</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.feature_manager</a> &gt; <span class="el_source">FeatureManager.java</span></div><h1>FeatureManager.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.feature_manager;
+
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager;
+import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
+import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+
+/**
+ * Implementation of {@link IFeatureManager}.
+ */
+public class FeatureManager implements IFeatureManager {
+    private IFilesystemTracker filesystemTracker;
+
+    /**
+     * The constructor.
+     *
+     * @param filesystemTracker the {@link IFilesystemTracker} instance to use
+     * @throws InvalidArgumentException if {@code filesystemTracker} is {@code null}
+     */
+    public FeatureManager(final IFilesystemTracker filesystemTracker)
+<span class="fc" id="L22">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (null == filesystemTracker) {</span>
+<span class="fc" id="L24">            throw new InvalidArgumentException(&quot;Filesystem tracker should not be null.&quot;);</span>
+        }
+
+<span class="fc" id="L27">        this.filesystemTracker = filesystemTracker;</span>
+<span class="fc" id="L28">    }</span>
+
+    @Override
+    public IFeature newFeature(final String name) throws FeatureManagementException {
+        try {
+<span class="fc" id="L33">            return new Feature(name, this.filesystemTracker);</span>
+<span class="fc" id="L34">        } catch (InvalidArgumentException e) {</span>
+<span class="fc" id="L35">            throw new FeatureManagementException(&quot;Error creating new feature.&quot;, e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

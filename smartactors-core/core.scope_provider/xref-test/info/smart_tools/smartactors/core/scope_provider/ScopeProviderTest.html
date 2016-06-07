@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.scope_provider;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobserver.IObserver;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScope;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Test
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> checkSubscribeOnCreationNewScope()
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          IObserver observer = mock(IObserver.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          IAction observer = mock(IAction.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          doNothing().when(observer).execute(any(IScope.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          ScopeProvider.subscribeOnCreationNewScope(observer);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          ScopeProvider.createScope(<strong class="jxr_keyword">null</strong>);
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      @Test
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> checkClearListOfSubscribers()
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          IObserver observer = mock(IObserver.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          IAction observer = mock(IAction.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          doNothing().when(observer).execute(any(IScope.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          ScopeProvider.subscribeOnCreationNewScope(observer);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          ScopeProvider.createScope(<strong class="jxr_keyword">null</strong>);

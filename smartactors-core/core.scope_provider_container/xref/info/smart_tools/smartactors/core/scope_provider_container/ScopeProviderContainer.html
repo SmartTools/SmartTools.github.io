@@ -8,7 +8,7 @@
 <div id="overview"><a href="../../../../../../apidocs/info/smart_tools/smartactors/core/scope_provider_container/ScopeProviderContainer.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.scope_provider_container;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobserver.IObserver;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScope;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScopeFactory;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope_provider_container.IScopeProviderContainer;
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Local storage for create scope event handlers</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> List&lt;IObserver&lt;IScope&gt;&gt; handlerStorage = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> List&lt;IAction&lt;IScope&gt;&gt; handlerStorage = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * Constructor with {@link IScopeFactory}</em>
@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">public</strong> IScope getScope(<strong class="jxr_keyword">final</strong> Object key) <strong class="jxr_keyword">throws</strong> ScopeProviderException {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          IScope scope = scopeStorage.get(key);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">if</strong> (scope == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == scope) {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ScopeProviderException(<span class="jxr_string">"Scope not found."</span>);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          }
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">public</strong> IScope getCurrentScope()
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>              <strong class="jxr_keyword">throws</strong> ScopeProviderException {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          IScope scope = currentScope.get();
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">if</strong> (scope == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == scope) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ScopeProviderException(<span class="jxr_string">"Current Scope is null."</span>);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          }
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>             <strong class="jxr_keyword">throws</strong> ScopeProviderException {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>             IScope newScope = factory.createScope(params);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>             <strong class="jxr_keyword">for</strong> (IObserver &lt;IScope&gt; handler : handlerStorage) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>             <strong class="jxr_keyword">for</strong> (IAction&lt;IScope&gt; handler : handlerStorage) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>                 handler.execute(newScope);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>             }
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>             Object uuid = UUID.randomUUID();
@@ -150,9 +150,9 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     * @throws ScopeProviderException if any errors occurred</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>     @Override
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IObserver&lt;IScope&gt; handler)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IAction&lt;IScope&gt; handler)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>             <strong class="jxr_keyword">throws</strong> ScopeProviderException {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">if</strong> (handler == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == handler) {
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ScopeProviderException(<span class="jxr_string">"Incoming argument should not be null"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>         }
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>         handlerStorage.add(handler);
