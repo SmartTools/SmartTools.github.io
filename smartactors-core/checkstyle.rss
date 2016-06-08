@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 158,
+      <title>File: 163,
              Errors: 0,
-             Warnings: 10,
+             Warnings: 12,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -186,6 +186,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.exception.PoolGuardException.java">info/smart_tools/smartactors/core/pool_guard/exception/PoolGuardException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iplugin_creator.package-info.java">info/smart_tools/smartactors/core/iplugin_creator/package-info.java</a>
                 </td>
                 <td>
@@ -291,6 +305,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.PoolGuard.java">info/smart_tools/smartactors/core/pool_guard/PoolGuard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -677,6 +705,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager.java">info/smart_tools/smartactors/core/ifeature_manager/IFeatureManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.package-info.java">info/smart_tools/smartactors/core/pool_guard/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1600,6 +1642,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.IPoolGuard.java">info/smart_tools/smartactors/core/pool_guard/IPoolGuard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.IFieldName.java">info/smart_tools/smartactors/core/iobject/IFieldName.java</a>
                 </td>
                 <td>
@@ -1657,6 +1713,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.test_jar.package-info.java">info/smart_tools/smartactors/plugin/test_jar/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.exception.package-info.java">info/smart_tools/smartactors/core/pool_guard/exception/package-info.java</a>
                 </td>
                 <td>
                   0

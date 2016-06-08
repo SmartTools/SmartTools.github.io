@@ -50,6 +50,8 @@ info.smart_tools.smartactors.core.named_keys_storage
 info.smart_tools.smartactors.core.plugin_creator
 info.smart_tools.smartactors.core.plugin_loader_from_jar
 info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementation
+info.smart_tools.smartactors.core.pool_guard
+info.smart_tools.smartactors.core.pool_guard.exception
 info.smart_tools.smartactors.core.recursive_scope
 info.smart_tools.smartactors.core.resolve_by_name_ioc_strategy
 info.smart_tools.smartactors.core.resolve_by_name_ioc_with_lambda_strategy
