@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 153,
+      <title>File: 157,
              Errors: 0,
              Warnings: 9,
              Infos: 0
@@ -75,6 +75,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iioccontainer.exception.DeletionException.java">info/smart_tools/smartactors/core/iioccontainer/exception/DeletionException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipool.package-info.java">info/smart_tools/smartactors/core/ipool/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -201,6 +215,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.load_scope_povider.package-info.java">info/smart_tools/smartactors/plugin/load_scope_povider/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.package-info.java">info/smart_tools/smartactors/core/ipool/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1376,6 +1404,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipool.IPool.java">info/smart_tools/smartactors/core/ipool/IPool.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.named_keys_storage.package-info.java">info/smart_tools/smartactors/core/named_keys_storage/package-info.java</a>
                 </td>
                 <td>
@@ -1909,6 +1951,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.package-info.java">info/smart_tools/smartactors/core/idatabase_task/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.PoolException.java">info/smart_tools/smartactors/core/ipool/exception/PoolException.java</a>
                 </td>
                 <td>
                   0

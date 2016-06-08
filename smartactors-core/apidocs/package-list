@@ -32,6 +32,8 @@ info.smart_tools.smartactors.core.iplugin_creator.exception
 info.smart_tools.smartactors.core.iplugin_loader
 info.smart_tools.smartactors.core.iplugin_loader.exception
 info.smart_tools.smartactors.core.iplugin_loader_visitor
+info.smart_tools.smartactors.core.ipool
+info.smart_tools.smartactors.core.ipool.exception
 info.smart_tools.smartactors.core.iresolve_dependency_strategy
 info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception
 info.smart_tools.smartactors.core.iscope
