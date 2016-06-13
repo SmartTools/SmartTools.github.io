@@ -81,3 +81,4 @@ info.smart_tools.smartactors.utils.ioc.strategy.common
 info.smart_tools.smartactors.utils.listeners
 info.smart_tools.smartactors.utils.reflection
 info.smart_tools.smartactors.utils.scope
+test
