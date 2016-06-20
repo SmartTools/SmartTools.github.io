@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 229,
+      <title>File: 232,
              Errors: 0,
-             Warnings: 265,
+             Warnings: 278,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -690,6 +690,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyRecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/MyRecursiveContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_connection.JDBCCompiledQuery.java">info/smart_tools/smartactors/core/postgres_connection/JDBCCompiledQuery.java</a>
                 </td>
                 <td>
@@ -711,6 +725,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOCException.java">info/smart_tools/smartactors/core/examples/scope/MyIOCException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
                 <td>
                   0
@@ -1383,6 +1411,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOC.java">info/smart_tools/smartactors/core/examples/scope/MyIOC.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
                 </td>
                 <td>
                   0

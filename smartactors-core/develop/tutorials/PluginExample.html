@@ -784,16 +784,24 @@
         <div id="bodyColumn"  class="span10" >
                                   
             <h1>How to use Plugins</h1>
-<p>Plugin is a set of functionality, i.e. Java classes packed into one or multiple JAR files. The Server loads and initializes such JARs.</p>
+<div class="section">
+<h2><a name="Overview"></a>Overview</h2>
+<p>Plugin is a set of functionality, i.e. Java classes packed into one or multiple JAR files. The Server loads and initializes such JARs.</p></div>
+<div class="section">
+<h2><a name="Loading_and_initialization_steps"></a>Loading and initialization steps</h2>
 <p>Loading and initializing are two separate steps of the process.</p>
 <p>At the first step a part of the server, the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html"><tt>PluginLoader</tt></a> scans the JAR file for implementations of <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iplugin/IPlugin.html"><tt>IPlugin</tt></a>. It uses <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_creator/PluginCreator.html"><tt>PluginCreator</tt></a> to instantiate the Plugin by passing the instance of <tt>IBootstrap</tt> to it&#x2019;s constructor. The <tt>load()</tt> method of each Plugin is called here.</p>
 <p>In it&#x2019;s <tt>load()</tt> method the Plugin adds it&#x2019;s own <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ibootstrap_item/IBootstrapItem.html"><tt>IBootstrapItem</tt></a> into the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ibootstrap/IBootstrap.html"><tt>IBootstrap</tt></a> known to him. The <tt>IBootstrapItem</tt> gives the name of the part of the functionality provided by the plugin and allows to declare dependencies from the other bootstrap items using the <tt>after()</tt> and <tt>before()</tt> methods. Finally the sequence of the bootstrap items according to the dependencies is constructed and their <tt>executeProcess()</tt> is called. This is the second step of the initialization.</p>
-<p><img src="http://www.plantuml.com/plantuml/img/IyxFBSZFIyqhKGXEBIfBBU9AXWi4v9IcP-OX2JZbvvSKbnGb5c0Jyon9pUNYWXYYaA-hQwUWfAK4DKF1IY4dFp6b65KUhXKedLgHcbnQaWfK0TMX1JC1nGAWoeAY_BBC591AX7wSYfFpSt9IaqkG5ODba6s7AarAJSilIYMiBZ6j11XA0000" alt="Plugins and Bootstrap" /></p>
+<p><img src="http://www.plantuml.com/plantuml/img/IyxFBSZFIyqhKGXEBIfBBU9AXWi4v9IcP-OX2JZbvvSKbnGb5c0Jyon9pUNYWXYYaA-hQwUWfAK4DKF1IY4dFp6b65KUhXKedLgHcbnQaWfK0TMX1JC1nGAWoeAY_BBC591AX7wSYfFpSt9IaqkG5ODba6s7AarAJSilIYMiBZ6j11XA0000" alt="Plugins and Bootstrap" /></p></div>
+<div class="section">
+<h2><a name="Sample_plugin"></a>Sample plugin</h2>
 <p>Let create a sample plugin.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">public class MyPlugin implements IPlugin {
 </pre></div></div>
+<div class="section">
+<h3><a name="Bootstrap_reference"></a>Bootstrap reference</h3>
 <p>It must contain a reference to <tt>Bootstrap</tt> provided during initialization process.</p>
 
 <div class="source">
@@ -805,7 +813,9 @@
 <div class="source"><pre class="prettyprint">public MyPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {
     this.bootstrap = bootstrap;
 }
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="Load_method"></a>Load method</h3>
 <p>You have to define the <tt>load()</tt> method.</p>
 
 <div class="source">
@@ -821,7 +831,9 @@ public void load() throws PluginException {
 
 <div class="source">
 <div class="source"><pre class="prettyprint">item.after(&quot;IOC&quot;);
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="Initialization_callback"></a>Initialization callback</h3>
 <p>Then you define your plugin initialization code. For example, let register some new strategy in IOC.</p>
 
 <div class="source">
@@ -834,34 +846,48 @@ public void load() throws PluginException {
         throw new RuntimeException(e);
     }
 });
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="Registering_the_callback"></a>Registering the callback</h3>
 <p>Finally you should add your bootstrap item into <tt>Bootstrap</tt>: </p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">bootstrap.add(item);
-</pre></div></div>
+</pre></div></div></div></div>
+<div class="section">
+<h2><a name="How_plugins_are_loaded"></a>How plugins are loaded</h2>
 <p>On the server side the loading of the plugin may looks as the following.</p>
+<div class="section">
+<h3><a name="Bootstrap"></a>Bootstrap</h3>
 <p>The server initializes the <tt>Bootstrap</tt> to handle the initialization sequence.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IBootstrap bootstrap = new Bootstrap();
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="PluginCreator"></a>PluginCreator</h3>
 <p>Also it uses <tt>PluginCreator</tt> to find and call the correct constructor of <tt>IPlugin</tt>.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IPluginCreator creator = new PluginCreator();
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="PluginLoaderVisitor"></a>PluginLoaderVisitor</h3>
 <p>A <tt>IPluginLoaderVisitor</tt> is necessary to track plugins loading process.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IPluginLoaderVisitor&lt;String&gt; visitor = new MyPluginVisitor();
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="ClassLoader"></a>ClassLoader</h3>
 <p>Because the plugin jars can be located in different directories and can be added dynamically, the special kind of <a class="externalLink" href="http://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html">ClassLoader</a> is required.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">ClassLoader urlClassLoader =
                 new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="PluginLoader"></a>PluginLoader</h3>
 <p>Then the <tt>PluginLoader</tt> is created. It&#x2019;s second constructor parameter is the code to load each plugin.</p>
 
 <div class="source">
@@ -877,17 +903,23 @@ public void load() throws PluginException {
         },
         visitor
 );
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="Loading"></a>Loading</h3>
 <p>The server scans the jar file for <tt>IPlugin</tt> instances.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">pluginLoader.loadPlugin(&quot;examples.jar&quot;);
-</pre></div></div>
+</pre></div></div></div>
+<div class="section">
+<h3><a name="Initialization"></a>Initialization</h3>
 <p>And then calls the initialization code of <tt>BootstrapItem</tt>s in the sequence according to their dependencies.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">bootstrap.start();
-</pre></div></div>
+</pre></div></div></div></div>
+<div class="section">
+<h2><a name="Initialization_order"></a>Initialization order</h2>
 <p>In this example, when we have two plugins: &#x2018;MyPlugin&#x2019; following <i>after</i> &#x2018;IOC&#x2019; &#x2014; the loading and initialization sequence is like this:</p>
 
 <ol style="list-style-type: decimal">
@@ -900,8 +932,10 @@ public void load() throws PluginException {
   
 <li>initialization code of bootstrap item of &#x2018;MyPlugin&#x2019; because it asked to be after &#x2018;IOC&#x2019;</li>
 </ol>
-<p>Note the order of first two steps is not defined, while the order of execution of bootstrap items is defined by their dependencies.</p>
-<p>You can check the full source codes of this example <a class="externalLink" href="http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/plugin/package-summary.html">here</a>.</p>
+<p>Note the order of first two steps is not defined, while the order of execution of bootstrap items is defined by their dependencies.</p></div>
+<div class="section">
+<h2><a name="Code_of_the_example"></a>Code of the example</h2>
+<p>You can check the full source codes of this example <a class="externalLink" href="http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/plugin/package-summary.html">here</a>.</p></div>
                   </div>
             </div>
           </div>

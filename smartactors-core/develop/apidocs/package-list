@@ -15,6 +15,7 @@ info.smart_tools.smartactors.core.db_task.upsert.psql
 info.smart_tools.smartactors.core.db_task.upsert.psql.wrapper
 info.smart_tools.smartactors.core.examples
 info.smart_tools.smartactors.core.examples.plugin
+info.smart_tools.smartactors.core.examples.scope
 info.smart_tools.smartactors.core.feature_manager
 info.smart_tools.smartactors.core.filesystem_tracker
 info.smart_tools.smartactors.core.iaction

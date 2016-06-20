@@ -784,24 +784,36 @@
         <div id="bodyColumn"  class="span10" >
                                   
             <h1>How to use IOC</h1>
+<div class="section">
+<h2><a name="Overview"></a>Overview</h2>
 <p><a class="externalLink" href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> means Inversion of Control. It&#x2019;s a common design principle, and SmartActors, as many other popular frameworks, has it&#x2019;s own IoC container.</p>
-<p>The access to IoC is done through static <a class="externalLink" href="https://en.wikipedia.org/wiki/Service_locator_pattern">service locator</a> called <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ioc/IOC.html"><tt>IOC</tt></a> The main methods are <tt>void IOC.register(IKey key, IResolveDependencyStrategy strategy)</tt> and <tt>T IOC.resolve(IKey&lt;T&gt; key, Object... args)</tt>. The container resolves objects by the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ikey/IKey.html"><tt>IKey</tt></a>. The object resolving is delegated to a <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html"><tt>IResolveDependencyStrategy</tt></a>. There are a couple of predefined strategies.</p>
-<p>First of all, you need a key to register your strategy and resolve objects. The simplest way is to use <tt>new</tt> operator:</p>
+<p>The access to IoC is done through static <a class="externalLink" href="https://en.wikipedia.org/wiki/Service_locator_pattern">service locator</a> called <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ioc/IOC.html"><tt>IOC</tt></a> The main methods are <tt>void IOC.register(IKey key, IResolveDependencyStrategy strategy)</tt> and <tt>T IOC.resolve(IKey&lt;T&gt; key, Object... args)</tt>. The container resolves objects by the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ikey/IKey.html"><tt>IKey</tt></a>. The object resolving is delegated to a <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html"><tt>IResolveDependencyStrategy</tt></a>. There are a couple of predefined strategies.</p></div>
+<div class="section">
+<h2><a name="Key"></a>Key</h2>
+<p>First of all, you need a key to register your strategy and resolve objects. The simplest way is to use the <tt>new</tt> operator.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; myNewKey = new Key&lt;&gt;(&quot;myKey&quot;);
 </pre></div></div>
-<p>If your strategy requires more type validation of the resolving objects, you can pass the <tt>Class</tt> to the key:</p>
+<p>If your strategy requires more type validation of the resolving objects, you can pass the <tt>Class</tt> to the key.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; myTypedKey = new Key&lt;&gt;(MyClass.class, &quot;myKey&quot;);
 </pre></div></div>
-<p>However, the recommended way to get the key is to resolve it with IOC:</p>
+<p>However, the recommended way to get the key is to resolve it with IOC.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; myResolveKey = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;myKey&quot;);
 </pre></div></div>
-<p><tt>IOC.getKeyForKeyStorage()</tt> produces the key to get the key. To resolve the key, the corresponding strategy should be registered before. Also, the default IoC implementation requires the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iscope/IScope.html"><tt>Scope</tt></a> to be initialized. So this initialization code is required (usually it&#x2019;s already called by the server implementation):</p>
+<p><tt>IOC.getKeyForKeyStorage()</tt> produces the key to get the key.</p>
+<p>This magic is hidden in <tt>Keys</tt> class, so it&#x2019;s necessary just to call <tt>Keys.getOrAdd()</tt>.</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; myKey = Keys.getOrAdd(&quot;myKey&quot;);
+</pre></div></div></div>
+<div class="section">
+<h2><a name="Initialization"></a>Initialization</h2>
+<p>To resolve the key, the corresponding strategy should be registered before. Also, the default IoC implementation requires the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iscope/IScope.html"><tt>Scope</tt></a> to be initialized. So this initialization code is required (usually it&#x2019;s already called by the server implementation):</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">Object scopeKey = ScopeProvider.createScope(null);
@@ -812,36 +824,40 @@ IOC.register(IOC.getKeyForKeyStorage(), new ResolveByNameIocStrategy(
         (a) -&gt; new Key((String) a[0]))
 );
 </pre></div></div>
-<p>The <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/resolve_by_name_ioc_with_lambda_strategy/ResolveByNameIocStrategy.html"><tt>ResolveByNameIocStrategy</tt></a> it responsive to create Keys by the name as it was demonstrated above.</p>
+<p>The <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/resolve_by_name_ioc_with_lambda_strategy/ResolveByNameIocStrategy.html"><tt>ResolveByNameIocStrategy</tt></a> it responsive to create Keys by the name as it was demonstrated above.</p></div>
+<div class="section">
+<h2><a name="Singleton_strategy"></a>Singleton strategy</h2>
 <p>When you have a key, you can register the resolving strategy. For example, <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html"><tt>SingletonStrategy</tt></a>:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; key = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;singleton&quot;);
+<div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; key = Keys.getOrAdd(&quot;singleton&quot;);
 MyClass myObject = new MyClass(&quot;singleton&quot;);
 IOC.register(key, new SingletonStrategy(myObject));
 </pre></div></div>
-<p>This strategy always returns the object instance, given to it&#x2019;s constructor.</p>
+<p>This strategy always returns the same object instance, given to it&#x2019;s constructor.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">MyClass resolveObject1 = IOC.resolve(key);
 MyClass resolveObject2 = IOC.resolve(key);
 </pre></div></div>
-<p>Both these variables point to the same object.</p>
-<p>The <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/create_new_instance_strategy/CreateNewInstanceStrategy.html"><tt>CreateNewInstanceStrategy</tt></a> creates a new object for each call to <tt>resolve()</tt>. You should define a <a class="externalLink" href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">lambda expressions</a> to create your objects and pass it to the strategy constructor:</p>
+<p>Both these variables point to the same object.</p></div>
+<div class="section">
+<h2><a name="New_instance_strategy"></a>New instance strategy</h2>
+<p>The <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/create_new_instance_strategy/CreateNewInstanceStrategy.html"><tt>CreateNewInstanceStrategy</tt></a> creates a new object for each call to <tt>resolve()</tt>. You should define a <a class="externalLink" href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">lambda expressions</a> to create your objects and pass it to the strategy constructor.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; key = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;new&quot;);
+<div class="source"><pre class="prettyprint">IKey&lt;MyClass&gt; key = Keys.getOrAdd(&quot;new&quot;);
 IOC.register(key, new CreateNewInstanceStrategy(
         (args) -&gt; new MyClass((String) args[0])));
 </pre></div></div>
-<p>Then you can resolve instances of your class:</p>
+<p>Then you can resolve instances of your class.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">MyClass resolveObject1 = IOC.resolve(key, &quot;id1&quot;);
 MyClass resolveObject2 = IOC.resolve(key, &quot;id1&quot;);
 MyClass resolveObject3 = IOC.resolve(key, &quot;id3&quot;);
 </pre></div></div>
-<p>All returned objects are different objects. However, these objects can be equal (but not the same), if you pass the same parameters to the <tt>resolve()</tt> method (string id in this example).</p>
+<p>All returned objects are different objects. However, these objects can be equal (but not the same) if you pass the same parameters to the <tt>resolve()</tt> method (string id in this example).</p></div>
                   </div>
             </div>
           </div>
