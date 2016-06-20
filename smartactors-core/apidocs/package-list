@@ -1,6 +1,11 @@
 info.smart_tools.smartactors.core.bootstrap
 info.smart_tools.smartactors.core.bootstrap_item
 info.smart_tools.smartactors.core.create_new_instance_strategy
+info.smart_tools.smartactors.core.db_storage
+info.smart_tools.smartactors.core.db_storage.exceptions
+info.smart_tools.smartactors.core.db_storage.interfaces
+info.smart_tools.smartactors.core.db_storage.interfaces.wrapper
+info.smart_tools.smartactors.core.db_storage.utils
 info.smart_tools.smartactors.core.examples
 info.smart_tools.smartactors.core.examples.plugin
 info.smart_tools.smartactors.core.feature_manager
@@ -44,6 +49,8 @@ info.smart_tools.smartactors.core.iscope_provider_container
 info.smart_tools.smartactors.core.iscope_provider_container.exception
 info.smart_tools.smartactors.core.iserver
 info.smart_tools.smartactors.core.iserver.exception
+info.smart_tools.smartactors.core.istorage_connection
+info.smart_tools.smartactors.core.istorage_connection.exception
 info.smart_tools.smartactors.core.istrategy_container
 info.smart_tools.smartactors.core.istrategy_container.exception
 info.smart_tools.smartactors.core.itask
@@ -66,6 +73,9 @@ info.smart_tools.smartactors.core.scope_provider_container
 info.smart_tools.smartactors.core.server_with_ioc
 info.smart_tools.smartactors.core.server_with_plugin_loader
 info.smart_tools.smartactors.core.singleton_strategy
+info.smart_tools.smartactors.core.sql_commons
+info.smart_tools.smartactors.core.sql_commons.exception
+info.smart_tools.smartactors.core.sql_commons.psql
 info.smart_tools.smartactors.core.strategy_container
 info.smart_tools.smartactors.core.string_ioc_key
 info.smart_tools.smartactors.plugin.load_scope_povider
