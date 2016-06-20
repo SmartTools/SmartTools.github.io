@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ScopeProvider.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.scope_provider</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.scope_provider</a> &gt; <span class="el_source">ScopeProvider.java</span></div><h1>ScopeProvider.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.scope_provider;
+
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iscope.IScope;
+import info.smart_tools.smartactors.core.iscope.IScopeFactory;
+import info.smart_tools.smartactors.core.iscope_provider_container.IScopeProviderContainer;
+import info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
+import info.smart_tools.smartactors.core.recursive_scope.ScopeFactory;
+import info.smart_tools.smartactors.core.scope_provider_container.ScopeProviderContainer;
+
+/**
+ * Realization of ScopeProvider by ServiceLocator pattern
+ */
+public final class ScopeProvider {
+
+    /**
+     * Implementation of {@link IScopeProviderContainer}.
+     * Will be initialized by default implementation of {@link IScopeProviderContainer}
+     * ReInitialization possible only with using java reflection API
+     * Example:
+     * &lt;pre&gt;
+     * {@code
+     * Field field = ScopeProvider.class.getDeclaredField(&quot;container&quot;);
+     * field.setAccessible(true);
+     * field.set(null, new Object());
+     * field.setAccessible(false);
+     * }
+     * &lt;/pre&gt;
+     */
+    private static IScopeProviderContainer container;
+
+    /**
+     * Default private constructor
+     */
+<span class="nc" id="L35">    private ScopeProvider() {</span>
+<span class="nc" id="L36">    }</span>
+
+    static {
+<span class="fc" id="L39">        IScopeFactory factory = new ScopeFactory();</span>
+<span class="fc" id="L40">        container = new ScopeProviderContainer(factory);</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Get instance of {@link IScope} from local storage of {@link IScopeProviderContainer} by unique
+     * identifier of {@link IScope} instance
+     * @param key unique identifier of {@link IScope} instance
+     * @return instance of {@link IScope}
+     * @throws ScopeProviderException if value is not found or any errors occurred
+     */
+    public static IScope getScope(final Object key)
+            throws ScopeProviderException {
+<span class="fc" id="L52">        return container.getScope(key);</span>
+    }
+
+    /**
+     * Get current instance of {@link IScope}
+     * @return instance of {@link IScope}
+     * @throws ScopeProviderException if current scope is null or any errors occurred
+     */
+    public static IScope getCurrentScope()
+            throws ScopeProviderException {
+<span class="fc" id="L62">        return container.getCurrentScope();</span>
+    }
+
+    /**
+     * Add new dependency to the local storage of {@link IScopeProviderContainer} by unique identifier
+     * @param key unique identifier
+     * @param scope instance of {@link IScope}
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static void addScope(final Object key, final IScope scope)
+            throws ScopeProviderException {
+<span class="fc" id="L73">        container.addScope(key, scope);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Set given instance of {@link IScope} as current to the {@link IScopeProviderContainer}
+     * @param scope instance of {@link IScope}
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static void setCurrentScope(final IScope scope)
+            throws ScopeProviderException {
+<span class="fc" id="L83">        container.setCurrentScope(scope);</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Remove given instance of {@link IScope} from local storage of {@link IScopeProviderContainer} by unique identifier
+     * @param key unique identifier {@link IScope} instance
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static void deleteScope(final Object key)
+            throws ScopeProviderException {
+<span class="fc" id="L93">        container.deleteScope(key);</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Create new instance of {@link IScope} and store it to the local storage of {@link IScopeProviderContainer}
+     * @param param needed parameters for creation instance of {@link IScope}
+     * @return unique identifier of created instance of {@link IScope}
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static Object createScope(final Object param)
+            throws ScopeProviderException {
+<span class="fc" id="L104">        return container.createScope(param);</span>
+    }
+
+    /**
+     * Register event handler (action) to the local action storage
+     * @param handler handler for execute when event will be happened
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static void subscribeOnCreationNewScope(final IAction&lt;IScope&gt; handler)
+            throws ScopeProviderException {
+<span class="fc" id="L114">        container.subscribeOnCreationNewScope(handler);</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Clear local action storage
+     * @throws ScopeProviderException if any errors occurred
+     */
+    public static void clearListOfSubscribers()
+            throws ScopeProviderException {
+<span class="fc" id="L123">        container.clearListOfSubscribers();</span>
+<span class="fc" id="L124">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

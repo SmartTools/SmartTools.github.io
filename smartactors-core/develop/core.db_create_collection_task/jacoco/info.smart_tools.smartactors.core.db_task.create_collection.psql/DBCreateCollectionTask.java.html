@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBCreateCollectionTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.db_create_collection_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.db_task.create_collection.psql</a> &gt; <span class="el_source">DBCreateCollectionTask.java</span></div><h1>DBCreateCollectionTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.db_task.create_collection.psql;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
+import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.db_task.create_collection.psql.wrapper.CreateCollectionQuery;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.sql_commons.FieldPath;
+import info.smart_tools.smartactors.core.sql_commons.JDBCCompiledQuery;
+import info.smart_tools.smartactors.core.sql_commons.QueryStatement;
+import info.smart_tools.smartactors.core.sql_commons.QueryStatementFactory;
+import info.smart_tools.smartactors.core.sql_commons.exception.QueryStatementFactoryException;
+import info.smart_tools.smartactors.core.sql_commons.psql.Schema;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Task for create collection with predefined indexes
+ */
+public class DBCreateCollectionTask implements IDatabaseTask {
+
+    private CompiledQuery compiledQuery;
+    private StorageConnection connection;
+
+<span class="fc" id="L38">    private static Map&lt;String,String&gt; indexCreationTemplates = new HashMap&lt;String, String&gt;() {{</span>
+<span class="fc" id="L39">        put(&quot;ordered&quot;,&quot;CREATE INDEX ON %s USING BTREE ((%s));\n&quot;);</span>
+<span class="fc" id="L40">        put(&quot;tags&quot;,&quot;CREATE INDEX ON %s USING GIN ((%s));\n&quot;);</span>
+<span class="fc" id="L41">        put(&quot;fulltext&quot;,String.format(&quot;CREATE INDEX ON %%s USING GIN ((to_tsvector('%s',(%%s)::text)));\n&quot;, Schema.FTS_DICTIONARY));</span>
+<span class="fc" id="L42">        put(&quot;datetime&quot;,&quot;CREATE INDEX ON %s USING BTREE ((parse_timestamp_immutable(%s)));\n&quot;);</span>
+<span class="fc" id="L43">        put(&quot;id&quot;,&quot;CREATE INDEX ON %1$s USING BTREE ((%2$s));\nCREATE INDEX ON %1$s USING HASH ((%2$s));\n&quot;);</span>
+<span class="fc" id="L44">    }};</span>
+
+<span class="fc" id="L46">    public DBCreateCollectionTask() {}</span>
+
+    @Override
+    public void prepare(final IObject createCollectionMessage) throws TaskPrepareException {
+
+        try {
+<span class="fc" id="L52">            QueryStatementFactory factory = () -&gt; {</span>
+<span class="nc" id="L53">                QueryStatement preparedQuery = new QueryStatement();</span>
+<span class="nc" id="L54">                Writer writer = preparedQuery.getBodyWriter();</span>
+                try {
+<span class="nc" id="L56">                    CreateCollectionQuery message = IOC.resolve(Keys.getOrAdd(CreateCollectionQuery.class.toString()), createCollectionMessage);</span>
+<span class="nc" id="L57">                    CollectionName collectionName = CollectionName.fromString(message.getCollectionName());</span>
+<span class="nc" id="L58">                    writer.write(String.format(</span>
+                        &quot;CREATE TABLE %s (%s %s PRIMARY KEY, %s JSONB NOT NULL);\n&quot;,
+<span class="nc" id="L60">                        collectionName.toString(),</span>
+                        Schema.ID_COLUMN_NAME ,Schema.ID_COLUMN_SQL_TYPE, Schema.DOCUMENT_COLUMN_NAME)
+                    );
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                    if (!message.getIndexes().containsKey(&quot;id&quot;)) {</span>
+<span class="nc" id="L64">                        message.getIndexes().put(&quot;id&quot;,&quot;id&quot;);</span>
+                    }
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                    for (Map.Entry&lt;String, String&gt; entry : message.getIndexes().entrySet()) {</span>
+<span class="nc" id="L67">                        FieldPath field = IOC.resolve(Keys.getOrAdd(FieldPath.class.toString()), entry.getKey());</span>
+<span class="nc" id="L68">                        String indexType = entry.getValue();</span>
+<span class="nc" id="L69">                        String tpl = indexCreationTemplates.get(indexType);</span>
+
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                        if (tpl == null) {</span>
+<span class="nc" id="L72">                            throw new QueryStatementFactoryException(&quot;Invalid index type: &quot; + indexType);</span>
+                        }
+<span class="nc" id="L74">                        preparedQuery.getBodyWriter().write(String.format(tpl, collectionName.toString(), field.getSQLRepresentation()));</span>
+<span class="nc" id="L75">                    }</span>
+<span class="nc" id="L76">                } catch (IOException | QueryBuildException | ResolutionException | ChangeValueException | ReadValueException e) {</span>
+<span class="nc" id="L77">                    throw new QueryStatementFactoryException(&quot;Error while initialize update query.&quot;, e);</span>
+<span class="nc" id="L78">                }</span>
+<span class="nc" id="L79">                return preparedQuery;</span>
+            };
+
+<span class="fc" id="L82">            this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, DBCreateCollectionTask.class.toString(), factory);</span>
+<span class="nc" id="L83">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L84">            throw new TaskPrepareException(&quot;Error while writing collection creation statement.&quot;,e);</span>
+<span class="fc" id="L85">        }</span>
+<span class="fc" id="L86">    }</span>
+
+    @Override
+    public void execute() throws TaskExecutionException {
+
+        try {
+<span class="fc" id="L92">            ((JDBCCompiledQuery)compiledQuery).getPreparedStatement().execute();</span>
+<span class="nc" id="L93">        } catch (Exception e) {</span>
+<span class="nc" id="L94">            throw new TaskExecutionException(&quot;Collection creation query execution failed because of SQL exception.&quot;,e);</span>
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">    }</span>
+
+    @Override
+    public void setConnection(StorageConnection connection) throws TaskSetConnectionException {
+<span class="fc" id="L100">        this.connection = connection;</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

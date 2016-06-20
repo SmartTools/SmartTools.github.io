@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.get_by_id_task,info.smart_tools.smartactors.core.db_task.get_by_id.exception,DBGetByIdTaskException,5,0,0,0,2,0,1,0,1,0
+core.get_by_id_task,info.smart_tools.smartactors.core.db_task.get_by_id.psql,DBGetByIdTask,94,44,3,1,22,10,3,4,1,4
