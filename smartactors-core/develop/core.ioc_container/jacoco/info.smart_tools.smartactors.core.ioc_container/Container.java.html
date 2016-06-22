@@ -72,7 +72,7 @@ public class Container implements IContainer {
 <span class="fc" id="L72">            IResolveDependencyStrategy strategy = strategyContainer.resolve(key);</span>
 <span class="fc" id="L73">            return (T) strategy.resolve(args);</span>
 <span class="fc" id="L74">        } catch (Throwable e) {</span>
-<span class="fc" id="L75">            throw new ResolutionException(&quot;Resolution of dependency failed.&quot;);</span>
+<span class="fc" id="L75">            throw new ResolutionException(&quot;Resolution of dependency failed.&quot;, e);</span>
         }
     }
 

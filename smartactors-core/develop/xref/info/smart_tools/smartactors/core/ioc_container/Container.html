@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              <a href="../../../../../info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html">IResolveDependencyStrategy</a> strategy = strategyContainer.resolve(key);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              <strong class="jxr_keyword">return</strong> (T) strategy.resolve(args);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          } <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/ResolutionException.html">ResolutionException</a>(<span class="jxr_string">"Resolution of dependency failed."</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/ResolutionException.html">ResolutionException</a>(<span class="jxr_string">"Resolution of dependency failed."</span>, e);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
