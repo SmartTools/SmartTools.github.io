@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>core.istorage_connection - Checkstyle report</title>
-    <link>core.istorage_connection/</link>
+    <link>core.istorage_connection/core.istorage_connection/</link>
     <description>core.istorage_connection - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 5,
              Infos: 0
       </title>
-            <link>core.istorage_connection//checkstyle.html</link>
+            <link>core.istorage_connection/core.istorage_connection//checkstyle.html</link>
       <description>
-        <p>Click <a href="core.istorage_connection//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="core.istorage_connection/core.istorage_connection//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.package-info.java">info/smart_tools/smartactors/core/istorage_connection/package-info.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.package-info.java">info/smart_tools/smartactors/core/istorage_connection/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IPreparedQuery.java">info/smart_tools/smartactors/core/istorage_connection/IPreparedQuery.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IPreparedQuery.java">info/smart_tools/smartactors/core/istorage_connection/IPreparedQuery.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IStorageConnection.java">info/smart_tools/smartactors/core/istorage_connection/IStorageConnection.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IStorageConnection.java">info/smart_tools/smartactors/core/istorage_connection/IStorageConnection.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.exception.package-info.java">info/smart_tools/smartactors/core/istorage_connection/exception/package-info.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.exception.package-info.java">info/smart_tools/smartactors/core/istorage_connection/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.exception.StorageException.java">info/smart_tools/smartactors/core/istorage_connection/exception/StorageException.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.exception.StorageException.java">info/smart_tools/smartactors/core/istorage_connection/exception/StorageException.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.ICompiledQuery.java">info/smart_tools/smartactors/core/istorage_connection/ICompiledQuery.java</a>
+                  <a href="core.istorage_connection/core.istorage_connection//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.ICompiledQuery.java">info/smart_tools/smartactors/core/istorage_connection/ICompiledQuery.java</a>
                 </td>
                 <td>
                   0

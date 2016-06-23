@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>core.ipool - Checkstyle report</title>
-    <link>core.ipool/</link>
+    <link>core.ipool/core.ipool/</link>
     <description>core.ipool - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 1,
              Infos: 0
       </title>
-            <link>core.ipool//checkstyle.html</link>
+            <link>core.ipool/core.ipool//checkstyle.html</link>
       <description>
-        <p>Click <a href="core.ipool//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="core.ipool/core.ipool//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.package-info.java">info/smart_tools/smartactors/core/ipool/package-info.java</a>
+                  <a href="core.ipool/core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.package-info.java">info/smart_tools/smartactors/core/ipool/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.PoolPutException.java">info/smart_tools/smartactors/core/ipool/exception/PoolPutException.java</a>
+                  <a href="core.ipool/core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.PoolPutException.java">info/smart_tools/smartactors/core/ipool/exception/PoolPutException.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.package-info.java">info/smart_tools/smartactors/core/ipool/exception/package-info.java</a>
+                  <a href="core.ipool/core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.package-info.java">info/smart_tools/smartactors/core/ipool/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.IPool.java">info/smart_tools/smartactors/core/ipool/IPool.java</a>
+                  <a href="core.ipool/core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.IPool.java">info/smart_tools/smartactors/core/ipool/IPool.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.PoolTakeException.java">info/smart_tools/smartactors/core/ipool/exception/PoolTakeException.java</a>
+                  <a href="core.ipool/core.ipool//checkstyle.html#info.smart_tools.smartactors.core.ipool.exception.PoolTakeException.java">info/smart_tools/smartactors/core/ipool/exception/PoolTakeException.java</a>
                 </td>
                 <td>
                   0

@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>core.db_storage - Checkstyle report</title>
-    <link>core.db_storage/</link>
+    <link>core.db_storage/core.db_storage/</link>
     <description>core.db_storage - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 46,
              Infos: 0
       </title>
-            <link>core.db_storage//checkstyle.html</link>
+            <link>core.db_storage/core.db_storage//checkstyle.html</link>
       <description>
-        <p>Click <a href="core.db_storage//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="core.db_storage/core.db_storage//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.QueryExecutionException.java">info/smart_tools/smartactors/core/db_storage/exceptions/QueryExecutionException.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.QueryExecutionException.java">info/smart_tools/smartactors/core/db_storage/exceptions/QueryExecutionException.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.StorageException.java">info/smart_tools/smartactors/core/db_storage/exceptions/StorageException.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.StorageException.java">info/smart_tools/smartactors/core/db_storage/exceptions/StorageException.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.package-info.java">info/smart_tools/smartactors/core/db_storage/exceptions/package-info.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.package-info.java">info/smart_tools/smartactors/core/db_storage/exceptions/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.PreparedQuery.java">info/smart_tools/smartactors/core/db_storage/interfaces/PreparedQuery.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.PreparedQuery.java">info/smart_tools/smartactors/core/db_storage/interfaces/PreparedQuery.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.package-info.java">info/smart_tools/smartactors/core/db_storage/interfaces/package-info.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.package-info.java">info/smart_tools/smartactors/core/db_storage/interfaces/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException.java">info/smart_tools/smartactors/core/db_storage/exceptions/QueryBuildException.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException.java">info/smart_tools/smartactors/core/db_storage/exceptions/QueryBuildException.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.wrapper.StorageParams.java">info/smart_tools/smartactors/core/db_storage/interfaces/wrapper/StorageParams.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.wrapper.StorageParams.java">info/smart_tools/smartactors/core/db_storage/interfaces/wrapper/StorageParams.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageConnection.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageConnection.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.utils.package-info.java">info/smart_tools/smartactors/core/db_storage/utils/package-info.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.utils.package-info.java">info/smart_tools/smartactors/core/db_storage/utils/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter.java">info/smart_tools/smartactors/core/db_storage/interfaces/SQLQueryParameterSetter.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter.java">info/smart_tools/smartactors/core/db_storage/interfaces/SQLQueryParameterSetter.java</a>
                 </td>
                 <td>
                   0
@@ -186,7 +186,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery.java">info/smart_tools/smartactors/core/db_storage/interfaces/CompiledQuery.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery.java">info/smart_tools/smartactors/core/db_storage/interfaces/CompiledQuery.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.package-info.java">info/smart_tools/smartactors/core/db_storage/package-info.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.package-info.java">info/smart_tools/smartactors/core/db_storage/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.utils.CollectionName.java">info/smart_tools/smartactors/core/db_storage/utils/CollectionName.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.utils.CollectionName.java">info/smart_tools/smartactors/core/db_storage/utils/CollectionName.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageDriver.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageDriver.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageDriver.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageDriver.java</a>
                 </td>
                 <td>
                   0
@@ -242,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageExecutor.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageExecutor.java</a>
+                  <a href="core.db_storage/core.db_storage//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.StorageExecutor.java">info/smart_tools/smartactors/core/db_storage/interfaces/StorageExecutor.java</a>
                 </td>
                 <td>
                   0

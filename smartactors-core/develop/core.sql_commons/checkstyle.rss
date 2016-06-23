@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>core.sql_commons - Checkstyle report</title>
-    <link>core.sql_commons/</link>
+    <link>core.sql_commons/core.sql_commons/</link>
     <description>core.sql_commons - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 124,
              Infos: 0
       </title>
-            <link>core.sql_commons//checkstyle.html</link>
+            <link>core.sql_commons/core.sql_commons//checkstyle.html</link>
       <description>
-        <p>Click <a href="core.sql_commons//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="core.sql_commons/core.sql_commons//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCConnectionOptions.java">info/smart_tools/smartactors/core/sql_commons/JDBCConnectionOptions.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCConnectionOptions.java">info/smart_tools/smartactors/core/sql_commons/JDBCConnectionOptions.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryStatement.java">info/smart_tools/smartactors/core/sql_commons/QueryStatement.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryStatement.java">info/smart_tools/smartactors/core/sql_commons/QueryStatement.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.package-info.java">info/smart_tools/smartactors/core/sql_commons/package-info.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.package-info.java">info/smart_tools/smartactors/core/sql_commons/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.ConditionsResolverBase.java">info/smart_tools/smartactors/core/sql_commons/ConditionsResolverBase.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.ConditionsResolverBase.java">info/smart_tools/smartactors/core/sql_commons/ConditionsResolverBase.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.psql.Schema.java">info/smart_tools/smartactors/core/sql_commons/psql/Schema.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.psql.Schema.java">info/smart_tools/smartactors/core/sql_commons/psql/Schema.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryStatementFactory.java">info/smart_tools/smartactors/core/sql_commons/QueryStatementFactory.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryStatementFactory.java">info/smart_tools/smartactors/core/sql_commons/QueryStatementFactory.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.Conditions.java">info/smart_tools/smartactors/core/sql_commons/Conditions.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.Conditions.java">info/smart_tools/smartactors/core/sql_commons/Conditions.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.DBTaskExecutor.java">info/smart_tools/smartactors/core/sql_commons/DBTaskExecutor.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.DBTaskExecutor.java">info/smart_tools/smartactors/core/sql_commons/DBTaskExecutor.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryConditionWriter.java">info/smart_tools/smartactors/core/sql_commons/QueryConditionWriter.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryConditionWriter.java">info/smart_tools/smartactors/core/sql_commons/QueryConditionWriter.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryConditionWriterResolver.java">info/smart_tools/smartactors/core/sql_commons/QueryConditionWriterResolver.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryConditionWriterResolver.java">info/smart_tools/smartactors/core/sql_commons/QueryConditionWriterResolver.java</a>
                 </td>
                 <td>
                   0
@@ -186,7 +186,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.FieldPath.java">info/smart_tools/smartactors/core/sql_commons/FieldPath.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.FieldPath.java">info/smart_tools/smartactors/core/sql_commons/FieldPath.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.exception.QueryStatementFactoryException.java">info/smart_tools/smartactors/core/sql_commons/exception/QueryStatementFactoryException.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.exception.QueryStatementFactoryException.java">info/smart_tools/smartactors/core/sql_commons/exception/QueryStatementFactoryException.java</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCCompiledQuery.java">info/smart_tools/smartactors/core/sql_commons/JDBCCompiledQuery.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCCompiledQuery.java">info/smart_tools/smartactors/core/sql_commons/JDBCCompiledQuery.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCConnection.java">info/smart_tools/smartactors/core/sql_commons/JDBCConnection.java</a>
+                  <a href="core.sql_commons/core.sql_commons//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.JDBCConnection.java">info/smart_tools/smartactors/core/sql_commons/JDBCConnection.java</a>
                 </td>
                 <td>
                   0
