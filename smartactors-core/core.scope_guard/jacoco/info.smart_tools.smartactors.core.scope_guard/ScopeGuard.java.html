@@ -8,7 +8,7 @@ import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
  * Implementation of {@link IScopeGuard}
  * @since 1.7+
  */
-<span class="fc" id="L11">public class ScopeGuard implements IScopeGuard {</span>
+public class ScopeGuard implements IScopeGuard {
 
     /**
      * Local storage for instance of {@link IScope}
@@ -16,13 +16,13 @@ import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
     private IScope previousScope;
 
     /**
-     * Locally save and substitute current instance of {@link IScope} by
+     * Locally saves and substitutes current instance of {@link IScope} by
      * other
      * @param key unique identifier for find {@link IScope}
      * @throws  ScopeGuardException if any errors occurred
      */
-    public void guard(final Object key)
-            throws ScopeGuardException {
+    public ScopeGuard(final Object key)
+<span class="fc" id="L25">            throws ScopeGuardException {</span>
         try {
 <span class="fc" id="L27">            previousScope = ScopeProvider.getCurrentScope();</span>
 <span class="fc" id="L28">            ScopeProvider.setCurrentScope(ScopeProvider.getScope(key));</span>
@@ -32,18 +32,18 @@ import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
 <span class="fc" id="L32">    }</span>
 
     /**
-     * Set locally saved {@link IScope} as current
+     * Sets locally saved {@link IScope} as current
      * @throws ScopeGuardException if any errors occurred
      */
     public void close() throws ScopeGuardException {
         try {
-<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (previousScope != null) {</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (previousScope != null) {</span>
 <span class="fc" id="L41">                ScopeProvider.setCurrentScope(previousScope);</span>
             } else {
-<span class="fc" id="L43">                throw new Exception();</span>
+<span class="nc" id="L43">                throw new Exception();</span>
             }
-<span class="fc" id="L45">        } catch (Exception e) {</span>
-<span class="fc" id="L46">            throw new ScopeGuardException(&quot;ScopeGuard could not restore original state.&quot;, e);</span>
+<span class="nc" id="L45">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            throw new ScopeGuardException(&quot;ScopeGuard could not restore original state.&quot;, e);</span>
 <span class="fc" id="L47">        }</span>
 <span class="fc" id="L48">    }</span>
 }

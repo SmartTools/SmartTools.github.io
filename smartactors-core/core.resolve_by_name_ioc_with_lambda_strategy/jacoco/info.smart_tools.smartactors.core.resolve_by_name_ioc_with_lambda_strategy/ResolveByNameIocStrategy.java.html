@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResolveByNameIocStrategy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.resolve_by_name_ioc_with_lambda_strategy</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.resolve_by_name_ioc_with_lambda_strategy</a> &gt; <span class="el_source">ResolveByNameIocStrategy.java</span></div><h1>ResolveByNameIocStrategy.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.resolve_by_name_ioc_with_lambda_strategy;
 
 import info.smart_tools.smartactors.core.ikey.IKey;
-import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
 
@@ -22,7 +21,7 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
     /**
      * Local {@link IKey} instance storage
      */
-<span class="fc" id="L25">    private Map&lt;String, Object&gt; storage = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L24">    private Map&lt;String, Object&gt; storage = new ConcurrentHashMap&lt;&gt;();</span>
 
     /**
      * Function to create object for storing
@@ -32,15 +31,13 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
     /**
      * Strategy constructor
      * @param strategy function to create object for storing
-     * @throws InvalidArgumentException if any errors occurred
      */
-    public ResolveByNameIocStrategy(final Function&lt;Object[], Object&gt; strategy)
-<span class="fc" id="L38">            throws InvalidArgumentException {</span>
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (null == strategy) {</span>
-<span class="fc" id="L40">            throw new InvalidArgumentException(&quot;Strategy should not be null&quot;);</span>
+<span class="fc" id="L35">    public ResolveByNameIocStrategy(final Function&lt;Object[], Object&gt; strategy) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (strategy == null) {</span>
+<span class="fc" id="L37">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L42">        this.strategy = strategy;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L39">        this.strategy = strategy;</span>
+<span class="fc" id="L40">    }</span>
 
     /**
      * Return stored instance of {@link IKey} if exists
@@ -54,14 +51,14 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
     public &lt;T&gt; T resolve(final Object... args)
             throws ResolveDependencyStrategyException {
         try {
-<span class="fc" id="L57">            Object result = storage.get((String) args[0]);</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (null == result) {</span>
-<span class="fc" id="L59">                result = strategy.apply(args);</span>
-<span class="fc" id="L60">                storage.put((String) args[0], result);</span>
+<span class="fc" id="L54">            Object result = storage.get((String) args[0]);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (result == null) {</span>
+<span class="fc" id="L56">                result = strategy.apply(args);</span>
+<span class="fc" id="L57">                storage.put((String) args[0], result);</span>
             }
-<span class="fc" id="L62">            return (T) result;</span>
-<span class="fc" id="L63">        } catch (Exception e) {</span>
-<span class="fc" id="L64">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
+<span class="fc" id="L59">            return (T) result;</span>
+<span class="fc" id="L60">        } catch (Exception e) {</span>
+<span class="fc" id="L61">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
         }
     }
 }

@@ -1,3 +1,3 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.scope_guard,info.smart_tools.smartactors.core.scope_guard,ScopeGuard,0,38,0,2,0,14,0,4,0,3
+core.scope_guard,info.smart_tools.smartactors.core.scope_guard,ScopeGuard,11,26,1,1,3,11,1,2,0,2
 core.scope_guard,info.smart_tools.smartactors.core.scope_guard.exception,ScopeGuardException,0,13,0,0,0,6,0,3,0,3

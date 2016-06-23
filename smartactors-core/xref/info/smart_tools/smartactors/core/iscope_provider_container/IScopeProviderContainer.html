@@ -8,7 +8,7 @@
 <div id="overview"><a href="../../../../../../apidocs/info/smart_tools/smartactors/core/iscope_provider_container/IScopeProviderContainer.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.iscope_provider_container;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobserver.IObserver;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope.IScope;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @param handler handler for execute when event will be happened</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     * @throws ScopeProviderException if any errors occurred</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IAction&lt;IScope&gt; handler)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">void</strong> subscribeOnCreationNewScope(<strong class="jxr_keyword">final</strong> IObserver&lt;IScope&gt; handler)
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>              <strong class="jxr_keyword">throws</strong> ScopeProviderException;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_javadoccomment">/**</em>

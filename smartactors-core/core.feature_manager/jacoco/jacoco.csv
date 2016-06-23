@@ -1,4 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature,7,165,1,13,2,40,1,11,0,5
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature.FileHandlerAction,11,113,0,10,2,25,0,7,0,2
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,FeatureManager,0,28,0,2,0,8,0,3,0,2

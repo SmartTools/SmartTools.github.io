@@ -40,7 +40,7 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
             throws ResolveDependencyStrategyException {
         try {
 <span class="fc" id="L42">            IKey result = storage.get((String) args[0]);</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">            if (null == result) {</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            if (result == null) {</span>
 <span class="fc" id="L44">                result = new Key(String.class, (String) args[0]);</span>
 <span class="fc" id="L45">                storage.put((String) args[0], result);</span>
             }

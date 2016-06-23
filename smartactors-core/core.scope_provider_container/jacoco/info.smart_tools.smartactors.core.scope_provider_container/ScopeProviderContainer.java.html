@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ScopeProviderContainer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.scope_provider_container</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.scope_provider_container</a> &gt; <span class="el_source">ScopeProviderContainer.java</span></div><h1>ScopeProviderContainer.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.scope_provider_container;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iobserver.IObserver;
 import info.smart_tools.smartactors.core.iscope.IScope;
 import info.smart_tools.smartactors.core.iscope.IScopeFactory;
 import info.smart_tools.smartactors.core.iscope_provider_container.IScopeProviderContainer;
@@ -35,7 +35,7 @@ public class ScopeProviderContainer implements IScopeProviderContainer {
     /**
      * Local storage for create scope event handlers
      */
-<span class="fc" id="L38">    private List&lt;IAction&lt;IScope&gt;&gt; handlerStorage = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">    private List&lt;IObserver&lt;IScope&gt;&gt; handlerStorage = new ArrayList&lt;&gt;();</span>
 
     /**
      * Constructor with {@link IScopeFactory}
@@ -53,7 +53,7 @@ public class ScopeProviderContainer implements IScopeProviderContainer {
      */
     public IScope getScope(final Object key) throws ScopeProviderException {
 <span class="fc" id="L55">        IScope scope = scopeStorage.get(key);</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (null == scope) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (scope == null) {</span>
 <span class="fc" id="L57">            throw new ScopeProviderException(&quot;Scope not found.&quot;);</span>
         }
 
@@ -68,7 +68,7 @@ public class ScopeProviderContainer implements IScopeProviderContainer {
     public IScope getCurrentScope()
             throws ScopeProviderException {
 <span class="fc" id="L70">        IScope scope = currentScope.get();</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (null == scope) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (scope == null) {</span>
 <span class="fc" id="L72">            throw new ScopeProviderException(&quot;Current Scope is null.&quot;);</span>
         }
 
@@ -124,7 +124,7 @@ public class ScopeProviderContainer implements IScopeProviderContainer {
             throws ScopeProviderException {
         try {
 <span class="fc" id="L126">            IScope newScope = factory.createScope(params);</span>
-<span class="fc bfc" id="L127" title="All 2 branches covered.">            for (IAction&lt;IScope&gt; handler : handlerStorage) {</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">            for (IObserver &lt;IScope&gt; handler : handlerStorage) {</span>
 <span class="fc" id="L128">                handler.execute(newScope);</span>
 <span class="fc" id="L129">            }</span>
 <span class="fc" id="L130">            Object uuid = UUID.randomUUID();</span>
@@ -142,9 +142,9 @@ public class ScopeProviderContainer implements IScopeProviderContainer {
      * @throws ScopeProviderException if any errors occurred
      */
     @Override
-    public void subscribeOnCreationNewScope(final IAction&lt;IScope&gt; handler)
+    public void subscribeOnCreationNewScope(final IObserver&lt;IScope&gt; handler)
             throws ScopeProviderException {
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (null == handler) {</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (handler == null) {</span>
 <span class="fc" id="L148">            throw new ScopeProviderException(&quot;Incoming argument should not be null&quot;);</span>
         }
 <span class="fc" id="L150">        handlerStorage.add(handler);</span>

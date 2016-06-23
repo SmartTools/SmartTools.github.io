@@ -33,7 +33,7 @@ class Scope implements IScope {
             throws ScopeException {
 <span class="fc" id="L34">        Object value = storage.get(key);</span>
 
-<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (null == value) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (value == null) {</span>
             try {
 <span class="fc" id="L38">                return parent.getValue(key);</span>
 <span class="fc" id="L39">            } catch (NullPointerException e) {</span>

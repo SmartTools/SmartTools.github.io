@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 5,
+      <title>File: 4,
              Errors: 0,
-             Warnings: 17,
+             Warnings: 19,
              Infos: 0
       </title>
             <link>core.examples/core.examples//checkstyle.html</link>
@@ -46,27 +46,13 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyPluginVisitor.java">info/smart_tools/smartactors/core/examples/plugin/MyPluginVisitor.java</a>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOC.java">info/smart_tools/smartactors/core/examples/scope/MyIOC.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  7
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyPlugin.java">info/smart_tools/smartactors/core/examples/plugin/MyPlugin.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
+                  5
                 </td>
                 <td>
                   0
@@ -88,13 +74,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyServer.java">info/smart_tools/smartactors/core/examples/plugin/MyServer.java</a>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyRecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/MyRecursiveContainer.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  6
                 </td>
                 <td>
                   0
@@ -102,13 +88,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyIocPlugin.java">info/smart_tools/smartactors/core/examples/plugin/MyIocPlugin.java</a>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOCException.java">info/smart_tools/smartactors/core/examples/scope/MyIOCException.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  2
                 </td>
                 <td>
                   0
