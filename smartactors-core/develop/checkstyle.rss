@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 237,
+      <title>File: 238,
              Errors: 0,
-             Warnings: 286,
+             Warnings: 287,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -2433,6 +2433,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.postges_connection_pool.PostgresConnectionPoolPlugin.java">info/smart_tools/smartactors/plugin/postges_connection_pool/PostgresConnectionPoolPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0

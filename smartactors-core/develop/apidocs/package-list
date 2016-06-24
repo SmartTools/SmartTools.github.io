@@ -91,5 +91,6 @@ info.smart_tools.smartactors.core.strategy_container
 info.smart_tools.smartactors.core.string_ioc_key
 info.smart_tools.smartactors.plugin.compile_query
 info.smart_tools.smartactors.plugin.load_scope_povider
+info.smart_tools.smartactors.plugin.postges_connection_pool
 info.smart_tools.smartactors.plugin.subscribe_scope_provider_on_scope_creation
 info.smart_tools.smartactors.plugin.test_jar
