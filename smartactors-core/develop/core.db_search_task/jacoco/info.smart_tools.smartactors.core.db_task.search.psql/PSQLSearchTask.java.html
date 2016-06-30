@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PSQLSearchTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.db_search_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.db_task.search.psql</a> &gt; <span class="el_source">PSQLSearchTask.java</span></div><h1>PSQLSearchTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.db_task.search.psql;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+import info.smart_tools.smartactors.core.db_storage.exceptions.StorageException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
+import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter;
+import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.db_task.search.DBSearchTask;
+import info.smart_tools.smartactors.core.db_task.search.utils.IBufferedQuery;
+import info.smart_tools.smartactors.core.db_task.search.utils.ISearchQueryWriter;
+import info.smart_tools.smartactors.core.db_task.search.utils.sql.GeneralSQLOrderWriter;
+import info.smart_tools.smartactors.core.db_task.search.utils.sql.GeneralSQLPagingWriter;
+import info.smart_tools.smartactors.core.db_task.search.wrappers.ISearchQuery;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.sql_commons.QueryConditionWriterResolver;
+import info.smart_tools.smartactors.core.sql_commons.QueryStatement;
+
+import javax.annotation.Nonnull;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Task for searching documents in database.
+ */
+public class PSQLSearchTask extends DBSearchTask {
+    /** Current connection to database. */
+    private StorageConnection connection;
+    /** Compiled searching query. */
+    private CompiledQuery query;
+    /** {@see SearchQuery} {@link ISearchQuery} */
+    private ISearchQuery message;
+
+    /** Modules for building a searching query. */
+    private QueryConditionWriterResolver conditionsWriterResolver;
+    private ISearchQueryWriter orderWriter;
+    private ISearchQueryWriter pagingWriter;
+
+    /**
+     * A single constructor for creation {@link PSQLSearchTask}
+     */
+    private PSQLSearchTask(
+            final QueryConditionWriterResolver conditionsWriterResolver,
+            final ISearchQueryWriter orderWriter,
+            final ISearchQueryWriter pagingWriter
+<span class="fc" id="L53">    ) {</span>
+<span class="fc" id="L54">        this.conditionsWriterResolver = conditionsWriterResolver;</span>
+<span class="fc" id="L55">        this.orderWriter = orderWriter;</span>
+<span class="fc" id="L56">        this.pagingWriter = pagingWriter;</span>
+<span class="fc" id="L57">    }</span>
+
+    public static PSQLSearchTask create() {
+<span class="fc" id="L60">        return new PSQLSearchTask(</span>
+<span class="fc" id="L61">                ConditionsWriterResolver.create(),</span>
+<span class="fc" id="L62">                GeneralSQLOrderWriter.create(),</span>
+<span class="fc" id="L63">                GeneralSQLPagingWriter.create());</span>
+    }
+
+    /**
+     * Factory method for creation new instance of {@link PSQLSearchTask}.
+     *
+     * @param bufferMaxSize
+     */
+    public static PSQLSearchTask create(final int bufferMaxSize) {
+<span class="nc" id="L72">        return new PSQLSearchTask(</span>
+<span class="nc" id="L73">                ConditionsWriterResolver.create(),</span>
+<span class="nc" id="L74">                GeneralSQLOrderWriter.create(),</span>
+<span class="nc" id="L75">                GeneralSQLPagingWriter.create());</span>
+    }
+
+    /**
+     * {@see IDatabaseTask} {@link info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask}
+     * Prepare query for searching documents in database by some criteria.
+     *
+     * @param prepareMessage {@see SearchQuery} {@link ISearchQuery}
+     *
+     * @throws TaskPrepareException when:
+     *                1. IOC resolution error;
+     *                2. Error building a searching query statement.
+     */
+    @Override
+    public void prepare(@Nonnull final IObject prepareMessage) throws TaskPrepareException {
+        try {
+<span class="fc" id="L91">            ISearchQuery queryMessage = IOC.resolve(Keys.getOrAdd(ISearchQuery.class.toString()), prepareMessage);</span>
+<span class="fc" id="L92">            IBufferedQuery searchQuery = queryMessage</span>
+<span class="fc" id="L93">                    .getBufferedQuery()</span>
+<span class="fc" id="L94">                    .orElse(createSearchQuery(queryMessage));</span>
+<span class="fc" id="L95">            queryMessage.setBufferedQuery(searchQuery);</span>
+
+<span class="fc" id="L97">            query = setQueryParameters(searchQuery.getCompiledQuery(), searchQuery.getParametersSetters());</span>
+<span class="fc" id="L98">            message = queryMessage;</span>
+<span class="nc" id="L99">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L100">            throw new TaskPrepareException(e.getMessage(), e);</span>
+<span class="nc" id="L101">        } catch (StorageException e) {</span>
+<span class="nc" id="L102">            throw new TaskPrepareException(&quot;Error compiled query statement&quot; + e.getMessage(), e);</span>
+<span class="fc" id="L103">        }</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * {@see ITask} {@link info.smart_tools.smartactors.core.itask.ITask}
+     * Executes searching documents by criteria from database.
+     *
+     * @throws TaskExecutionException when error in execution process.
+     */
+    @Override
+    public void execute() throws TaskExecutionException {
+<span class="fc" id="L114">        super.execute(query, message);</span>
+<span class="fc" id="L115">    }</span>
+
+    @Override
+    public void setConnection(@Nonnull final StorageConnection storageConnection) throws TaskSetConnectionException {
+<span class="fc" id="L119">        this.connection = storageConnection;</span>
+<span class="fc" id="L120">    }</span>
+
+    private IBufferedQuery createSearchQuery(final ISearchQuery queryMessage)
+            throws TaskPrepareException, StorageException, ResolutionException {
+<span class="fc" id="L124">        List&lt;SQLQueryParameterSetter&gt; setters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L125">        CompiledQuery compiledQuery = connection.compileQuery(createQueryStatement(queryMessage, setters));</span>
+<span class="fc" id="L126">        return IOC.resolve(Keys.getOrAdd(IBufferedQuery.class.toString()), compiledQuery, setters);</span>
+    }
+
+    private QueryStatement createQueryStatement(
+            final ISearchQuery queryMessage,
+            final List&lt;SQLQueryParameterSetter&gt; setters
+    ) throws TaskPrepareException {
+<span class="fc" id="L133">        QueryStatement queryStatement = new QueryStatement();</span>
+        try {
+<span class="fc" id="L135">            queryStatement.getBodyWriter().write(String.format(&quot;SELECT * FROM %s WHERE&quot;,</span>
+<span class="fc" id="L136">                    CollectionName.fromString(queryMessage.getCollectionName()).toString()));</span>
+
+<span class="fc" id="L138">            conditionsWriterResolver</span>
+<span class="fc" id="L139">                    .resolve(null)</span>
+<span class="fc" id="L140">                    .write(queryStatement, conditionsWriterResolver, null, queryMessage.getCriteria(), setters);</span>
+<span class="fc" id="L141">            orderWriter.write(queryStatement, queryMessage, setters);</span>
+<span class="fc" id="L142">            pagingWriter.write(queryStatement, queryMessage, setters);</span>
+<span class="nc" id="L143">        } catch (QueryBuildException e) {</span>
+<span class="nc" id="L144">            throw new TaskPrepareException(&quot;Error writing query statement: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L145">        } catch (Exception e) {</span>
+<span class="nc" id="L146">            throw new TaskPrepareException(e.getMessage(), e);</span>
+<span class="fc" id="L147">        }</span>
+
+<span class="fc" id="L149">        return queryStatement;</span>
+    }
+
+    private CompiledQuery setQueryParameters(
+            final CompiledQuery compiledQuery,
+            final List&lt;SQLQueryParameterSetter&gt; setters
+    ) throws TaskPrepareException {
+        try {
+<span class="fc" id="L157">            compiledQuery.setParameters(setters);</span>
+<span class="nc" id="L158">        } catch (SQLException | QueryBuildException e) {</span>
+<span class="nc" id="L159">            throw new TaskPrepareException(&quot;Error setting query parameters: &quot; + e.getMessage(), e);</span>
+<span class="fc" id="L160">        }</span>
+
+<span class="fc" id="L162">        return compiledQuery;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

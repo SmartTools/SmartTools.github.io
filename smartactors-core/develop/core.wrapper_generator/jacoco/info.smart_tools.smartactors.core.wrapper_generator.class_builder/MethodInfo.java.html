@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MethodInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.wrapper_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.wrapper_generator.class_builder</a> &gt; <span class="el_source">MethodInfo.java</span></div><h1>MethodInfo.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.wrapper_generator.class_builder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Method summary info
+ */
+public class MethodInfo {
+
+    private ClassBuilder builder;
+    private Modifiers modifier;
+    private String name;
+<span class="fc" id="L14">    private List&lt;MethodParameterInfo&gt; parameters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L15">    private List&lt;String&gt; exceptions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L16">    private List&lt;String&gt; body = new ArrayList&lt;&gt;();</span>
+    private String returnType;
+
+    /**
+     * Constructor.
+     * Create new instance of {@link MethodInfo} by given {@link ClassBuilder}
+     * @param classBuilder the link to parent instance of {@link ClassBuilder}
+     */
+<span class="fc" id="L24">    public MethodInfo(final ClassBuilder classBuilder) {</span>
+<span class="fc" id="L25">        this.builder = classBuilder;</span>
+<span class="fc" id="L26">    }</span>
+
+    public Modifiers getModifier() {
+<span class="fc" id="L29">        return modifier;</span>
+    }
+
+    /**
+     * Set modifier of method
+     * @param modifierOfMethod the method modifier
+     * @return instance of {@link MethodInfo}
+     */
+    public MethodInfo setModifier(final Modifiers modifierOfMethod) {
+<span class="fc" id="L38">        this.modifier = modifierOfMethod;</span>
+
+<span class="fc" id="L40">        return this;</span>
+    }
+
+    public String getName() {
+<span class="fc" id="L44">        return name;</span>
+    }
+
+    /**
+     * Set name of current method
+     * @param nameOfMethod the name of method
+     * @return instance of {@link MethodInfo}
+     */
+    public MethodInfo setName(final String nameOfMethod) {
+<span class="fc" id="L53">        this.name = nameOfMethod;</span>
+
+<span class="fc" id="L55">        return this;</span>
+    }
+
+    public List&lt;MethodParameterInfo&gt; getParameters() {
+<span class="fc" id="L59">        return parameters;</span>
+    }
+
+    /**
+     * Add new parameter to the current method and start editing arguments of new parameter
+     * @return instance of {@link ConstructorParameterInfo}
+     */
+    public MethodParameterInfo addParameter() {
+<span class="fc" id="L67">        MethodParameterInfo parameterInfo = new MethodParameterInfo(this);</span>
+<span class="fc" id="L68">        this.parameters.add(parameterInfo);</span>
+<span class="fc" id="L69">        return parameterInfo;</span>
+    }
+
+    public List&lt;String&gt; getExceptions() {
+<span class="fc" id="L73">        return exceptions;</span>
+    }
+
+    /**
+     * Add new exception to the current method by given exception name
+     * @param exception the name of given exception
+     * @return current instance of {@link MethodInfo}
+     */
+    public MethodInfo setExceptions(final String exception) {
+<span class="fc" id="L82">        this.exceptions.add(exception);</span>
+
+<span class="fc" id="L84">        return this;</span>
+    }
+
+    public List&lt;String&gt; getBody() {
+<span class="fc" id="L88">        return body;</span>
+    }
+
+    /**
+     * Add next string to the method body
+     * @param string the string with constructor code
+     * @return current instance of {@link MethodInfo}
+     */
+    public MethodInfo addStringToBody(final String string) {
+<span class="fc" id="L97">        this.body.add(string);</span>
+
+<span class="fc" id="L99">        return this;</span>
+    }
+
+    public String getReturnType() {
+<span class="fc" id="L103">        return returnType;</span>
+    }
+
+    /**
+     * Set type of method return value
+     * @param type the type of returning value
+     * @return current instance of {@link MethodInfo}
+     */
+    public MethodInfo setReturnType(final String type) {
+<span class="fc" id="L112">        this.returnType = type;</span>
+
+<span class="fc" id="L114">        return this;</span>
+    }
+
+    /**
+     * Return editing to parent parameters
+     * @return the parent instance of {@link ClassBuilder}
+     */
+    public ClassBuilder next() {
+<span class="fc" id="L122">        return this.builder;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

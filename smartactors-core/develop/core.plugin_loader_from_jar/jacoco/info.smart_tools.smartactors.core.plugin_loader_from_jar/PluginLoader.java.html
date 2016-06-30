@@ -7,9 +7,11 @@ import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
 import info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
 import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -23,7 +25,7 @@ import java.util.jar.JarFile;
  * given parameters.
  * &lt;/pre&gt;
  */
-public class PluginLoader implements IPluginLoader&lt;String&gt; {
+public class PluginLoader implements IPluginLoader&lt;Collection&lt;File&gt;&gt; {
 
     private static final String CLASS_EXTENSION = &quot;.class&quot;;
 
@@ -44,53 +46,64 @@ public class PluginLoader implements IPluginLoader&lt;String&gt; {
      * @throws InvalidArgumentException if incoming argument are wrong
      */
     public PluginLoader(final ClassLoader classLoader, final IAction&lt;Class&gt; action, final IPluginLoaderVisitor&lt;String&gt; visitor)
-<span class="fc" id="L47">            throws InvalidArgumentException {</span>
-<span class="pc bpc" id="L48" title="2 of 6 branches missed.">        if (null == action || null == classLoader || null == visitor) {</span>
-<span class="fc" id="L49">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+<span class="fc" id="L49">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L50" title="2 of 6 branches missed.">        if (null == action || null == classLoader || null == visitor) {</span>
+<span class="fc" id="L51">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
         }
-<span class="fc" id="L51">        this.creator = action;</span>
-<span class="fc" id="L52">        this.visitor = visitor;</span>
+<span class="fc" id="L53">        this.creator = action;</span>
+<span class="fc" id="L54">        this.visitor = visitor;</span>
         try {
-<span class="fc" id="L54">            this.classLoader = (ExpansibleURLClassLoader) classLoader;</span>
-<span class="fc" id="L55">        } catch (Throwable e) {</span>
-<span class="fc" id="L56">            throw new InvalidArgumentException(&quot;Could not cast given ClassLoader to the URLClassLoader.&quot;);</span>
-<span class="fc" id="L57">        }</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L56">            this.classLoader = (ExpansibleURLClassLoader) classLoader;</span>
+<span class="fc" id="L57">        } catch (Throwable e) {</span>
+<span class="fc" id="L58">            throw new InvalidArgumentException(&quot;Could not cast given ClassLoader to the URLClassLoader.&quot;);</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">    }</span>
 
     @Override
-    public void loadPlugin(final String pathToJar)
+    public void loadPlugin(final Collection&lt;File&gt; files)
             throws PluginLoaderException {
-<span class="fc" id="L63">        JarFile jarFile = null;</span>
         try {
-<span class="fc" id="L65">            jarFile = new JarFile(pathToJar);</span>
-<span class="fc" id="L66">            Enumeration&lt;JarEntry&gt; iterator = jarFile.entries();</span>
-<span class="fc" id="L67">            URL url = new URL(&quot;jar:file:&quot; + pathToJar + &quot;!/&quot;);</span>
-<span class="fc" id="L68">            this.classLoader.addUrl(url);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            for (File file : files) {</span>
+<span class="fc" id="L67">                URL url = new URL(&quot;jar:file:&quot; + file.getAbsolutePath() + &quot;!/&quot;);</span>
+<span class="fc" id="L68">                this.classLoader.addUrl(url);</span>
+<span class="fc" id="L69">            }</span>
+<span class="fc" id="L70">        } catch (Throwable e) {</span>
+<span class="fc" id="L71">            throw new PluginLoaderException(&quot;Malformed file name.&quot;, e);</span>
+<span class="fc" id="L72">        }</span>
 
-<span class="fc bfc" id="L70" title="All 2 branches covered.">            while (iterator.hasMoreElements()) {</span>
-<span class="fc" id="L71">                JarEntry je = iterator.nextElement();</span>
-<span class="pc bpc" id="L72" title="1 of 4 branches missed.">                if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {</span>
-<span class="nc" id="L73">                    continue;</span>
+<span class="fc" id="L74">        JarFile jarFile = null;</span>
+<span class="fc" id="L75">        String pathToJar = null;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (File file : files) {</span>
+            try {
+<span class="fc" id="L78">                pathToJar = file.getAbsolutePath();</span>
+<span class="fc" id="L79">                jarFile = new JarFile(pathToJar);</span>
+<span class="fc" id="L80">                Enumeration&lt;JarEntry&gt; iterator = jarFile.entries();</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                while (iterator.hasMoreElements()) {</span>
+<span class="fc" id="L82">                    JarEntry je = iterator.nextElement();</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">                    if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {</span>
+<span class="nc" id="L84">                        continue;</span>
+                    }
+<span class="fc" id="L86">                    String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());</span>
+<span class="fc" id="L87">                    className = className.replace('/', '.');</span>
+<span class="fc" id="L88">                    Class clazz = classLoader.loadClass(className);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                    if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {</span>
+<span class="fc" id="L90">                        creator.execute(clazz);</span>
+                    }
+<span class="fc" id="L92">                }</span>
+<span class="fc" id="L93">            } catch (Throwable e) {</span>
+<span class="fc" id="L94">                visitor.pluginLoadingFail(pathToJar, e);</span>
+<span class="fc" id="L95">                throw new PluginLoaderException(&quot;Plugin loading failed.&quot;, e);</span>
+            } finally {
+<span class="pc bpc" id="L97" title="1 of 4 branches missed.">                if (null != jarFile) {</span>
+                    try {
+<span class="fc" id="L99">                        jarFile.close();</span>
+<span class="nc" id="L100">                    } catch (IOException e) {</span>
+                        //TODO: replace throw by other logic
+<span class="pc" id="L102">                        throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
+<span class="fc" id="L103">                    }</span>
                 }
-<span class="fc" id="L75">                String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());</span>
-<span class="fc" id="L76">                className = className.replace('/', '.');</span>
-<span class="fc" id="L77">                Class clazz = classLoader.loadClass(className);</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {</span>
-<span class="fc" id="L79">                    creator.execute(clazz);</span>
-                }
-<span class="fc" id="L81">            }</span>
-<span class="fc" id="L82">        } catch (Throwable e) {</span>
-<span class="fc" id="L83">            visitor.pluginLoadingFail(pathToJar, e);</span>
-<span class="fc" id="L84">            throw new PluginLoaderException(&quot;Plugin loading failed.&quot;, e);</span>
-        } finally {
-<span class="pc bpc" id="L86" title="1 of 4 branches missed.">            if (null != jarFile) {</span>
-                try {
-<span class="fc" id="L88">                    jarFile.close();</span>
-<span class="nc" id="L89">                } catch (IOException e) {</span>
-<span class="pc" id="L90">                    throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
-<span class="fc" id="L91">                }</span>
             }
-        }
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

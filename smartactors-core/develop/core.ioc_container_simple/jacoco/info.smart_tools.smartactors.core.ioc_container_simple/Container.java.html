@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
      * @return instance of {@link IKey}
      */
     @Override
-    public IKey&lt;IKey&gt; getKeyForKeyStorage() {
+    public IKey getKeyForKeyStorage() {
 <span class="fc" id="L39">        return null;</span>
     }
 
@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
      * @throws ResolutionException if resolution is impossible because of any errors
      */
     @Override
-    public &lt;T&gt; T resolve(final IKey&lt;T&gt; key, final Object ... args)
+    public &lt;T&gt; T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {
 <span class="fc" id="L54">            IResolveDependencyStrategy strategy = storage.get(key);</span>

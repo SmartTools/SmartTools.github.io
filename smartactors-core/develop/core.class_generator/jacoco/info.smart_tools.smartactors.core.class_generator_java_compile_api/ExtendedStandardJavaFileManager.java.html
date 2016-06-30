@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExtendedStandardJavaFileManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.class_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.class_generator_java_compile_api</a> &gt; <span class="el_source">ExtendedStandardJavaFileManager.java</span></div><h1>ExtendedStandardJavaFileManager.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.class_generator_java_compile_api;
+
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
+import java.io.IOException;
+
+/**
+ * Class extends StandardJavaFileManager
+ */
+class ExtendedStandardJavaFileManager extends ForwardingJavaFileManager&lt;JavaFileManager&gt; {
+
+    private CompiledCode compiledCode;
+    private DynamicClassLoader cl;
+
+    /**
+     * Constructor.
+     * Creates instance of {@link ExtendedStandardJavaFileManager} by given
+     * instances of {@link JavaFileManager}, {@link CompiledCode}, {@link DynamicClassLoader}
+     * @param fileManager instance of {@link JavaFileManager}
+     * @param compiledCode instance of {@link CompiledCode}
+     * @param cl instance of {@link DynamicClassLoader}
+     */
+    ExtendedStandardJavaFileManager(
+            final JavaFileManager fileManager,
+            final CompiledCode compiledCode,
+            final DynamicClassLoader cl
+    ) {
+<span class="fc" id="L31">        super(fileManager);</span>
+<span class="fc" id="L32">        this.compiledCode = compiledCode;</span>
+<span class="fc" id="L33">        this.cl = cl;</span>
+<span class="fc" id="L34">        this.cl.setCode(compiledCode);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Get compiled code
+     * @param location instance of {@link Location}
+     * @param className full name of future class
+     * @param kind instance of {@link Kind}
+     * @param sibling ??
+     * @return compiled code
+     * @throws IOException if any errors occurred
+     */
+    public JavaFileObject getJavaFileForOutput(
+            final Location location,
+            final String className,
+            final Kind kind,
+            final FileObject sibling
+    ) throws IOException {
+<span class="fc" id="L52">        return this.compiledCode;</span>
+    }
+
+    /**
+     * Get current instance of {@link DynamicClassLoader}
+     * @param location instance of {@link Location}
+     * @return instance of current {@link DynamicClassLoader}
+     */
+    public ClassLoader getClassLoader(final Location location) {
+<span class="fc" id="L61">        return this.cl;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Field.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.wrapper_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.wrapper_generator</a> &gt; <span class="el_source">Field.java</span></div><h1>Field.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.wrapper_generator;
+
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IFieldName;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+/**
+ * Support class for convert types and resolve dependencies in
+ * @param &lt;T&gt; type of returning value for getters or type of value that will be set to iobject
+ */
+public class Field&lt;T&gt; {
+    private IFieldName name;
+
+    /**
+     * Constructor.
+     * Create instance of {@link Field} by given instance of {@link IFieldName}
+     * @param name instance of {@link IFieldName}
+     */
+<span class="fc" id="L25">    public Field(final IFieldName name) {</span>
+<span class="fc" id="L26">        this.name = name;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Get specific value from instance of {@link IObject} and convert it to T type
+     * @param object instance of {@link IObject}
+     * @param targetClass class to convert gotten value to
+     * @return instance of {@link T}
+     * @throws ReadValueException if any errors occurred when iobject had been reading
+     * @throws ChangeValueException if any errors occurred when iobject had been changing
+     * @throws InvalidArgumentException if incoming arguments are incorrect
+     */
+    public T from(final IObject object, final Class&lt;T&gt; targetClass)
+            throws ReadValueException, ChangeValueException, InvalidArgumentException {
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (object == null) {</span>
+<span class="fc" id="L41">            throw new InvalidArgumentException(&quot;Input IObject in Field.from(IObject, Class) is null&quot;);</span>
+        }
+<span class="fc" id="L43">        Object value = object.getValue(name);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L45">            return null;</span>
+        }
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (value.getClass().equals(targetClass)) {</span>
+<span class="fc" id="L48">            return (T) value;</span>
+        }
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (targetClass.isAssignableFrom(value.getClass())) {</span>
+<span class="fc" id="L52">            return (T) value;</span>
+        }
+
+        try {
+            T convertedValue;
+<span class="fc" id="L57">            convertedValue = IOC.resolve(Keys.getOrAdd(targetClass.toString()), value);</span>
+
+<span class="fc" id="L59">            return convertedValue;</span>
+<span class="fc" id="L60">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L61">            throw new InvalidArgumentException(</span>
+                    &quot;Passed object with value of field which is impossible to resolve to expected type&quot;,
+                    e
+            );
+        }
+    }
+
+    /**
+     * Get specific value from instance of {@link IObject} and convert it to T type
+     * @param object instance of {@link IObject}
+     * @param strategyName if exists then indicate name of specific strategy for resolve dependency
+     * @return instance of {@link T}
+     * @throws ReadValueException if any errors occurred when iobject had been reading
+     * @throws ChangeValueException if any errors occurred when iobject had been changing
+     * @throws InvalidArgumentException if incoming arguments are incorrect
+     */
+    public T from(final IObject object, final String strategyName)
+            throws ReadValueException, ChangeValueException, InvalidArgumentException {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (object == null) {</span>
+<span class="fc" id="L80">            throw new InvalidArgumentException(&quot;Input IObject in Field.from(IObject, Class) is null&quot;);</span>
+        }
+<span class="fc" id="L82">        Object value = object.getValue(name);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L84">            return null;</span>
+        }
+
+        try {
+            T convertedValue;
+<span class="fc" id="L89">            convertedValue = IOC.resolve(Keys.getOrAdd(strategyName), value);</span>
+
+<span class="fc" id="L91">            return convertedValue;</span>
+<span class="fc" id="L92">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L93">            throw new InvalidArgumentException(</span>
+                    &quot;Passed object with value of field which is impossible to resolve to expected type&quot;,
+                    e
+            );
+        }
+    }
+
+    /**
+     * Insert into {@link IObject} value-object that casts to target class.
+     * @param object IObject that wil be contain value
+     * @param value value object
+     * @throws ChangeValueException if any errors occurred when iobject had been changing
+     * @throws InvalidArgumentException if incoming arguments are incorrect
+     */
+    public void inject(final IObject object, final T value)
+            throws ChangeValueException, InvalidArgumentException {
+<span class="fc" id="L109">        object.setValue(name, value);</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Delete from input {@link IObject} field {@link Field#name}
+     * @param object input object
+     * @throws DeleteValueException if any errors occurred when iobject had been deleting
+     * @throws InvalidArgumentException if incoming arguments are incorrect
+     */
+    public void delete(final IObject object)
+            throws DeleteValueException, InvalidArgumentException {
+<span class="fc" id="L120">        object.deleteField(name);</span>
+<span class="fc" id="L121">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>core.class_generator - Checkstyle report</title>
+    <link>core.class_generator/core.class_generator/</link>
+    <description>core.class_generator - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2016</copyright>
+    <item>
+      <title>File: 7,
+             Errors: 0,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>core.class_generator/core.class_generator//checkstyle.html</link>
+      <description>
+        <p>Click <a href="core.class_generator/core.class_generator//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.InMemoryCodeCompiler.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/InMemoryCodeCompiler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.SourceCode.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/SourceCode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.package-info.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.CompiledCode.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/CompiledCode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.ClassGenerator.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/ClassGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.ExtendedStandardJavaFileManager.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/ExtendedStandardJavaFileManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.DynamicClassLoader.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/DynamicClassLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

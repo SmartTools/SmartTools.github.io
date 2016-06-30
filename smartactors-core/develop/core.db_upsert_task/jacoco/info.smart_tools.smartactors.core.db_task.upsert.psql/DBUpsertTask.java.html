@@ -11,6 +11,7 @@ import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
@@ -56,137 +57,162 @@ public class DBUpsertTask implements IDatabaseTask {
         void upsert() throws TaskExecutionException;
     }
 
-<span class="fc" id="L59">    public DBUpsertTask() {</span>
+<span class="fc" id="L60">    public DBUpsertTask() {</span>
 
-<span class="fc" id="L61">        executionMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L62">        executionMap = new HashMap&lt;&gt;();</span>
         try {
-<span class="fc" id="L63">            this.dbInsertTask = IOC.resolve(Keys.getOrAdd(DBInsertTask.class.toString()));</span>
-<span class="nc" id="L64">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L64">            this.dbInsertTask = IOC.resolve(Keys.getOrAdd(DBInsertTask.class.toString()));</span>
+<span class="nc" id="L65">        } catch (ResolutionException e) {</span>
             //TODO:: throw smth like TaskCreateException(&quot;Error while resolving insert task.&quot;, e); when standard exception would be added
-<span class="fc" id="L66">        }</span>
-<span class="fc" id="L67">        executionMap.put(UPDATE_MODE, () -&gt; {</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">        executionMap.put(UPDATE_MODE, () -&gt; {</span>
             try {
-<span class="fc" id="L69">                int nUpdated = compiledQuery.getPreparedStatement().executeUpdate();</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">                if (nUpdated == 0) {</span>
-<span class="fc" id="L71">                    throw new TaskExecutionException(&quot;Update query failed: wrong count of documents is updated.&quot;);</span>
+<span class="fc" id="L70">                int nUpdated = compiledQuery.getPreparedStatement().executeUpdate();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                if (nUpdated == 0) {</span>
+<span class="fc" id="L72">                    throw new TaskExecutionException(&quot;Update query failed: wrong count of documents is updated.&quot;);</span>
                 }
-<span class="nc" id="L73">            } catch (SQLException e) {</span>
-<span class="nc" id="L74">                throw new TaskExecutionException(&quot;Transaction execution has been failed.&quot;, e);</span>
-<span class="fc" id="L75">            }</span>
-<span class="fc" id="L76">        });</span>
-<span class="fc" id="L77">        executionMap.put(INSERT_MODE, () -&gt; {</span>
+<span class="nc" id="L74">            } catch (SQLException e) {</span>
+<span class="nc" id="L75">                throw new TaskExecutionException(&quot;Transaction execution has been failed.&quot;, e);</span>
+<span class="fc" id="L76">            }</span>
+<span class="fc" id="L77">        });</span>
+<span class="fc" id="L78">        executionMap.put(INSERT_MODE, () -&gt; {</span>
             try {
-<span class="fc" id="L79">                ResultSet resultSet = compiledQuery.getPreparedStatement().executeQuery();</span>
-<span class="pc bpc" id="L80" title="1 of 4 branches missed.">                if (resultSet == null || !resultSet.first()) {</span>
-<span class="fc" id="L81">                    throw new TaskExecutionException(&quot;Database returned not enough of generated ids.&quot;);</span>
+<span class="fc" id="L80">                ResultSet resultSet = compiledQuery.getPreparedStatement().executeQuery();</span>
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">                if (resultSet == null || !resultSet.first()) {</span>
+<span class="fc" id="L82">                    throw new TaskExecutionException(&quot;Database returned not enough of generated ids.&quot;);</span>
                 }
                 try {
                     //TODO:: replace by field.inject()
-<span class="fc" id="L85">                    rawUpsertQuery.setValue(idFieldName, resultSet.getLong(&quot;id&quot;));</span>
-<span class="nc" id="L86">                } catch (ChangeValueException e) {</span>
-<span class="nc" id="L87">                    throw new TaskExecutionException(&quot;Could not set new id on inserted document.&quot;);</span>
-<span class="fc" id="L88">                }</span>
-<span class="nc" id="L89">            } catch (SQLException e) {</span>
-<span class="nc" id="L90">                throw new TaskExecutionException(&quot;Insertion query execution failed because of SQL exception.&quot;,e);</span>
-<span class="fc" id="L91">            }</span>
-<span class="fc" id="L92">        });</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L86">                    rawUpsertQuery.setValue(idFieldName, resultSet.getLong(&quot;id&quot;));</span>
+<span class="nc" id="L87">                } catch (ChangeValueException e) {</span>
+<span class="nc" id="L88">                    throw new TaskExecutionException(&quot;Could not set new id on inserted document.&quot;);</span>
+<span class="nc" id="L89">                } catch (Throwable e) { //TODO added by AKutalev, reason: now IObject can throw InvalidArgumentException</span>
+<span class="nc" id="L90">                    throw new TaskExecutionException(&quot;Invalid argument exception&quot;, e);</span>
+<span class="fc" id="L91">                }</span>
+<span class="nc" id="L92">            } catch (SQLException e) {</span>
+<span class="nc" id="L93">                throw new TaskExecutionException(&quot;Insertion query execution failed because of SQL exception.&quot;, e);</span>
+<span class="fc" id="L94">            }</span>
+<span class="fc" id="L95">        });</span>
+<span class="fc" id="L96">    }</span>
 
     @Override
     public void prepare(final IObject upsertObject) throws TaskPrepareException {
 
         try {
-<span class="fc" id="L99">            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.toString()), upsertObject);</span>
-<span class="fc" id="L100">            this.collectionName = upsertMessage.getCollectionName();</span>
-<span class="nc" id="L101">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L102">            throw new TaskPrepareException(&quot;Error while resolving upsert message.&quot;, e);</span>
-<span class="nc" id="L103">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L104">            throw new TaskPrepareException(&quot;Error while get collection name.&quot;, e);</span>
-<span class="fc" id="L105">        }</span>
+<span class="fc" id="L102">            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.toString()), upsertObject);</span>
+<span class="fc" id="L103">            this.collectionName = upsertMessage.getCollectionName();</span>
+<span class="nc" id="L104">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L105">            throw new TaskPrepareException(&quot;Error while resolving upsert message.&quot;, e);</span>
+<span class="nc" id="L106">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L107">            throw new TaskPrepareException(&quot;Error while get collection name.&quot;, e);</span>
+<span class="fc" id="L108">        }</span>
         try {
-<span class="fc" id="L107">            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), collectionName + &quot;Id&quot;);</span>
-<span class="nc" id="L108">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L109">            throw new TaskPrepareException(&quot;Can't create idFieldName.&quot;, e);</span>
-<span class="fc" id="L110">        }</span>
+<span class="fc" id="L110">            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), collectionName + &quot;Id&quot;);</span>
+<span class="nc" id="L111">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L112">            throw new TaskPrepareException(&quot;Can't create idFieldName.&quot;, e);</span>
+<span class="fc" id="L113">        }</span>
 
-<span class="fc" id="L112">        this.rawUpsertQuery = upsertObject;</span>
+<span class="fc" id="L115">        this.rawUpsertQuery = upsertObject;</span>
         try {
-<span class="fc" id="L114">            String id = IOC.resolve(Keys.getOrAdd(String.class.toString()), upsertObject.getValue(idFieldName));</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            if (id != null) {</span>
-<span class="fc" id="L116">                this.mode = UPDATE_MODE;</span>
-<span class="fc" id="L117">                QueryStatementFactory factory = () -&gt; {</span>
-<span class="nc" id="L118">                    QueryStatement updateQueryStatement = new QueryStatement();</span>
-<span class="nc" id="L119">                    Writer writer = updateQueryStatement.getBodyWriter();</span>
+<span class="fc" id="L117">            String id = IOC.resolve(Keys.getOrAdd(String.class.toString()), upsertObject.getValue(idFieldName));</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (id != null) {</span>
+<span class="fc" id="L119">                this.mode = UPDATE_MODE;</span>
+<span class="fc" id="L120">                QueryStatementFactory factory = () -&gt; {</span>
+<span class="nc" id="L121">                    QueryStatement updateQueryStatement = new QueryStatement();</span>
+<span class="nc" id="L122">                    Writer writer = updateQueryStatement.getBodyWriter();</span>
                     try {
-<span class="nc" id="L121">                        writer.write(String.format(</span>
-<span class="nc" id="L122">                            &quot;UPDATE %s AS tab SET %s = docs.document FROM (VALUES&quot;, CollectionName.fromString(collectionName).toString(), Schema.DOCUMENT_COLUMN_NAME</span>
+<span class="nc" id="L124">                        writer.write(String.format(</span>
+                                &quot;UPDATE %s AS tab SET %s = docs.document FROM (VALUES&quot;,
+<span class="nc" id="L126">                                CollectionName.fromString(collectionName).toString(),</span>
+                                Schema.DOCUMENT_COLUMN_NAME
                         ));
-<span class="nc" id="L124">                        writer.write(&quot;(?,?::jsonb)&quot;);</span>
-<span class="nc" id="L125">                        writer.write(String.format(&quot;) AS docs (id, document) WHERE tab.%s = docs.id;&quot;, Schema.ID_COLUMN_NAME));</span>
-<span class="nc" id="L126">                    } catch (IOException | QueryBuildException e) {</span>
-<span class="nc" id="L127">                        throw new QueryStatementFactoryException(&quot;Error while initialize update query.&quot;, e);</span>
-<span class="nc" id="L128">                    }</span>
-<span class="nc" id="L129">                    return updateQueryStatement;</span>
+<span class="nc" id="L129">                        writer.write(&quot;(?,?::jsonb)&quot;);</span>
+<span class="nc" id="L130">                        writer.write(String.format(</span>
+                                &quot;) AS docs (id, document) WHERE tab.%s = docs.id;&quot;,
+                                Schema.ID_COLUMN_NAME
+                        ));
+<span class="nc" id="L134">                    } catch (IOException | QueryBuildException e) {</span>
+<span class="nc" id="L135">                        throw new QueryStatementFactoryException(&quot;Error while initialize update query.&quot;, e);</span>
+<span class="nc" id="L136">                    }</span>
+<span class="nc" id="L137">                    return updateQueryStatement;</span>
                 };
-<span class="fc" id="L131">                this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, DBUpsertTask.class.toString().concat(&quot;update&quot;), factory);</span>
-
-<span class="fc" id="L133">                List&lt;SQLQueryParameterSetter&gt; parameterSetters = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L134">                parameterSetters.add((statement, index) -&gt; {</span>
+<span class="fc" id="L139">                this.compiledQuery = IOC.resolve(</span>
+<span class="fc" id="L140">                        Keys.getOrAdd(CompiledQuery.class.toString()),</span>
+                        connection,
+<span class="fc" id="L142">                        DBUpsertTask.class.toString().concat(&quot;update&quot;),</span>
+                        factory
+                );
+<span class="fc" id="L145">                List&lt;SQLQueryParameterSetter&gt; parameterSetters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L146">                parameterSetters.add((statement, index) -&gt; {</span>
                     try {
-<span class="nc" id="L136">                        statement.setLong(index++, Long.parseLong(id));</span>
-<span class="nc" id="L137">                        statement.setString(index++, upsertObject.toString());</span>
-<span class="nc" id="L138">                    } catch (NullPointerException | NumberFormatException e) {</span>
-<span class="nc" id="L139">                        throw new QueryBuildException(&quot;Error while writing update query statement: &quot;, e);</span>
-<span class="nc" id="L140">                    }</span>
-<span class="nc" id="L141">                    return index;</span>
+<span class="nc" id="L148">                        statement.setLong(index++, Long.parseLong(id));</span>
+<span class="nc" id="L149">                        statement.setString(index++, upsertObject.toString());</span>
+<span class="nc" id="L150">                    } catch (NullPointerException | NumberFormatException e) {</span>
+<span class="nc" id="L151">                        throw new QueryBuildException(&quot;Error while writing update query statement: &quot;, e);</span>
+<span class="nc" id="L152">                    }</span>
+<span class="nc" id="L153">                    return index;</span>
                 });
-<span class="fc" id="L143">                this.compiledQuery.setParameters(parameterSetters);</span>
-<span class="fc" id="L144">            } else {</span>
-<span class="fc" id="L145">                this.mode = INSERT_MODE;</span>
-<span class="fc" id="L146">                dbInsertTask.setConnection(connection);</span>
+<span class="fc" id="L155">                this.compiledQuery.setParameters(parameterSetters);</span>
+<span class="fc" id="L156">            } else {</span>
+<span class="fc" id="L157">                this.mode = INSERT_MODE;</span>
+<span class="fc" id="L158">                dbInsertTask.setConnection(connection);</span>
 
                 //TODO:: move to DBInsertTask prepare() or to the separate class
-<span class="fc" id="L149">                QueryStatementFactory factory = () -&gt; {</span>
-<span class="nc" id="L150">                    QueryStatement insertQueryStatement = new QueryStatement();</span>
-<span class="nc" id="L151">                    Writer writer = insertQueryStatement.getBodyWriter();</span>
+<span class="fc" id="L161">                QueryStatementFactory factory = () -&gt; {</span>
+<span class="nc" id="L162">                    QueryStatement insertQueryStatement = new QueryStatement();</span>
+<span class="nc" id="L163">                    Writer writer = insertQueryStatement.getBodyWriter();</span>
                     try {
-<span class="nc" id="L153">                        writer.write(String.format(</span>
-<span class="nc" id="L154">                            &quot;INSERT INTO %s (%s) VALUES&quot;, CollectionName.fromString(collectionName).toString(), Schema.DOCUMENT_COLUMN_NAME</span>
+<span class="nc" id="L165">                        writer.write(String.format(</span>
+                                &quot;INSERT INTO %s (%s) VALUES&quot;,
+<span class="nc" id="L167">                                CollectionName.fromString(collectionName).toString(),</span>
+                                Schema.DOCUMENT_COLUMN_NAME
                         ));
-<span class="nc" id="L156">                        writer.write(&quot;(?::jsonb)&quot;);</span>
-<span class="nc" id="L157">                        writer.write(String.format(&quot; RETURNING %s AS id;&quot;, Schema.ID_COLUMN_NAME));</span>
-<span class="nc" id="L158">                    } catch (IOException | QueryBuildException e) {</span>
-<span class="nc" id="L159">                        throw new QueryStatementFactoryException(&quot;Error while initialize insert query.&quot;, e);</span>
-<span class="nc" id="L160">                    }</span>
-<span class="nc" id="L161">                    return insertQueryStatement;</span>
+<span class="nc" id="L170">                        writer.write(&quot;(?::jsonb)&quot;);</span>
+<span class="nc" id="L171">                        writer.write(String.format(&quot; RETURNING %s AS id;&quot;, Schema.ID_COLUMN_NAME));</span>
+<span class="nc" id="L172">                    } catch (IOException | QueryBuildException e) {</span>
+<span class="nc" id="L173">                        throw new QueryStatementFactoryException(&quot;Error while initialize insert query.&quot;, e);</span>
+<span class="nc" id="L174">                    }</span>
+<span class="nc" id="L175">                    return insertQueryStatement;</span>
                 };
-
-<span class="fc" id="L164">                this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, DBUpsertTask.class.toString().concat(&quot;insert&quot;), factory);</span>
-<span class="fc" id="L165">                List&lt;SQLQueryParameterSetter&gt; parameterSetters = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L166">                parameterSetters.add((statement, index) -&gt; {</span>
+<span class="fc" id="L177">                this.compiledQuery = IOC.resolve(</span>
+<span class="fc" id="L178">                        Keys.getOrAdd(CompiledQuery.class.toString()),</span>
+                        connection,
+<span class="fc" id="L180">                        DBUpsertTask.class.toString().concat(&quot;insert&quot;),</span>
+                        factory
+                );
+<span class="fc" id="L183">                List&lt;SQLQueryParameterSetter&gt; parameterSetters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L184">                parameterSetters.add((statement, index) -&gt; {</span>
                     try {
-<span class="nc" id="L168">                        statement.setString(index++, upsertObject.toString());</span>
-<span class="nc" id="L169">                    } catch (NullPointerException e) {</span>
-<span class="nc" id="L170">                        throw new QueryBuildException(&quot;Error while writing update query statement: &quot;, e);</span>
-<span class="nc" id="L171">                    }</span>
-<span class="nc" id="L172">                    return index;</span>
+<span class="nc" id="L186">                        statement.setString(index++, upsertObject.toString());</span>
+<span class="nc" id="L187">                    } catch (NullPointerException e) {</span>
+<span class="nc" id="L188">                        throw new QueryBuildException(&quot;Error while writing update query statement: &quot;, e);</span>
+<span class="nc" id="L189">                    }</span>
+<span class="nc" id="L190">                    return index;</span>
                 });
-<span class="fc" id="L174">                this.compiledQuery.setParameters(parameterSetters);</span>
+<span class="fc" id="L192">                this.compiledQuery.setParameters(parameterSetters);</span>
             }
-<span class="nc" id="L176">        } catch (ReadValueException | StorageException | ResolutionException | TaskSetConnectionException | SQLException e) {</span>
-<span class="nc" id="L177">            throw new TaskPrepareException(&quot;Error while writing update query statement.&quot;,e);</span>
-<span class="fc" id="L178">        }</span>
-<span class="fc" id="L179">    }</span>
+<span class="nc" id="L194">        } catch (</span>
+                ReadValueException |
+                StorageException |
+                ResolutionException |
+                TaskSetConnectionException |
+                SQLException e
+        ) {
+<span class="nc" id="L201">            throw new TaskPrepareException(&quot;Error while writing update query statement.&quot;, e);</span>
+<span class="nc" id="L202">        } catch (InvalidArgumentException e) { //TODO added by AKutalev, reason: now IObject can throw InvalidArgumentException</span>
+<span class="nc" id="L203">            throw new TaskPrepareException(&quot;Invalid argument exception&quot;, e);</span>
+<span class="fc" id="L204">        }</span>
+<span class="fc" id="L205">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="fc" id="L183">        this.connection = connection;</span>
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L209">        this.connection = connection;</span>
+<span class="fc" id="L210">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
 
-<span class="fc" id="L189">        executionMap.get(mode).upsert();</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L215">        executionMap.get(mode).upsert();</span>
+<span class="fc" id="L216">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

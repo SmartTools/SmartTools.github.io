@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 4,
              Errors: 0,
-             Warnings: 23,
+             Warnings: 9,
              Infos: 0
       </title>
             <link>core.db_create_collection_task/core.db_create_collection_task//checkstyle.html</link>
@@ -94,7 +94,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  19
+                  5
                 </td>
                 <td>
                   0

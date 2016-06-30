@@ -21,7 +21,7 @@
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../info/smart_tools/smartactors/core/examples/scope/MyIOC.html">MyIOC</a> {
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>      <em class="jxr_javadoccomment">/** Key for getting instance of storage from current scope */</em>
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> IKey STORAGE_KEY;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> IKey STORAGE_KEY;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">static</strong> {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>          <strong class="jxr_keyword">try</strong> {
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T resolve(<strong class="jxr_keyword">final</strong> IKey&lt;T&gt; key) <strong class="jxr_keyword">throws</strong> MyIOCException {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T resolve(<strong class="jxr_keyword">final</strong> IKey key) <strong class="jxr_keyword">throws</strong> MyIOCException {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>              MyRecursiveContainer&lt;IKey, Object&gt; storage = (MyRecursiveContainer&lt;IKey, Object&gt;)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                      ScopeProvider.getCurrentScope().getValue(STORAGE_KEY);

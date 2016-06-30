@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.FieldName;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ds_object.FieldName;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IFieldName;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
@@ -95,17 +95,17 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">new</strong> ResolveByNameIocStrategy(
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>                  (a) -&gt; {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>                      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Key&lt;IKey&gt;((String) a[0]);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Key((String) a[0]);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>                      } <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>                      }
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>                  })
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          );
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          IKey&lt;DBInsertTask&gt; keyDBInsertTask = Keys.getOrAdd(DBInsertTask.<strong class="jxr_keyword">class</strong>.toString());
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          IKey&lt;UpsertMessage&gt; keyUpsertMessage= Keys.getOrAdd(UpsertMessage.<strong class="jxr_keyword">class</strong>.toString());
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>          IKey&lt;QueryStatement&gt; keyQueryStatement = Keys.getOrAdd(QueryStatement.<strong class="jxr_keyword">class</strong>.toString());
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          IKey&lt;IFieldName&gt; keyFieldName = Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.toString());
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         IKey&lt;CompiledQuery&gt; keyCompiledQuery = Keys.getOrAdd(CompiledQuery.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          IKey keyDBInsertTask = Keys.getOrAdd(DBInsertTask.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          IKey keyUpsertMessage= Keys.getOrAdd(UpsertMessage.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          IKey keyQueryStatement = Keys.getOrAdd(QueryStatement.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          IKey keyFieldName = Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         IKey keyCompiledQuery = Keys.getOrAdd(CompiledQuery.<strong class="jxr_keyword">class</strong>.toString());
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>         IOC.register(
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>             keyDBInsertTask,
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>             <strong class="jxr_keyword">new</strong> SingletonStrategy(mock(DBInsertTask.<strong class="jxr_keyword">class</strong>))
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> ShouldPrepareInsertQuery_When_IdIsNull()
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         IKey&lt;String&gt; keyString = Keys.getOrAdd(String.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         IKey keyString = Keys.getOrAdd(String.<strong class="jxr_keyword">class</strong>.toString());
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>         IOC.register(
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>             keyString,
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>             <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> ShouldPrepareUpdateQuery_When_IdIsGiven()
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>         <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>         IKey&lt;String&gt; keyString = Keys.getOrAdd(String.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>         IKey keyString = Keys.getOrAdd(String.<strong class="jxr_keyword">class</strong>.toString());
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         IOC.register(
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>             keyString,
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>             <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(String::valueOf));

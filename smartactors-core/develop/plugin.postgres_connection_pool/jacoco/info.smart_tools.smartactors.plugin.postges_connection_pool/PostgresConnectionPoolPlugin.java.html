@@ -43,7 +43,7 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L46">            IKey&lt;Pool&gt; postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
+<span class="nc" id="L46">            IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
 <span class="nc" id="L47">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;PostgresConnectionPoolPlugin&quot;);</span>
 <span class="nc" id="L48">            item.process(() -&gt; {</span>
                 try {

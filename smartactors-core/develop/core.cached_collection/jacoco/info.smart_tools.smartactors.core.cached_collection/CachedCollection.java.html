@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CachedCollection.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection</a> &gt; <span class="el_source">CachedCollection.java</span></div><h1>CachedCollection.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection;
+
+import info.smart_tools.smartactors.core.cached_collection.exception.DeleteCacheItemException;
+import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
+import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCacheItemException;
+import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
+import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
+import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.CachedCollectionConfig;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.GetObjectFromCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteFromCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteItem;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertIntoCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem;
+import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.ipool.IPool;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.pool_guard.IPoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.PoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.exception.PoolGuardException;
+import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+
+/**
+ * Implementation of cached collection
+ * {@link ICachedCollection}
+ */
+public class CachedCollection implements ICachedCollection {
+
+    private IPool connectionPool;
+    private CollectionName collectionName;
+    private ConcurrentMap&lt;String, List&lt;IObject&gt;&gt; map;
+
+    /**
+     * Constructor which initializes database tasks for db operations and connection pool for them.
+     * @param config wrapper for configuration object with tasks and pool.
+     * @throws InvalidArgumentException Except when actor can't be created with @config
+     */
+<span class="nc" id="L56">    public CachedCollection(final CachedCollectionConfig config) throws InvalidArgumentException {</span>
+        try {
+<span class="nc" id="L58">            this.collectionName = config.getCollectionName();</span>
+<span class="nc" id="L59">            this.connectionPool = config.getConnectionPool();</span>
+<span class="nc" id="L60">            this.map = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="nc" id="L61">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L62">            throw new InvalidArgumentException(&quot;Can't create cached collection.&quot;, e);</span>
+<span class="nc" id="L63">        }</span>
+<span class="nc" id="L64">    }</span>
+
+    @Override
+    public List&lt;IObject&gt; getItems(final String key) throws GetCacheItemException {
+
+        try {
+<span class="nc" id="L70">            List&lt;IObject&gt; items = map.get(key);</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">            if (items == null || items.isEmpty()) {</span>
+<span class="nc" id="L72">                try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L73">                    IDatabaseTask getItemTask = IOC.resolve(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()));</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                    if (getItemTask == null) {</span>
+                        //NOTE:: we should have strategy for creating nested tasks for task-facade with smth like map
+                        //with name of task-facade as a key
+<span class="nc" id="L77">                        IDatabaseTask nestedTask = IOC.resolve(</span>
+<span class="nc" id="L78">                            Keys.getOrAdd(IDatabaseTask.class.toString()), GetObjectFromCachedCollectionTask.class.toString()</span>
+                        );
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                        if (nestedTask == null) {</span>
+<span class="nc" id="L81">                            throw new GetCacheItemException(&quot;Can't create nested task for getItem task.&quot;);</span>
+                        }
+<span class="nc" id="L83">                        getItemTask = new GetObjectFromCachedCollectionTask(nestedTask);</span>
+<span class="nc" id="L84">                        IOC.register(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()), new SingletonStrategy(getItemTask));</span>
+                    }
+<span class="nc" id="L86">                    GetObjectFromCachedCollectionQuery getItemQuery = IOC.resolve(</span>
+<span class="nc" id="L87">                        Keys.getOrAdd(GetObjectFromCachedCollectionQuery.class.toString())</span>
+                    );
+<span class="nc" id="L89">                    getItemQuery.setCollectionName(collectionName);</span>
+<span class="nc" id="L90">                    getItemQuery.setKey(key);</span>
+<span class="nc" id="L91">                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
+<span class="nc" id="L92">                    getItemTask.prepare(getItemQuery.wrapped());</span>
+<span class="nc" id="L93">                    getItemTask.execute();</span>
+<span class="nc" id="L94">                    items = getItemQuery.getSearchResult().collect(Collectors.toList());</span>
+<span class="nc" id="L95">                    map.put(key, items);</span>
+<span class="nc bnc" id="L96" title="All 8 branches missed.">                } catch (PoolGuardException e) {</span>
+<span class="nc" id="L97">                    throw new GetCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L98">                } catch (InvalidArgumentException | RegistrationException e) {</span>
+<span class="nc" id="L99">                    throw new GetCacheItemException(&quot;Can't register strategy for getItem task.&quot;, e);</span>
+<span class="nc" id="L100">                }</span>
+            }
+
+<span class="nc" id="L103">            return items;</span>
+<span class="nc" id="L104">        } catch (TaskSetConnectionException e) {</span>
+<span class="nc" id="L105">            throw new GetCacheItemException(&quot;Can't set connection to read task.&quot;, e);</span>
+<span class="nc" id="L106">        } catch (TaskPrepareException e) {</span>
+<span class="nc" id="L107">            throw new GetCacheItemException(&quot;Error during preparing read task.&quot;, e);</span>
+<span class="nc" id="L108">        } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L109">            throw new GetCacheItemException(&quot;Error during execution read task.&quot;, e);</span>
+<span class="nc" id="L110">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L111">            throw new GetCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
+<span class="nc" id="L112">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L113">            throw new GetCacheItemException(&quot;Can't read cached object.&quot;, e);</span>
+        }
+    }
+
+    @Override
+    public void delete(final IObject message) throws DeleteCacheItemException {
+        try {
+            DeleteItem deleteItem;
+<span class="nc" id="L121">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L122">                IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()));</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                if (deleteTask == null) {</span>
+<span class="nc" id="L124">                    IDatabaseTask nestedTask = IOC.resolve(</span>
+<span class="nc" id="L125">                        Keys.getOrAdd(IDatabaseTask.class.toString()), DeleteFromCachedCollectionTask.class.toString()</span>
+                    );
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (nestedTask == null) {</span>
+<span class="nc" id="L128">                        throw new DeleteCacheItemException(&quot;Can't create nested task for delete task.&quot;);</span>
+                    }
+<span class="nc" id="L130">                    deleteTask = new DeleteFromCachedCollectionTask(nestedTask);</span>
+<span class="nc" id="L131">                    IOC.register(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()), new SingletonStrategy(deleteTask));</span>
+                }
+<span class="nc" id="L133">                deleteItem = IOC.resolve(Keys.getOrAdd(DeleteItem.class.toString()), message);</span>
+<span class="nc" id="L134">                DeleteFromCachedCollectionQuery deleteQuery = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionQuery.class.toString()));</span>
+<span class="nc" id="L135">                deleteQuery.setCollectionName(collectionName);</span>
+<span class="nc" id="L136">                deleteQuery.setDeleteItem(deleteItem);</span>
+<span class="nc" id="L137">                StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject());</span>
+<span class="nc" id="L138">                deleteTask.setConnection(connection);</span>
+<span class="nc" id="L139">                deleteTask.prepare(deleteQuery.wrapped());</span>
+<span class="nc" id="L140">                deleteTask.execute();</span>
+<span class="nc bnc" id="L141" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
+<span class="nc" id="L142">                throw new DeleteCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L143">            } catch (TaskSetConnectionException e) {</span>
+<span class="nc" id="L144">                throw new DeleteCacheItemException(&quot;Can't set connection to delete task.&quot;, e);</span>
+<span class="nc" id="L145">            } catch (TaskPrepareException e) {</span>
+<span class="nc" id="L146">                throw new DeleteCacheItemException(&quot;Error during preparing delete task.&quot;, e);</span>
+<span class="nc" id="L147">            } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L148">                throw new DeleteCacheItemException(&quot;Error during execution delete task.&quot;, e);</span>
+<span class="nc" id="L149">            } catch (InvalidArgumentException | RegistrationException e) {</span>
+<span class="nc" id="L150">                throw new DeleteCacheItemException(&quot;Can't register strategy for delete task.&quot;, e);</span>
+<span class="nc" id="L151">            }</span>
+
+<span class="nc" id="L153">            String key = deleteItem.getKey();</span>
+<span class="nc" id="L154">            List&lt;IObject&gt; items = map.get(key);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (items != null) {</span>
+                DeleteItem item;
+<span class="nc bnc" id="L157" title="All 2 branches missed.">                for (IObject obj : items) {</span>
+<span class="nc" id="L158">                    item = IOC.resolve(Keys.getOrAdd(DeleteItem.class.toString()), obj);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                    if (item.getId().equals(deleteItem.getId())) {</span>
+<span class="nc" id="L160">                        items.remove(obj);</span>
+<span class="nc" id="L161">                        break;</span>
+                    }
+<span class="nc" id="L163">                }</span>
+            }
+<span class="nc" id="L165">        }  catch (ResolutionException e) {</span>
+<span class="nc" id="L166">            throw new DeleteCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
+<span class="nc" id="L167">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L168">            throw new DeleteCacheItemException(&quot;Can't delete cached object.&quot;, e);</span>
+<span class="nc" id="L169">        }</span>
+<span class="nc" id="L170">    }</span>
+
+    @Override
+    public void upsert(final IObject message) throws UpsertCacheItemException {
+
+        try {
+            UpsertItem upsertItem;
+<span class="nc" id="L177">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L178">                IDatabaseTask upsertTask = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()));</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                if (upsertTask == null) {</span>
+<span class="nc" id="L180">                    IDatabaseTask nestedTask = IOC.resolve(</span>
+<span class="nc" id="L181">                        Keys.getOrAdd(IDatabaseTask.class.toString()), UpsertIntoCachedCollectionTask.class.toString()</span>
+                    );
+<span class="nc bnc" id="L183" title="All 2 branches missed.">                    if (nestedTask == null) {</span>
+<span class="nc" id="L184">                        throw new UpsertCacheItemException(&quot;Can't create nested task for upsert task.&quot;);</span>
+                    }
+<span class="nc" id="L186">                    upsertTask = new UpsertIntoCachedCollectionTask(nestedTask);</span>
+<span class="nc" id="L187">                    IOC.register(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()), new SingletonStrategy(upsertTask));</span>
+                }
+<span class="nc" id="L189">                upsertItem = IOC.resolve(Keys.getOrAdd(UpsertItem.class.toString()), message);</span>
+<span class="nc" id="L190">                Boolean isActive = upsertItem.isActive();</span>
+<span class="nc" id="L191">                upsertItem.setIsActive(true);</span>
+<span class="nc" id="L192">                UpsertIntoCachedCollectionQuery upsertQuery = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()));</span>
+<span class="nc" id="L193">                upsertQuery.setCollectionName(collectionName);</span>
+<span class="nc" id="L194">                upsertQuery.setUpsertItem(upsertItem);</span>
+
+<span class="nc" id="L196">                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
+<span class="nc" id="L197">                upsertTask.prepare(upsertQuery.wrapped());</span>
+                try {
+<span class="nc" id="L199">                    upsertTask.execute();</span>
+<span class="nc" id="L200">                } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L201">                    upsertItem.setIsActive(isActive);</span>
+<span class="nc" id="L202">                    throw new UpsertCacheItemException(&quot;Error during execution upsert task.&quot;, e);</span>
+<span class="nc" id="L203">                }</span>
+<span class="nc bnc" id="L204" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
+<span class="nc" id="L205">                throw new UpsertCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L206">            } catch (TaskSetConnectionException e) {</span>
+<span class="nc" id="L207">                throw new UpsertCacheItemException(&quot;Can't set connection to upsert task.&quot;, e);</span>
+<span class="nc" id="L208">            } catch (TaskPrepareException e) {</span>
+<span class="nc" id="L209">                throw new UpsertCacheItemException(&quot;Error during preparing upsert task.&quot;, e);</span>
+<span class="nc" id="L210">            } catch (InvalidArgumentException | RegistrationException e) {</span>
+<span class="nc" id="L211">                throw new UpsertCacheItemException(&quot;Can't register strategy for upsert task.&quot;, e);</span>
+<span class="nc" id="L212">            }</span>
+<span class="nc" id="L213">            String key = upsertItem.getKey();</span>
+<span class="nc" id="L214">            List&lt;IObject&gt; items = map.get(key);</span>
+<span class="nc bnc" id="L215" title="All 4 branches missed.">            if (items != null &amp;&amp; !items.isEmpty()) {</span>
+                UpsertItem item;
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                for (IObject obj : items) {</span>
+<span class="nc" id="L218">                    item = IOC.resolve(Keys.getOrAdd(UpsertItem.class.toString()), obj);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                    if (item.getId().equals(upsertItem.getId())) {</span>
+<span class="nc" id="L220">                        items.remove(obj);</span>
+<span class="nc" id="L221">                        items.add(upsertItem.wrapped());</span>
+<span class="nc" id="L222">                        break;</span>
+                    }
+<span class="nc" id="L224">                }</span>
+            } else {
+<span class="nc" id="L226">                map.put(key, Collections.singletonList(upsertItem.wrapped()));</span>
+            }
+<span class="nc" id="L228">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L229">            throw new UpsertCacheItemException(&quot;Can't add or update cached object.&quot;, e);</span>
+<span class="nc" id="L230">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L231">            throw new UpsertCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
+<span class="nc" id="L232">        }</span>
+<span class="nc" id="L233">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

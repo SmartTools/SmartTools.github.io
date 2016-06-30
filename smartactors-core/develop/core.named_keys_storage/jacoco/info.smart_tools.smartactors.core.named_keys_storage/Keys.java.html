@@ -17,14 +17,13 @@ public final class Keys {
 
     /**
      * Get stored or add new instance of {@link IKey} by given name
-     * @param &lt;T&gt; type of stored object by instance of {@link IKey}
      * @param keyName name of instance of {@link IKey}
      * @throws ResolutionException if dependency resolution has been failed
      * @return instance of {@link IKey}
      */
-    public static &lt;T&gt; IKey&lt;T&gt; getOrAdd(final String keyName)
+    public static IKey getOrAdd(final String keyName)
             throws ResolutionException {
-<span class="fc" id="L27">        return (IKey&lt;T&gt;) IOC.resolve(IOC.getKeyForKeyStorage(), keyName);</span>
+<span class="fc" id="L26">        return (IKey) IOC.resolve(IOC.getKeyForKeyStorage(), keyName);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

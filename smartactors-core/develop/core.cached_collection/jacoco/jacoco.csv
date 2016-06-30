@@ -1,0 +1,9 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection,CachedCollection,731,0,54,0,135,0,31,0,4,0
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,DeleteCacheItemException,5,4,0,0,2,2,1,1,1,1
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,UpsertCacheItemException,7,9,0,0,4,4,2,2,2,2
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,GetCacheItemException,12,4,0,0,6,2,3,1,3,1
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,GetObjectFromCachedCollectionTask,0,142,0,0,0,35,0,5,0,5
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,UpsertIntoCachedCollectionTask,0,57,1,1,0,18,1,4,0,4
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,CreateCachedCollectionTask,0,71,0,0,0,20,0,4,0,4
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,DeleteFromCachedCollectionTask,0,55,0,0,0,17,0,4,0,4

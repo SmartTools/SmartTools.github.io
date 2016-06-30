@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sampleIOC() <strong class="jxr_keyword">throws</strong> InvalidArgumentException, MyIOCException, ScopeProviderException {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>         assertSame(systemScope, ScopeProvider.getCurrentScope());
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         IKey key = <strong class="jxr_keyword">new</strong> Key&lt;MyClass&gt;(<span class="jxr_string">"my"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         IKey key = <strong class="jxr_keyword">new</strong> Key(<span class="jxr_string">"my"</span>);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>         MyClass main = <strong class="jxr_keyword">new</strong> MyClass(<span class="jxr_string">"main"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>         MyIOC.register(key, main);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>         assertEquals(main, MyIOC.resolve(key));
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>     @Test
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSystemIOC() <strong class="jxr_keyword">throws</strong> ScopeProviderException, ResolutionException, InvalidArgumentException, RegistrationException {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>         assertSame(systemScope, ScopeProvider.getCurrentScope());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         IKey&lt;MyClass&gt; key = Keys.getOrAdd(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         IKey key = Keys.getOrAdd(<span class="jxr_string">"test"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>         MyClass systemObject = <strong class="jxr_keyword">new</strong> MyClass(<span class="jxr_string">"system"</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>         IOC.register(key, <strong class="jxr_keyword">new</strong> SingletonStrategy(systemObject));
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>         assertEquals(systemObject, IOC.resolve(key));

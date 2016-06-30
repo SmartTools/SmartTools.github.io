@@ -5,7 +5,6 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.DeletionExcepti
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
-import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.istrategy_container.IStrategyContainer;
 import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
@@ -23,20 +22,19 @@ public class Container implements IContainer {
     /** Key for getting instance of {@link IStrategyContainer} from current scope */
     private IKey strategyContainerKey;
     /** */
-    private IKey&lt;IKey&lt;?&gt;&gt; keyForKeyStorage;
+    private IKey keyForKeyStorage;
 
     /**
      * Default constructor
-     * @throws InvalidArgumentException if any errors occurred
      */
-<span class="fc" id="L32">    public Container() {</span>
+<span class="fc" id="L30">    public Container() {</span>
         try {
-<span class="fc" id="L34">            strategyContainerKey = new Key(java.util.UUID.randomUUID().toString());</span>
-<span class="fc" id="L35">            keyForKeyStorage = new Key&lt;&gt;(java.util.UUID.randomUUID().toString());</span>
-<span class="nc" id="L36">        } catch (Exception e) {</span>
-<span class="nc" id="L37">            throw new RuntimeException(&quot;Initialization of IOC container has been failed.&quot;);</span>
-<span class="fc" id="L38">        }</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L32">            strategyContainerKey = new Key(java.util.UUID.randomUUID().toString());</span>
+<span class="fc" id="L33">            keyForKeyStorage = new Key(java.util.UUID.randomUUID().toString());</span>
+<span class="nc" id="L34">        } catch (Exception e) {</span>
+<span class="nc" id="L35">            throw new RuntimeException(&quot;Initialization of IOC container has been failed.&quot;);</span>
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * Return specific instance of {@link IKey} for container ID
@@ -44,7 +42,7 @@ public class Container implements IContainer {
      */
     @Override
     public IKey getIocKey() {
-<span class="fc" id="L47">        return this.strategyContainerKey;</span>
+<span class="fc" id="L45">        return this.strategyContainerKey;</span>
     }
 
     /**
@@ -52,8 +50,8 @@ public class Container implements IContainer {
      * @return instance of {@link IKey}
      */
     @Override
-    public IKey&lt;IKey&lt;?&gt;&gt; getKeyForKeyStorage() {
-<span class="fc" id="L56">        return this.keyForKeyStorage;</span>
+    public IKey getKeyForKeyStorage() {
+<span class="fc" id="L54">        return this.keyForKeyStorage;</span>
     }
 
     /**
@@ -65,14 +63,14 @@ public class Container implements IContainer {
      * @throws ResolutionException if resolution is impossible because of any errors
      */
     @Override
-    public &lt;T&gt; T resolve(final IKey&lt;T&gt; key, final Object ... args)
+    public &lt;T&gt; T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {
-<span class="fc" id="L71">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
-<span class="fc" id="L72">            IResolveDependencyStrategy strategy = strategyContainer.resolve(key);</span>
-<span class="fc" id="L73">            return (T) strategy.resolve(args);</span>
-<span class="fc" id="L74">        } catch (Throwable e) {</span>
-<span class="fc" id="L75">            throw new ResolutionException(&quot;Resolution of dependency failed.&quot;, e);</span>
+<span class="fc" id="L69">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
+<span class="fc" id="L70">            IResolveDependencyStrategy strategy = strategyContainer.resolve(key);</span>
+<span class="fc" id="L71">            return (T) strategy.resolve(args);</span>
+<span class="fc" id="L72">        } catch (Throwable e) {</span>
+<span class="fc" id="L73">            throw new ResolutionException(&quot;Resolution of dependency failed.&quot;, e);</span>
         }
     }
 
@@ -86,12 +84,12 @@ public class Container implements IContainer {
     public void register(final IKey key, final IResolveDependencyStrategy strategy)
             throws RegistrationException {
         try {
-<span class="fc" id="L89">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
-<span class="fc" id="L90">            strategyContainer.register(key, strategy);</span>
-<span class="fc" id="L91">        } catch (Throwable e) {</span>
-<span class="fc" id="L92">            throw new RegistrationException(&quot;Registration of dependency failed.&quot;, e);</span>
-<span class="fc" id="L93">        }</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L87">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
+<span class="fc" id="L88">            strategyContainer.register(key, strategy);</span>
+<span class="fc" id="L89">        } catch (Throwable e) {</span>
+<span class="fc" id="L90">            throw new RegistrationException(&quot;Registration of dependency failed.&quot;, e);</span>
+<span class="fc" id="L91">        }</span>
+<span class="fc" id="L92">    }</span>
 
     /**
      *
@@ -103,11 +101,11 @@ public class Container implements IContainer {
     public void remove(final IKey key)
             throws DeletionException {
         try {
-<span class="fc" id="L106">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
-<span class="fc" id="L107">            strategyContainer.remove(key);</span>
-<span class="fc" id="L108">        } catch (Throwable e) {</span>
-<span class="fc" id="L109">            throw new DeletionException(&quot;Deletion of dependency failed.&quot;, e);</span>
-<span class="fc" id="L110">        }</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L104">            IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);</span>
+<span class="fc" id="L105">            strategyContainer.remove(key);</span>
+<span class="fc" id="L106">        } catch (Throwable e) {</span>
+<span class="fc" id="L107">            throw new DeletionException(&quot;Deletion of dependency failed.&quot;, e);</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

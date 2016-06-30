@@ -61,47 +61,46 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * Return specific instance of {@link IKey} for resolve dependencies from key storage</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * @param &lt;T&gt; type of returned value of inserted key</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     * @return instance of {@link IKey}</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; IKey&lt;IKey&lt;T&gt;&gt; getKeyForKeyStorage() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">return</strong> container.getKeyForKeyStorage();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     * Resolve dependency by given given {@link IKey} instance and args</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     * @param args needed parameters for resolve dependency</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     * @param &lt;T&gt; type of class for resolution</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * @return instance of class with classId identifier</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * @throws ResolutionException if resolution is impossible because of any errors</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T resolve(<strong class="jxr_keyword">final</strong> IKey&lt;T&gt; key, <strong class="jxr_keyword">final</strong> Object ... args)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/ResolutionException.html">ResolutionException</a> {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">return</strong> container.resolve(key, args);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     * Register new dependency by instance of {@link IKey}</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * @param strategy instance of {@link IResolveDependencyStrategy}</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * @throws RegistrationException when registration is impossible because of any error</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> register(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> key, <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html">IResolveDependencyStrategy</a> strategy)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/RegistrationException.html">RegistrationException</a> {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          container.register(key, strategy);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * Remove dependency with given key</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * @throws DeletionException if any errors occurred</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> remove(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> key)
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/DeletionException.html">DeletionException</a> {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          container.remove(key);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * @return instance of {@link IKey}</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> getKeyForKeyStorage() {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">return</strong> container.getKeyForKeyStorage();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * Resolve dependency by given given {@link IKey} instance and args</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @param args needed parameters for resolve dependency</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     * @param &lt;T&gt; type of class for resolution</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     * @return instance of class with classId identifier</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * @throws ResolutionException if resolution is impossible because of any errors</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T resolve(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> key, <strong class="jxr_keyword">final</strong> Object ... args)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/ResolutionException.html">ResolutionException</a> {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> (T) container.resolve(key, args);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     * Register new dependency by instance of {@link IKey}</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * @param strategy instance of {@link IResolveDependencyStrategy}</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * @throws RegistrationException when registration is impossible because of any error</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> register(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> key, <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html">IResolveDependencyStrategy</a> strategy)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/RegistrationException.html">RegistrationException</a> {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          container.register(key, strategy);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     * Remove dependency with given key</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * @param key instance of {@link IKey}</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * @throws DeletionException if any errors occurred</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> remove(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> key)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iioccontainer/exception/DeletionException.html">DeletionException</a> {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          container.remove(key);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

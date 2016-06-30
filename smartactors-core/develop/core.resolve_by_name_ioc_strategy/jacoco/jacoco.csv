@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.resolve_by_name_ioc_strategy,info.smart_tools.smartactors.core.resolve_by_name_ioc_strategy,ResolveByNameIocStrategy,0,47,0,2,0,10,0,3,0,2
+core.resolve_by_name_ioc_strategy,info.smart_tools.smartactors.core.resolve_by_name_ioc_strategy,ResolveByNameIocStrategy,0,46,0,2,0,10,0,3,0,2

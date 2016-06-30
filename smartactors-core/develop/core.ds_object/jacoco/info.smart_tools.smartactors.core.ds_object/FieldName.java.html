@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FieldName.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.ds_object</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.ds_object</a> &gt; <span class="el_source">FieldName.java</span></div><h1>FieldName.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.ds_object;
+
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IFieldName;
+
+import java.util.regex.Pattern;
+
+/**
+ * A {@code FieldName} passed to {@code IObject} methods
+ * as name of needed field. This class checks the validity of the name.
+ */
+public class FieldName implements IFieldName {
+
+    /**
+     * Pattern with valid symbols for {@code FieldName}
+     */
+<span class="fc" id="L17">    private static final Pattern VALID_SYMBOLS = Pattern.compile(&quot;[\\wа-яА-ЯёЁ\\-\\+=\\|!@#\\$%\\^&amp;\\*:/\\., \\{\\}\\(\\)\\[\\]]+&quot;);</span>
+
+    private String name;
+
+    /**
+     * Base constructor for {@code FieldName}
+     * @param name is name of field, it must not be {@code null} and
+     *             must contain at least one of the symbols from {@literal 0-9a-zA-Z_-+=|!@#$%^&amp;*:/., {}()[]}
+     * @throws InvalidArgumentException if name is not valid
+     */
+    public FieldName(final String name)
+<span class="fc" id="L28">            throws InvalidArgumentException {</span>
+<span class="fc" id="L29">        initialize(name);</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L34">        return 23 + name.hashCode();</span>
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L39" title="2 of 4 branches missed.">        return (this == obj) ||</span>
+                ((obj instanceof FieldName)
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                        &amp;&amp; this.name.equals(((FieldName) obj).name)</span>
+                );
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L47">        return name;</span>
+    }
+
+    /**
+     * Initialize class property {@code FieldName}
+     * @param nameValue pretender name for {@code FieldName}
+     * @throws InvalidArgumentException if any errors occurred
+     */
+    protected void initialize(final String nameValue)
+            throws InvalidArgumentException {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (null == nameValue) {</span>
+<span class="fc" id="L58">            throw new InvalidArgumentException(&quot;Name parameter must not be null&quot;);</span>
+        }
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (nameValue.isEmpty()) {</span>
+<span class="fc" id="L61">            throw new InvalidArgumentException(&quot;Name parameter must not be empty&quot;);</span>
+        }
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (!VALID_SYMBOLS.matcher(nameValue).matches()) {</span>
+<span class="fc" id="L64">            throw new InvalidArgumentException(&quot;Name parameter contains illegal symbols&quot;);</span>
+        }
+<span class="fc" id="L66">        this.name = nameValue;</span>
+<span class="fc" id="L67">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

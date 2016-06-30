@@ -22,11 +22,12 @@ import info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementat
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 
 /**
  * Server with PluginLoader
  */
-<span class="fc" id="L29">public class Server implements IServer {</span>
+<span class="fc" id="L30">public class Server implements IServer {</span>
 
     @Override
     public void initialize()
@@ -34,23 +35,22 @@ import java.net.URL;
         try {
 
             // Initialize plugin infrastructure
-<span class="fc" id="L37">            IBootstrap bootstrap = new Bootstrap();</span>
-<span class="fc" id="L38">            IPluginCreator creator = new PluginCreator();</span>
-<span class="fc" id="L39">            IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
-<span class="fc" id="L40">            ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());</span>
-<span class="fc" id="L41">            IPluginLoader&lt;String&gt; pluginLoader = new PluginLoader(</span>
+<span class="fc" id="L38">            IBootstrap bootstrap = new Bootstrap();</span>
+<span class="fc" id="L39">            IPluginCreator creator = new PluginCreator();</span>
+<span class="fc" id="L40">            IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
+<span class="fc" id="L41">            ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());</span>
+<span class="fc" id="L42">            IPluginLoader&lt;Collection&lt;File&gt;&gt; pluginLoader = new PluginLoader(</span>
                     urlClassLoader,
                     (t) -&gt; {
                         try {
-<span class="nc" id="L45">                            IPlugin plugin = creator.create(t, bootstrap);</span>
-<span class="nc" id="L46">                            plugin.load();</span>
-<span class="nc" id="L47">                        } catch (Exception e) {</span>
-<span class="nc" id="L48">                            throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
-<span class="nc" id="L49">                        }</span>
-<span class="nc" id="L50">                    },</span>
+<span class="nc" id="L46">                            IPlugin plugin = creator.create(t, bootstrap);</span>
+<span class="nc" id="L47">                            plugin.load();</span>
+<span class="nc" id="L48">                        } catch (Exception e) {</span>
+<span class="nc" id="L49">                            throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
+<span class="nc" id="L50">                        }</span>
+<span class="nc" id="L51">                    },</span>
                     visitor
             );
-
 
             // FS listener creation
             // TODO: Get from configuration
@@ -62,46 +62,43 @@ import java.net.URL;
                     ListenerTask::new);
 
 <span class="fc" id="L64">            jarFilesTracker.start(coreJarsDir);</span>
+<span class="fc" id="L65">            jarFilesTracker.addErrorHandler((e) -&gt; {</span>
+<span class="nc" id="L66">                System.out.println(&quot;Server initialization failed!&quot;);</span>
+<span class="nc" id="L67">                throw new RuntimeException(e);</span>
+            });
 
             // FeatureManager &amp; Feature creation
-<span class="fc" id="L67">            IFeatureManager featureManager = new FeatureManager(jarFilesTracker);</span>
+<span class="fc" id="L71">            IFeatureManager featureManager = new FeatureManager(jarFilesTracker);</span>
 
-<span class="fc" id="L69">            IFeature coreFeature = featureManager.newFeature(&quot;smartactors.core&quot;);</span>
-<span class="fc" id="L70">            coreFeature.whenPresent(files -&gt; {</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">                for (File file : files) {</span>
-                    try {
-<span class="nc" id="L73">                        pluginLoader.loadPlugin(file.getAbsolutePath());</span>
-<span class="nc" id="L74">                    } catch (Throwable e) {</span>
-<span class="nc" id="L75">                        throw new RuntimeException(&quot;Plugin loading failed.&quot;);</span>
-<span class="nc" id="L76">                    }</span>
-<span class="nc" id="L77">                }</span>
+
+<span class="fc" id="L74">            IFeature coreFeature = featureManager.newFeature(&quot;smartactors.core&quot;);</span>
+<span class="fc" id="L75">            coreFeature.whenPresent(files -&gt; {</span>
                 try {
-<span class="nc" id="L79">                    bootstrap.start();</span>
-<span class="nc" id="L80">                } catch (Throwable e) {</span>
-<span class="nc" id="L81">                    throw new RuntimeException(&quot;Could not execute plugin process&quot;);</span>
-<span class="nc" id="L82">                }</span>
-<span class="nc" id="L83">            });</span>
+<span class="nc" id="L77">                    pluginLoader.loadPlugin(files);</span>
+<span class="nc" id="L78">                    bootstrap.start();</span>
+<span class="nc" id="L79">                } catch (Throwable e) {</span>
+<span class="nc" id="L80">                    throw new RuntimeException(&quot;Plugin loading failed.&quot;, e);</span>
+<span class="nc" id="L81">                }</span>
+<span class="nc" id="L82">            });</span>
 
-<span class="fc" id="L85">            String[] coreJars = {</span>
+<span class="fc" id="L84">            String[] coreJars = {</span>
                     &quot;ScopeProvider.jar&quot;,
                     &quot;PluginSubscribeScopeProviderOnScopeCreation.jar&quot;
             };
-<span class="fc bfc" id="L89" title="All 2 branches covered.">            for (String jarName : coreJars) {</span>
-<span class="fc" id="L90">                coreFeature.requireFile(jarName);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for (String jarName : coreJars) {</span>
+<span class="fc" id="L89">                coreFeature.requireFile(jarName);</span>
             }
 
-<span class="fc" id="L93">            coreFeature.listen();</span>
+<span class="fc" id="L92">            coreFeature.listen();</span>
 
-<span class="nc" id="L95">        } catch (Throwable e) {</span>
-<span class="nc" id="L96">            throw new ServerInitializeException(&quot;Server initialization failed.&quot;, e);</span>
-<span class="fc" id="L97">        }</span>
-
-
-<span class="fc" id="L100">    }</span>
+<span class="nc" id="L94">        } catch (Throwable e) {</span>
+<span class="nc" id="L95">            throw new ServerInitializeException(&quot;Server initialization failed.&quot;, e);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">    }</span>
 
     @Override
     public void start() throws ServerExecutionException {
 
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L102">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

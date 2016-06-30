@@ -17,11 +17,11 @@
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a> {
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Pattern VALIDATION_PATTERN = Pattern.compile(<span class="jxr_string">"[a-zA-Z_][0-9a-zA-Z_]*"</span>);
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern VALIDATION_PATTERN = Pattern.compile(<span class="jxr_string">"[a-zA-Z_][0-9a-zA-Z_]*"</span>);
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">private</strong> String name;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a>(String name) {
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a>(<strong class="jxr_keyword">final</strong> String name) {
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>          <strong class="jxr_keyword">this</strong>.name = name;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>      }
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
@@ -35,10 +35,10 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * @return created CollectionName</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     * @throws QueryBuildException if input string doesn't match validation pattern</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a> fromString(String name) <strong class="jxr_keyword">throws</strong> QueryBuildException {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a> fromString(<strong class="jxr_keyword">final</strong> String name) <strong class="jxr_keyword">throws</strong> QueryBuildException {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">if</strong> (!VALIDATION_PATTERN.matcher(name).matches()) {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/exceptions/QueryBuildException.html">QueryBuildException</a>(<span class="jxr_string">"Invalid collection name: "</span>+name);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/exceptions/QueryBuildException.html">QueryBuildException</a>(<span class="jxr_string">"Invalid collection name: "</span> + name);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          }
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/core/db_storage/utils/CollectionName.html">CollectionName</a>(name.toLowerCase());

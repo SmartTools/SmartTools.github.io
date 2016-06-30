@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 5,
              Errors: 0,
-             Warnings: 11,
+             Warnings: 5,
              Infos: 0
       </title>
             <link>core.db_upsert_task/core.db_upsert_task//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -108,7 +108,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  7
+                  2
                 </td>
                 <td>
                   0

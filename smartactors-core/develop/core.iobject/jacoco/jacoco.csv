@@ -1,0 +1,5 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.iobject,info.smart_tools.smartactors.core.iobject.exception,DeleteValueException,3,13,0,0,2,6,1,3,1,3
+core.iobject,info.smart_tools.smartactors.core.iobject.exception,SerializeException,3,13,0,0,2,6,1,3,1,3
+core.iobject,info.smart_tools.smartactors.core.iobject.exception,ReadValueException,3,13,0,0,2,6,1,3,1,3
+core.iobject,info.smart_tools.smartactors.core.iobject.exception,ChangeValueException,3,13,0,0,2,6,1,3,1,3

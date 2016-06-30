@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ConstructorInfo,0,67,0,0,0,20,0,10,0,10
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,MethodInfo,0,83,0,0,0,26,0,14,0,14
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,MethodParameterInfo,0,25,0,0,0,10,0,6,0,6
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ClassBuilder,0,711,5,45,0,220,5,33,0,13
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,FieldInfo,0,41,0,0,0,16,0,10,0,10
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ConstructorParameterInfo,0,25,0,0,0,10,0,6,0,6
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ClassInfo,0,48,0,0,0,17,0,10,0,10
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers,9,49,0,0,0,5,2,2,2,2
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,Field,0,102,0,12,0,29,0,11,0,5
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,WrapperGenerator,7,692,5,47,2,131,5,25,0,4

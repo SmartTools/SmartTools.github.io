@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Operators.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.db_search_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.db_task.search.psql</a> &gt; <span class="el_source">Operators.java</span></div><h1>Operators.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.db_task.search.psql;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter;
+import info.smart_tools.smartactors.core.sql_commons.ConditionsResolverBase;
+import info.smart_tools.smartactors.core.sql_commons.FieldPath;
+import info.smart_tools.smartactors.core.sql_commons.QueryConditionWriter;
+import info.smart_tools.smartactors.core.sql_commons.QueryConditionWriterResolver;
+import info.smart_tools.smartactors.core.sql_commons.QueryStatement;
+import info.smart_tools.smartactors.core.sql_commons.psql.Schema;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.List;
+
+/**
+ * Class for constructing queries with comparison operators and parameters
+ */
+final class Operators {
+<span class="nc" id="L21">    private Operators(){}</span>
+
+    /**
+     * Writes sql-query with basic field comparison operators
+     * @param format Sql string for condition. Contains '%s' for field path and '?' for parameters
+     * @param query Query statement object with part of sql query (select...) and parameter setters
+     * @param contextFieldPath Field path, for example document#&gt;'{field}'
+     * @throws QueryBuildException
+     */
+    private static void writeFieldCheckCondition(
+            final String format,
+            final QueryStatement query,
+            final FieldPath contextFieldPath,
+            final Object queryParameter,
+            final List&lt;SQLQueryParameterSetter&gt; setters
+    ) throws QueryBuildException {
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (contextFieldPath == null) {</span>
+<span class="nc" id="L39">            throw new QueryBuildException(&quot;Field check conditions not allowed outside of field context.&quot;);</span>
+        }
+
+        try {
+<span class="nc" id="L43">            query.getBodyWriter().write(String.format(format, contextFieldPath.getSQLRepresentation()));</span>
+
+<span class="nc" id="L45">            setters.add((statement, index) -&gt; {</span>
+<span class="nc" id="L46">                statement.setObject(index++, queryParameter);</span>
+<span class="nc" id="L47">                return index;</span>
+            });
+<span class="nc" id="L49">        } catch (IOException e) {</span>
+<span class="nc" id="L50">            throw new QueryBuildException(&quot;Query search conditions write failed because of exception.&quot;, e);</span>
+<span class="nc" id="L51">        }</span>
+<span class="nc" id="L52">    }</span>
+
+    /**
+     * Writes sql-query which checks existence of field into document
+     * @param query Query statement object with part of sql query (select...) and parameter setters
+     * @param resolver Resolver with lambdas for writing sql by operators
+     * @param contextFieldPath Field path, for example document#&gt;'{field}'
+     * @param queryParameter Parameter value. Should be boolean: if true check field is null and vice versa
+     * @throws QueryBuildException
+     */
+    private static void writeFieldExistsCheckCondition(
+            final QueryStatement query,
+            final QueryConditionWriterResolver resolver,
+            final FieldPath contextFieldPath,
+            final Object queryParameter,
+            final List&lt;SQLQueryParameterSetter&gt; setters
+    ) throws QueryBuildException {
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (contextFieldPath == null) {</span>
+<span class="nc" id="L71">            throw new QueryBuildException(&quot;Field check conditions not allowed outside of field context.&quot;);</span>
+        }
+
+        try {
+<span class="nc" id="L75">            String isNullStr = String.valueOf(queryParameter);</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">            if (!(isNullStr.equalsIgnoreCase(&quot;true&quot;) || isNullStr.equalsIgnoreCase(&quot;false&quot;))) {</span>
+<span class="nc" id="L77">                throw new QueryBuildException(&quot;Parameter for existence checking should represent boolean value.&quot;);</span>
+            }
+<span class="nc" id="L79">            Boolean isNull = Boolean.parseBoolean(isNullStr);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            String condition = isNull ? &quot;(%s) is null&quot; : &quot;(%s) is not null&quot;;</span>
+<span class="nc" id="L81">            query.getBodyWriter().write(String.format(condition, contextFieldPath.getSQLRepresentation()));</span>
+<span class="nc" id="L82">        } catch (IOException e) {</span>
+<span class="nc" id="L83">            throw new QueryBuildException(&quot;Query search conditions write failed because of exception.&quot;, e);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     *
+     * @param query Query statement object with part of sql query (select...) and parameter setters
+     * @param resolver Resolver with lambdas for writing sql by operators
+     * @param contextFieldPath Field path, for example document#&gt;'{field}'
+     * @param queryParameter Parameter value.
+     * @throws QueryBuildException
+     */
+    private static void writeFieldInArrayCheckCondition(
+            final QueryStatement query,
+            final QueryConditionWriterResolver resolver,
+            final FieldPath contextFieldPath,
+            final Object queryParameter,
+            final List&lt;SQLQueryParameterSetter&gt; setters
+    ) throws QueryBuildException {
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (contextFieldPath == null) {</span>
+<span class="nc" id="L104">            throw new QueryBuildException(&quot;Operator \&quot;$in\&quot; not allowed outside of field context.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (!List.class.isAssignableFrom(queryParameter.getClass())) {</span>
+<span class="nc" id="L108">            throw new QueryBuildException(&quot;Parameter of \&quot;$in\&quot; operator should be an JSON array.&quot;);</span>
+        }
+
+<span class="nc" id="L111">        List&lt;Object&gt; paramAsList = (List&lt;Object&gt;) queryParameter;</span>
+<span class="nc" id="L112">        Writer writer = query.getBodyWriter();</span>
+
+        try {
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (paramAsList.size() == 0) {</span>
+<span class="nc" id="L116">                writer.write(&quot;(FALSE)&quot;);</span>
+<span class="nc" id="L117">                return;</span>
+            }
+
+<span class="nc" id="L120">            writer.write(String.format(&quot;((%s)in(&quot;, contextFieldPath.getSQLRepresentation()));</span>
+
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            for (int i = paramAsList.size(); i &gt; 0; --i) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                writer.write(String.format(&quot;to_json(?)::jsonb%s&quot;, (i == 1) ? &quot;&quot; : &quot;,&quot;));</span>
+            }
+
+<span class="nc" id="L126">            writer.write(&quot;))&quot;);</span>
+
+<span class="nc" id="L128">            setters.add((statement, index) -&gt; {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                for (Object obj : paramAsList) {</span>
+<span class="nc" id="L130">                    statement.setObject(index++, obj);</span>
+<span class="nc" id="L131">                }</span>
+<span class="nc" id="L132">                return index;</span>
+            });
+<span class="nc" id="L134">        } catch (IOException e) {</span>
+<span class="nc" id="L135">            throw new QueryBuildException(&quot;Query search conditions write failed because of exception.&quot;, e);</span>
+<span class="nc" id="L136">        }</span>
+<span class="nc" id="L137">    }</span>
+
+    private static QueryConditionWriter formattedCheckWriter(final String format) {
+<span class="fc" id="L140">        return (query, resolver, contextFieldPath, queryParameter, setters) -&gt;</span>
+<span class="nc" id="L141">            writeFieldCheckCondition(format, query, contextFieldPath, queryParameter, setters);</span>
+    }
+
+    /**
+     * Registers operators.
+     * @param resolver Resolver for writing queries by operators
+     */
+    public static void addAll(@Nonnull final ConditionsResolverBase resolver) {
+        // Basic field comparison operators
+<span class="fc" id="L150">        resolver.addOperator(&quot;$eq&quot;, formattedCheckWriter(&quot;((%s)=to_json(?)::jsonb)&quot;));</span>
+<span class="fc" id="L151">        resolver.addOperator(&quot;$ne&quot;, formattedCheckWriter(&quot;((%s)!=to_json(?)::jsonb)&quot;));</span>
+<span class="fc" id="L152">        resolver.addOperator(&quot;$lt&quot;, formattedCheckWriter(&quot;((%s)&lt;to_json(?)::jsonb)&quot;));</span>
+<span class="fc" id="L153">        resolver.addOperator(&quot;$gt&quot;, formattedCheckWriter(&quot;((%s)&gt;to_json(?)::jsonb)&quot;));</span>
+<span class="fc" id="L154">        resolver.addOperator(&quot;$lte&quot;, formattedCheckWriter(&quot;((%s)&lt;=to_json(?)::jsonb)&quot;));</span>
+<span class="fc" id="L155">        resolver.addOperator(&quot;$gte&quot;, formattedCheckWriter(&quot;((%s)&gt;=to_json(?)::jsonb)&quot;));</span>
+
+        //Check on present
+<span class="fc" id="L158">        resolver.addOperator(&quot;$isNull&quot;, Operators::writeFieldExistsCheckCondition);</span>
+
+        // ISO 8601 date/time operators
+        /*TODO: Find a way to build an index on date/time field.*/
+<span class="fc" id="L162">        resolver.addOperator(&quot;$date-from&quot;, formattedCheckWriter(&quot;(parse_timestamp_immutable(%s)&gt;=(?)::timestamp)&quot;));</span>
+<span class="fc" id="L163">        resolver.addOperator(&quot;$date-to&quot;, formattedCheckWriter(&quot;(parse_timestamp_immutable(%s)&lt;=(?)::timestamp)&quot;));</span>
+
+        // Value in list check
+<span class="fc" id="L166">        resolver.addOperator(&quot;$in&quot;, Operators::writeFieldInArrayCheckCondition);</span>
+
+        // Tags operators
+<span class="fc" id="L169">        resolver.addOperator(&quot;$hasTag&quot;, formattedCheckWriter(&quot;((%s)??(?))&quot;));</span>
+
+        // Fulltext search
+<span class="fc" id="L172">        resolver.addOperator(&quot;$fulltext&quot;, formattedCheckWriter(</span>
+<span class="fc" id="L173">                String.format(&quot;(to_tsvector('%s',(%%s)::text))@@(to_tsquery(%s,?))&quot;,</span>
+                        Schema.FTS_DICTIONARY, Schema.FTS_DICTIONARY)));
+<span class="fc" id="L175">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

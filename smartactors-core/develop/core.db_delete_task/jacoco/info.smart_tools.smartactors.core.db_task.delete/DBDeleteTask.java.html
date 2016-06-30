@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBDeleteTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.db_delete_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.db_task.delete</a> &gt; <span class="el_source">DBDeleteTask.java</span></div><h1>DBDeleteTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.db_task.delete;
+
+import info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
+import info.smart_tools.smartactors.core.db_task.delete.wrappers.DeletionQuery;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.sql_commons.JDBCCompiledQuery;
+
+import javax.annotation.Nonnull;
+import java.sql.SQLException;
+
+/**
+ * Common deletion task executor.
+ */
+public abstract class DBDeleteTask implements IDatabaseTask {
+
+    /**
+     * Default constructor.
+     */
+<span class="fc" id="L20">    protected DBDeleteTask() {}</span>
+
+    /**
+     * Executes deletion query of rows to database.
+     *
+     * @param query - a compiled executable query to database.
+     * @param message - source message with parameters for query.
+     *
+     * @throws TaskExecutionException when number of deleted rows not equals of number of rows which had to be removed.
+     */
+    protected void execute(final @Nonnull CompiledQuery query, final @Nonnull DeletionQuery message)
+            throws TaskExecutionException {
+        try {
+<span class="fc" id="L33">            int nDeleted = ((JDBCCompiledQuery) query).getPreparedStatement().executeUpdate();</span>
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (nDeleted != message.countDocumentIds()) {</span>
+<span class="fc" id="L36">                throw new TaskExecutionException(&quot;Delete query failed: wrong count of documents is deleted.&quot;);</span>
+            }
+<span class="nc" id="L38">        } catch (SQLException e) {</span>
+<span class="nc" id="L39">            throw new TaskExecutionException(&quot;Deletion query execution failed because of SQL exception.&quot;, e);</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

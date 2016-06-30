@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,ExtendedStandardJavaFileManager,0,20,0,0,0,7,0,3,0,3
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,DynamicClassLoader,4,36,0,2,1,9,0,4,0,3
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,ClassGenerator,24,70,7,7,6,14,7,3,0,3
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,CompiledCode,0,20,0,0,0,5,0,3,0,3
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,SourceCode,0,28,0,0,0,5,0,2,0,2
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,InMemoryCodeCompiler,22,141,5,7,4,31,4,6,0,4

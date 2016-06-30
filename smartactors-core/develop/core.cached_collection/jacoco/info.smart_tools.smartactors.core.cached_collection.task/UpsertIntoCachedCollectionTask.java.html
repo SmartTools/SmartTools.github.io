@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UpsertIntoCachedCollectionTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection.task</a> &gt; <span class="el_source">UpsertIntoCachedCollectionTask.java</span></div><h1>UpsertIntoCachedCollectionTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection.task;
+
+import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertIntoCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem;
+import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.time.LocalDateTime;
+
+/**
+ * Makes add or update operation for cached collection
+ */
+public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
+
+    private IDatabaseTask upsertTask;
+
+    /**
+     * @param upsertTask Target update task
+     */
+<span class="fc" id="L29">    public UpsertIntoCachedCollectionTask(final IDatabaseTask upsertTask) {</span>
+<span class="fc" id="L30">        this.upsertTask = upsertTask;</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Prepares database query
+     *
+     * @param query query object
+     * @throws TaskPrepareException if error occurs in process of query preparing
+     */
+    @Override
+    public void prepare(final IObject query) throws TaskPrepareException {
+
+        try {
+<span class="fc" id="L43">            UpsertIntoCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()), query);</span>
+<span class="fc" id="L44">            UpsertItem upsertItem = message.getUpsertItem();</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            if (upsertItem.getStartDateTime() == null) {</span>
+<span class="fc" id="L46">                upsertItem.setStartDateTime(LocalDateTime.now());</span>
+            }
+<span class="fc" id="L48">            upsertTask.prepare(message.wrapped());</span>
+<span class="fc" id="L49">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L50">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare upsert into cached collection&quot;, e);</span>
+<span class="fc" id="L51">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="fc" id="L52">            throw new TaskPrepareException(&quot;Can't prepare query for upsert into cached collection&quot;, e);</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">    }</span>
+
+    @Override
+    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+<span class="fc" id="L58">        upsertTask.setConnection(connection);</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Execute the task.
+     *
+     * @throws TaskExecutionException if error occurs in process of task execution
+     */
+    @Override
+    public void execute() throws TaskExecutionException {
+<span class="fc" id="L68">        upsertTask.execute();</span>
+<span class="fc" id="L69">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
