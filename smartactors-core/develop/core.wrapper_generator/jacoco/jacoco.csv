@@ -11,5 +11,5 @@ core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class
 core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ConstructorParameterInfo,0,25,0,0,0,10,0,6,0,6
 core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,ClassInfo,0,48,0,0,0,17,0,10,0,10
 core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator.class_builder,Modifiers,9,49,0,0,0,5,2,2,2,2
-core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,Field,0,102,0,12,0,29,0,11,0,5
-core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,WrapperGenerator,7,692,5,47,2,131,5,25,0,4
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,Field,9,393,4,28,0,74,4,17,0,5
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,WrapperGenerator,17,486,1,25,5,115,1,16,0,4

@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.server_with_iobject,info.smart_tools.smartactors.core.server_with_iobject,Server,36,438,0,0,12,90,0,15,0,15
+core.server_with_iobject,info.smart_tools.smartactors.core.server_with_iobject,Server,42,452,0,0,14,97,0,16,0,16
 core.server_with_iobject,info.smart_tools.smartactors.core.server_with_iobject,Server.new ArrayList() {...},0,14,0,0,0,1,0,1,0,1
 core.server_with_iobject,info.smart_tools.smartactors.core.server_with_iobject,Server.new ArrayList() {...},0,16,0,0,0,1,0,1,0,1
 core.server_with_iobject,info.smart_tools.smartactors.core.server_with_iobject,Server.new ArrayList() {...},0,11,0,0,0,1,0,1,0,1
