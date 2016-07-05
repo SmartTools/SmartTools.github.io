@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 323,
+      <title>File: 370,
              Errors: 0,
-             Warnings: 221,
+             Warnings: 227,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -89,6 +89,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.get_by_id.exception.DBGetByIdTaskException.java">info/smart_tools/smartactors/core/db_task/get_by_id/exception/DBGetByIdTaskException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.task_dispatcher.TaskDispatcher.java">info/smart_tools/smartactors/core/task_dispatcher/TaskDispatcher.java</a>
                 </td>
                 <td>
                   0
@@ -186,6 +200,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.IMessageProcessor.java">info/smart_tools/smartactors/core/message_processing/IMessageProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.imessage.IMessage.java">info/smart_tools/smartactors/core/imessage/IMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.exception.DeleteCacheItemException.java">info/smart_tools/smartactors/core/cached_collection/exception/DeleteCacheItemException.java</a>
                 </td>
                 <td>
@@ -207,6 +249,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.package-info.java">info/smart_tools/smartactors/core/message_processing/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -284,6 +340,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.IMessageReceiver.java">info/smart_tools/smartactors/core/message_processing/IMessageReceiver.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.search.utils.sql.GeneralSQLPagingWriter.java">info/smart_tools/smartactors/core/db_task/search/utils/sql/GeneralSQLPagingWriter.java</a>
                 </td>
                 <td>
@@ -299,6 +369,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.istrategy_container.IStrategyContainer.java">info/smart_tools/smartactors/core/istrategy_container/IStrategyContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.ExceptionHandlingReceiver.java">info/smart_tools/smartactors/core/exception_handling_receivers/ExceptionHandlingReceiver.java</a>
                 </td>
                 <td>
                   0
@@ -480,6 +564,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processor.package-info.java">info/smart_tools/smartactors/core/message_processor/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing_sequence.MessageProcessingSequence.java">info/smart_tools/smartactors/core/message_processing_sequence/MessageProcessingSequence.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.QueryConditionWriterResolver.java">info/smart_tools/smartactors/core/sql_commons/QueryConditionWriterResolver.java</a>
                 </td>
                 <td>
@@ -536,7 +648,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.thread_pool.package-info.java">info/smart_tools/smartactors/core/thread_pool/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyServer.java">info/smart_tools/smartactors/core/examples/plugin/MyServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.strategy.FirstItemStrategy.java">info/smart_tools/smartactors/actors/get_form/strategy/FirstItemStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -677,6 +817,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.singleton_strategy.package-info.java">info/smart_tools/smartactors/core/singleton_strategy/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ithread_pool.package-info.java">info/smart_tools/smartactors/core/ithread_pool/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1040,6 +1194,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.imessage.package-info.java">info/smart_tools/smartactors/core/imessage/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.CriteriaCachedCollectionQuery.java">info/smart_tools/smartactors/core/cached_collection/wrapper/CriteriaCachedCollectionQuery.java</a>
                 </td>
                 <td>
@@ -1125,6 +1293,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.scope_creation_event_handler.ScopeCreationEventHandler.java">info/smart_tools/smartactors/core/scope_creation_event_handler/ScopeCreationEventHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.strategy.IFormsStrategy.java">info/smart_tools/smartactors/actors/get_form/strategy/IFormsStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -1530,6 +1712,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iresource_source.IResourceSource.java">info/smart_tools/smartactors/core/iresource_source/IResourceSource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.test_jar.package-info.java">info/smart_tools/smartactors/plugin/test_jar/package-info.java</a>
                 </td>
                 <td>
@@ -1573,6 +1769,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.bootstrap.Bootstrap.java">info/smart_tools/smartactors/core/bootstrap/Bootstrap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.wrapper.package-info.java">info/smart_tools/smartactors/actors/get_form/wrapper/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1797,6 +2007,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.feature_manager.FeatureManager.java">info/smart_tools/smartactors/core/feature_manager/FeatureManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.blocking_queue.BlockingQueue.java">info/smart_tools/smartactors/core/blocking_queue/BlockingQueue.java</a>
                 </td>
                 <td>
                   0
@@ -2146,6 +2370,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.exceptions.NestedChainStackOverflowException.java">info/smart_tools/smartactors/core/message_processing/exceptions/NestedChainStackOverflowException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask.java">info/smart_tools/smartactors/core/idatabase_task/IDatabaseTask.java</a>
                 </td>
                 <td>
@@ -2286,6 +2524,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iresource_source.exceptions.OutOfResourceException.java">info/smart_tools/smartactors/core/iresource_source/exceptions/OutOfResourceException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ClassBuilder.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ClassBuilder.java</a>
                 </td>
                 <td>
@@ -2329,6 +2581,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.test_jar.PluginTestJar.java">info/smart_tools/smartactors/plugin/test_jar/PluginTestJar.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iqueue.package-info.java">info/smart_tools/smartactors/core/iqueue/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -2398,7 +2664,49 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.blocking_queue.package-info.java">info/smart_tools/smartactors/core/blocking_queue/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.DynamicClassLoader.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/DynamicClassLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iqueue.IQueue.java">info/smart_tools/smartactors/core/iqueue/IQueue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.exceptions.MessageReceiveException.java">info/smart_tools/smartactors/core/message_processing/exceptions/MessageReceiveException.java</a>
                 </td>
                 <td>
                   0
@@ -2482,6 +2790,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.wrapper.ActorParams.java">info/smart_tools/smartactors/actors/get_form/wrapper/ActorParams.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ifeature_manager.exception.package-info.java">info/smart_tools/smartactors/core/ifeature_manager/exception/package-info.java</a>
                 </td>
                 <td>
@@ -2552,6 +2874,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.exceptions.package-info.java">info/smart_tools/smartactors/core/message_processing/exceptions/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.scope_provider_container.ScopeProviderContainer.java">info/smart_tools/smartactors/core/scope_provider_container/ScopeProviderContainer.java</a>
                 </td>
                 <td>
@@ -2581,6 +2917,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.ClassGenerator.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/ClassGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing_sequence.package-info.java">info/smart_tools/smartactors/core/message_processing_sequence/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -2643,6 +2993,20 @@ under the License.
                 </td>
                 <td>
                   2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.package-info.java">info/smart_tools/smartactors/actors/get_form/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -2762,6 +3126,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iresource_source.exceptions.package-info.java">info/smart_tools/smartactors/core/iresource_source/exceptions/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.exception.package-info.java">info/smart_tools/smartactors/core/iobject/exception/package-info.java</a>
                 </td>
                 <td>
@@ -2818,6 +3196,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.RetryingToTakeResourceExceptionHandler.java">info/smart_tools/smartactors/core/exception_handling_receivers/RetryingToTakeResourceExceptionHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.server_with_iobject.package-info.java">info/smart_tools/smartactors/core/server_with_iobject/package-info.java</a>
                 </td>
                 <td>
@@ -2833,6 +3225,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.bootstrap.package-info.java">info/smart_tools/smartactors/core/bootstrap/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.SkipReceiverExceptionHandler.java">info/smart_tools/smartactors/core/exception_handling_receivers/SkipReceiverExceptionHandler.java</a>
                 </td>
                 <td>
                   0
@@ -2916,6 +3322,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.package-info.java">info/smart_tools/smartactors/core/receiver_chain/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iioccontainer.IContainer.java">info/smart_tools/smartactors/core/iioccontainer/IContainer.java</a>
                 </td>
                 <td>
@@ -2923,6 +3343,34 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.ImmutableReceiverChain.java">info/smart_tools/smartactors/core/receiver_chain/ImmutableReceiverChain.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.IReceiverChain.java">info/smart_tools/smartactors/core/message_processing/IReceiverChain.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -3049,6 +3497,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.GetFormActor.java">info/smart_tools/smartactors/actors/get_form/GetFormActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
                 <td>
                   0
@@ -3364,6 +3826,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.IMessageProcessingSequence.java">info/smart_tools/smartactors/core/message_processing/IMessageProcessingSequence.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ioc.IOC.java">info/smart_tools/smartactors/core/ioc/IOC.java</a>
                 </td>
                 <td>
@@ -3477,6 +3953,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.IObject.java">info/smart_tools/smartactors/core/iobject/IObject.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.thread_pool.ThreadPool.java">info/smart_tools/smartactors/core/thread_pool/ThreadPool.java</a>
                 </td>
                 <td>
                   0
@@ -3784,6 +4274,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.wrapper.GetFormMessage.java">info/smart_tools/smartactors/actors/get_form/wrapper/GetFormMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask_dispatcher.ITaskDispatcher.java">info/smart_tools/smartactors/core/itask_dispatcher/ITaskDispatcher.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/GetObjectFromCachedCollectionTask.java</a>
                 </td>
                 <td>
@@ -3854,6 +4372,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.thread_pool.ThreadImpl.java">info/smart_tools/smartactors/core/thread_pool/ThreadImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.idatabase_task.exception.package-info.java">info/smart_tools/smartactors/core/idatabase_task/exception/package-info.java</a>
                 </td>
                 <td>
@@ -3883,6 +4415,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ioc_container.Container.java">info/smart_tools/smartactors/core/ioc_container/Container.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.exceptions.NoExceptionHandleChainException.java">info/smart_tools/smartactors/core/message_processing/exceptions/NoExceptionHandleChainException.java</a>
                 </td>
                 <td>
                   0
@@ -3980,6 +4526,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask_dispatcher.package-info.java">info/smart_tools/smartactors/core/itask_dispatcher/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.exception.QueryStatementFactoryException.java">info/smart_tools/smartactors/core/sql_commons/exception/QueryStatementFactoryException.java</a>
                 </td>
                 <td>
@@ -3995,6 +4555,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_connection.wrapper.package-info.java">info/smart_tools/smartactors/core/postgres_connection/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.task_dispatcher.ExecutionTask.java">info/smart_tools/smartactors/core/task_dispatcher/ExecutionTask.java</a>
                 </td>
                 <td>
                   0
@@ -4120,6 +4694,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.task_dispatcher.package-info.java">info/smart_tools/smartactors/core/task_dispatcher/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem.java">info/smart_tools/smartactors/core/cached_collection/wrapper/upsert/UpsertItem.java</a>
                 </td>
                 <td>
@@ -4135,6 +4723,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ds_object.FieldName.java">info/smart_tools/smartactors/core/ds_object/FieldName.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.strategy.package-info.java">info/smart_tools/smartactors/actors/get_form/strategy/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -4176,6 +4778,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processor.MessageProcessor.java">info/smart_tools/smartactors/core/message_processor/MessageProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IStorageConnection.java">info/smart_tools/smartactors/core/istorage_connection/IStorageConnection.java</a>
                 </td>
                 <td>
@@ -4183,6 +4799,20 @@ under the License.
                 </td>
                 <td>
                   5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ithread_pool.IThreadPool.java">info/smart_tools/smartactors/core/ithread_pool/IThreadPool.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -4309,6 +4939,34 @@ under the License.
                 </td>
                 <td>
                   6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.package-info.java">info/smart_tools/smartactors/core/exception_handling_receivers/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iresource_source.package-info.java">info/smart_tools/smartactors/core/iresource_source/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0

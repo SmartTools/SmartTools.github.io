@@ -1,0 +1,4 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.task_dispatcher,info.smart_tools.smartactors.core.task_dispatcher,ExecutionTask,6,41,0,4,0,15,0,4,0,2
+core.task_dispatcher,info.smart_tools.smartactors.core.task_dispatcher,TaskDispatcher,1,111,1,5,1,31,1,12,0,10
+core.task_dispatcher,info.smart_tools.smartactors.core.task_dispatcher,TaskDispatcher.new Runnable() {...},0,10,0,0,0,3,0,2,0,2

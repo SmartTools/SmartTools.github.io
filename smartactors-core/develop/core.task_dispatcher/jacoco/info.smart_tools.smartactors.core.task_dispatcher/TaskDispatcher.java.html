@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TaskDispatcher.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.task_dispatcher</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.task_dispatcher</a> &gt; <span class="el_source">TaskDispatcher.java</span></div><h1>TaskDispatcher.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.task_dispatcher;
+
+import info.smart_tools.smartactors.core.iqueue.IQueue;
+import info.smart_tools.smartactors.core.itask.ITask;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.itask_dispatcher.ITaskDispatcher;
+import info.smart_tools.smartactors.core.ithread_pool.IThreadPool;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Implementation of {@link ITaskDispatcher}.
+ */
+public class TaskDispatcher implements ITaskDispatcher {
+    private final IQueue&lt;ITask&gt; taskQueue;
+    private final IThreadPool threadPool;
+    private final AtomicInteger runningThreadCount;
+
+    private final long maxExecutionDelay;
+    private final int maxRunningThreads;
+
+    /**
+     * The time in nanoseconds (as returned by {@link System#nanoTime()}) when the last task was taken from queue.
+     */
+    private final AtomicLong lastTakeTime;
+
+    private final Runnable callback;
+    private final ExecutionTask executionTask;
+
+    /**
+     * The constructor.
+     *
+     * @param taskQueue            the queue to take tasks from
+     * @param threadPool           the thread pool to use to execute tasks
+     * @param maxExecutionDelay    the maximum delay between starts of execution of tasks
+     * @param maxRunningThreads    the maximum amount of threads to start on new enqueued tasks when there seems to be
+     *                             no long tasks
+     */
+    public TaskDispatcher(final IQueue&lt;ITask&gt; taskQueue, final IThreadPool threadPool,
+<span class="fc" id="L41">                          final long maxExecutionDelay, final int maxRunningThreads) {</span>
+<span class="fc" id="L42">        this.taskQueue = taskQueue;</span>
+<span class="fc" id="L43">        this.threadPool = threadPool;</span>
+
+<span class="fc" id="L45">        this.maxExecutionDelay = maxExecutionDelay;</span>
+<span class="fc" id="L46">        this.maxRunningThreads = maxRunningThreads;</span>
+
+<span class="fc" id="L48">        this.executionTask = new ExecutionTask(this);</span>
+<span class="fc" id="L49">        this.callback = new Runnable() {</span>
+            @Override
+            public void run() {
+<span class="fc" id="L52">                tryStartNewThread();</span>
+<span class="fc" id="L53">            }</span>
+        };
+
+<span class="fc" id="L56">        this.runningThreadCount = new AtomicInteger(0);</span>
+<span class="fc" id="L57">        this.lastTakeTime = new AtomicLong(0);</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Should be called when a task is taken from queue.
+     */
+    void notifyTaskTaken() {
+<span class="fc" id="L64">        lastTakeTime.set(System.nanoTime());</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Should be called when new thread starts taking tasks from queue.
+     */
+    void notifyThreadStart() {
+<span class="fc" id="L71">        runningThreadCount.incrementAndGet();</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Should be called when a thread stops taking tasks from queue.
+     */
+    void notifyThreadStop() {
+<span class="fc" id="L78">        runningThreadCount.decrementAndGet();</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Starts (takes from pool) new thread executing the {@link #executionTask} if it is necessary.
+     */
+    void tryStartNewThread() {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (!shouldStartNewThread()) {</span>
+<span class="fc" id="L86">            return;</span>
+        }
+
+        try {
+<span class="fc" id="L90">            threadPool.tryExecute(executionTask);</span>
+<span class="nc" id="L91">        } catch (final TaskExecutionException e) {</span>
+            // TODO: Handle?
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Decide if new thread executing {@link #executionTask} should be started.
+     *
+     * @return {@code true} if new thread should be started.
+     */
+    protected boolean shouldStartNewThread() {
+<span class="fc" id="L102">        int runningThreads = runningThreadCount.get();</span>
+<span class="fc" id="L103">        long timeDelta = System.nanoTime() - lastTakeTime.get();</span>
+
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">        return runningThreads &lt; maxRunningThreads || timeDelta &gt; maxExecutionDelay;</span>
+    }
+
+    IThreadPool getThreadPool() {
+<span class="fc" id="L109">        return threadPool;</span>
+    }
+
+    IQueue&lt;ITask&gt; getTaskQueue() {
+<span class="fc" id="L113">        return taskQueue;</span>
+    }
+
+    @Override
+    public void start() {
+<span class="fc" id="L118">        lastTakeTime.set(System.nanoTime());</span>
+<span class="fc" id="L119">        taskQueue.addNewItemCallback(callback);</span>
+<span class="fc" id="L120">    }</span>
+
+    @Override
+    public void stop() {
+<span class="fc" id="L124">        taskQueue.removeNewItemCallback(callback);</span>
+<span class="fc" id="L125">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ImmutableReceiverChain.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.immutable_receiver_chain</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.receiver_chain</a> &gt; <span class="el_source">ImmutableReceiverChain.java</span></div><h1>ImmutableReceiverChain.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.receiver_chain;
+
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.core.message_processing.IReceiverChain;
+
+import java.util.Map;
+
+/**
+ * Basic implementation of {@link IReceiverChain} -- immutable sequence of receivers.
+ */
+public class ImmutableReceiverChain implements IReceiverChain {
+    private final String name;
+    private final IMessageReceiver[] receivers;
+    private final IObject[] arguments;
+    private final Map&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; exceptionalChains;
+
+    /**
+     * The constructor.
+     *
+     * @param name                        name of the chain
+     * @param receivers                   sequence (array) of receivers
+     * @param arguments                   array of argument objects for receivers in the chain
+     * @param exceptionalChains           mapping from exception class to exceptional chain to use when it occurs
+     * @throws InvalidArgumentException if name is {@code null}
+     * @throws InvalidArgumentException if receivers is {@code null}
+     */
+    public ImmutableReceiverChain(final String name, final IMessageReceiver[] receivers, final IObject[] arguments,
+                                  final Map&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; exceptionalChains)
+<span class="fc" id="L31">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L33">            throw new InvalidArgumentException(&quot;Chain name should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (null == receivers) {</span>
+<span class="fc" id="L37">            throw new InvalidArgumentException(&quot;Chain receivers list should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (null == arguments) {</span>
+<span class="fc" id="L41">            throw new InvalidArgumentException(&quot;Chain arguments list should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (receivers.length != arguments.length) {</span>
+<span class="fc" id="L45">            throw new InvalidArgumentException(&quot;Length of arguments list  does not match length of receivers list.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (null == exceptionalChains) {</span>
+<span class="fc" id="L49">            throw new InvalidArgumentException(&quot;Exceptional chains list should not be null&quot;);</span>
+        }
+
+<span class="fc" id="L52">        this.name = name;</span>
+<span class="fc" id="L53">        this.receivers = receivers;</span>
+<span class="fc" id="L54">        this.arguments = arguments;</span>
+<span class="fc" id="L55">        this.exceptionalChains = exceptionalChains;</span>
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public IMessageReceiver get(final int index) {
+<span class="pc bpc" id="L60" title="1 of 4 branches missed.">        if (index &lt; 0 || index &gt;= receivers.length) {</span>
+<span class="fc" id="L61">            return null;</span>
+        }
+
+<span class="fc" id="L64">        return receivers[index];</span>
+    }
+
+    @Override
+    public IObject getArguments(final int index) {
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (index &lt; 0 || index &gt;= arguments.length) {</span>
+<span class="fc" id="L70">            return null;</span>
+        }
+
+<span class="fc" id="L73">        return arguments[index];</span>
+    }
+
+    @Override
+    public String getName() {
+<span class="fc" id="L78">        return name;</span>
+    }
+
+    @Override
+    public IReceiverChain getExceptionalChain(final Throwable exception) {
+<span class="fc" id="L83">        Throwable e = exception;</span>
+
+        do {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            for (Map.Entry&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; entry : this.exceptionalChains.entrySet()) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                if (entry.getKey().isAssignableFrom(e.getClass())) {</span>
+<span class="fc" id="L88">                    return entry.getValue();</span>
+                }
+<span class="fc" id="L90">            }</span>
+
+<span class="fc" id="L92">            Throwable eNext = e.getCause();</span>
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (eNext == e) {</span>
+<span class="fc" id="L95">                break;</span>
+            }
+
+<span class="fc" id="L98">            e = eNext;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        } while (null != e);</span>
+
+<span class="fc" id="L101">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

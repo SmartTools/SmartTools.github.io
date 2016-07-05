@@ -1,3 +1,7 @@
+info.smart_tools.smartactors.actors.get_form
+info.smart_tools.smartactors.actors.get_form.strategy
+info.smart_tools.smartactors.actors.get_form.wrapper
+info.smart_tools.smartactors.core.blocking_queue
 info.smart_tools.smartactors.core.bootstrap
 info.smart_tools.smartactors.core.bootstrap_item
 info.smart_tools.smartactors.core.cached_collection
@@ -35,6 +39,7 @@ info.smart_tools.smartactors.core.ds_object
 info.smart_tools.smartactors.core.examples
 info.smart_tools.smartactors.core.examples.plugin
 info.smart_tools.smartactors.core.examples.scope
+info.smart_tools.smartactors.core.exception_handling_receivers
 info.smart_tools.smartactors.core.feature_manager
 info.smart_tools.smartactors.core.filesystem_tracker
 info.smart_tools.smartactors.core.iaction
@@ -54,6 +59,7 @@ info.smart_tools.smartactors.core.ifilesystem_tracker.exception
 info.smart_tools.smartactors.core.iioccontainer
 info.smart_tools.smartactors.core.iioccontainer.exception
 info.smart_tools.smartactors.core.ikey
+info.smart_tools.smartactors.core.imessage
 info.smart_tools.smartactors.core.imulti_action_strategy
 info.smart_tools.smartactors.core.imulti_action_strategy.exception
 info.smart_tools.smartactors.core.invalid_argument_exception
@@ -72,8 +78,11 @@ info.smart_tools.smartactors.core.iplugin_loader.exception
 info.smart_tools.smartactors.core.iplugin_loader_visitor
 info.smart_tools.smartactors.core.ipool
 info.smart_tools.smartactors.core.ipool.exception
+info.smart_tools.smartactors.core.iqueue
 info.smart_tools.smartactors.core.iresolve_dependency_strategy
 info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception
+info.smart_tools.smartactors.core.iresource_source
+info.smart_tools.smartactors.core.iresource_source.exceptions
 info.smart_tools.smartactors.core.iscope
 info.smart_tools.smartactors.core.iscope.exception
 info.smart_tools.smartactors.core.iscope_provider_container
@@ -86,8 +95,14 @@ info.smart_tools.smartactors.core.istrategy_container
 info.smart_tools.smartactors.core.istrategy_container.exception
 info.smart_tools.smartactors.core.itask
 info.smart_tools.smartactors.core.itask.exception
+info.smart_tools.smartactors.core.itask_dispatcher
+info.smart_tools.smartactors.core.ithread_pool
 info.smart_tools.smartactors.core.iwrapper_generator
 info.smart_tools.smartactors.core.iwrapper_generator.exception
+info.smart_tools.smartactors.core.message_processing
+info.smart_tools.smartactors.core.message_processing.exceptions
+info.smart_tools.smartactors.core.message_processing_sequence
+info.smart_tools.smartactors.core.message_processor
 info.smart_tools.smartactors.core.named_keys_storage
 info.smart_tools.smartactors.core.plugin_creator
 info.smart_tools.smartactors.core.plugin_loader_from_jar
@@ -97,6 +112,7 @@ info.smart_tools.smartactors.core.pool_guard
 info.smart_tools.smartactors.core.pool_guard.exception
 info.smart_tools.smartactors.core.postgres_connection
 info.smart_tools.smartactors.core.postgres_connection.wrapper
+info.smart_tools.smartactors.core.receiver_chain
 info.smart_tools.smartactors.core.recursive_scope
 info.smart_tools.smartactors.core.recursive_strategy_container
 info.smart_tools.smartactors.core.resolve_by_name_ioc_strategy
@@ -115,6 +131,8 @@ info.smart_tools.smartactors.core.sql_commons.exception
 info.smart_tools.smartactors.core.sql_commons.psql
 info.smart_tools.smartactors.core.strategy_container
 info.smart_tools.smartactors.core.string_ioc_key
+info.smart_tools.smartactors.core.task_dispatcher
+info.smart_tools.smartactors.core.thread_pool
 info.smart_tools.smartactors.core.wrapper_generator
 info.smart_tools.smartactors.core.wrapper_generator.class_builder
 info.smart_tools.smartactors.plugin.compile_query
