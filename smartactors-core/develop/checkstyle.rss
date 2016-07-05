@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 370,
+      <title>File: 376,
              Errors: 0,
-             Warnings: 227,
+             Warnings: 231,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -1349,6 +1349,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.CreateCachedCollectionQuery.java">info/smart_tools/smartactors/core/cached_collection/wrapper/CreateCachedCollectionQuery.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.package-info.java">info/smart_tools/smartactors/actors/authentication/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -2720,6 +2734,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.wrapper.AuthenticationMessage.java">info/smart_tools/smartactors/actors/authentication/wrapper/AuthenticationMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.get_by_id.exception.package-info.java">info/smart_tools/smartactors/core/db_task/get_by_id/exception/package-info.java</a>
                 </td>
                 <td>
@@ -3924,6 +3952,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.AuthenticationActor.java">info/smart_tools/smartactors/actors/authentication/AuthenticationActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.exception.package-info.java">info/smart_tools/smartactors/actors/authentication/exception/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iplugin_creator.IPluginCreator.java">info/smart_tools/smartactors/core/iplugin_creator/IPluginCreator.java</a>
                 </td>
                 <td>
@@ -3953,6 +4009,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.IObject.java">info/smart_tools/smartactors/core/iobject/IObject.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.wrapper.package-info.java">info/smart_tools/smartactors/actors/authentication/wrapper/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -5143,6 +5213,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.exception.package-info.java">info/smart_tools/smartactors/core/istorage_connection/exception/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.exception.AuthFailException.java">info/smart_tools/smartactors/actors/authentication/exception/AuthFailException.java</a>
                 </td>
                 <td>
                   0
