@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 413,
+      <title>File: 419,
              Errors: 0,
-             Warnings: 239,
+             Warnings: 240,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -509,6 +509,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ClassInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ClassInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.package-info.java">info/smart_tools/smartactors/actor/get_async_operation/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -2790,6 +2804,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.wrapper.package-info.java">info/smart_tools/smartactors/actor/get_async_operation/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.istorage_connection.IStorageConnection.java">info/smart_tools/smartactors/core/istorage_connection/IStorageConnection.java</a>
                 </td>
                 <td>
@@ -3351,6 +3379,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iplugin_creator.exception.PluginCreationException.java">info/smart_tools/smartactors/core/iplugin_creator/exception/PluginCreationException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.exception.package-info.java">info/smart_tools/smartactors/actor/get_async_operation/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -4344,6 +4386,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.exception.GetAsyncOperationActorException.java">info/smart_tools/smartactors/actor/get_async_operation/exception/GetAsyncOperationActorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.blocking_queue.package-info.java">info/smart_tools/smartactors/core/blocking_queue/package-info.java</a>
                 </td>
                 <td>
@@ -4652,6 +4708,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.GetAsyncOperationActor.java">info/smart_tools/smartactors/actor/get_async_operation/GetAsyncOperationActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.SkipReceiverExceptionHandler.java">info/smart_tools/smartactors/core/exception_handling_receivers/SkipReceiverExceptionHandler.java</a>
                 </td>
                 <td>
@@ -4667,6 +4737,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iserver.exception.ServerInitializeException.java">info/smart_tools/smartactors/core/iserver/exception/ServerInitializeException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.get_async_operation.wrapper.GetAsyncOperationMessage.java">info/smart_tools/smartactors/actor/get_async_operation/wrapper/GetAsyncOperationMessage.java</a>
                 </td>
                 <td>
                   0

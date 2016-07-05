@@ -1,6 +1,9 @@
 info.smart_tools.smartactors.actor.create_async_operation
 info.smart_tools.smartactors.actor.create_async_operation.exception
 info.smart_tools.smartactors.actor.create_async_operation.wrapper
+info.smart_tools.smartactors.actor.get_async_operation
+info.smart_tools.smartactors.actor.get_async_operation.exception
+info.smart_tools.smartactors.actor.get_async_operation.wrapper
 info.smart_tools.smartactors.actors.authentication
 info.smart_tools.smartactors.actors.authentication.exception
 info.smart_tools.smartactors.actors.authentication.wrapper
