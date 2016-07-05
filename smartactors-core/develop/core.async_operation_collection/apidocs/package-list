@@ -1,0 +1,7 @@
+info.smart_tools.smartactors.core.async_operation_collection
+info.smart_tools.smartactors.core.async_operation_collection.exception
+info.smart_tools.smartactors.core.async_operation_collection.task
+info.smart_tools.smartactors.core.async_operation_collection.wrapper.create_item
+info.smart_tools.smartactors.core.async_operation_collection.wrapper.delete
+info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item
+info.smart_tools.smartactors.core.async_operation_collection.wrapper.update

@@ -32,7 +32,6 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
     /**
      * Prepares database query
-     *
      * @param query query object
      * @throws TaskPrepareException if error occurs in process of query preparing
      */
@@ -40,23 +39,23 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-<span class="fc" id="L43">            UpsertIntoCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()), query);</span>
-<span class="fc" id="L44">            UpsertItem upsertItem = message.getUpsertItem();</span>
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            if (upsertItem.getStartDateTime() == null) {</span>
-<span class="fc" id="L46">                upsertItem.setStartDateTime(LocalDateTime.now());</span>
+<span class="fc" id="L42">            UpsertIntoCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()), query);</span>
+<span class="fc" id="L43">            UpsertItem upsertItem = message.getUpsertItem();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">            if (upsertItem.getStartDateTime() == null) {</span>
+<span class="fc" id="L45">                upsertItem.setStartDateTime(LocalDateTime.now());</span>
             }
-<span class="fc" id="L48">            upsertTask.prepare(message.wrapped());</span>
-<span class="fc" id="L49">        } catch (ResolutionException e) {</span>
-<span class="fc" id="L50">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare upsert into cached collection&quot;, e);</span>
-<span class="fc" id="L51">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="fc" id="L52">            throw new TaskPrepareException(&quot;Can't prepare query for upsert into cached collection&quot;, e);</span>
-<span class="fc" id="L53">        }</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L47">            upsertTask.prepare(message.wrapped());</span>
+<span class="fc" id="L48">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L49">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare upsert into cached collection&quot;, e);</span>
+<span class="fc" id="L50">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="fc" id="L51">            throw new TaskPrepareException(&quot;Can't prepare query for upsert into cached collection&quot;, e);</span>
+<span class="fc" id="L52">        }</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="fc" id="L58">        upsertTask.setConnection(connection);</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L57">        upsertTask.setConnection(connection);</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Execute the task.
@@ -65,7 +64,7 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
      */
     @Override
     public void execute() throws TaskExecutionException {
-<span class="fc" id="L68">        upsertTask.execute();</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L67">        upsertTask.execute();</span>
+<span class="fc" id="L68">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
