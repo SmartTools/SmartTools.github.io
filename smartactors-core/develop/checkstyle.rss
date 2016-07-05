@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 401,
+      <title>File: 406,
              Errors: 0,
-             Warnings: 232,
+             Warnings: 238,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -312,6 +312,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.close_async_operation.package-info.java">info/smart_tools/smartactors/actors/close_async_operation/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.async_operation_collection.task.CreateAsyncOperationTask.java">info/smart_tools/smartactors/core/async_operation_collection/task/CreateAsyncOperationTask.java</a>
                 </td>
                 <td>
@@ -361,6 +375,20 @@ under the License.
                 </td>
                 <td>
                   6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.close_async_operation.wrapper.package-info.java">info/smart_tools/smartactors/actors/close_async_operation/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -1243,6 +1271,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.close_async_operation.CloseAsyncOperationActor.java">info/smart_tools/smartactors/actors/close_async_operation/CloseAsyncOperationActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
                 <td>
                   0
@@ -2573,6 +2615,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.close_async_operation.wrapper.ActorParams.java">info/smart_tools/smartactors/actors/close_async_operation/wrapper/ActorParams.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -3973,6 +4029,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.close_async_operation.wrapper.CloseAsyncOpMessage.java">info/smart_tools/smartactors/actors/close_async_operation/wrapper/CloseAsyncOpMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
                 </td>
                 <td>
                   0

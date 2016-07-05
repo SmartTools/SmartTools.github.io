@@ -1,6 +1,8 @@
 info.smart_tools.smartactors.actors.authentication
 info.smart_tools.smartactors.actors.authentication.exception
 info.smart_tools.smartactors.actors.authentication.wrapper
+info.smart_tools.smartactors.actors.close_async_operation
+info.smart_tools.smartactors.actors.close_async_operation.wrapper
 info.smart_tools.smartactors.actors.get_form
 info.smart_tools.smartactors.actors.get_form.strategy
 info.smart_tools.smartactors.actors.get_form.wrapper
