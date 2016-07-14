@@ -404,6 +404,12 @@
                   
                       <li>      <a href="../core.ifield/index.html"  title="core.ifield">core.ifield</a>
 </li>
+                  
+                      <li>      <a href="../core.ipath/index.html"  title="core.ipath">core.ipath</a>
+</li>
+                  
+                      <li>      <a href="../core.path/index.html"  title="core.path">core.path</a>
+</li>
                           </ul>
       </li>
                   </ul>
@@ -1223,6 +1229,20 @@
           <span class="none"></span>
         core.ifield</a>
             </li>
+                
+      <li>
+  
+                          <a href="../core.ipath/index.html" title="core.ipath">
+          <span class="none"></span>
+        core.ipath</a>
+            </li>
+                
+      <li>
+  
+                          <a href="../core.path/index.html" title="core.path">
+          <span class="none"></span>
+        core.path</a>
+            </li>
             </ul>
               
                 
@@ -1250,7 +1270,7 @@
 <div class="section">
 <h2><a name="Loading_and_initialization_steps"></a>Loading and initialization steps</h2>
 <p>Loading and initializing are two separate steps of the process.</p>
-<p>At the first step a part of the server, the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html"><tt>PluginLoader</tt></a> scans the JAR file for implementations of <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iplugin/IPlugin.html"><tt>IPlugin</tt></a>. It uses <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_creator/PluginCreator.html"><tt>PluginCreator</tt></a> to instantiate the Plugin by passing the instance of <tt>IBootstrap</tt> to it&#x2019;s constructor. The <tt>load()</tt> method of each Plugin is called here.</p>
+<p>At the first step a part of the server, the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html"><tt>PluginLoader</tt></a> scans the JAR files for implementations of <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iplugin/IPlugin.html"><tt>IPlugin</tt></a>. It uses <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_creator/PluginCreator.html"><tt>PluginCreator</tt></a> to instantiate the Plugin by passing the instance of <tt>IBootstrap</tt> to it&#x2019;s constructor. The <tt>load()</tt> method of each Plugin is called here.</p>
 <p>In it&#x2019;s <tt>load()</tt> method the Plugin adds it&#x2019;s own <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ibootstrap_item/IBootstrapItem.html"><tt>IBootstrapItem</tt></a> into the <a class="externalLink" href="http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/ibootstrap/IBootstrap.html"><tt>IBootstrap</tt></a> known to him. The <tt>IBootstrapItem</tt> gives the name of the part of the functionality provided by the plugin and allows to declare dependencies from the other bootstrap items using the <tt>after()</tt> and <tt>before()</tt> methods. Finally the sequence of the bootstrap items according to the dependencies is constructed and their <tt>executeProcess()</tt> is called. This is the second step of the initialization.</p>
 <p><img src="http://www.plantuml.com/plantuml/img/IyxFBSZFIyqhKGXEBIfBBU9AXWi4v9IcP-OX2JZbvvSKbnGb5c0Jyon9pUNYWXYYaA-hQwUWfAK4DKF1IY4dFp6b65KUhXKedLgHcbnQaWfK0TMX1JC1nGAWoeAY_BBC591AX7wSYfFpSt9IaqkG5ODba6s7AarAJSilIYMiBZ6j11XA0000" alt="Plugins and Bootstrap" /></p></div>
 <div class="section">
@@ -1258,7 +1278,7 @@
 <p>Let create a sample plugin.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">public class MyPlugin implements IPlugin {
+<div class="source"><pre class="prettyprint">public class SamplePlugin implements IPlugin {
 </pre></div></div>
 <div class="section">
 <h3><a name="Bootstrap_reference"></a>Bootstrap reference</h3>
@@ -1270,7 +1290,7 @@
 <p>The <tt>Bootstrap</tt> must be injected into the plugin&#x2019;s constructor.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">public MyPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {
+<div class="source"><pre class="prettyprint">public SamplePlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {
     this.bootstrap = bootstrap;
 }
 </pre></div></div></div>
@@ -1285,7 +1305,7 @@ public void load() throws PluginException {
 <p>In the method at the first you should declare the <tt>BootstrapItem</tt> provided by your plugin.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;MyPlugin&quot;);
+<div class="source"><pre class="prettyprint">IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;SamplePlugin&quot;);
 </pre></div></div>
 <p>Here you declare that your item must be initialized after initialization of &#x2018;IOC&#x2019; item.</p>
 
@@ -1299,12 +1319,18 @@ public void load() throws PluginException {
 <div class="source">
 <div class="source"><pre class="prettyprint">item.process(() -&gt; {
     try {
-        IKey&lt;MyClass&gt;key = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;new MyClass&quot;);
-        IOC.register(key, new CreateNewInstanceStrategy(
-                (args) -&gt; new MyClass((String) args[0])));
+        IKey key = Keys.getOrAdd(&quot;new SampleClass&quot;);
+        IOC.register(
+                key,
+                // it's the initialization action of our plugin
+                new CreateNewInstanceStrategy(
+                        (args) -&gt; new SampleClass((String) args[0])
+                )
+        );
     } catch (Exception e) {
         throw new RuntimeException(e);
     }
+    System.out.println(&quot;SamplePlugin initialized&quot;);
 });
 </pre></div></div></div>
 <div class="section">
@@ -1336,7 +1362,7 @@ public void load() throws PluginException {
 <p>A <tt>IPluginLoaderVisitor</tt> is necessary to track plugins loading process.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IPluginLoaderVisitor&lt;String&gt; visitor = new MyPluginVisitor();
+<div class="source"><pre class="prettyprint">IPluginLoaderVisitor&lt;String&gt; visitor = new SamplePluginVisitor();
 </pre></div></div></div>
 <div class="section">
 <h3><a name="ClassLoader"></a>ClassLoader</h3>
@@ -1351,7 +1377,7 @@ public void load() throws PluginException {
 <p>Then the <tt>PluginLoader</tt> is created. It&#x2019;s second constructor parameter is the code to load each plugin.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IPluginLoader&lt;String&gt; pluginLoader = new PluginLoader(
+<div class="source"><pre class="prettyprint">IPluginLoader&lt;Collection&lt;IPath&gt;&gt; pluginLoader = new PluginLoader(
         urlClassLoader,
         (t) -&gt; {
             try {
@@ -1366,10 +1392,13 @@ public void load() throws PluginException {
 </pre></div></div></div>
 <div class="section">
 <h3><a name="Loading"></a>Loading</h3>
-<p>The server scans the jar file for <tt>IPlugin</tt> instances.</p>
+<p>The server scans the collection of jar files for <tt>IPlugin</tt> instances.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">pluginLoader.loadPlugin(&quot;examples.jar&quot;);
+<div class="source"><pre class="prettyprint">Collection&lt;IPath&gt; fileCollection = new ArrayList&lt;&gt;();
+fileCollection.add(new Path(&quot;libs/SamplePlugin.jar&quot;));
+fileCollection.add(new Path(&quot;libs/IocPlugin.jar&quot;));
+pluginLoader.loadPlugin(fileCollection);
 </pre></div></div></div>
 <div class="section">
 <h3><a name="Initialization"></a>Initialization</h3>
@@ -1380,17 +1409,17 @@ public void load() throws PluginException {
 </pre></div></div></div></div>
 <div class="section">
 <h2><a name="Initialization_order"></a>Initialization order</h2>
-<p>In this example, when we have two plugins: &#x2018;MyPlugin&#x2019; following <i>after</i> &#x2018;IOC&#x2019; &#x2014; the loading and initialization sequence is like this:</p>
+<p>In this example, when we have two plugins: &#x2018;SamplePlugin&#x2019; following <i>after</i> &#x2018;IOC&#x2019; &#x2014; the loading and initialization sequence is like this:</p>
 
 <ol style="list-style-type: decimal">
   
-<li><tt>IOCPlugin.load()</tt>, registers bootstrap item</li>
+<li><tt>SamplePlugin.load()</tt>, registers bootstrap item</li>
   
-<li><tt>MyPlugin.load()</tt>, registers bootstrap item</li>
+<li><tt>IOCPlugin.load()</tt>, registers bootstrap item</li>
   
 <li>initialization code of bootstrap item of &#x2018;IOC&#x2019; plugin</li>
   
-<li>initialization code of bootstrap item of &#x2018;MyPlugin&#x2019; because it asked to be after &#x2018;IOC&#x2019;</li>
+<li>initialization code of bootstrap item of &#x2018;SamplePlugin&#x2019; because it asked to be after &#x2018;IOC&#x2019;</li>
 </ol>
 <p>Note the order of first two steps is not defined, while the order of execution of bootstrap items is defined by their dependencies.</p></div>
 <div class="section">

@@ -9,8 +9,8 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.filesystem_tracker;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ipath.IPath;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment">/**</em>
@@ -27,7 +27,7 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">     * @throws IOException if I/O error occurs during creation of a {@code Runnable}</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment">     * @see ListeningTaskFactory</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>      Runnable createRunnable(File directory, IAction&lt;File&gt; handler) <strong class="jxr_keyword">throws</strong> IOException;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>      Runnable createRunnable(<a href="../../../../../info/smart_tools/smartactors/core/ipath/IPath.html">IPath</a> directory, IAction&lt;IPath&gt; handler) <strong class="jxr_keyword">throws</strong> IOException;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  }
 </pre>
 <hr/>

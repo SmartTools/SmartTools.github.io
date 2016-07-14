@@ -9,13 +9,13 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.plugin_loader_from_jar;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.IAction;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ipath.IPath;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * given parameters.</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * &lt;/pre&gt;</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html">PluginLoader</a> <strong class="jxr_keyword">implements</strong> IPluginLoader&lt;Collection&lt;File&gt;&gt; {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html">PluginLoader</a> <strong class="jxr_keyword">implements</strong> IPluginLoader&lt;Collection&lt;IPath&gt;&gt; {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CLASS_EXTENSION = <span class="jxr_string">".class"</span>;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
@@ -68,11 +68,11 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Override
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> loadPlugin(<strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> loadPlugin(<strong class="jxr_keyword">final</strong> Collection&lt;IPath&gt; files)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/iplugin_loader/exception/PluginLoaderException.html">PluginLoaderException</a> {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">for</strong> (File file : files) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  URL url = <strong class="jxr_keyword">new</strong> URL(<span class="jxr_string">"jar:file:"</span> + file.getAbsolutePath() + <span class="jxr_string">"!/"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">for</strong> (IPath file : files) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  URL url = <strong class="jxr_keyword">new</strong> URL(<span class="jxr_string">"jar:file:"</span> + file.getPath() + <span class="jxr_string">"!/"</span>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">this</strong>.classLoader.addUrl(url);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>              }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          } <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -81,9 +81,9 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          JarFile jarFile = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          String pathToJar = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">for</strong> (File file : files) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">for</strong> (IPath file : files) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  pathToJar = file.getAbsolutePath();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  pathToJar = file.getPath();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>                  jarFile = <strong class="jxr_keyword">new</strong> JarFile(pathToJar);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                  Enumeration&lt;JarEntry&gt; iterator = jarFile.entries();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>                  <strong class="jxr_keyword">while</strong> (iterator.hasMoreElements()) {

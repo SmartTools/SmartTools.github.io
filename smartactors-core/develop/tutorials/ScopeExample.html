@@ -404,6 +404,12 @@
                   
                       <li>      <a href="../core.ifield/index.html"  title="core.ifield">core.ifield</a>
 </li>
+                  
+                      <li>      <a href="../core.ipath/index.html"  title="core.ipath">core.ipath</a>
+</li>
+                  
+                      <li>      <a href="../core.path/index.html"  title="core.path">core.path</a>
+</li>
                           </ul>
       </li>
                   </ul>
@@ -1223,6 +1229,20 @@
           <span class="none"></span>
         core.ifield</a>
             </li>
+                
+      <li>
+  
+                          <a href="../core.ipath/index.html" title="core.ipath">
+          <span class="none"></span>
+        core.ipath</a>
+            </li>
+                
+      <li>
+  
+                          <a href="../core.path/index.html" title="core.path">
+          <span class="none"></span>
+        core.path</a>
+            </li>
             </ul>
               
                 
@@ -1262,7 +1282,7 @@ value = scope.getValue(key)
 </pre></div></div></div>
 <div class="section">
 <h3><a name="Why_you_need_scopes"></a>Why you need scopes</h3>
-<p>Service locators provide the globally available API, so the scopes give ability to separate the data of service locators in different contexts. For example, you can define totally independent scope for testing environment, so your tests will take the IoC data totally independent on the IoC of the main application.</p>
+<p>Service locators provide the globally available API, and the scopes give ability to separate the data of service locators in different contexts. For example, you can define totally independent scope for testing environment, so your tests will take the IoC data totally independent on the IoC of the main application.</p>
 <p>The service locator should always take it&#x2019;s data from the <i>current scope</i>. But the current scope can be defined and changed externally.</p>
 <p>Also scopes can be nested into each other. This allows to <i>override</i> data. If some key is not defined in the current scope, it may be looked in the parent scope. As the opposite you can redefine the value in the current scope, and it doesn&#x2019;t affect the users of the parent scope.</p></div></div>
 <div class="section">
@@ -1357,33 +1377,33 @@ assertSame(workerScope, ScopeProvider.getCurrentScope());
 <p>Let&#x2019;s create the simple IoC which takes care about scopes. The IoC will be simple, it just always returns the objects put into it by the key.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">IKey key = new Key&lt;MyClass&gt;(&quot;my&quot;);
-MyClass main = new MyClass(&quot;main&quot;);
-MyIOC.register(key, main);
-assertEquals(main, MyIOC.resolve(key));
+<div class="source"><pre class="prettyprint">IKey key = new Key(&quot;sample&quot;);
+SampleClass main = new SampleClass(&quot;main&quot;);
+SimpleIOC.register(key, main);
+assertEquals(main, SimpleIOC.resolve(key));
 </pre></div></div>
 <p>The IoC must return the parent scope object from the child scope.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">ScopeProvider.setCurrentScope(workerScope);
-assertEquals(main, MyIOC.resolve(key));
+assertEquals(main, SimpleIOC.resolve(key));
 </pre></div></div>
 <p>But it should allow to override the object.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">MyClass worker = new MyClass(&quot;worker&quot;);
-MyIOC.register(key, worker);
-assertEquals(worker, MyIOC.resolve(key));
+<div class="source"><pre class="prettyprint">SampleClass worker = new SampleClass(&quot;worker&quot;);
+SimpleIOC.register(key, worker);
+assertEquals(worker, SimpleIOC.resolve(key));
 </pre></div></div>
 <p>Also it should return to the main scope object when the scope is switched back.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">ScopeProvider.setCurrentScope(systemScope);
-assertEquals(main, MyIOC.resolve(key));
+assertEquals(main, SimpleIOC.resolve(key));
 </pre></div></div></div>
 <div class="section">
 <h3><a name="IoC_storage"></a>IoC storage</h3>
-<p>IoC must have a storage, and keep this storage in the scope.</p>
+<p>IoC must have a storage, and keep this storage in the scope. The storage is a separate class.</p>
 <p>The storage can be based on a simple <a class="externalLink" href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html">Map</a>.</p>
 
 <div class="source">
@@ -1399,7 +1419,7 @@ assertEquals(main, MyIOC.resolve(key));
 <p>However, the storage must do a recursive search: if the key is not found in the current scope, ask the parent scope.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">private final MyRecursiveContainer&lt;K, V&gt; parent;
+<div class="source"><pre class="prettyprint">private final RecursiveContainer&lt;K, V&gt; parent;
 
 public V get(final K key) {
     V result = null;
@@ -1413,7 +1433,7 @@ public V get(final K key) {
 <p>The parent container is provided in the constructor.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">public MyRecursiveContainer(final MyRecursiveContainer&lt;K, V&gt; parent) {
+<div class="source"><pre class="prettyprint">public RecursiveContainer(final RecursiveContainer&lt;K, V&gt; parent) {
     this.parent = parent;
 }
 </pre></div></div></div>
@@ -1424,15 +1444,15 @@ public V get(final K key) {
 <div class="source">
 <div class="source"><pre class="prettyprint">STORAGE_KEY = new Key(java.util.UUID.randomUUID().toString());
 </pre></div></div>
-<p>And it needs a code which guarantees the storage is correctly created in any new scope appeared in the system. Before adding a new storage to the scope we should ask the new scope for the parent storage to correctly link them.</p>
+<p>And it needs a code which guarantees the storage is correctly created in any new scope appeared in the system. Before adding a new storage to the scope we should ask the new scope for the parent storage (from the parent scope) to correctly link them.</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">ScopeProvider.subscribeOnCreationNewScope(
         scope -&gt; {
             try {
-                MyRecursiveContainer&lt;IKey, Object&gt; parentStorage = null;
+                RecursiveContainer&lt;IKey, Object&gt; parentStorage = null;
                 try {
-                    parentStorage = (MyRecursiveContainer&lt;IKey, Object&gt;) scope.getValue(STORAGE_KEY);
+                    parentStorage = (RecursiveContainer&lt;IKey, Object&gt;) scope.getValue(STORAGE_KEY);
                 } catch (ScopeException e) {
                     // parent storage does not exists, create a new with null parent
                 }
@@ -1446,32 +1466,32 @@ public V get(final K key) {
 <p>Then to register an object in IoC we just take the storage from the current scope and put a value into it.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">public static void register(final IKey key, final Object value) throws MyIOCException {
+<div class="source"><pre class="prettyprint">public static void register(final IKey key, final Object value) throws SimpleIOCException {
     try {
-        MyRecursiveContainer&lt;IKey, Object&gt; storage = (MyRecursiveContainer&lt;IKey, Object&gt;)
+        RecursiveContainer&lt;IKey, Object&gt; storage = (RecursiveContainer&lt;IKey, Object&gt;)
                 ScopeProvider.getCurrentScope().getValue(STORAGE_KEY);
         storage.put(key, value);
     } catch (Throwable e) {
-        throw new MyIOCException(e);
+        throw new SimpleIOCException(e);
     }
 }
 </pre></div></div>
 <p>To resolve the key we take the storage from the current scope again and get the value. The recursive search is done by the storage.</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">public static &lt;T&gt; T resolve(final IKey&lt;T&gt; key) throws MyIOCException {
+<div class="source"><pre class="prettyprint">public static &lt;T&gt; T resolve(final IKey&lt;T&gt; key) throws SimpleIOCException {
     try {
-        MyRecursiveContainer&lt;IKey, Object&gt; storage = (MyRecursiveContainer&lt;IKey, Object&gt;)
+        RecursiveContainer&lt;IKey, Object&gt; storage = (RecursiveContainer&lt;IKey, Object&gt;)
                 ScopeProvider.getCurrentScope().getValue(STORAGE_KEY);
         return (T) storage.get(key);
     } catch (Throwable e) {
-        throw new MyIOCException(e);
+        throw new SimpleIOCException(e);
     }
 }
 </pre></div></div></div>
 <div class="section">
 <h3><a name="IoC_objects"></a>IoC objects</h3>
-<p>So, the scopes key-value storages with hierarchical structure which allows to search values from child to parent.</p>
+<p>So, the scopes are key-value storages with hierarchical structure which allows to search values from child to parent.</p>
 <p>But IoC internally is also the key-value storage which holds objects or strategies to resolve objects. And this storage should also be hierarchical with ability to search values from child to parent. The hierarchy of IoC storage follows the hierarchy of scopes.</p>
 <p>So, the IoC as a service locator just takes the storage from the current scope and asks it for data. Because you can define different scopes for different situations you can get different (and independent) data from IoC when necessary.</p>
 <p><img src="http://www.plantuml.com/plantuml/img/XP2n3i8W48PtdkBIgHruWQRfqib94-FM1V5IgmW4Q1FVNi2ge4sS2Dnt_tq7uquPE5WqX71rqqgYTB1H7JIDVvn7ZY0KPvvgsnJPCUEFFLSQFNh5EvsPcD137wOxZ-AqXlpc-7ms_4jQXKYG1qhRQ5s3mM6q3arPzTAWLMB6iY8a50DKyCc4YRsqGQn89MiOq9LL3SiaGf9YRDRHjaYtpo15CrMI_fAlPSj-dBBjQj1JbDWUByYzv-BqlBwcBV2Qr3ldg_41" alt="IoC in Scopes" /></p></div></div>
@@ -1481,7 +1501,7 @@ public V get(final K key) {
 
 <ul>
   
-<li><a class="externalLink" href="http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/scope/package-frame.html">MyIOC implementation</a></li>
+<li><a class="externalLink" href="http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/scope/package-frame.html">SimpleIOC implementation</a></li>
   
 <li><a class="externalLink" href="http://smarttools.github.io/smartactors-core/core.examples/xref-test/info/smart_tools/smartactors/core/examples/ScopeExample.html">Tests</a></li>
 </ul></div>

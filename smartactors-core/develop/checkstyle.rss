@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 455,
+      <title>File: 467,
              Errors: 0,
-             Warnings: 262,
+             Warnings: 248,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -95,6 +95,20 @@ under the License.
                 </td>
                 <td>
                   3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipath.IPathFilter.java">info/smart_tools/smartactors/core/ipath/IPathFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -201,6 +215,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iplugin_creator.package-info.java">info/smart_tools/smartactors/core/iplugin_creator/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.IocPlugin.java">info/smart_tools/smartactors/core/examples/plugin/IocPlugin.java</a>
                 </td>
                 <td>
                   0
@@ -508,20 +536,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyServer.java">info/smart_tools/smartactors/core/examples/plugin/MyServer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_connection.db-init.properties">info/smart_tools/smartactors/core/postgres_connection/db-init.properties</a>
                 </td>
                 <td>
@@ -537,6 +551,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ClassInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ClassInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.SimpleIOCException.java">info/smart_tools/smartactors/core/examples/scope/SimpleIOCException.java</a>
                 </td>
                 <td>
                   0
@@ -1194,6 +1222,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePluginVisitor.java">info/smart_tools/smartactors/core/examples/plugin/SamplePluginVisitor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.bootstrap.Bootstrap.java">info/smart_tools/smartactors/core/bootstrap/Bootstrap.java</a>
                 </td>
                 <td>
@@ -1516,7 +1558,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.get_form_actor.package-info.java">info/smart_tools/smartactors/plugin/get_form_actor/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.package-info.java">info/smart_tools/smartactors/core/examples/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1530,13 +1572,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.MyClass.java">info/smart_tools/smartactors/core/examples/MyClass.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.get_form_actor.package-info.java">info/smart_tools/smartactors/plugin/get_form_actor/package-info.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -2454,6 +2496,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.Plugin2.java">info/smart_tools/smartactors/core/examples/feature/Plugin2.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iscope.exception.ScopeFactoryException.java">info/smart_tools/smartactors/core/iscope/exception/ScopeFactoryException.java</a>
                 </td>
                 <td>
@@ -2469,6 +2525,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iserver.package-info.java">info/smart_tools/smartactors/core/iserver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.RecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/RecursiveContainer.java</a>
                 </td>
                 <td>
                   0
@@ -2693,6 +2763,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iplugin_creator.IPluginCreator.java">info/smart_tools/smartactors/core/iplugin_creator/IPluginCreator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.PluginServer.java">info/smart_tools/smartactors/core/examples/plugin/PluginServer.java</a>
                 </td>
                 <td>
                   0
@@ -2944,6 +3028,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipath.package-info.java">info/smart_tools/smartactors/core/ipath/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.plugin_loader_from_jar.ExpansibleURLClassLoader.java">info/smart_tools/smartactors/core/plugin_loader_from_jar/ExpansibleURLClassLoader.java</a>
                 </td>
                 <td>
@@ -3182,6 +3280,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.package-info.java">info/smart_tools/smartactors/core/examples/feature/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ithread_pool.IThreadPool.java">info/smart_tools/smartactors/core/ithread_pool/IThreadPool.java</a>
                 </td>
                 <td>
@@ -3287,34 +3399,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyPluginVisitor.java">info/smart_tools/smartactors/core/examples/plugin/MyPluginVisitor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyPlugin.java">info/smart_tools/smartactors/core/examples/plugin/MyPlugin.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
                 </td>
                 <td>
                   0
@@ -3714,6 +3798,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePlugin.java">info/smart_tools/smartactors/core/examples/plugin/SamplePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.async_operation_collection.wrapper.delete.package-info.java">info/smart_tools/smartactors/core/async_operation_collection/wrapper/delete/package-info.java</a>
                 </td>
                 <td>
@@ -3729,6 +3827,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iobject.exception.ChangeValueException.java">info/smart_tools/smartactors/core/iobject/exception/ChangeValueException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.package-info.java">info/smart_tools/smartactors/core/examples/plugin/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -3952,7 +4064,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.scope_guard.exception.package-info.java">info/smart_tools/smartactors/core/scope_guard/exception/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.path.Path.java">info/smart_tools/smartactors/core/path/Path.java</a>
                 </td>
                 <td>
                   0
@@ -3966,13 +4078,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyRecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/MyRecursiveContainer.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.scope_guard.exception.package-info.java">info/smart_tools/smartactors/core/scope_guard/exception/package-info.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  6
+                  0
                 </td>
                 <td>
                   0
@@ -4001,20 +4113,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOCException.java">info/smart_tools/smartactors/core/examples/scope/MyIOCException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
                 </td>
                 <td>
                   0
@@ -4120,6 +4218,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.FeatureServer.java">info/smart_tools/smartactors/core/examples/feature/FeatureServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.strategy.IFormsStrategy.java">info/smart_tools/smartactors/actors/get_form/strategy/IFormsStrategy.java</a>
                 </td>
                 <td>
@@ -4163,6 +4275,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.itask.exception.package-info.java">info/smart_tools/smartactors/core/itask/exception/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ipath.IPath.java">info/smart_tools/smartactors/core/ipath/IPath.java</a>
                 </td>
                 <td>
                   0
@@ -4246,6 +4372,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.SimpleIOC.java">info/smart_tools/smartactors/core/examples/scope/SimpleIOC.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.async_operation_collection.package-info.java">info/smart_tools/smartactors/core/async_operation_collection/package-info.java</a>
                 </td>
                 <td>
@@ -4302,6 +4442,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.path.package-info.java">info/smart_tools/smartactors/core/path/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.get_by_id.psql.wrapper.package-info.java">info/smart_tools/smartactors/core/db_task/get_by_id/psql/wrapper/package-info.java</a>
                 </td>
                 <td>
@@ -4337,20 +4491,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.MyIocPlugin.java">info/smart_tools/smartactors/core/examples/plugin/MyIocPlugin.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
                 </td>
                 <td>
                   0
@@ -4491,20 +4631,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.MyIOC.java">info/smart_tools/smartactors/core/examples/scope/MyIOC.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
                 </td>
                 <td>
                   0
@@ -5268,6 +5394,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.SampleClass.java">info/smart_tools/smartactors/core/examples/SampleClass.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.create_collection.psql.wrapper.CreateCollectionQuery.java">info/smart_tools/smartactors/core/db_task/create_collection/psql/wrapper/CreateCollectionQuery.java</a>
                 </td>
                 <td>
@@ -5535,6 +5675,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.search.utils.ISearchQueryWriter.java">info/smart_tools/smartactors/core/db_task/search/utils/ISearchQueryWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.package-info.java">info/smart_tools/smartactors/core/examples/scope/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -6115,6 +6269,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.Plugin1.java">info/smart_tools/smartactors/core/examples/feature/Plugin1.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0

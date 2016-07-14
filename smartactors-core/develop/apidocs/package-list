@@ -63,6 +63,7 @@ info.smart_tools.smartactors.core.db_task.upsert.psql
 info.smart_tools.smartactors.core.db_task.upsert.psql.wrapper
 info.smart_tools.smartactors.core.ds_object
 info.smart_tools.smartactors.core.examples
+info.smart_tools.smartactors.core.examples.feature
 info.smart_tools.smartactors.core.examples.plugin
 info.smart_tools.smartactors.core.examples.scope
 info.smart_tools.smartactors.core.exception_handling_receivers
@@ -99,6 +100,7 @@ info.smart_tools.smartactors.core.iobject_wrapper
 info.smart_tools.smartactors.core.ioc
 info.smart_tools.smartactors.core.ioc_container
 info.smart_tools.smartactors.core.ioc_container_simple
+info.smart_tools.smartactors.core.ipath
 info.smart_tools.smartactors.core.iplugin
 info.smart_tools.smartactors.core.iplugin.exception
 info.smart_tools.smartactors.core.iplugin_creator
@@ -134,6 +136,7 @@ info.smart_tools.smartactors.core.message_processing.exceptions
 info.smart_tools.smartactors.core.message_processing_sequence
 info.smart_tools.smartactors.core.message_processor
 info.smart_tools.smartactors.core.named_keys_storage
+info.smart_tools.smartactors.core.path
 info.smart_tools.smartactors.core.plugin_creator
 info.smart_tools.smartactors.core.plugin_loader_from_jar
 info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementation
