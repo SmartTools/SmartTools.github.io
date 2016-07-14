@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 13,
+      <title>File: 12,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>core.wrapper_generator/core.wrapper_generator//checkstyle.html</link>
@@ -88,6 +88,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ConstructorParameterInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ConstructorParameterInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.Modifiers.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/Modifiers.java</a>
                 </td>
                 <td>
@@ -130,13 +144,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.IObjectWrapper.java">info/smart_tools/smartactors/core/wrapper_generator/IObjectWrapper.java</a>
+                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.FieldInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/FieldInfo.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ConstructorInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ConstructorInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -165,48 +193,6 @@ under the License.
                 </td>
                 <td>
                   1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ConstructorParameterInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ConstructorParameterInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.FieldInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/FieldInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.wrapper_generator/core.wrapper_generator//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.ConstructorInfo.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/ConstructorInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
                 <td>
                   0

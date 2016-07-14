@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetCookieFromRequestRule.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">transformation_rule.get_cookie_from_request</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.transformation_rules.get_cookie_from_request</a> &gt; <span class="el_source">GetCookieFromRequestRule.java</span></div><h1>GetCookieFromRequestRule.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.transformation_rules.get_cookie_from_request;
+
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaders;
+import java.util.stream.Stream;
+
+/**
+ * Rule that extract cookie from request
+ */
+<span class="fc" id="L12">public class GetCookieFromRequestRule implements IResolveDependencyStrategy {</span>
+
+    /**
+     * Extracts cookie from given HTTP request.
+     * @param args array of needed parameters for resolve dependency,
+     *             first parameter the FullHttpRequest, second the cookie name
+     * @param &lt;T&gt; type String
+     * @return String the cookie value
+     */
+    @Override
+    public &lt;T&gt; T resolve(final Object... args) {
+<span class="fc" id="L23">        String cookieString = ((FullHttpRequest) args[0]).headers().get(HttpHeaders.Names.COOKIE);</span>
+
+<span class="fc" id="L25">        String cookie = Stream.of(cookieString.split(&quot;;&quot;))</span>
+<span class="fc" id="L26">                .map(x -&gt; x.split(&quot;=&quot;))</span>
+<span class="fc" id="L27">                .filter(x -&gt; x[0].equals((String) args[1]))</span>
+<span class="fc" id="L28">                .findFirst().get()[1];</span>
+
+<span class="fc" id="L30">        return (T) cookie;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

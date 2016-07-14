@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateCachedCollectionTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection.task</a> &gt; <span class="el_source">CreateCachedCollectionTask.java</span></div><h1>CreateCachedCollectionTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection.task;
 
-import info.smart_tools.smartactors.core.cached_collection.wrapper.CreateCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -24,46 +26,54 @@ public class CreateCachedCollectionTask implements IDatabaseTask {
     private static final String ORDERED_INDEX = &quot;ordered&quot;;
     private static final String DATE_TIME_INDEX = &quot;datetime&quot;;
 
+    private IField keyNameField;
+    private IField indexesField;
+
     private IDatabaseTask createCollectionTask;
 
     /**
      * Constructor
      * @param createCollectionTask nested task for creating collection
+     * @throws CreateCachedCollectionTaskException for create task error
      */
-<span class="fc" id="L33">    public CreateCachedCollectionTask(final IDatabaseTask createCollectionTask) {</span>
-<span class="fc" id="L34">        this.createCollectionTask = createCollectionTask;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L39">    public CreateCachedCollectionTask(final IDatabaseTask createCollectionTask) throws CreateCachedCollectionTaskException {</span>
+<span class="fc" id="L40">        this.createCollectionTask = createCollectionTask;</span>
+        try {
+<span class="fc" id="L42">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
+<span class="fc" id="L43">            this.indexesField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;indexes&quot;);</span>
+<span class="nc" id="L44">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L45">            throw new CreateCachedCollectionTaskException(&quot;Can't create CreateCachedCollectionTask.&quot;, e);</span>
+<span class="fc" id="L46">        }</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Prepares database query
-     *
      * @param query query object
+     *              {
+     *              &quot;keyName&quot;: &quot;name for key of this collection&quot;
+     *              }
      * @throws TaskPrepareException if error occurs in process of query preparing
      */
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-<span class="fc" id="L47">            CreateCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(CreateCachedCollectionQuery.class.toString()), query);</span>
-<span class="fc" id="L48">            Map&lt;String, String&gt; indexes = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L49">            indexes.put(message.getKey(), ORDERED_INDEX);</span>
-            //TODO:: Should it be ordered?
-<span class="fc" id="L51">            indexes.put(&quot;isActive&quot;, ORDERED_INDEX);</span>
-<span class="fc" id="L52">            indexes.put(&quot;startDateTime&quot;, DATE_TIME_INDEX);</span>
-<span class="fc" id="L53">            message.setIndexes(indexes);</span>
+<span class="fc" id="L61">            Map&lt;String, String&gt; indexes = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L62">            indexes.put(keyNameField.in(query), ORDERED_INDEX);</span>
+<span class="fc" id="L63">            indexes.put(&quot;isActive&quot;, ORDERED_INDEX);</span>
+<span class="fc" id="L64">            indexes.put(&quot;startDateTime&quot;, DATE_TIME_INDEX);</span>
+<span class="fc" id="L65">            indexesField.out(query, indexes);</span>
 
-<span class="fc" id="L55">            createCollectionTask.prepare(message.wrapped());</span>
-<span class="fc" id="L56">        } catch (ResolutionException e) {</span>
-<span class="fc" id="L57">            throw new TaskPrepareException(&quot;Can't create message from query&quot;, e);</span>
-<span class="fc" id="L58">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="fc" id="L59">            throw new TaskPrepareException(&quot;Can't prepare query for create cached collection&quot;, e);</span>
-<span class="fc" id="L60">        }</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L67">            createCollectionTask.prepare(query);</span>
+<span class="fc" id="L68">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
+<span class="fc" id="L69">            throw new TaskPrepareException(&quot;Can't prepare query for create cached collection&quot;, e);</span>
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="fc" id="L65">        createCollectionTask.setConnection(connection);</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L75">        createCollectionTask.setConnection(connection);</span>
+<span class="fc" id="L76">    }</span>
 
     /**
      * Execute the task.
@@ -72,7 +82,7 @@ public class CreateCachedCollectionTask implements IDatabaseTask {
      */
     @Override
     public void execute() throws TaskExecutionException {
-<span class="fc" id="L75">        createCollectionTask.execute();</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L85">        createCollectionTask.execute();</span>
+<span class="fc" id="L86">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

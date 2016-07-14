@@ -18,9 +18,9 @@
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IFieldName;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ifield_name.IFieldName;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../info/smart_tools/smartactors/core/db_storage/interfaces/StorageConnection.html">StorageConnection</a> connection;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> Map&lt;String, UpsertExecution&gt; executionMap;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">private</strong> String mode;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../info/smart_tools/smartactors/core/iobject/IFieldName.html">IFieldName</a> idFieldName;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> idFieldName;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../info/smart_tools/smartactors/core/db_task/upsert/psql/DBUpsertTask.html">UpsertExecution</a> {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          <strong class="jxr_keyword">void</strong> upsert() <strong class="jxr_keyword">throws</strong> TaskExecutionException;

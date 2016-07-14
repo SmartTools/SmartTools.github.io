@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetAsyncOperationTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.async_operation_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.async_operation_collection.task</a> &gt; <span class="el_source">GetAsyncOperationTask.java</span></div><h1>GetAsyncOperationTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.async_operation_collection.task;
 
-import info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item.AsyncOperationTaskQuery;
-import info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item.EQMessage;
-import info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item.GetAsyncOperationQuery;
+import info.smart_tools.smartactors.core.async_operation_collection.exception.GetAsyncOperationException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -22,13 +22,30 @@ public class GetAsyncOperationTask implements IDatabaseTask {
 
     private IDatabaseTask getItemTask;
 
+    private IField pageNumberField;
+    private IField pageSizeField;
+    private IField queryField;
+    private IField eqField;
+    private IField tokenField;
+
     /**
      * Constructor
      * @param getItemTask nested task for read object
+     * @throws GetAsyncOperationException
      */
-<span class="fc" id="L29">    public GetAsyncOperationTask(final IDatabaseTask getItemTask) {</span>
-<span class="fc" id="L30">        this.getItemTask = getItemTask;</span>
-<span class="fc" id="L31">    }</span>
+<span class="nc" id="L36">    public GetAsyncOperationTask(final IDatabaseTask getItemTask) throws GetAsyncOperationException {</span>
+<span class="nc" id="L37">        this.getItemTask = getItemTask;</span>
+
+        try {
+<span class="nc" id="L40">            pageNumberField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;pageNumber&quot;);</span>
+<span class="nc" id="L41">            pageSizeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;pageSize&quot;);</span>
+<span class="nc" id="L42">            queryField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;query&quot;);</span>
+<span class="nc" id="L43">            eqField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;$eq&quot;);</span>
+<span class="nc" id="L44">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;token&quot;);</span>
+<span class="nc" id="L45">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L46">            throw new GetAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">    }</span>
 
     /**
      * @param query query object
@@ -41,33 +58,31 @@ public class GetAsyncOperationTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-<span class="fc" id="L44">            GetAsyncOperationQuery srcQueryObject = IOC.resolve(Keys.getOrAdd(GetAsyncOperationQuery.class.toString()), query);</span>
-<span class="fc" id="L45">            AsyncOperationTaskQuery criteriaQuery = IOC.resolve(Keys.getOrAdd(AsyncOperationTaskQuery.class.toString()));</span>
 
-<span class="fc" id="L47">            EQMessage tokenCondition = IOC.resolve(Keys.getOrAdd(EQMessage.class.toString()));</span>
-<span class="fc" id="L48">            tokenCondition.setEq(srcQueryObject.getToken());</span>
-<span class="fc" id="L49">            criteriaQuery.setToken(tokenCondition);</span>
+<span class="nc" id="L62">            IObject criteriaIObject = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
 
-<span class="fc" id="L51">            srcQueryObject.setPageNumber(1);</span>
-<span class="fc" id="L52">            srcQueryObject.setPageSize(1);</span>
-<span class="fc" id="L53">            srcQueryObject.setQuery(criteriaQuery);</span>
+<span class="nc" id="L64">            eqField.out(criteriaIObject, tokenField.in(query));</span>
 
-<span class="fc" id="L55">            getItemTask.prepare(query);</span>
-<span class="fc" id="L56">        } catch (ResolutionException e) {</span>
-<span class="fc" id="L57">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
-<span class="fc" id="L58">        } catch (ChangeValueException | ReadValueException e) {</span>
-<span class="fc" id="L59">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
-<span class="fc" id="L60">        }</span>
-<span class="fc" id="L61">    }</span>
+<span class="nc" id="L66">            pageNumberField.out(query, 1);</span>
+<span class="nc" id="L67">            pageSizeField.out(query, 1);</span>
+<span class="nc" id="L68">            queryField.out(query, criteriaIObject);</span>
+
+<span class="nc" id="L70">            getItemTask.prepare(query);</span>
+<span class="nc" id="L71">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L72">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
+<span class="nc" id="L73">        } catch (ChangeValueException | ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L74">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="fc" id="L65">        getItemTask.setConnection(connection);</span>
-<span class="fc" id="L66">    }</span>
+<span class="nc" id="L80">        getItemTask.setConnection(connection);</span>
+<span class="nc" id="L81">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="fc" id="L70">        getItemTask.execute();</span>
-<span class="fc" id="L71">    }</span>
+<span class="nc" id="L85">        getItemTask.execute();</span>
+<span class="nc" id="L86">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

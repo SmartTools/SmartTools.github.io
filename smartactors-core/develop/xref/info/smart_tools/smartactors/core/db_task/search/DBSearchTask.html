@@ -11,9 +11,9 @@
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.db_task.search.wrappers.ISearchQuery;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IFieldName;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ifield_name.IFieldName;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <a href="../../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> object;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                  <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>                      object = IOC.resolve(Keys.getOrAdd(IObject.<strong class="jxr_keyword">class</strong>.toString()), jsonValue);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                      <a href="../../../../../../info/smart_tools/smartactors/core/iobject/IFieldName.html">IFieldName</a> idFN = IOC.resolve(Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.toString()), <span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                      <a href="../../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> idFN = IOC.resolve(Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.toString()), <span class="jxr_string">"id"</span>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>                      object.setValue(idFN, resultSet.getLong(<span class="jxr_string">"id"</span>));
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>                  } <strong class="jxr_keyword">catch</strong> (ChangeValueException e) {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/core/itask/exception/TaskExecutionException.html">TaskExecutionException</a>(<span class="jxr_string">"Could not set document's id field."</span>, e);

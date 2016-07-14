@@ -2,8 +2,9 @@
 
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
-import info.smart_tools.smartactors.core.ds_object.FieldName;
+import info.smart_tools.smartactors.core.field_name.FieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iscope.IScope;
 import info.smart_tools.smartactors.core.iserver.IServer;
@@ -16,7 +17,6 @@ import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
 import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.core.strategy_container.StrategyContainer;
 import info.smart_tools.smartactors.core.string_ioc_key.Key;
-import info.smart_tools.smartactors.core.wrapper_generator.IObjectWrapper;
 import info.smart_tools.smartactors.core.wrapper_generator.WrapperGenerator;
 
 import java.util.ArrayList;
@@ -46,133 +46,141 @@ import java.util.List;
             /** Get wrapper generator by IOC.resolve */
 <span class="fc" id="L47">            IWrapperGenerator wg = IOC.resolve(Keys.getOrAdd(IWrapperGenerator.class.toString()));</span>
 
-            /** Get bindings */
-<span class="fc" id="L50">            IObject binding = getBinding();</span>
-
             /** Get message, context, response */
-<span class="fc" id="L53">            IObject message = getMessage();</span>
-<span class="fc" id="L54">            IObject context = getContext();</span>
-<span class="fc" id="L55">            IObject response = getResponse();</span>
-<span class="fc" id="L56">            IObject environment = new DSObject();</span>
-<span class="fc" id="L57">            environment.setValue(new FieldName(&quot;message&quot;), message);</span>
-<span class="fc" id="L58">            environment.setValue(new FieldName(&quot;context&quot;), context);</span>
-<span class="fc" id="L59">            environment.setValue(new FieldName(&quot;response&quot;), response);</span>
-<span class="fc" id="L60">            environment.setValue(new FieldName(&quot;binding&quot;), binding);</span>
+<span class="fc" id="L50">            IObject message = getMessage();</span>
+<span class="fc" id="L51">            IObject context = getContext();</span>
+<span class="fc" id="L52">            IObject response = getResponse();</span>
+<span class="fc" id="L53">            IObject environment = new DSObject();</span>
+<span class="fc" id="L54">            environment.setValue(new FieldName(&quot;message&quot;), message);</span>
+<span class="fc" id="L55">            environment.setValue(new FieldName(&quot;context&quot;), context);</span>
+<span class="fc" id="L56">            environment.setValue(new FieldName(&quot;response&quot;), response);</span>
 
             /** Generate wrapper class by given interface and create instance of generated class */
-<span class="fc" id="L63">            IWrapper wrapper = wg.generate(IWrapper.class);</span>
+<span class="fc" id="L59">            IWrapper wrapper = wg.generate(IWrapper.class);</span>
 
             /** Check registration of IWrapper instance creation strategy to IOC */
-<span class="fc" id="L66">            IWrapper newInstanceOfWrapper = IOC.resolve(Keys.getOrAdd(IWrapper.class.getCanonicalName()));</span>
+<span class="fc" id="L62">            IWrapper newInstanceOfWrapper = IOC.resolve(Keys.getOrAdd(IWrapper.class.getCanonicalName()));</span>
 
             /** Initialize wrapper */
-<span class="fc" id="L69">            ((IObjectWrapper) wrapper).init(environment);</span>
+<span class="fc" id="L65">            ((IObjectWrapper) wrapper).init(environment);</span>
 
             /** Wrapper usage: get values */
-<span class="fc" id="L72">            Integer i = wrapper.getIntValue();</span>
-<span class="fc" id="L73">            String s = wrapper.getStringValue();</span>
-<span class="fc" id="L74">            Boolean b = wrapper.getBoolValue();</span>
-<span class="fc" id="L75">            IObject io = wrapper.getIObject();</span>
-<span class="fc" id="L76">            List&lt;Integer&gt; intList = wrapper.getListOfInt();</span>
-<span class="fc" id="L77">            List&lt;String&gt; stringList = wrapper.getListOfString();</span>
+<span class="fc" id="L68">            Integer i = wrapper.getIntValue();</span>
+<span class="fc" id="L69">            String s = wrapper.getStringValue();</span>
+<span class="fc" id="L70">            Boolean b = wrapper.getBoolValue();</span>
+<span class="fc" id="L71">            IObject io = wrapper.getIObject();</span>
+<span class="fc" id="L72">            List&lt;Integer&gt; intList = wrapper.getListOfInt();</span>
+<span class="fc" id="L73">            List&lt;String&gt; stringList = wrapper.getListOfString();</span>
 
             /** Wrapper usage: set values */
-<span class="fc" id="L80">            wrapper.setIntValue(2);</span>
-<span class="fc" id="L81">            wrapper.setBoolValue(false);</span>
-<span class="fc" id="L82">            wrapper.setStringValue(&quot;new text&quot;);</span>
-<span class="fc" id="L83">            wrapper.setIObject(new DSObject());</span>
-<span class="fc" id="L84">            wrapper.setListOfString(new ArrayList&lt;String&gt;() {{ add(&quot;new string&quot;); }});</span>
-<span class="fc" id="L85">            wrapper.setListOfInt(new ArrayList&lt;Integer&gt;() {{ add(2); }});</span>
+<span class="fc" id="L76">            wrapper.setIntValue(2);</span>
+<span class="fc" id="L77">            wrapper.setBoolValue(false);</span>
+<span class="fc" id="L78">            wrapper.setStringValue(&quot;new text&quot;);</span>
+<span class="fc" id="L79">            wrapper.setIObject(new DSObject());</span>
+<span class="fc" id="L80">            wrapper.setListOfString(new ArrayList&lt;String&gt;() {{ add(&quot;new string&quot;); }});</span>
+<span class="fc" id="L81">            wrapper.setListOfInt(new ArrayList&lt;Integer&gt;() {{ add(2); }});</span>
 
-<span class="nc" id="L87">        } catch (Throwable e) {</span>
-<span class="nc" id="L88">            throw new ServerExecutionException(e);</span>
-<span class="fc" id="L89">        }</span>
-<span class="fc" id="L90">    }</span>
+<span class="nc" id="L83">        } catch (Throwable e) {</span>
+<span class="nc" id="L84">            throw new ServerExecutionException(e);</span>
+<span class="fc" id="L85">        }</span>
+<span class="fc" id="L86">    }</span>
 
     private void scopeInit()
             throws Exception {
-<span class="fc" id="L94">        ScopeProvider.subscribeOnCreationNewScope(</span>
+<span class="fc" id="L90">        ScopeProvider.subscribeOnCreationNewScope(</span>
                 scope -&gt; {
                     try {
-<span class="fc" id="L97">                        scope.setValue(IOC.getIocKey(), new StrategyContainer());</span>
-<span class="nc" id="L98">                    } catch (Exception e) {</span>
-<span class="nc" id="L99">                        throw new Error(e);</span>
-<span class="fc" id="L100">                    }</span>
-<span class="fc" id="L101">                }</span>
+<span class="fc" id="L93">                        scope.setValue(IOC.getIocKey(), new StrategyContainer());</span>
+<span class="nc" id="L94">                    } catch (Exception e) {</span>
+<span class="nc" id="L95">                        throw new Error(e);</span>
+<span class="fc" id="L96">                    }</span>
+<span class="fc" id="L97">                }</span>
         );
 
 
-<span class="fc" id="L105">        Object keyOfMainScope = ScopeProvider.createScope(null);</span>
-<span class="fc" id="L106">        IScope mainScope = ScopeProvider.getScope(keyOfMainScope);</span>
-<span class="fc" id="L107">        ScopeProvider.setCurrentScope(mainScope);</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L101">        Object keyOfMainScope = ScopeProvider.createScope(null);</span>
+<span class="fc" id="L102">        IScope mainScope = ScopeProvider.getScope(keyOfMainScope);</span>
+<span class="fc" id="L103">        ScopeProvider.setCurrentScope(mainScope);</span>
+<span class="fc" id="L104">    }</span>
 
     private void registerKeysStorageStrategyAndFieldNameStrategy()
             throws Exception {
-<span class="fc" id="L112">        IOC.register(</span>
-<span class="fc" id="L113">                IOC.getKeyForKeyStorage(),</span>
+<span class="fc" id="L108">        IOC.register(</span>
+<span class="fc" id="L109">                IOC.getKeyForKeyStorage(),</span>
                 new ResolveByNameIocStrategy(
                         (arg) -&gt; {
                             try {
-<span class="fc" id="L117">                                return new Key((String) arg[0]);</span>
-<span class="nc" id="L118">                            } catch (Exception e) {</span>
-<span class="nc" id="L119">                                throw new RuntimeException(e);</span>
+<span class="fc" id="L113">                                return new Key((String) arg[0]);</span>
+<span class="nc" id="L114">                            } catch (Exception e) {</span>
+<span class="nc" id="L115">                                throw new RuntimeException(e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L124">        IOC.register(</span>
-<span class="fc" id="L125">                Keys.getOrAdd(FieldName.class.getCanonicalName()),</span>
+<span class="fc" id="L120">        IOC.register(</span>
+<span class="fc" id="L121">                Keys.getOrAdd(FieldName.class.getCanonicalName()),</span>
                 new ResolveByNameIocStrategy(
                         (a) -&gt; {
                             try {
-<span class="fc" id="L129">                                return new FieldName((String) a[0]);</span>
-<span class="nc" id="L130">                            } catch (Exception e) {</span>
-<span class="nc" id="L131">                                throw new RuntimeException(e);</span>
+<span class="nc" id="L125">                                return new FieldName((String) a[0]);</span>
+<span class="nc" id="L126">                            } catch (Exception e) {</span>
+<span class="nc" id="L127">                                throw new RuntimeException(e);</span>
                             }
                         })
         );
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L131">    }</span>
 
     private void registerWrapperGenerator()
             throws Exception {
-<span class="fc" id="L139">        IWrapperGenerator wg = new WrapperGenerator(null);</span>
-<span class="fc" id="L140">        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.toString()), new SingletonStrategy(wg));</span>
-<span class="fc" id="L141">    }</span>
+<span class="fc" id="L135">        IWrapperGenerator wg = new WrapperGenerator(null);</span>
+<span class="fc" id="L136">        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.toString()), new SingletonStrategy(wg));</span>
+<span class="fc" id="L137">    }</span>
 
     private void registerConverterStrategies()
             throws Exception {
-<span class="fc" id="L145">        IOC.register(Keys.getOrAdd(&quot;ToListOfInt&quot;),</span>
+<span class="fc" id="L141">        IOC.register(Keys.getOrAdd(&quot;ToListOfInt&quot;),</span>
                 new CreateNewInstanceStrategy(
                         (arg) -&gt; {
                             try {
-<span class="fc" id="L149">                                return arg[0];</span>
-<span class="nc" id="L150">                            } catch (Exception e) {</span>
-<span class="nc" id="L151">                                throw new RuntimeException(e);</span>
+<span class="nc" id="L145">                                return arg[0];</span>
+<span class="nc" id="L146">                            } catch (Exception e) {</span>
+<span class="nc" id="L147">                                throw new RuntimeException(e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L156">        IOC.register(Keys.getOrAdd(&quot;ToListOfString&quot;),</span>
+<span class="fc" id="L152">        IOC.register(Keys.getOrAdd(&quot;ToListOfString&quot;),</span>
                 new CreateNewInstanceStrategy(
                         (arg) -&gt; {
                             try {
-<span class="fc" id="L160">                                return arg[0];</span>
-<span class="nc" id="L161">                            } catch (Exception e) {</span>
-<span class="nc" id="L162">                                throw new RuntimeException(e);</span>
+<span class="nc" id="L156">                                return arg[0];</span>
+<span class="nc" id="L157">                            } catch (Exception e) {</span>
+<span class="nc" id="L158">                                throw new RuntimeException(e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L163">        IOC.register(</span>
+<span class="fc" id="L164">                Keys.getOrAdd(IObject.class.getCanonicalName()),</span>
+                new ResolveByNameIocStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="fc" id="L168">                                return new DSObject();</span>
+<span class="nc" id="L169">                            } catch (Exception e) {</span>
+<span class="nc" id="L170">                                throw new RuntimeException(e);</span>
+                            }
+                        })
+        );
+<span class="fc" id="L174">        fillBinding();</span>
+<span class="fc" id="L175">    }</span>
 
-    private IObject getBinding()
+    private void fillBinding()
             throws Exception {
-<span class="fc" id="L171">        IObject binding = new DSObject();</span>
-<span class="fc" id="L172">        IObject bindingForIWrapper = new DSObject();</span>
+<span class="fc" id="L179">        IObject binding = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()), &quot;binding&quot;);</span>
+<span class="fc" id="L180">        IObject bindingForIWrapper = new DSObject();</span>
 
         // Binding for IWrapper methods
-<span class="fc" id="L175">        IObject getIntValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L183">        IObject getIntValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -182,7 +190,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L185">        IObject setIntValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L193">        IObject setIntValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -190,7 +198,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L193">        IObject getStringValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L201">        IObject getStringValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -200,7 +208,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L203">        IObject setStringValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L211">        IObject setStringValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -208,7 +216,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L211">        IObject getListOfInt = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L219">        IObject getListOfInt = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;ToListOfInt\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -218,7 +226,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L221">        IObject setListOfInt = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L229">        IObject setListOfInt = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -226,7 +234,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L229">        IObject getListOfString = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L237">        IObject getListOfString = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;ToListOfString\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -236,7 +244,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L239">        IObject setListOfString = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L247">        IObject setListOfString = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -244,7 +252,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L247">        IObject getBoolValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L255">        IObject getBoolValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -254,7 +262,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L257">        IObject setBoolValue = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L265">        IObject setBoolValue = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -262,7 +270,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L265">        IObject getIObject = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L273">        IObject getIObject = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\n&quot; +
@@ -272,7 +280,7 @@ import java.util.List;
                 &quot;\t}\n&quot; +
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
-<span class="fc" id="L275">        IObject setIObject = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L283">        IObject setIObject = new DSObject(&quot;{\n&quot; +</span>
                 &quot;\t\&quot;rules\&quot;: [{\n&quot; +
                 &quot;\t\t\&quot;name\&quot;: \&quot;\&quot;,\n&quot; +
                 &quot;\t\t\&quot;args\&quot;: [\&quot;in\&quot;],\n&quot; +
@@ -281,55 +289,53 @@ import java.util.List;
                 &quot;\t]\n&quot; +
                 &quot;}&quot;);
 
-<span class="fc" id="L284">        bindingForIWrapper.setValue(new FieldName(&quot;getIntValue&quot;), getIntValue);</span>
-<span class="fc" id="L285">        bindingForIWrapper.setValue(new FieldName(&quot;setIntValue&quot;), setIntValue);</span>
-<span class="fc" id="L286">        bindingForIWrapper.setValue(new FieldName(&quot;getStringValue&quot;), getStringValue);</span>
-<span class="fc" id="L287">        bindingForIWrapper.setValue(new FieldName(&quot;setStringValue&quot;), setStringValue);</span>
-<span class="fc" id="L288">        bindingForIWrapper.setValue(new FieldName(&quot;getListOfInt&quot;), getListOfInt);</span>
-<span class="fc" id="L289">        bindingForIWrapper.setValue(new FieldName(&quot;setListOfInt&quot;), setListOfInt);</span>
-<span class="fc" id="L290">        bindingForIWrapper.setValue(new FieldName(&quot;getListOfString&quot;), getListOfString);</span>
-<span class="fc" id="L291">        bindingForIWrapper.setValue(new FieldName(&quot;setListOfString&quot;), setListOfString);</span>
-<span class="fc" id="L292">        bindingForIWrapper.setValue(new FieldName(&quot;getBoolValue&quot;), getBoolValue);</span>
-<span class="fc" id="L293">        bindingForIWrapper.setValue(new FieldName(&quot;setBoolValue&quot;), setBoolValue);</span>
-<span class="fc" id="L294">        bindingForIWrapper.setValue(new FieldName(&quot;getIObject&quot;), getIObject);</span>
-<span class="fc" id="L295">        bindingForIWrapper.setValue(new FieldName(&quot;setIObject&quot;), setIObject);</span>
+<span class="fc" id="L292">        bindingForIWrapper.setValue(new FieldName(&quot;getIntValue&quot;), getIntValue);</span>
+<span class="fc" id="L293">        bindingForIWrapper.setValue(new FieldName(&quot;setIntValue&quot;), setIntValue);</span>
+<span class="fc" id="L294">        bindingForIWrapper.setValue(new FieldName(&quot;getStringValue&quot;), getStringValue);</span>
+<span class="fc" id="L295">        bindingForIWrapper.setValue(new FieldName(&quot;setStringValue&quot;), setStringValue);</span>
+<span class="fc" id="L296">        bindingForIWrapper.setValue(new FieldName(&quot;getListOfInt&quot;), getListOfInt);</span>
+<span class="fc" id="L297">        bindingForIWrapper.setValue(new FieldName(&quot;setListOfInt&quot;), setListOfInt);</span>
+<span class="fc" id="L298">        bindingForIWrapper.setValue(new FieldName(&quot;getListOfString&quot;), getListOfString);</span>
+<span class="fc" id="L299">        bindingForIWrapper.setValue(new FieldName(&quot;setListOfString&quot;), setListOfString);</span>
+<span class="fc" id="L300">        bindingForIWrapper.setValue(new FieldName(&quot;getBoolValue&quot;), getBoolValue);</span>
+<span class="fc" id="L301">        bindingForIWrapper.setValue(new FieldName(&quot;setBoolValue&quot;), setBoolValue);</span>
+<span class="fc" id="L302">        bindingForIWrapper.setValue(new FieldName(&quot;getIObject&quot;), getIObject);</span>
+<span class="fc" id="L303">        bindingForIWrapper.setValue(new FieldName(&quot;setIObject&quot;), setIObject);</span>
 
-<span class="fc" id="L297">        binding.setValue(new FieldName(IWrapper.class.getCanonicalName()), bindingForIWrapper);</span>
-
-<span class="fc" id="L299">        return binding;</span>
-    }
+<span class="fc" id="L305">        binding.setValue(new FieldName(IWrapper.class.getCanonicalName()), bindingForIWrapper);</span>
+<span class="fc" id="L306">    }</span>
 
     private IObject getMessage()
             throws Exception {
-<span class="fc" id="L304">        IObject obj = new DSObject();</span>
-<span class="fc" id="L305">        obj.setValue(new FieldName(&quot;IntValue&quot;), 1);</span>
-<span class="fc" id="L306">        obj.setValue(new FieldName(&quot;StringValue&quot;), &quot;some text&quot;);</span>
-<span class="fc" id="L307">        obj.setValue(</span>
+<span class="fc" id="L310">        IObject obj = new DSObject();</span>
+<span class="fc" id="L311">        obj.setValue(new FieldName(&quot;IntValue&quot;), 1);</span>
+<span class="fc" id="L312">        obj.setValue(new FieldName(&quot;StringValue&quot;), &quot;some text&quot;);</span>
+<span class="fc" id="L313">        obj.setValue(</span>
                 new FieldName(&quot;ListOfInt&quot;),
-<span class="fc" id="L309">                new ArrayList&lt;Integer&gt;() {{ add(1); add(2); }}</span>
+<span class="fc" id="L315">                new ArrayList&lt;Integer&gt;() {{ add(1); add(2); }}</span>
         );
-<span class="fc" id="L311">        obj.setValue(</span>
+<span class="fc" id="L317">        obj.setValue(</span>
                 new FieldName(&quot;ListOfString&quot;),
-<span class="fc" id="L313">                new ArrayList&lt;String&gt;() {{ add(&quot;some text&quot;); add(&quot;another text&quot;); }}</span>
+<span class="fc" id="L319">                new ArrayList&lt;String&gt;() {{ add(&quot;some text&quot;); add(&quot;another text&quot;); }}</span>
         );
 
-<span class="fc" id="L316">        return obj;</span>
+<span class="fc" id="L322">        return obj;</span>
     }
 
     private IObject getContext()
             throws Exception {
-<span class="fc" id="L321">        IObject obj = new DSObject();</span>
-<span class="fc" id="L322">        obj.setValue(new FieldName(&quot;BoolValue&quot;), true);</span>
-<span class="fc" id="L323">        obj.setValue(new FieldName(&quot;IObject&quot;), new DSObject());</span>
+<span class="fc" id="L327">        IObject obj = new DSObject();</span>
+<span class="fc" id="L328">        obj.setValue(new FieldName(&quot;BoolValue&quot;), true);</span>
+<span class="fc" id="L329">        obj.setValue(new FieldName(&quot;IObject&quot;), new DSObject());</span>
 
-<span class="fc" id="L325">        return obj;</span>
+<span class="fc" id="L331">        return obj;</span>
     }
 
     private IObject getResponse()
             throws Exception {
-<span class="fc" id="L330">        IObject obj = new DSObject();</span>
+<span class="fc" id="L336">        IObject obj = new DSObject();</span>
 
-<span class="fc" id="L332">        return obj;</span>
+<span class="fc" id="L338">        return obj;</span>
     }
 
 }

@@ -18,23 +18,23 @@ public class DeleteAsyncOperationTask implements IDatabaseTask {
      * Constructor
      * @param deleteTask nested task for delete object
      */
-<span class="nc" id="L21">    public DeleteAsyncOperationTask(final IDatabaseTask deleteTask) {</span>
-<span class="nc" id="L22">        this.deleteTask = deleteTask;</span>
-<span class="nc" id="L23">    }</span>
+<span class="fc" id="L21">    public DeleteAsyncOperationTask(final IDatabaseTask deleteTask) {</span>
+<span class="fc" id="L22">        this.deleteTask = deleteTask;</span>
+<span class="fc" id="L23">    }</span>
 
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
-<span class="nc" id="L27">        deleteTask.prepare(query);</span>
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L27">        deleteTask.prepare(query);</span>
+<span class="fc" id="L28">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="nc" id="L32">        deleteTask.setConnection(connection);</span>
-<span class="nc" id="L33">    }</span>
+<span class="fc" id="L32">        deleteTask.setConnection(connection);</span>
+<span class="fc" id="L33">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L37">        deleteTask.execute();</span>
-<span class="nc" id="L38">    }</span>
+<span class="fc" id="L37">        deleteTask.execute();</span>
+<span class="fc" id="L38">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

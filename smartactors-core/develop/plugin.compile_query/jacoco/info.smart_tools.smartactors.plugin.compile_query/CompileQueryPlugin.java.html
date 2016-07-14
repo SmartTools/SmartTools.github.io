@@ -37,47 +37,48 @@ public class CompileQueryPlugin implements IPlugin {
     public void load() throws PluginException {
 
         try {
-            //Note:: resolve by name strategy for keys should be defined
-<span class="nc" id="L41">            IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.toString());</span>
-<span class="nc" id="L42">            Map&lt;QueryKey, CompiledQuery&gt; queryMap = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L43">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CompileQueryPlugin&quot;);</span>
-<span class="nc" id="L44">            item.process(() -&gt; {</span>
+<span class="nc" id="L40">            Map&lt;QueryKey, CompiledQuery&gt; queryMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L41">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CompileQueryPlugin&quot;);</span>
+<span class="nc" id="L42">            item</span>
+<span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L44">                    .process(() -&gt; {</span>
                 try {
-<span class="nc" id="L46">                    IOC.register(compiledQueryKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L46">                    IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.toString());</span>
+<span class="nc" id="L47">                    IOC.register(compiledQueryKey, new CreateNewInstanceStrategy(</span>
                         (args) -&gt; {
-<span class="nc" id="L48">                            StorageConnection connection = (StorageConnection) args[0];</span>
-<span class="nc" id="L49">                            String task = String.valueOf(args[1]);</span>
-<span class="nc bnc" id="L50" title="All 4 branches missed.">                            if (connection == null || task == null) {</span>
-<span class="nc" id="L51">                                throw new RuntimeException(&quot;Can't resolve compiled query: key parameter is null&quot;);</span>
+<span class="nc" id="L49">                            StorageConnection connection = (StorageConnection) args[0];</span>
+<span class="nc" id="L50">                            String task = String.valueOf(args[1]);</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">                            if (connection == null || task == null) {</span>
+<span class="nc" id="L52">                                throw new RuntimeException(&quot;Can't resolve compiled query: key parameter is null&quot;);</span>
                             }
-<span class="nc" id="L53">                            String id = connection.getId();</span>
-<span class="nc" id="L54">                            QueryKey queryKey = QueryKey.create(task, id);</span>
-<span class="nc" id="L55">                            CompiledQuery query = queryMap.get(queryKey);</span>
-<span class="nc bnc" id="L56" title="All 2 branches missed.">                            if (query == null) {</span>
-<span class="nc" id="L57">                                QueryStatementFactory factory = (QueryStatementFactory) args[2];</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">                                if (factory == null) {</span>
-<span class="nc" id="L59">                                    throw new RuntimeException(&quot;Can't resolve compiled query: query statement is null&quot;);</span>
+<span class="nc" id="L54">                            String id = connection.getId();</span>
+<span class="nc" id="L55">                            QueryKey queryKey = QueryKey.create(task, id);</span>
+<span class="nc" id="L56">                            CompiledQuery query = queryMap.get(queryKey);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                            if (query == null) {</span>
+<span class="nc" id="L58">                                QueryStatementFactory factory = (QueryStatementFactory) args[2];</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                                if (factory == null) {</span>
+<span class="nc" id="L60">                                    throw new RuntimeException(&quot;Can't resolve compiled query: query statement is null&quot;);</span>
                                 }
                                 try {
-<span class="nc" id="L62">                                    QueryStatement queryStatement = factory.create();</span>
-<span class="nc" id="L63">                                    query = connection.compileQuery(queryStatement);</span>
-<span class="nc" id="L64">                                    queryMap.put(queryKey, query);</span>
+<span class="nc" id="L63">                                    QueryStatement queryStatement = factory.create();</span>
+<span class="nc" id="L64">                                    query = connection.compileQuery(queryStatement);</span>
+<span class="nc" id="L65">                                    queryMap.put(queryKey, query);</span>
                                     //TODO:: how to remove old queries from map?
-<span class="nc" id="L66">                                } catch (QueryStatementFactoryException | StorageException e) {</span>
-<span class="nc" id="L67">                                    throw new RuntimeException(&quot;Can't resolve compiled query: &quot;, e);</span>
-<span class="nc" id="L68">                                }</span>
+<span class="nc" id="L67">                                } catch (QueryStatementFactoryException | StorageException e) {</span>
+<span class="nc" id="L68">                                    throw new RuntimeException(&quot;Can't resolve compiled query: &quot;, e);</span>
+<span class="nc" id="L69">                                }</span>
                             }
 
-<span class="nc" id="L71">                            return query;</span>
+<span class="nc" id="L72">                            return query;</span>
                         }));
-<span class="nc" id="L73">                } catch (RegistrationException | InvalidArgumentException e) {</span>
-<span class="nc" id="L74">                    throw new RuntimeException(e);</span>
-<span class="nc" id="L75">                }</span>
-<span class="nc" id="L76">            });</span>
-<span class="nc" id="L77">            bootstrap.add(item);</span>
-<span class="nc" id="L78">        } catch (ResolutionException | InvalidArgumentException e) {</span>
-<span class="nc" id="L79">            throw new PluginException(&quot;Can't load compile query plugin&quot;, e);</span>
-<span class="nc" id="L80">        }</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L74">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
+<span class="nc" id="L75">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L76">                }</span>
+<span class="nc" id="L77">            });</span>
+<span class="nc" id="L78">            bootstrap.add(item);</span>
+<span class="nc" id="L79">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L80">            throw new PluginException(&quot;Can't load compile query plugin&quot;, e);</span>
+<span class="nc" id="L81">        }</span>
+<span class="nc" id="L82">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,3 +1,4 @@
 info.smart_tools.smartactors.actors.get_form
+info.smart_tools.smartactors.actors.get_form.exception
 info.smart_tools.smartactors.actors.get_form.strategy
 info.smart_tools.smartactors.actors.get_form.wrapper

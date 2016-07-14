@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>WDSObject.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.wds_object</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.wds_object</a> &gt; <span class="el_source">WDSObject.java</span></div><h1>WDSObject.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.wds_object;
+
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
+import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Implementation of {@link IObject} and {@link IObjectWrapper}
+ */
+public class WDSObject implements IObject, IObjectWrapper {
+
+    private IObject initIObject;
+    private Map&lt;IFieldName, IField&gt; inFields;
+    private Map&lt;IFieldName, IField[]&gt; outFields;
+    private IObject wrapperConfig;
+
+    /**
+     * Create empty instance of {@link WDSObject} by initialization instance of {@link IObject}
+     * @param wrapperConfig the part of global config for current wrapper
+     * @throws InvalidArgumentException if environment is null
+     */
+    public WDSObject(final IObject wrapperConfig)
+<span class="fc" id="L35">            throws InvalidArgumentException {</span>
+<span class="fc" id="L36">        this.inFields = new HashMap&lt;&gt;(0);</span>
+<span class="fc" id="L37">        this.outFields = new HashMap&lt;&gt;(0);</span>
+<span class="fc" id="L38">        this.wrapperConfig = wrapperConfig;</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public Object getValue(final IFieldName name)
+            throws ReadValueException, InvalidArgumentException {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L45">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+        }
+<span class="fc" id="L47">        IField field = inFields.get(name);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (null == field) {</span>
+            try {
+<span class="fc" id="L50">                field = new WDSObjectField((List&lt;IObject&gt;) this.wrapperConfig.getValue(name));</span>
+<span class="fc" id="L51">            } catch (Throwable e) {</span>
+<span class="fc" id="L52">                throw new ReadValueException(&quot;Can't read configuration for current field name&quot;);</span>
+<span class="fc" id="L53">            }</span>
+<span class="fc" id="L54">            inFields.put(name, field);</span>
+        }
+<span class="fc" id="L56">        return field.in(this.initIObject);</span>
+    }
+
+    @Override
+    public void setValue(final IFieldName name, final Object value)
+            throws ChangeValueException, InvalidArgumentException {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L63">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+        }
+<span class="fc" id="L65">        IField[] fields = outFields.get(name);</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (null == fields) {</span>
+            try {
+<span class="fc" id="L68">                Object config = this.wrapperConfig.getValue(name);</span>
+<span class="fc" id="L69">                fields = new IField[((List&lt;List&lt;IObject&gt;&gt;) config).size()];</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">                for (int i = 0; i &lt; fields.length; ++i) {</span>
+<span class="fc" id="L71">                    fields[i] = new WDSObjectField(((List&lt;List&lt;IObject&gt;&gt;) config).get(i));</span>
+                }
+<span class="fc" id="L73">            } catch (Throwable e) {</span>
+<span class="fc" id="L74">                throw new ChangeValueException(&quot;Can't read configuration for current field name&quot;);</span>
+<span class="fc" id="L75">            }</span>
+<span class="fc" id="L76">            outFields.put(name, fields);</span>
+        }
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (IField f : fields) {</span>
+<span class="fc" id="L79">            f.out(this.initIObject, value);</span>
+        }
+<span class="fc" id="L81">    }</span>
+
+    @Override
+    public void deleteField(final IFieldName name)
+            throws DeleteValueException, InvalidArgumentException {
+<span class="fc" id="L86">        throw new DeleteValueException(&quot;Method not implemented.&quot;);</span>
+    }
+
+    @Override
+    public &lt;T&gt; T serialize()
+            throws SerializeException {
+<span class="fc" id="L92">        throw new SerializeException(&quot;Method not implemented.&quot;);</span>
+    }
+
+    @Override
+    public Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; iterator() {
+<span class="fc" id="L97">        return null;</span>
+    }
+
+    @Override
+    public void init(final IObject environment) {
+<span class="fc" id="L102">        this.initIObject = environment;</span>
+<span class="fc" id="L103">    }</span>
+
+    @Override
+    public IObject getEnvironmentIObject(final IFieldName fieldName)
+            throws InvalidArgumentException {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (null == fieldName) {</span>
+<span class="fc" id="L109">            throw new InvalidArgumentException(&quot;FieldName should not be null.&quot;);</span>
+        }
+        try {
+<span class="fc" id="L112">            return (IObject) this.initIObject.getValue(fieldName);</span>
+<span class="fc" id="L113">        } catch (Throwable e) {</span>
+<span class="fc" id="L114">            throw new InvalidArgumentException(&quot;Could not read data from environment.&quot;, e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

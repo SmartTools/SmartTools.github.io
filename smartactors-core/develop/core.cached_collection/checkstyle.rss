@@ -88,6 +88,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException.java">info/smart_tools/smartactors/core/cached_collection/exception/CreateCachedCollectionTaskException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.CreateCachedCollectionQuery.java">info/smart_tools/smartactors/core/cached_collection/wrapper/CreateCachedCollectionQuery.java</a>
                 </td>
                 <td>
@@ -201,20 +215,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.exception.package-info.java">info/smart_tools/smartactors/core/cached_collection/exception/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.CachedCollectionConfig.java">info/smart_tools/smartactors/core/cached_collection/wrapper/CachedCollectionConfig.java</a>
                 </td>
                 <td>
                   0

@@ -54,11 +54,12 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          BootstrapItem bootstrapItem = mock(BootstrapItem.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          whenNew(BootstrapItem.<strong class="jxr_keyword">class</strong>).withArguments(<span class="jxr_string">"CompileQueryPlugin"</span>).thenReturn(bootstrapItem);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          plugin.load();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          verifyNew(BootstrapItem.<strong class="jxr_keyword">class</strong>).withArguments(<span class="jxr_string">"CompileQueryPlugin"</span>);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          verify(bootstrap).add(eq(bootstrapItem));
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          when(bootstrapItem.after(<span class="jxr_string">"IOC"</span>)).thenReturn(bootstrapItem);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          plugin.load();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          verifyNew(BootstrapItem.<strong class="jxr_keyword">class</strong>).withArguments(<span class="jxr_string">"CompileQueryPlugin"</span>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          verify(bootstrap).add(eq(bootstrapItem));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

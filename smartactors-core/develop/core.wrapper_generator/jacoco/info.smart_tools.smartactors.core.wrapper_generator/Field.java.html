@@ -1,164 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Field.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.wrapper_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.wrapper_generator</a> &gt; <span class="el_source">Field.java</span></div><h1>Field.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.wrapper_generator;
 
-import info.smart_tools.smartactors.core.ds_object.FieldName;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
-import info.smart_tools.smartactors.core.ioc.IOC;
-import info.smart_tools.smartactors.core.named_keys_storage.Keys;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
- * Support class for generate wrappers
- * @param &lt;T&gt; type of returning value for 'out' method or type of value that will be put into iObject for 'in' method
+ * Implementation of {@link IField}
  */
-public class Field&lt;T&gt; {
+public class Field implements IField {
 
-    private static final String FIELD_TARGET = &quot;target&quot;;
-    private static final String FIELD_ARGS = &quot;args&quot;;
-    private static final String FIELD_NAME = &quot;name&quot;;
-    private static final String FIELD_RULES = &quot;rules&quot;;
-    private static final String METHOD_IN = &quot;in&quot;;
-    private static final String METHOD_OUT = &quot;out&quot;;
-    private static final String SPLITTER = &quot;\\/&quot;;
-
-    private String bindingLocation;
+    private IFieldName fieldName;
 
     /**
      * Constructor.
      * Create instance of {@link Field}
-     * @param bindingPath the path to binding for current instance of {@link Field}
-     */
-<span class="fc" id="L36">    public Field(final String bindingPath) {</span>
-<span class="fc" id="L37">        this.bindingLocation = bindingPath;</span>
-<span class="fc" id="L38">    }</span>
-
-    /**
-     * Apply rules and return result
-     * @param env instance of {@link IObject} with data
-     * @return instance of {@link T}
-     * @throws ReadValueException if any errors occurred when iobject had been reading
+     * @param fieldName name of {@code WDSObject} field
      * @throws InvalidArgumentException if incoming arguments are incorrect
-     * @throws ClassCastException when returning type doesn't match required type
      */
-    public T out(final IObject env)
+    public Field(final IFieldName fieldName)
+<span class="fc" id="L24">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if (null == fieldName) {</span>
+<span class="nc" id="L26">            throw new InvalidArgumentException(&quot;FieldName should not be null&quot;);</span>
+        }
+<span class="fc" id="L28">        this.fieldName = fieldName;</span>
+<span class="fc" id="L29">    }</span>
+
+    @Override
+    public &lt;T&gt; T in(final IObject wdsObject)
             throws ReadValueException, InvalidArgumentException, ClassCastException {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (null == env) {</span>
-<span class="fc" id="L51">            throw new InvalidArgumentException(&quot;Environment should not be null.&quot;);</span>
-        }
-<span class="fc" id="L53">        Object value = null;</span>
-<span class="fc" id="L54">        Object out = null;</span>
-        try {
-<span class="fc" id="L56">            IObject binding = (IObject) getValueFromNestedIObject(env, this.bindingLocation);</span>
-<span class="fc" id="L57">            List&lt;Map&lt;String, Object&gt;&gt; rules = (ArrayList&lt;Map&lt;String, Object&gt;&gt;) binding.getValue(</span>
-<span class="fc" id="L58">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), FIELD_RULES)</span>
-            );
-<span class="fc bfc" id="L60" title="All 2 branches covered.">            for (Map&lt;String, Object&gt; rule : rules) {</span>
-<span class="fc" id="L61">                String target = (String) rule.get(FIELD_TARGET);</span>
-<span class="fc" id="L62">                List&lt;String&gt; args = (ArrayList&lt;String&gt;) rule.get(FIELD_ARGS);</span>
-<span class="fc" id="L63">                String name = (String) rule.get(FIELD_NAME);</span>
-<span class="fc" id="L64">                Object[] resolvedArgs = new Object[args.size()];</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">                for (String arg : args) {</span>
-<span class="fc" id="L66">                    resolvedArgs[args.indexOf(arg)] =  getValueFromNestedIObject(env, arg);</span>
-<span class="fc" id="L67">                }</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">                value = !name.isEmpty() ? IOC.resolve(Keys.getOrAdd(name), resolvedArgs) : resolvedArgs[0];</span>
-<span class="pc bpc" id="L69" title="1 of 4 branches missed.">                if (!target.isEmpty() &amp;&amp; !target.equals(METHOD_OUT)) {</span>
-<span class="fc" id="L70">                    setValueToNestedIObject(env, target, value);</span>
-                }
-<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (target.equals(METHOD_OUT)) {</span>
-<span class="fc" id="L73">                    out = value;</span>
-                }
-<span class="fc" id="L75">            }</span>
-<span class="fc" id="L76">        } catch (Exception e) {</span>
-<span class="fc" id="L77">            throw new ReadValueException(&quot;Could not apply rules.&quot;, e);</span>
-<span class="fc" id="L78">        }</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (null == out) {</span>
-<span class="fc" id="L80">            return null;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (null == wdsObject) {</span>
+<span class="nc" id="L35">            throw new InvalidArgumentException(&quot;WDSObject should not be null.&quot;);</span>
         }
 
-<span class="fc" id="L83">        return (T) out;</span>
+<span class="nc" id="L38">        return (T) wdsObject.getValue(fieldName);</span>
     }
 
-    /**
-     * Apply rules to given argument without return result
-     * @param env instance of {@link IObject} with data
-     * @param in given argument
-     * @throws ChangeValueException if any errors occurred when iobject had been changing
-     * @throws InvalidArgumentException if incoming arguments are incorrect
-     */
-    public void in(final IObject env, final T in)
+    @Override
+    public &lt;T&gt; void out(final IObject wdsObject, final T in)
             throws ChangeValueException, InvalidArgumentException {
-<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (null == env) {</span>
-<span class="fc" id="L96">            throw new InvalidArgumentException(&quot;Environment should not be null.&quot;);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (null == wdsObject) {</span>
+<span class="nc" id="L45">            throw new InvalidArgumentException(&quot;WDSObject should not be null.&quot;);</span>
         }
-<span class="fc" id="L98">        Object value = null;</span>
-        try {
-<span class="fc" id="L100">            IObject binding = (IObject) getValueFromNestedIObject(env, this.bindingLocation);</span>
-<span class="fc" id="L101">            List&lt;Map&lt;String, Object&gt;&gt; rules = (ArrayList&lt;Map&lt;String, Object&gt;&gt;) binding.getValue(</span>
-<span class="fc" id="L102">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), FIELD_RULES)</span>
-            );
-<span class="fc bfc" id="L104" title="All 2 branches covered.">            for (Map&lt;String, Object&gt; rule : rules) {</span>
-<span class="fc" id="L105">                String target = (String) rule.get(FIELD_TARGET);</span>
-<span class="fc" id="L106">                List&lt;String&gt; args = (ArrayList&lt;String&gt;) rule.get(FIELD_ARGS);</span>
-<span class="fc" id="L107">                String name = (String) rule.get(FIELD_NAME);</span>
-<span class="fc" id="L108">                Object[] resolvedArgs = new Object[args.size()];</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">                for (String arg : args) {</span>
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                    resolvedArgs[args.indexOf(arg)] = arg.equals(METHOD_IN) ? in : getValueFromNestedIObject(env, arg);</span>
-<span class="fc" id="L111">                }</span>
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                value = !name.isEmpty() ? IOC.resolve(Keys.getOrAdd(name), resolvedArgs) : resolvedArgs[0];</span>
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">                if (!target.isEmpty()) {</span>
-<span class="fc" id="L114">                    setValueToNestedIObject(env, target, value);</span>
-                }
-<span class="fc" id="L116">            }</span>
-<span class="fc" id="L117">        } catch (Exception e) {</span>
-<span class="fc" id="L118">            throw new ChangeValueException(&quot;Could not apply rules.&quot;, e);</span>
-<span class="fc" id="L119">        }</span>
-<span class="fc" id="L120">    }</span>
-
-    private Object getValueFromNestedIObject(final IObject source, final String location)
-            throws ReadValueException {
-        try {
-<span class="fc" id="L125">            String[] separated = location.split(SPLITTER);</span>
-<span class="fc" id="L126">            IObject nestedObject = (IObject) source.getValue(</span>
-<span class="fc" id="L127">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[0])</span>
-            );
-<span class="fc bfc" id="L129" title="All 2 branches covered.">            for (int i = 1; i &lt; separated.length - 1; ++i) {</span>
-<span class="fc" id="L130">                nestedObject = (IObject) nestedObject.getValue(</span>
-<span class="fc" id="L131">                        IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[i])</span>
-                );
-            }
-
-<span class="fc" id="L135">            return nestedObject.getValue(</span>
-<span class="fc" id="L136">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[separated.length - 1])</span>
-            );
-<span class="fc" id="L138">        } catch (Throwable e) {</span>
-<span class="fc" id="L139">            throw new ReadValueException(&quot;Could not read value from IObject&quot;, e);</span>
-        }
-    }
-
-    private void setValueToNestedIObject(final IObject source, final String location, final Object value)
-            throws ChangeValueException {
-        try {
-<span class="fc" id="L146">            String[] separated = location.split(SPLITTER);</span>
-<span class="fc" id="L147">            IObject nestedObject = (IObject) source.getValue(</span>
-<span class="fc" id="L148">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[0])</span>
-            );
-<span class="fc bfc" id="L150" title="All 2 branches covered.">            for (int i = 1; i &lt; separated.length - 1; ++i) {</span>
-<span class="fc" id="L151">                nestedObject = (IObject) nestedObject.getValue(</span>
-<span class="fc" id="L152">                        IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[i])</span>
-                );
-            }
-<span class="fc" id="L155">            nestedObject.setValue(</span>
-<span class="fc" id="L156">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[separated.length - 1]),</span>
-                    value
-            );
-<span class="fc" id="L159">        } catch (Throwable e) {</span>
-<span class="fc" id="L160">            throw new ChangeValueException(&quot;Could not write value to IObject&quot;, e);</span>
-<span class="fc" id="L161">        }</span>
-<span class="fc" id="L162">    }</span>
+<span class="nc" id="L47">        wdsObject.setValue(fieldName, in);</span>
+<span class="nc" id="L48">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+actor.check_user_by_email_actor,info.smart_tools.smartactors.actors.check_user_by_email,CheckUserByEmailActor,20,41,0,2,6,10,0,3,0,2
+actor.check_user_by_email_actor,info.smart_tools.smartactors.actors.check_user_by_email.exception,NotFoundUserException,9,4,0,0,4,2,2,1,2,1

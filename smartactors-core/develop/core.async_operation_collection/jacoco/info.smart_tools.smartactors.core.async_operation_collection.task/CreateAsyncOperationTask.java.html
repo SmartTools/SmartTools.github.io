@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateAsyncOperationTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.async_operation_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.async_operation_collection.task</a> &gt; <span class="el_source">CreateAsyncOperationTask.java</span></div><h1>CreateAsyncOperationTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.async_operation_collection.task;
 
-import info.smart_tools.smartactors.core.async_operation_collection.wrapper.create_item.AsyncDocument;
-import info.smart_tools.smartactors.core.async_operation_collection.wrapper.create_item.CreateOperationQuery;
+import info.smart_tools.smartactors.core.async_operation_collection.exception.CreateAsyncOperationException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -21,13 +22,28 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
 
     private IDatabaseTask task;
 
+    private IField asyncDataField;
+    private IField doneFlagField;
+    private IField tokenField;
+    private IField expiredTimeField;
+    private IField documentField;
     /**
      * Constructor
      * @param task the insert DB task
      */
-<span class="nc" id="L28">    public CreateAsyncOperationTask(final IDatabaseTask task) {</span>
-<span class="nc" id="L29">        this.task = task;</span>
-<span class="nc" id="L30">    }</span>
+<span class="nc" id="L34">    public CreateAsyncOperationTask(final IDatabaseTask task) throws CreateAsyncOperationException {</span>
+<span class="nc" id="L35">        this.task = task;</span>
+
+        try {
+<span class="nc" id="L38">            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;asyncData&quot;);</span>
+<span class="nc" id="L39">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;done&quot;);</span>
+<span class="nc" id="L40">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;token&quot;);</span>
+<span class="nc" id="L41">            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;expiredTime&quot;);</span>
+<span class="nc" id="L42">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
+<span class="nc" id="L43">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L44">            throw new CreateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L45">        }</span>
+<span class="nc" id="L46">    }</span>
 
     /**
      * @param query query object
@@ -42,30 +58,31 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-<span class="nc" id="L45">            CreateOperationQuery srcQueryObject = IOC.resolve(Keys.getOrAdd(CreateOperationQuery.class.toString()), query);</span>
-<span class="nc" id="L46">            AsyncDocument document = IOC.resolve(Keys.getOrAdd(AsyncDocument.class.toString()));</span>
-<span class="nc" id="L47">            document.setAsyncData(srcQueryObject.getAsyncData());</span>
-<span class="nc" id="L48">            document.setDoneFlag(false);</span>
-<span class="nc" id="L49">            document.setToken(srcQueryObject.getToken());</span>
-<span class="nc" id="L50">            document.setExpiredTime(srcQueryObject.getExpiredTime());</span>
-<span class="nc" id="L51">            srcQueryObject.setDocument(document.getIObject());</span>
-            //TODO:: mb pass to prepare new object only with needed fields?
-<span class="nc" id="L53">            task.prepare(srcQueryObject.getIObject());</span>
-<span class="nc" id="L54">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L55">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare create async operation&quot;, e);</span>
-<span class="nc" id="L56">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L57">            throw new TaskPrepareException(&quot;Can't prepare query for create async operation&quot;, e);</span>
-<span class="nc" id="L58">        }</span>
-<span class="nc" id="L59">    }</span>
+
+<span class="nc" id="L62">            IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
+
+<span class="nc" id="L64">            asyncDataField.out(document, asyncDataField.in(query));</span>
+<span class="nc" id="L65">            doneFlagField.out(document, false);</span>
+<span class="nc" id="L66">            tokenField.out(document, tokenField.in(query));</span>
+<span class="nc" id="L67">            expiredTimeField.out(document, expiredTimeField.in(query));</span>
+<span class="nc" id="L68">            documentField.out(query, document);</span>
+
+<span class="nc" id="L70">            task.prepare(query);</span>
+<span class="nc" id="L71">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L72">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare create async operation&quot;, e);</span>
+<span class="nc" id="L73">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L74">            throw new TaskPrepareException(&quot;Can't prepare query for create async operation cause one of IField.out operation down&quot;, e);</span>
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="nc" id="L63">        this.task.setConnection(connection);</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L80">        this.task.setConnection(connection);</span>
+<span class="nc" id="L81">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L68">        this.task.execute();</span>
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L85">        this.task.execute();</span>
+<span class="nc" id="L86">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

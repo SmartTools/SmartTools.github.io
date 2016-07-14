@@ -212,15 +212,15 @@ public class ClassBuilder {
 <span class="fc" id="L212">                    .append(field.getModifier().getValue())</span>
 <span class="fc" id="L213">                    .append(SPACE)</span>
 <span class="fc" id="L214">                    .append(field.getType());</span>
-<span class="pc bpc" id="L215" title="1 of 4 branches missed.">            if (field.getInnerGenericType() != null &amp;&amp; !field.getInnerGenericType().isEmpty()) {</span>
-<span class="fc" id="L216">                String genericType = mapPrimitiveToClass.get(field.getInnerGenericType());</span>
-<span class="fc bfc" id="L217" title="All 2 branches covered.">                if (null == genericType) {</span>
-<span class="fc" id="L218">                    genericType = field.getInnerGenericType();</span>
+<span class="pc bpc" id="L215" title="3 of 4 branches missed.">            if (field.getInnerGenericType() != null &amp;&amp; !field.getInnerGenericType().isEmpty()) {</span>
+<span class="nc" id="L216">                String genericType = mapPrimitiveToClass.get(field.getInnerGenericType());</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                if (null == genericType) {</span>
+<span class="nc" id="L218">                    genericType = field.getInnerGenericType();</span>
                 }
-<span class="fc" id="L220">                builder</span>
-<span class="fc" id="L221">                        .append(OPEN_TB)</span>
-<span class="fc" id="L222">                        .append(genericType)</span>
-<span class="fc" id="L223">                        .append(CLOSE_TB);</span>
+<span class="nc" id="L220">                builder</span>
+<span class="nc" id="L221">                        .append(OPEN_TB)</span>
+<span class="nc" id="L222">                        .append(genericType)</span>
+<span class="nc" id="L223">                        .append(CLOSE_TB);</span>
             }
 <span class="fc" id="L225">            builder</span>
 <span class="fc" id="L226">                    .append(SPACE)</span>

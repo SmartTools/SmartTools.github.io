@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetFormActor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.get_form</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.get_form</a> &gt; <span class="el_source">GetFormActor.java</span></div><h1>GetFormActor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.get_form;
 
+import info.smart_tools.smartactors.actors.get_form.exception.GetFormActorException;
 import info.smart_tools.smartactors.actors.get_form.strategy.IFormsStrategy;
-import info.smart_tools.smartactors.actors.get_form.wrapper.ActorParams;
 import info.smart_tools.smartactors.actors.get_form.wrapper.GetFormMessage;
 import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
-import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iobject.IObject;
-import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
-import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
 import java.util.List;
@@ -19,34 +16,36 @@ import java.util.List;
  * Actor that put form to message from cached collection
  */
 public class GetFormActor {
+    private static final String KEY_NAME = &quot;form&quot;;
     private ICachedCollection collection;
 
     /**
      * Constructor for actor
      * @param params the wrapper for IObject, contains collectionName
-     * @throws InvalidArgumentException
+     * @throws GetFormActorException for errors during create
      */
-<span class="fc" id="L29">    public GetFormActor(final ActorParams params) throws InvalidArgumentException {</span>
+<span class="fc" id="L27">    public GetFormActor(final IObject params) throws GetFormActorException {</span>
         try {
-<span class="fc" id="L31">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), params.getCollectionName());</span>
-<span class="nc" id="L32">        } catch (ResolutionException | ReadValueException e) {</span>
-<span class="nc" id="L33">            throw new InvalidArgumentException(e);</span>
-<span class="fc" id="L34">        }</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L29">            IField field = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L30">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), field.in(params), KEY_NAME);</span>
+<span class="fc" id="L31">        } catch (Exception e) {</span>
+<span class="fc" id="L32">            throw new GetFormActorException(&quot;Can't create GetFormActor&quot;, e);</span>
+<span class="fc" id="L33">        }</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Set form to message using strategy
      * @param message the wrapper for message
-     * @throws TaskExecutionException
+     * @throws GetFormActorException for errors during get form
      */
-    public void getForm(final GetFormMessage message) throws  TaskExecutionException {
+    public void getForm(final GetFormMessage message) throws  GetFormActorException {
         try {
-<span class="fc" id="L44">            List&lt;IObject&gt; forms = collection.getItems(message.getFormKey());</span>
-<span class="fc" id="L45">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());</span>
-<span class="fc" id="L46">            message.setForm(strategy.getForm(forms));</span>
-<span class="fc" id="L47">        } catch (Exception e) {</span>
-<span class="fc" id="L48">            throw new TaskExecutionException(&quot;Failed to get form from collection&quot;, e);</span>
-<span class="fc" id="L49">        }</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L43">            List&lt;IObject&gt; forms = collection.getItems(message.getFormKey());</span>
+<span class="fc" id="L44">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());</span>
+<span class="fc" id="L45">            message.setForm(strategy.getForm(forms));</span>
+<span class="nc" id="L46">        } catch (Exception e) {</span>
+<span class="nc" id="L47">            throw new GetFormActorException(&quot;Failed to get form from collection&quot;, e);</span>
+<span class="fc" id="L48">        }</span>
+<span class="fc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
