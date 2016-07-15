@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 467,
+      <title>File: 469,
              Errors: 0,
              Warnings: 248,
              Infos: 0
@@ -4218,6 +4218,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_by_composite_name_ioc_with_lambda_strategy.package-info.java">info/smart_tools/smartactors/core/resolve_by_composite_name_ioc_with_lambda_strategy/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.FeatureServer.java">info/smart_tools/smartactors/core/examples/feature/FeatureServer.java</a>
                 </td>
                 <td>
@@ -5045,6 +5059,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.sql_commons.package-info.java">info/smart_tools/smartactors/core/sql_commons/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_by_composite_name_ioc_with_lambda_strategy.ResolveByCompositeNameIOCStrategy.java">info/smart_tools/smartactors/core/resolve_by_composite_name_ioc_with_lambda_strategy/ResolveByCompositeNameIOCStrategy.java</a>
                 </td>
                 <td>
                   0

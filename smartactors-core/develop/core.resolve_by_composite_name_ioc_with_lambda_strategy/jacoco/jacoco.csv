@@ -1,0 +1,2 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.resolve_by_composite_name_ioc_with_lambda_strategy,info.smart_tools.smartactors.core.resolve_by_composite_name_ioc_with_lambda_strategy,ResolveByCompositeNameIOCStrategy,0,74,0,6,0,17,0,5,0,2

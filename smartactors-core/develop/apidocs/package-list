@@ -148,6 +148,7 @@ info.smart_tools.smartactors.core.postgres_connection.wrapper
 info.smart_tools.smartactors.core.receiver_chain
 info.smart_tools.smartactors.core.recursive_scope
 info.smart_tools.smartactors.core.recursive_strategy_container
+info.smart_tools.smartactors.core.resolve_by_composite_name_ioc_with_lambda_strategy
 info.smart_tools.smartactors.core.resolve_by_name_ioc_strategy
 info.smart_tools.smartactors.core.resolve_by_name_ioc_with_lambda_strategy
 info.smart_tools.smartactors.core.scope_creation_event_handler
