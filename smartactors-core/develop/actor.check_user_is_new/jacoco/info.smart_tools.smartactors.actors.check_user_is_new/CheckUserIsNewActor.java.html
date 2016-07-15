@@ -2,7 +2,7 @@
 
 import info.smart_tools.smartactors.actors.check_user_is_new.wrapper.ActorParams;
 import info.smart_tools.smartactors.actors.check_user_is_new.wrapper.MessageWrapper;
-import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
+import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -16,7 +16,7 @@ import java.util.List;
  * Actor check that this email was not registered before
  */
 public class CheckUserIsNewActor {
-    private CachedCollection collection;
+    private ICachedCollection collection;
 
     /**
      * Constructor
@@ -25,11 +25,14 @@ public class CheckUserIsNewActor {
      */
 <span class="fc" id="L26">    public CheckUserIsNewActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
-<span class="fc" id="L28">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), params.getCollectionName());</span>
-<span class="nc" id="L29">        } catch (Exception e) {</span>
-<span class="nc" id="L30">            throw new InvalidArgumentException(e);</span>
-<span class="fc" id="L31">        }</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L28">            collection = IOC.resolve(</span>
+<span class="fc" id="L29">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
+<span class="fc" id="L30">                    params.getCollectionName(),</span>
+<span class="fc" id="L31">                    params.getCollectionKey());</span>
+<span class="nc" id="L32">        } catch (Exception e) {</span>
+<span class="nc" id="L33">            throw new InvalidArgumentException(e);</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Check that this email was not registered before
@@ -38,13 +41,13 @@ public class CheckUserIsNewActor {
      */
     public void check(final MessageWrapper message) throws Exception {
         try {
-<span class="fc" id="L41">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
-<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (!users.isEmpty()) {</span>
-<span class="fc" id="L43">                throw new TaskExecutionException(&quot;User with this email already exists&quot;);</span>
+<span class="fc" id="L44">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (!users.isEmpty()) {</span>
+<span class="fc" id="L46">                throw new TaskExecutionException(&quot;User with this email already exists&quot;);</span>
             }
-<span class="nc" id="L45">        } catch (ReadValueException | GetCacheItemException e) {</span>
-<span class="nc" id="L46">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
-<span class="fc" id="L47">        }</span>
-<span class="fc" id="L48">    }</span>
+<span class="nc" id="L48">        } catch (ReadValueException | GetCacheItemException e) {</span>
+<span class="nc" id="L49">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -2,7 +2,7 @@
 
 import info.smart_tools.smartactors.actors.create_user.wrapper.ActorParams;
 import info.smart_tools.smartactors.actors.create_user.wrapper.MessageWrapper;
-import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
+import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCacheItemException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -15,20 +15,23 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
  * Actor for creating user
  */
 public class CreateUserActor {
-    private CachedCollection collection;
+    private ICachedCollection collection;
 
     /**
      * Constructor
      * @param params the actors params
      * @throws InvalidArgumentException
      */
-<span class="fc" id="L25">    public CreateUserActor(ActorParams params) throws InvalidArgumentException {</span>
+<span class="fc" id="L25">    public CreateUserActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
-<span class="fc" id="L27">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), params.getCollectionName());</span>
-<span class="nc" id="L28">        } catch (Exception e) {</span>
-<span class="nc" id="L29">            throw new InvalidArgumentException(&quot;Failed to initialize collection&quot;, e);</span>
-<span class="fc" id="L30">        }</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L27">            collection = IOC.resolve(</span>
+<span class="fc" id="L28">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
+<span class="fc" id="L29">                    params.getCollectionName(),</span>
+<span class="fc" id="L30">                    params.getCollectionKey());</span>
+<span class="nc" id="L31">        } catch (Exception e) {</span>
+<span class="nc" id="L32">            throw new InvalidArgumentException(&quot;Failed to initialize collection&quot;, e);</span>
+<span class="fc" id="L33">        }</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Create a new user in collection
@@ -37,11 +40,11 @@ public class CreateUserActor {
      */
     public void create(final MessageWrapper message) throws TaskExecutionException {
         try {
-<span class="fc" id="L40">            IObject user = message.getUser();</span>
-<span class="fc" id="L41">            collection.upsert(user);</span>
-<span class="fc" id="L42">        } catch (ReadValueException | UpsertCacheItemException e) {</span>
-<span class="fc" id="L43">            throw new TaskExecutionException(&quot;Failed to create new user&quot;, e);</span>
-<span class="fc" id="L44">        }</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L43">            IObject user = message.getUser();</span>
+<span class="fc" id="L44">            collection.upsert(user);</span>
+<span class="fc" id="L45">        } catch (ReadValueException | UpsertCacheItemException e) {</span>
+<span class="fc" id="L46">            throw new TaskExecutionException(&quot;Failed to create new user&quot;, e);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

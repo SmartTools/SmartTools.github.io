@@ -3,7 +3,7 @@
 import info.smart_tools.smartactors.actors.check_user_by_email.exception.NotFoundUserException;
 import info.smart_tools.smartactors.actors.check_user_by_email.wrapper.ActorParams;
 import info.smart_tools.smartactors.actors.check_user_by_email.wrapper.MessageWrapper;
-import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
+import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -19,7 +19,7 @@ import java.util.List;
  * Actor that check user by email
  */
 public class CheckUserByEmailActor {
-    private CachedCollection collection;
+    private ICachedCollection collection;
 
     /**
      * Constructor
@@ -28,11 +28,14 @@ public class CheckUserByEmailActor {
      */
 <span class="fc" id="L29">    public CheckUserByEmailActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
-<span class="fc" id="L31">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), params.getCollectionName());</span>
-<span class="nc" id="L32">        } catch (Exception e) {</span>
-<span class="nc" id="L33">            throw new InvalidArgumentException(e);</span>
-<span class="fc" id="L34">        }</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L31">            collection = IOC.resolve(</span>
+<span class="fc" id="L32">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
+<span class="fc" id="L33">                    params.getCollectionName(),</span>
+<span class="fc" id="L34">                    params.getCollectionKey());</span>
+<span class="nc" id="L35">        } catch (Exception e) {</span>
+<span class="nc" id="L36">            throw new InvalidArgumentException(e);</span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">    }</span>
 
 
     /**
@@ -43,16 +46,16 @@ public class CheckUserByEmailActor {
      */
     public void checkUser(final MessageWrapper message) throws NotFoundUserException, TaskExecutionException {
         try {
-<span class="fc" id="L46">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (users.size() != 1) {</span>
-<span class="fc" id="L48">                throw new NotFoundUserException(&quot;Failed to find user with this email&quot;);</span>
+<span class="fc" id="L49">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (users.size() != 1) {</span>
+<span class="fc" id="L51">                throw new NotFoundUserException(&quot;Failed to find user with this email&quot;);</span>
             }
-<span class="fc" id="L50">            message.setUser(users.get(0));</span>
-<span class="nc" id="L51">        } catch (ReadValueException | GetCacheItemException e) {</span>
-<span class="nc" id="L52">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
-<span class="nc" id="L53">        } catch (ChangeValueException e) {</span>
-<span class="nc" id="L54">            throw new TaskExecutionException(&quot;Failed to set user to message&quot;, e);</span>
-<span class="fc" id="L55">        }</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L53">            message.setUser(users.get(0));</span>
+<span class="nc" id="L54">        } catch (ReadValueException | GetCacheItemException e) {</span>
+<span class="nc" id="L55">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
+<span class="nc" id="L56">        } catch (ChangeValueException e) {</span>
+<span class="nc" id="L57">            throw new TaskExecutionException(&quot;Failed to set user to message&quot;, e);</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

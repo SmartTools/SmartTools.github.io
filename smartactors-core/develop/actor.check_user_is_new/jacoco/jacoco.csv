@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-actor.check_user_is_new,info.smart_tools.smartactors.actors.check_user_is_new,CheckUserIsNewActor,13,34,0,2,4,9,0,3,0,2
+actor.check_user_is_new,info.smart_tools.smartactors.actors.check_user_is_new,CheckUserIsNewActor,13,39,0,2,4,12,0,3,0,2
