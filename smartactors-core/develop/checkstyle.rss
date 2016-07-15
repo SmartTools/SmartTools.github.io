@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 469,
+      <title>File: 474,
              Errors: 0,
              Warnings: 248,
              Infos: 0
@@ -662,6 +662,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.FarewellMessage.java">info/smart_tools/smartactors/core/examples/actor/FarewellMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.pool_guard.package-info.java">info/smart_tools/smartactors/core/pool_guard/package-info.java</a>
                 </td>
                 <td>
@@ -929,6 +943,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.wrapper_generator.class_builder.package-info.java">info/smart_tools/smartactors/core/wrapper_generator/class_builder/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.GreetingMessage.java">info/smart_tools/smartactors/core/examples/actor/GreetingMessage.java</a>
                 </td>
                 <td>
                   0
@@ -1293,6 +1321,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_task.create_collection.psql.wrapper.package-info.java">info/smart_tools/smartactors/core/db_task/create_collection/psql/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActor.java">info/smart_tools/smartactors/core/examples/actor/HelloActor.java</a>
                 </td>
                 <td>
                   0
@@ -4036,6 +4078,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.package-info.java">info/smart_tools/smartactors/core/examples/actor/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ifilesystem_tracker.exception.FilesystemTrackerStartupException.java">info/smart_tools/smartactors/core/ifilesystem_tracker/exception/FilesystemTrackerStartupException.java</a>
                 </td>
                 <td>
@@ -6361,6 +6417,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.iscope.IScope.java">info/smart_tools/smartactors/core/iscope/IScope.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActorException.java">info/smart_tools/smartactors/core/examples/actor/HelloActorException.java</a>
                 </td>
                 <td>
                   0

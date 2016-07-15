@@ -356,7 +356,13 @@
 <td>core.strategy_container</td>
 <td>0.2.0-SNAPSHOT</td>
 <td>jar</td>
-<td>-</td></tr></table></div><a name="Project_Dependencies_test"></a>
+<td>-</td></tr>
+<tr class="a">
+<td>org.mockito</td>
+<td><a class="externalLink" href="http://www.mockito.org">mockito-core</a></td>
+<td>1.10.19</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://github.com/mockito/mockito/blob/master/LICENSE">The MIT License</a></td></tr></table></div><a name="Project_Dependencies_test"></a>
 <div class="section">
 <h3><a name="test"></a>test</h3>
 <p>The following is a list of test dependencies for this project. These dependencies are only required to compile and run unit tests for the application:</p>
@@ -523,10 +529,10 @@
 <td><a class="externalLink" href="https://github.com/trung/InMemoryJavaCompiler">InMemoryJavaCompiler</a></td>
 <td>1.2</td>
 <td>jar</td>
-<td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></td></tr></table></div><a name="Project_Transitive_Dependencies_test"></a>
+<td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></td></tr></table></div><a name="Project_Transitive_Dependencies_runtime"></a>
 <div class="section">
-<h3><a name="test"></a>test</h3>
-<p>The following is a list of test dependencies for this project. These dependencies are only required to compile and run unit tests for the application:</p>
+<h3><a name="runtime"></a>runtime</h3>
+<p>The following is a list of runtime dependencies for this project. These dependencies are required to run the application:</p>
 <table border="0" class="table table-striped">
 <tr class="a">
 <th>GroupId</th>
@@ -539,7 +545,13 @@
 <td>hamcrest-core</td>
 <td>1.1</td>
 <td>jar</td>
-<td><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">BSD style</a></td></tr></table></div></div><a name="Project_Dependency_Graph"></a>
+<td><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">BSD style</a></td></tr>
+<tr class="a">
+<td>org.objenesis</td>
+<td><a class="externalLink" href="http://objenesis.org">objenesis</a></td>
+<td>2.1</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></td></tr></table></div></div><a name="Project_Dependency_Graph"></a>
 <div class="section">
 <h2><a name="Project_Dependency_Graph"></a>Project Dependency Graph</h2>
 <script language="javascript" type="text/javascript">
@@ -943,7 +955,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://junit.org">http://junit.org</a></p>
 <p><b>Project Licenses: </b><a class="externalLink" href="http://www.opensource.org/licenses/cpl1.0.txt">Common Public License Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>org.hamcrest:hamcrest-core:jar:1.1 (test) <img id="_img81" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep80', '_img81' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep80" style="display:none">
+<li>org.hamcrest:hamcrest-core:jar:1.1 (runtime) <img id="_img81" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep80', '_img81' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep80" style="display:none">
 <table border="0" class="table table-striped">
 <tr class="a">
 <th>Hamcrest Core</th></tr>
@@ -951,7 +963,26 @@
 <td>
 <p><b>Description: </b>There is currently no description associated with this project.</p>
 <p><b>Project Licenses: </b><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">BSD style</a></p></td></tr></table></div></li></ul></li>
-<li>info.smart_tools.smartactors:core.recursive_strategy_container:jar:0.2.0-SNAPSHOT (test) <img id="_img83" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep82', '_img83' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep82" style="display:none">
+<li>org.mockito:mockito-core:jar:1.10.19 (compile) <img id="_img83" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep82', '_img83' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep82" style="display:none">
+<table border="0" class="table table-striped">
+<tr class="a">
+<th>Mockito</th></tr>
+<tr class="b">
+<td>
+<p><b>Description: </b>Mock objects library for java</p>
+<p><b>URL: </b><a class="externalLink" href="http://www.mockito.org">http://www.mockito.org</a></p>
+<p><b>Project Licenses: </b><a class="externalLink" href="http://github.com/mockito/mockito/blob/master/LICENSE">The MIT License</a></p></td></tr></table></div>
+<ul>
+<li>org.objenesis:objenesis:jar:2.1 (runtime) <img id="_img85" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep84', '_img85' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep84" style="display:none">
+<table border="0" class="table table-striped">
+<tr class="a">
+<th>Objenesis</th></tr>
+<tr class="b">
+<td>
+<p><b>Description: </b>A library for instantiating Java objects</p>
+<p><b>URL: </b><a class="externalLink" href="http://objenesis.org">http://objenesis.org</a></p>
+<p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></p></td></tr></table></div></li></ul></li>
+<li>info.smart_tools.smartactors:core.recursive_strategy_container:jar:0.2.0-SNAPSHOT (test) <img id="_img87" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep86', '_img87' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep86" style="display:none">
 <table border="0" class="table table-striped">
 <tr class="a">
 <th>core.recursive_strategy_container</th></tr>
@@ -961,7 +992,7 @@
 <p><b>URL: </b>core.recursive_strategy_container/core.recursive_strategy_container/</p>
 <p><b>Project Licenses: </b>No licenses are defined for this project.</p></td></tr></table></div>
 <ul>
-<li>info.smart_tools.smartactors:core.iscope:jar:0.2.0-SNAPSHOT (compile) <img id="_img85" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep84', '_img85' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep84" style="display:none">
+<li>info.smart_tools.smartactors:core.iscope:jar:0.2.0-SNAPSHOT (compile) <img id="_img89" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep88', '_img89' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep88" style="display:none">
 <table border="0" class="table table-striped">
 <tr class="a">
 <th>core.iscope</th></tr>
@@ -973,7 +1004,9 @@
 <div class="section">
 <h2><a name="Licenses"></a>Licenses</h2>
 <p><b>BSD style: </b>Hamcrest Core</p>
+<p><b>Apache 2: </b>Objenesis</p>
 <p><b>Unknown: </b>core.bootstrap, core.bootstrap_item, core.create_new_instance_strategy, core.examples, core.feature_manager, core.filesystem_tracker, core.iaction, core.ibootstrap, core.ibootstrap_item, core.ifeature_manager, core.ifield_name, core.ifilesystem_tracker, core.iioccontainer, core.ikey, core.invalid_argument_exception, core.iobject, core.ioc, core.ioc_container, core.ipath, core.iplugin, core.iplugin_creator, core.iplugin_loader, core.iplugin_loader_visitor, core.iresolve_dependency_strategy, core.iscope, core.iscope_provider_container, core.iserver, core.istrategy_container, core.named_keys_storage, core.path, core.plugin_creator, core.plugin_loader_from_jar, core.recursive_scope, core.recursive_strategy_container, core.resolve_by_name_ioc_with_lambda_strategy, core.scope_provider, core.scope_provider_container, core.singleton_strategy, core.strategy_container, core.string_ioc_key</p>
+<p><b>The MIT License: </b>Mockito</p>
 <p><b>Apache License, Version 2.0: </b>InMemoryJavaCompiler</p>
 <p><b>Common Public License Version 1.0: </b>JUnit</p></div><a name="Dependency_File_Details"></a>
 <div class="section">
@@ -1324,6 +1357,22 @@
 <td>1.7</td>
 <td>Yes</td></tr>
 <tr class="b">
+<td>mockito-core-1.10.19.jar</td>
+<td>1.2 MB</td>
+<td>1138</td>
+<td>694</td>
+<td>67</td>
+<td>1.5</td>
+<td>Yes</td></tr>
+<tr class="a">
+<td>objenesis-2.1.jar</td>
+<td>41.8 kB</td>
+<td>52</td>
+<td>37</td>
+<td>9</td>
+<td>1.5</td>
+<td>Yes</td></tr>
+<tr class="b">
 <th>Total</th>
 <th>Size</th>
 <th>Entries</th>
@@ -1332,29 +1381,37 @@
 <th>Java Version</th>
 <th>Debug Information</th></tr>
 <tr class="a">
-<td>42</td>
-<td>502.8 kB</td>
-<td>924</td>
-<td>360</td>
-<td>89</td>
+<td>44</td>
+<td>1.7 MB</td>
+<td>2114</td>
+<td>1091</td>
+<td>165</td>
 <td>1.8</td>
-<td>38</td></tr>
+<td>40</td></tr>
 <tr class="b">
-<td>compile: 39</td>
-<td>compile: 168.3 kB</td>
-<td>compile: 566</td>
-<td>compile: 85</td>
-<td>compile: 54</td>
+<td>compile: 40</td>
+<td>compile: 1.3 MB</td>
+<td>compile: 1704</td>
+<td>compile: 779</td>
+<td>compile: 121</td>
 <td>-</td>
-<td>compile: 35</td></tr>
+<td>compile: 36</td></tr>
 <tr class="a">
-<td>test: 3</td>
-<td>test: 334.4 kB</td>
-<td>test: 358</td>
-<td>test: 275</td>
-<td>test: 35</td>
+<td>test: 2</td>
+<td>test: 257.8 kB</td>
+<td>test: 304</td>
+<td>test: 254</td>
+<td>test: 32</td>
 <td>-</td>
-<td>test: 3</td></tr></table></div><a name="Dependency_Repository_Locations"></a>
+<td>test: 2</td></tr>
+<tr class="b">
+<td>runtime: 2</td>
+<td>runtime: 118.4 kB</td>
+<td>runtime: 106</td>
+<td>runtime: 58</td>
+<td>runtime: 12</td>
+<td>-</td>
+<td>runtime: 2</td></tr></table></div><a name="Dependency_Repository_Locations"></a>
 <div class="section">
 <h2><a name="Dependency_Repository_Locations"></a>Dependency Repository Locations</h2>
 <table border="0" class="table table-striped">
@@ -1500,11 +1557,17 @@
 <td>org.mdkt.compiler:InMemoryJavaCompiler:jar:1.2</td>
 <td><a class="externalLink" href="http://repo.maven.apache.org/maven2/org/mdkt/compiler/InMemoryJavaCompiler/1.2/InMemoryJavaCompiler-1.2.jar"><img alt="Found at http://repo.maven.apache.org/maven2" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
+<td>org.mockito:mockito-core:jar:1.10.19</td>
+<td><a class="externalLink" href="http://repo.maven.apache.org/maven2/org/mockito/mockito-core/1.10.19/mockito-core-1.10.19.jar"><img alt="Found at http://repo.maven.apache.org/maven2" src="images/icon_success_sml.gif" /></a></td></tr>
+<tr class="a">
+<td>org.objenesis:objenesis:jar:2.1</td>
+<td><a class="externalLink" href="http://repo.maven.apache.org/maven2/org/objenesis/objenesis/2.1/objenesis-2.1.jar"><img alt="Found at http://repo.maven.apache.org/maven2" src="images/icon_success_sml.gif" /></a></td></tr>
+<tr class="b">
 <th>Total</th>
 <th>central</th></tr>
 <tr class="a">
-<td>42 (compile: 39, test: 3)</td>
-<td>3</td></tr></table></div>
+<td>44 (compile: 40, test: 2, runtime: 2)</td>
+<td>5</td></tr></table></div>
                   </div>
             </div>
           </div>
