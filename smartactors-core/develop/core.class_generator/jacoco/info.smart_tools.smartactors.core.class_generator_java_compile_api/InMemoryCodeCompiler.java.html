@@ -97,19 +97,27 @@ class InMemoryCodeCompiler {
 
 <span class="fc" id="L98">                URL[] urls = ucl.getURLs();</span>
 <span class="fc bfc" id="L99" title="All 2 branches covered.">                for (URL url : urls) {</span>
-<span class="fc" id="L100">                    buf.append(separator).append(url.getFile());</span>
+<span class="fc" id="L100">                    String jarPathName = url.getFile();</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                    if (jarPathName.startsWith(&quot;file:&quot;)) {</span>
+<span class="nc" id="L102">                        jarPathName = jarPathName.substring(</span>
+<span class="nc" id="L103">                                jarPathName.indexOf(&quot;file:&quot;) + &quot;file:&quot;.length(), jarPathName.indexOf(&quot;!/&quot;)</span>
+                        );
+                    }
+<span class="fc" id="L106">                    buf.append(separator).append(</span>
+                            jarPathName
+                    );
                 }
-<span class="fc" id="L102">            } catch (Exception e) {</span>
+<span class="fc" id="L110">            } catch (Exception e) {</span>
                 // do nothing
                 // because this try-catch check cast ClassLoader to URLClassLoader
-<span class="fc" id="L105">            }</span>
-<span class="fc" id="L106">            cl = cl.getParent();</span>
+<span class="fc" id="L113">            }</span>
+<span class="fc" id="L114">            cl = cl.getParent();</span>
         }
-<span class="pc bpc" id="L108" title="3 of 4 branches missed.">        if (null != additionalClassPaths &amp;&amp; !additionalClassPaths.isEmpty()) {</span>
-<span class="nc" id="L109">            buf.append(separator).append(additionalClassPaths);</span>
+<span class="pc bpc" id="L116" title="3 of 4 branches missed.">        if (null != additionalClassPaths &amp;&amp; !additionalClassPaths.isEmpty()) {</span>
+<span class="nc" id="L117">            buf.append(separator).append(additionalClassPaths);</span>
         }
 
-<span class="fc" id="L112">        return buf.toString();</span>
+<span class="fc" id="L120">        return buf.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
