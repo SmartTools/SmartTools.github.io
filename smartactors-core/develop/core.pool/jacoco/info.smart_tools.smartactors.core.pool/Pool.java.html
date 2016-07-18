@@ -41,23 +41,24 @@ public class Pool implements IPool {
     /**
      * Get a value by the key from the scope.
      * @throws PoolTakeException if error was occurred
+     * @return Object from pool
      */
     public Object take() throws PoolTakeException {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (freeItemsCounter.getAndDecrement() &lt;= 0) {</span>
-<span class="fc" id="L47">            freeItemsCounter.getAndIncrement();</span>
-<span class="fc" id="L48">            throw new PoolTakeException(&quot;Reached limit of items for this pool.&quot;);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (freeItemsCounter.getAndDecrement() &lt;= 0) {</span>
+<span class="fc" id="L48">            freeItemsCounter.getAndIncrement();</span>
+<span class="fc" id="L49">            throw new PoolTakeException(&quot;Reached limit of items for this pool.&quot;);</span>
         }
 
         try {
-<span class="fc" id="L52">            Object result = freeItems.poll();</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (result == null) {</span>
-<span class="fc" id="L54">                result = creationFunction.get();</span>
+<span class="fc" id="L53">            Object result = freeItems.poll();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (result == null) {</span>
+<span class="fc" id="L55">                result = creationFunction.get();</span>
             }
 
-<span class="fc" id="L57">            return result;</span>
-<span class="fc" id="L58">        } catch (Exception e) {</span>
-<span class="fc" id="L59">            freeItemsCounter.getAndIncrement();</span>
-<span class="fc" id="L60">            throw new PoolTakeException(&quot;Failed to get item&quot;, e);</span>
+<span class="fc" id="L58">            return result;</span>
+<span class="fc" id="L59">        } catch (Exception e) {</span>
+<span class="fc" id="L60">            freeItemsCounter.getAndIncrement();</span>
+<span class="fc" id="L61">            throw new PoolTakeException(&quot;Failed to get item&quot;, e);</span>
         }
     }
 
@@ -68,13 +69,13 @@ public class Pool implements IPool {
      */
     public void put(final Object item) throws PoolPutException {
         try {
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (freeItems.size() &gt;= freeItemsCounter.get()) {</span>
-<span class="fc" id="L72">                freeItems.add(item);</span>
-<span class="fc" id="L73">                freeItemsCounter.getAndIncrement();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (freeItems.size() &gt;= freeItemsCounter.get()) {</span>
+<span class="fc" id="L73">                freeItems.add(item);</span>
+<span class="fc" id="L74">                freeItemsCounter.getAndIncrement();</span>
             }
-<span class="nc" id="L75">        } catch (Exception e) {</span>
-<span class="nc" id="L76">            throw new PoolPutException(&quot;Error was occurred&quot;, e);</span>
-<span class="fc" id="L77">        }</span>
-<span class="fc" id="L78">    }</span>
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            throw new PoolPutException(&quot;Error was occurred&quot;, e);</span>
+<span class="fc" id="L78">        }</span>
+<span class="fc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

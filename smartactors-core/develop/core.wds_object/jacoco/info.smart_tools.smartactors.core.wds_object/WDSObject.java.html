@@ -2,7 +2,6 @@
 
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.ifield_name.IFieldName;
-import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
@@ -32,86 +31,86 @@ public class WDSObject implements IObject, IObjectWrapper {
      * @throws InvalidArgumentException if environment is null
      */
     public WDSObject(final IObject wrapperConfig)
-<span class="fc" id="L35">            throws InvalidArgumentException {</span>
-<span class="fc" id="L36">        this.inFields = new HashMap&lt;&gt;(0);</span>
-<span class="fc" id="L37">        this.outFields = new HashMap&lt;&gt;(0);</span>
-<span class="fc" id="L38">        this.wrapperConfig = wrapperConfig;</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L34">            throws InvalidArgumentException {</span>
+<span class="fc" id="L35">        this.inFields = new HashMap&lt;&gt;(0);</span>
+<span class="fc" id="L36">        this.outFields = new HashMap&lt;&gt;(0);</span>
+<span class="fc" id="L37">        this.wrapperConfig = wrapperConfig;</span>
+<span class="fc" id="L38">    }</span>
 
     @Override
     public Object getValue(final IFieldName name)
             throws ReadValueException, InvalidArgumentException {
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (null == name) {</span>
-<span class="fc" id="L45">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L44">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
         }
-<span class="fc" id="L47">        IField field = inFields.get(name);</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (null == field) {</span>
+<span class="fc" id="L46">        IField field = inFields.get(name);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (null == field) {</span>
             try {
-<span class="fc" id="L50">                field = new WDSObjectField((List&lt;IObject&gt;) this.wrapperConfig.getValue(name));</span>
-<span class="fc" id="L51">            } catch (Throwable e) {</span>
-<span class="fc" id="L52">                throw new ReadValueException(&quot;Can't read configuration for current field name&quot;);</span>
-<span class="fc" id="L53">            }</span>
-<span class="fc" id="L54">            inFields.put(name, field);</span>
+<span class="fc" id="L49">                field = new WDSObjectField((List&lt;IObject&gt;) this.wrapperConfig.getValue(name));</span>
+<span class="fc" id="L50">            } catch (Throwable e) {</span>
+<span class="fc" id="L51">                throw new ReadValueException(&quot;Can't read configuration for current field name&quot;);</span>
+<span class="fc" id="L52">            }</span>
+<span class="fc" id="L53">            inFields.put(name, field);</span>
         }
-<span class="fc" id="L56">        return field.in(this.initIObject);</span>
+<span class="fc" id="L55">        return field.in(this.initIObject);</span>
     }
 
     @Override
     public void setValue(final IFieldName name, final Object value)
             throws ChangeValueException, InvalidArgumentException {
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (null == name) {</span>
-<span class="fc" id="L63">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L62">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
         }
-<span class="fc" id="L65">        IField[] fields = outFields.get(name);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (null == fields) {</span>
+<span class="fc" id="L64">        IField[] fields = outFields.get(name);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (null == fields) {</span>
             try {
-<span class="fc" id="L68">                Object config = this.wrapperConfig.getValue(name);</span>
-<span class="fc" id="L69">                fields = new IField[((List&lt;List&lt;IObject&gt;&gt;) config).size()];</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">                for (int i = 0; i &lt; fields.length; ++i) {</span>
-<span class="fc" id="L71">                    fields[i] = new WDSObjectField(((List&lt;List&lt;IObject&gt;&gt;) config).get(i));</span>
+<span class="fc" id="L67">                Object config = this.wrapperConfig.getValue(name);</span>
+<span class="fc" id="L68">                fields = new IField[((List&lt;List&lt;IObject&gt;&gt;) config).size()];</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                for (int i = 0; i &lt; fields.length; ++i) {</span>
+<span class="fc" id="L70">                    fields[i] = new WDSObjectField(((List&lt;List&lt;IObject&gt;&gt;) config).get(i));</span>
                 }
-<span class="fc" id="L73">            } catch (Throwable e) {</span>
-<span class="fc" id="L74">                throw new ChangeValueException(&quot;Can't read configuration for current field name&quot;);</span>
-<span class="fc" id="L75">            }</span>
-<span class="fc" id="L76">            outFields.put(name, fields);</span>
+<span class="fc" id="L72">            } catch (Throwable e) {</span>
+<span class="fc" id="L73">                throw new ChangeValueException(&quot;Can't read configuration for current field name&quot;);</span>
+<span class="fc" id="L74">            }</span>
+<span class="fc" id="L75">            outFields.put(name, fields);</span>
         }
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (IField f : fields) {</span>
-<span class="fc" id="L79">            f.out(this.initIObject, value);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (IField f : fields) {</span>
+<span class="fc" id="L78">            f.out(this.initIObject, value);</span>
         }
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L80">    }</span>
 
     @Override
     public void deleteField(final IFieldName name)
             throws DeleteValueException, InvalidArgumentException {
-<span class="fc" id="L86">        throw new DeleteValueException(&quot;Method not implemented.&quot;);</span>
+<span class="fc" id="L85">        throw new DeleteValueException(&quot;Method not implemented.&quot;);</span>
     }
 
     @Override
     public &lt;T&gt; T serialize()
             throws SerializeException {
-<span class="fc" id="L92">        throw new SerializeException(&quot;Method not implemented.&quot;);</span>
+<span class="fc" id="L91">        throw new SerializeException(&quot;Method not implemented.&quot;);</span>
     }
 
     @Override
     public Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; iterator() {
-<span class="fc" id="L97">        return null;</span>
+<span class="fc" id="L96">        return null;</span>
     }
 
     @Override
     public void init(final IObject environment) {
-<span class="fc" id="L102">        this.initIObject = environment;</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L101">        this.initIObject = environment;</span>
+<span class="fc" id="L102">    }</span>
 
     @Override
     public IObject getEnvironmentIObject(final IFieldName fieldName)
             throws InvalidArgumentException {
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (null == fieldName) {</span>
-<span class="fc" id="L109">            throw new InvalidArgumentException(&quot;FieldName should not be null.&quot;);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (null == fieldName) {</span>
+<span class="fc" id="L108">            throw new InvalidArgumentException(&quot;FieldName should not be null.&quot;);</span>
         }
         try {
-<span class="fc" id="L112">            return (IObject) this.initIObject.getValue(fieldName);</span>
-<span class="fc" id="L113">        } catch (Throwable e) {</span>
-<span class="fc" id="L114">            throw new InvalidArgumentException(&quot;Could not read data from environment.&quot;, e);</span>
+<span class="fc" id="L111">            return (IObject) this.initIObject.getValue(fieldName);</span>
+<span class="fc" id="L112">        } catch (Throwable e) {</span>
+<span class="fc" id="L113">            throw new InvalidArgumentException(&quot;Could not read data from environment.&quot;, e);</span>
         }
     }
 }

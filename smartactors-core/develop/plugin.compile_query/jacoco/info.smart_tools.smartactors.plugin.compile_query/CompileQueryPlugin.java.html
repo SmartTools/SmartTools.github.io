@@ -29,56 +29,59 @@ public class CompileQueryPlugin implements IPlugin {
 
     private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
 
-<span class="nc" id="L32">    public CompileQueryPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L33">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L34">    }</span>
+    /**
+     * @param bootstrap Target bootstrap for adding strategy
+     */
+<span class="nc" id="L35">    public CompileQueryPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L36">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L37">    }</span>
 
     @Override
     public void load() throws PluginException {
 
         try {
-<span class="nc" id="L40">            Map&lt;QueryKey, CompiledQuery&gt; queryMap = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L41">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CompileQueryPlugin&quot;);</span>
-<span class="nc" id="L42">            item</span>
-<span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L44">                    .process(() -&gt; {</span>
+<span class="nc" id="L43">            Map&lt;QueryKey, CompiledQuery&gt; queryMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L44">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CompileQueryPlugin&quot;);</span>
+<span class="nc" id="L45">            item</span>
+<span class="nc" id="L46">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L47">                    .process(() -&gt; {</span>
                 try {
-<span class="nc" id="L46">                    IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.toString());</span>
-<span class="nc" id="L47">                    IOC.register(compiledQueryKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L49">                    IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.toString());</span>
+<span class="nc" id="L50">                    IOC.register(compiledQueryKey, new CreateNewInstanceStrategy(</span>
                         (args) -&gt; {
-<span class="nc" id="L49">                            StorageConnection connection = (StorageConnection) args[0];</span>
-<span class="nc" id="L50">                            String task = String.valueOf(args[1]);</span>
-<span class="nc bnc" id="L51" title="All 4 branches missed.">                            if (connection == null || task == null) {</span>
-<span class="nc" id="L52">                                throw new RuntimeException(&quot;Can't resolve compiled query: key parameter is null&quot;);</span>
+<span class="nc" id="L52">                            StorageConnection connection = (StorageConnection) args[0];</span>
+<span class="nc" id="L53">                            String task = String.valueOf(args[1]);</span>
+<span class="nc bnc" id="L54" title="All 4 branches missed.">                            if (connection == null || task == null) {</span>
+<span class="nc" id="L55">                                throw new RuntimeException(&quot;Can't resolve compiled query: key parameter is null&quot;);</span>
                             }
-<span class="nc" id="L54">                            String id = connection.getId();</span>
-<span class="nc" id="L55">                            QueryKey queryKey = QueryKey.create(task, id);</span>
-<span class="nc" id="L56">                            CompiledQuery query = queryMap.get(queryKey);</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">                            if (query == null) {</span>
-<span class="nc" id="L58">                                QueryStatementFactory factory = (QueryStatementFactory) args[2];</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">                                if (factory == null) {</span>
-<span class="nc" id="L60">                                    throw new RuntimeException(&quot;Can't resolve compiled query: query statement is null&quot;);</span>
+<span class="nc" id="L57">                            String id = connection.getId();</span>
+<span class="nc" id="L58">                            QueryKey queryKey = QueryKey.create(task, id);</span>
+<span class="nc" id="L59">                            CompiledQuery query = queryMap.get(queryKey);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                            if (query == null) {</span>
+<span class="nc" id="L61">                                QueryStatementFactory factory = (QueryStatementFactory) args[2];</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                                if (factory == null) {</span>
+<span class="nc" id="L63">                                    throw new RuntimeException(&quot;Can't resolve compiled query: query statement is null&quot;);</span>
                                 }
                                 try {
-<span class="nc" id="L63">                                    QueryStatement queryStatement = factory.create();</span>
-<span class="nc" id="L64">                                    query = connection.compileQuery(queryStatement);</span>
-<span class="nc" id="L65">                                    queryMap.put(queryKey, query);</span>
+<span class="nc" id="L66">                                    QueryStatement queryStatement = factory.create();</span>
+<span class="nc" id="L67">                                    query = connection.compileQuery(queryStatement);</span>
+<span class="nc" id="L68">                                    queryMap.put(queryKey, query);</span>
                                     //TODO:: how to remove old queries from map?
-<span class="nc" id="L67">                                } catch (QueryStatementFactoryException | StorageException e) {</span>
-<span class="nc" id="L68">                                    throw new RuntimeException(&quot;Can't resolve compiled query: &quot;, e);</span>
-<span class="nc" id="L69">                                }</span>
+<span class="nc" id="L70">                                } catch (QueryStatementFactoryException | StorageException e) {</span>
+<span class="nc" id="L71">                                    throw new RuntimeException(&quot;Can't resolve compiled query: &quot;, e);</span>
+<span class="nc" id="L72">                                }</span>
                             }
 
-<span class="nc" id="L72">                            return query;</span>
+<span class="nc" id="L75">                            return query;</span>
                         }));
-<span class="nc" id="L74">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
-<span class="nc" id="L75">                    throw new RuntimeException(e);</span>
-<span class="nc" id="L76">                }</span>
-<span class="nc" id="L77">            });</span>
-<span class="nc" id="L78">            bootstrap.add(item);</span>
-<span class="nc" id="L79">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L80">            throw new PluginException(&quot;Can't load compile query plugin&quot;, e);</span>
-<span class="nc" id="L81">        }</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L77">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
+<span class="nc" id="L78">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L79">                }</span>
+<span class="nc" id="L80">            });</span>
+<span class="nc" id="L81">            bootstrap.add(item);</span>
+<span class="nc" id="L82">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L83">            throw new PluginException(&quot;Can't load compile query plugin&quot;, e);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

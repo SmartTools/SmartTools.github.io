@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 2,
+      <title>File: 3,
              Errors: 0,
-             Warnings: 3,
+             Warnings: 0,
              Infos: 0
       </title>
             <link>plugin.compile_query/plugin.compile_query//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -66,7 +66,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="plugin.compile_query/plugin.compile_query//checkstyle.html#info.smart_tools.smartactors.plugin.compile_query.package-info.java">info/smart_tools/smartactors/plugin/compile_query/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
