@@ -20,18 +20,19 @@ public class AuthenticationActor {
     /**
      * Validate the session
      * @param message the incoming message
-     * @throws TaskExecutionException
+     * @throws TaskExecutionException Throw when one of parameters can't be read
+     * @throws AuthFailException Throw when auth info is null or auth info is not equal with session auth info
      */
     public void authenticateSession(final AuthenticationMessage message) throws TaskExecutionException, AuthFailException {
         try {
-<span class="fc" id="L27">            String requestAuthInfo = message.getRequestUserAgent();</span>
-<span class="fc" id="L28">            String sessionAuthInfo = message.getSessionUserAgent();</span>
-<span class="pc bpc" id="L29" title="1 of 4 branches missed.">            if (requestAuthInfo == null || !Objects.equals(requestAuthInfo, sessionAuthInfo)) {</span>
-<span class="fc" id="L30">                throw new AuthFailException(&quot;Failed to validate session&quot;);</span>
+<span class="fc" id="L28">            String requestAuthInfo = message.getRequestUserAgent();</span>
+<span class="fc" id="L29">            String sessionAuthInfo = message.getSessionUserAgent();</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">            if (requestAuthInfo == null || !Objects.equals(requestAuthInfo, sessionAuthInfo)) {</span>
+<span class="fc" id="L31">                throw new AuthFailException(&quot;Failed to validate session&quot;);</span>
             }
-<span class="nc" id="L32">        } catch (ReadValueException e) {</span>
-<span class="nc" id="L33">            throw new TaskExecutionException(&quot;Failed to validate session&quot;, e);</span>
-<span class="fc" id="L34">        }</span>
-<span class="fc" id="L35">    }</span>
+<span class="nc" id="L33">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L34">            throw new TaskExecutionException(&quot;Failed to validate session&quot;, e);</span>
+<span class="fc" id="L35">        }</span>
+<span class="fc" id="L36">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

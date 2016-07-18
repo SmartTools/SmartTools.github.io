@@ -30,20 +30,21 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     /**
      * Constructor
      * @param task the insert DB task
+     * @throws CreateAsyncOperationTask Throw when task can't be created (for example, when can't resolve some of field)
      */
-<span class="nc" id="L34">    public CreateAsyncOperationTask(final IDatabaseTask task) throws CreateAsyncOperationException {</span>
-<span class="nc" id="L35">        this.task = task;</span>
+<span class="nc" id="L35">    public CreateAsyncOperationTask(final IDatabaseTask task) throws CreateAsyncOperationException {</span>
+<span class="nc" id="L36">        this.task = task;</span>
 
         try {
-<span class="nc" id="L38">            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;asyncData&quot;);</span>
-<span class="nc" id="L39">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;done&quot;);</span>
-<span class="nc" id="L40">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;token&quot;);</span>
-<span class="nc" id="L41">            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;expiredTime&quot;);</span>
-<span class="nc" id="L42">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
-<span class="nc" id="L43">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L44">            throw new CreateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
-<span class="nc" id="L45">        }</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L39">            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;asyncData&quot;);</span>
+<span class="nc" id="L40">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;done&quot;);</span>
+<span class="nc" id="L41">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;token&quot;);</span>
+<span class="nc" id="L42">            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;expiredTime&quot;);</span>
+<span class="nc" id="L43">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
+<span class="nc" id="L44">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L45">            throw new CreateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L46">        }</span>
+<span class="nc" id="L47">    }</span>
 
     /**
      * @param query query object
@@ -59,30 +60,30 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
 
-<span class="nc" id="L62">            IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
+<span class="nc" id="L63">            IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
 
-<span class="nc" id="L64">            asyncDataField.out(document, asyncDataField.in(query));</span>
-<span class="nc" id="L65">            doneFlagField.out(document, false);</span>
-<span class="nc" id="L66">            tokenField.out(document, tokenField.in(query));</span>
-<span class="nc" id="L67">            expiredTimeField.out(document, expiredTimeField.in(query));</span>
-<span class="nc" id="L68">            documentField.out(query, document);</span>
+<span class="nc" id="L65">            asyncDataField.out(document, asyncDataField.in(query));</span>
+<span class="nc" id="L66">            doneFlagField.out(document, false);</span>
+<span class="nc" id="L67">            tokenField.out(document, tokenField.in(query));</span>
+<span class="nc" id="L68">            expiredTimeField.out(document, expiredTimeField.in(query));</span>
+<span class="nc" id="L69">            documentField.out(query, document);</span>
 
-<span class="nc" id="L70">            task.prepare(query);</span>
-<span class="nc" id="L71">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L72">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare create async operation&quot;, e);</span>
-<span class="nc" id="L73">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L74">            throw new TaskPrepareException(&quot;Can't prepare query for create async operation cause one of IField.out operation down&quot;, e);</span>
-<span class="nc" id="L75">        }</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L71">            task.prepare(query);</span>
+<span class="nc" id="L72">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L73">            throw new TaskPrepareException(&quot;Can't resolve objects during prepare create async operation&quot;, e);</span>
+<span class="nc" id="L74">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L75">            throw new TaskPrepareException(&quot;Can't prepare query for create async operation cause one of IField.out operation down&quot;, e);</span>
+<span class="nc" id="L76">        }</span>
+<span class="nc" id="L77">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="nc" id="L80">        this.task.setConnection(connection);</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L81">        this.task.setConnection(connection);</span>
+<span class="nc" id="L82">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L85">        this.task.execute();</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L86">        this.task.execute();</span>
+<span class="nc" id="L87">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

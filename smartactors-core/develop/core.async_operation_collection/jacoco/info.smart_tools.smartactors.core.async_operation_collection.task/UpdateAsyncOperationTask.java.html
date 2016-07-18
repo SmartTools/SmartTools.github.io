@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UpdateAsyncOperationTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.async_operation_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.async_operation_collection.task</a> &gt; <span class="el_source">UpdateAsyncOperationTask.java</span></div><h1>UpdateAsyncOperationTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.async_operation_collection.task;
 
-import info.smart_tools.smartactors.core.async_operation_collection.exception.DeleteAsyncOperationException;
 import info.smart_tools.smartactors.core.async_operation_collection.exception.UpdateAsyncOperationException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
@@ -11,7 +10,6 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionExcep
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
@@ -28,37 +26,37 @@ public class UpdateAsyncOperationTask implements IDatabaseTask {
     /**
      * Constructor
      * @param upsertTask nested task for update operation
-     * @throws ResolutionException
+     * @throws ResolutionException Throw when task can't be created (for example, when can't resolve some of field)
      */
-<span class="nc" id="L33">    public UpdateAsyncOperationTask(final IDatabaseTask upsertTask) throws UpdateAsyncOperationException {</span>
-<span class="nc" id="L34">        this.upsertTask = upsertTask;</span>
+<span class="nc" id="L31">    public UpdateAsyncOperationTask(final IDatabaseTask upsertTask) throws UpdateAsyncOperationException {</span>
+<span class="nc" id="L32">        this.upsertTask = upsertTask;</span>
 
         try {
-<span class="nc" id="L37">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document/done&quot;);</span>
-<span class="nc" id="L38">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L39">            throw new UpdateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
-<span class="nc" id="L40">        }</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L35">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document/done&quot;);</span>
+<span class="nc" id="L36">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L37">            throw new UpdateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">    }</span>
 
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-<span class="nc" id="L47">            doneFlagField.out(query, true);</span>
-<span class="nc" id="L48">            upsertTask.prepare(query);</span>
-<span class="nc" id="L49">        } catch (ChangeValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L50">            throw new TaskPrepareException(&quot;Can't prepare query for update into async operation collection&quot;, e);</span>
-<span class="nc" id="L51">        }</span>
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L45">            doneFlagField.out(query, true);</span>
+<span class="nc" id="L46">            upsertTask.prepare(query);</span>
+<span class="nc" id="L47">        } catch (ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L48">            throw new TaskPrepareException(&quot;Can't prepare query for update into async operation collection&quot;, e);</span>
+<span class="nc" id="L49">        }</span>
+<span class="nc" id="L50">    }</span>
 
     @Override
     public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="nc" id="L56">        upsertTask.setConnection(connection);</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L54">        upsertTask.setConnection(connection);</span>
+<span class="nc" id="L55">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L61">        upsertTask.execute();</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L59">        upsertTask.execute();</span>
+<span class="nc" id="L60">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
