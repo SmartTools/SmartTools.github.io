@@ -5,6 +5,7 @@ import info.smart_tools.smartactors.actors.check_user_by_email.wrapper.ActorPara
 import info.smart_tools.smartactors.actors.check_user_by_email.wrapper.MessageWrapper;
 import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
@@ -24,38 +25,40 @@ public class CheckUserByEmailActor {
     /**
      * Constructor
      * @param params the constructor params
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException Throw when can't read some value from message or resolving key or dependency is throw exception
      */
-<span class="fc" id="L29">    public CheckUserByEmailActor(final ActorParams params) throws InvalidArgumentException {</span>
+<span class="fc" id="L30">    public CheckUserByEmailActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
-<span class="fc" id="L31">            collection = IOC.resolve(</span>
-<span class="fc" id="L32">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
-<span class="fc" id="L33">                    params.getCollectionName(),</span>
-<span class="fc" id="L34">                    params.getCollectionKey());</span>
-<span class="nc" id="L35">        } catch (Exception e) {</span>
-<span class="nc" id="L36">            throw new InvalidArgumentException(e);</span>
-<span class="fc" id="L37">        }</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L32">            collection = IOC.resolve(</span>
+<span class="fc" id="L33">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
+<span class="fc" id="L34">                    params.getCollectionName(),</span>
+<span class="fc" id="L35">                    params.getCollectionKey());</span>
+<span class="nc" id="L36">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L37">            throw new InvalidArgumentException(&quot;Can't read some of message values&quot;, e);</span>
+<span class="nc" id="L38">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L39">            throw new InvalidArgumentException(&quot;Can't get key or resolve dependency&quot;, e);</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">    }</span>
 
 
     /**
      * Try to find user with this email in collection
      * @param message the message
-     * @throws NotFoundUserException
-     * @throws TaskExecutionException
+     * @throws NotFoundUserException Throw when user with this email not found
+     * @throws TaskExecutionException Throw in all of other reasons
      */
     public void checkUser(final MessageWrapper message) throws NotFoundUserException, TaskExecutionException {
         try {
-<span class="fc" id="L49">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (users.size() != 1) {</span>
-<span class="fc" id="L51">                throw new NotFoundUserException(&quot;Failed to find user with this email&quot;);</span>
+<span class="fc" id="L52">            List&lt;IObject&gt; users = collection.getItems(message.getEmail());</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (users.size() != 1) {</span>
+<span class="fc" id="L54">                throw new NotFoundUserException(&quot;Failed to find user with this email&quot;);</span>
             }
-<span class="fc" id="L53">            message.setUser(users.get(0));</span>
-<span class="nc" id="L54">        } catch (ReadValueException | GetCacheItemException e) {</span>
-<span class="nc" id="L55">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
-<span class="nc" id="L56">        } catch (ChangeValueException e) {</span>
-<span class="nc" id="L57">            throw new TaskExecutionException(&quot;Failed to set user to message&quot;, e);</span>
-<span class="fc" id="L58">        }</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L56">            message.setUser(users.get(0));</span>
+<span class="nc" id="L57">        } catch (ReadValueException | GetCacheItemException e) {</span>
+<span class="nc" id="L58">            throw new TaskExecutionException(&quot;Failed to get email from message&quot;, e);</span>
+<span class="nc" id="L59">        } catch (ChangeValueException e) {</span>
+<span class="nc" id="L60">            throw new TaskExecutionException(&quot;Failed to set user to message&quot;, e);</span>
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
