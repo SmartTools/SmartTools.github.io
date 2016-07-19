@@ -52,40 +52,42 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      @Override
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> load() <strong class="jxr_keyword">throws</strong> PluginException {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> postgresConnectionPoolKey = Keys.getOrAdd(<span class="jxr_string">"PostgresConnectionPool"</span>);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>              IBootstrapItem&lt;String&gt; item = <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/bootstrap_item/BootstrapItem.html">BootstrapItem</a>(<span class="jxr_string">"PostgresConnectionPoolPlugin"</span>);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              item.process(() -&gt; {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      IOC.register(postgresConnectionPoolKey, <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/create_new_instance_strategy/CreateNewInstanceStrategy.html">CreateNewInstanceStrategy</a>(
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                              (args) -&gt; {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                                  <a href="../../../../../info/smart_tools/smartactors/core/postgres_connection/wrapper/ConnectionOptions.html">ConnectionOptions</a> connectionOptions = (ConnectionOptions) args[0];
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                                  <strong class="jxr_keyword">if</strong> (connectionOptions == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>                                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Can't resolve connection pool: connectionOptions is null"</span>);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>                                  }
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                                  <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                                      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/pool/Pool.html">Pool</a>(connectionOptions.getMaxConnections(), () -&gt; {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>                                          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                                              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/postgres_connection/PostgresConnection.html">PostgresConnection</a>(connectionOptions);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>                                          } <strong class="jxr_keyword">catch</strong> (StorageException e) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>                                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>                                          }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                                      });
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                                  } <strong class="jxr_keyword">catch</strong> (ReadValueException e) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Can't create PostgresConnectionPool"</span>, e);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                                  }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>                              }));
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  } <strong class="jxr_keyword">catch</strong> (RegistrationException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  }
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>              });
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              bootstrap.add(item);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          } <strong class="jxr_keyword">catch</strong> (ResolutionException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iplugin/exception/PluginException.html">PluginException</a>(<span class="jxr_string">"Can't load postgres connection pool plugin"</span>, e);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              IBootstrapItem&lt;String&gt; item = <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/bootstrap_item/BootstrapItem.html">BootstrapItem</a>(<span class="jxr_string">"PostgresConnectionPoolPlugin"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              item
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  .after(<span class="jxr_string">"IOC"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  .process(() -&gt; {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                          <a href="../../../../../info/smart_tools/smartactors/core/ikey/IKey.html">IKey</a> postgresConnectionPoolKey = Keys.getOrAdd(<span class="jxr_string">"PostgresConnectionPool"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                          IOC.register(postgresConnectionPoolKey, <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/create_new_instance_strategy/CreateNewInstanceStrategy.html">CreateNewInstanceStrategy</a>(
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                              (args) -&gt; {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                                  <a href="../../../../../info/smart_tools/smartactors/core/postgres_connection/wrapper/ConnectionOptions.html">ConnectionOptions</a> connectionOptions = (ConnectionOptions) args[0];
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                                  <strong class="jxr_keyword">if</strong> (connectionOptions == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Can't resolve connection pool: connectionOptions is null"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                                  }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                                  <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                                      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/pool/Pool.html">Pool</a>(connectionOptions.getMaxConnections(), () -&gt; {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>                                          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                                              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/postgres_connection/PostgresConnection.html">PostgresConnection</a>(connectionOptions);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                                          } <strong class="jxr_keyword">catch</strong> (StorageException e) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                                          }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                                      });
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                                  } <strong class="jxr_keyword">catch</strong> (ReadValueException e) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Can't create PostgresConnectionPool"</span>, e);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                                  }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                              }));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                      } <strong class="jxr_keyword">catch</strong> (ResolutionException | RegistrationException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                      }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>              });
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              bootstrap.add(item);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iplugin/exception/PluginException.html">PluginException</a>(<span class="jxr_string">"Can't load postgres connection pool plugin"</span>, e);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 2,
+      <title>File: 3,
              Errors: 0,
-             Warnings: 0,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>core.immutable_receiver_chain/core.immutable_receiver_chain//checkstyle.html</link>
@@ -44,6 +44,20 @@ under the License.
             </tr>
           </thead>
           <tbody>
+                          <tr>
+                <td>
+                  <a href="core.immutable_receiver_chain/core.immutable_receiver_chain//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.ImmutableReceiverChainResolutionStrategy.java">info/smart_tools/smartactors/core/receiver_chain/ImmutableReceiverChainResolutionStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
                           <tr>
                 <td>
                   <a href="core.immutable_receiver_chain/core.immutable_receiver_chain//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.package-info.java">info/smart_tools/smartactors/core/receiver_chain/package-info.java</a>

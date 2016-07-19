@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ImmutableReceiverChainResolutionStrategy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.immutable_receiver_chain</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.receiver_chain</a> &gt; <span class="el_source">ImmutableReceiverChainResolutionStrategy.java</span></div><h1>ImmutableReceiverChainResolutionStrategy.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.receiver_chain;
+
+import info.smart_tools.smartactors.core.ichain_storage.IChainStorage;
+import info.smart_tools.smartactors.core.ichain_storage.exceptions.ChainNotFoundException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
+import info.smart_tools.smartactors.core.irouter.IRouter;
+import info.smart_tools.smartactors.core.irouter.exceptions.RouteNotFoundException;
+import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.core.message_processing.IReceiverChain;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+
+/**
+ * Strategy of creation of an {@link ImmutableReceiverChain}.
+ *
+ * Expected arguments:
+ * - {@link Object} - identifier of the chain
+ * - {@link IObject} describing the chain
+ * - {@link IChainStorage} to look for exceptional chains
+ * - {@link IRouter} to find the receivers
+ * Expected format of description:
+ * &lt;pre&gt;
+ *     {
+ *         &quot;steps&quot;: [
+ *             {                            // object describing a single step of message processing (a single receiver)
+ *                                          // this object will be passed to {@link IMessageReceiver#receive} method
+ *                                          // as second argument.
+ *                 &quot;target&quot;: &quot;theTarget&quot;,   // (just for example) fields defining the receiver. concrete field names
+ *                                          // depend on implementation of &quot;receiver_id_from_iobject&quot; strategy
+ *             },
+ *             {
+ *                 . . .
+ *             }
+ *         ],
+ *         &quot;exceptional&quot;: [                 // exception chains in the order the exception classes should be checked
+ *             {
+ *                 &quot;class&quot;: &quot;java.lang.NullPointerException&quot;,   // exception class
+ *                 &quot;chain&quot;: &quot;myExceptionalChain&quot;                // exceptional chain name
+ *             },
+ *             {
+ *                 &quot;class&quot;: &quot;org.my.Exception&quot;,
+ *                 &quot;chain&quot;: &quot;myExceptionalChain2&quot;
+ *             }
+ *         ]
+ *     }
+ * &lt;/pre&gt;
+ */
+<span class="nc" id="L57">public class ImmutableReceiverChainResolutionStrategy implements IResolveDependencyStrategy {</span>
+    @Override
+    public &lt;T&gt; T resolve(final Object... args) throws ResolveDependencyStrategyException {
+        try {
+<span class="nc" id="L61">            Object chainId = args[0];</span>
+<span class="nc" id="L62">            IObject description = (IObject) args[1];</span>
+<span class="nc" id="L63">            IChainStorage chainStorage = (IChainStorage) args[2];</span>
+<span class="nc" id="L64">            IRouter router = (IRouter) args[3];</span>
+
+<span class="nc" id="L66">            IKey fieldNameKey = IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString());</span>
+<span class="nc" id="L67">            IKey receiverIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;receiver_id_from_iobject&quot;);</span>
+<span class="nc" id="L68">            IKey chainIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;chain_id&quot;);</span>
+<span class="nc" id="L69">            IFieldName stepsFieldName = IOC.resolve(fieldNameKey, &quot;steps&quot;);</span>
+<span class="nc" id="L70">            IFieldName exceptionalChainsFieldName = IOC.resolve(fieldNameKey, &quot;exceptional&quot;);</span>
+<span class="nc" id="L71">            IFieldName exceptionClassFieldName = IOC.resolve(fieldNameKey, &quot;class&quot;);</span>
+<span class="nc" id="L72">            IFieldName exceptionChainFieldName = IOC.resolve(fieldNameKey, &quot;chain&quot;);</span>
+
+<span class="nc" id="L74">            List chainSteps = (List) description.getValue(stepsFieldName);</span>
+<span class="nc" id="L75">            List exceptionalChains = (List) description.getValue(exceptionalChainsFieldName);</span>
+
+<span class="nc" id="L77">            IMessageReceiver[] receivers = new IMessageReceiver[chainSteps.size()];</span>
+<span class="nc" id="L78">            IObject[] arguments = new IObject[chainSteps.size()];</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for (int i = 0; i &lt; chainSteps.size(); i++) {</span>
+<span class="nc" id="L81">                IObject step = (IObject) chainSteps.get(i);</span>
+
+<span class="nc" id="L83">                receivers[i] = router.route(IOC.resolve(receiverIdKey, step));</span>
+<span class="nc" id="L84">                arguments[i] = step;</span>
+            }
+
+<span class="nc" id="L87">            LinkedHashMap&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; exceptionalChainsMap = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            for (Object chainDesc : exceptionalChains) {</span>
+<span class="nc" id="L90">                IObject desc = (IObject) chainDesc;</span>
+
+<span class="nc" id="L92">                Class&lt;?&gt; clazz = this.getClass().getClassLoader().loadClass(String.valueOf(desc.getValue(exceptionClassFieldName)));</span>
+<span class="nc" id="L93">                IReceiverChain chain = chainStorage.resolve(IOC.resolve(chainIdKey, desc.getValue(exceptionChainFieldName)));</span>
+
+<span class="nc" id="L95">                exceptionalChainsMap.put((Class&lt;? extends Throwable&gt;) clazz, chain);</span>
+<span class="nc" id="L96">            }</span>
+
+<span class="nc" id="L98">            return (T) new ImmutableReceiverChain(chainId.toString(), receivers, arguments, exceptionalChainsMap);</span>
+<span class="nc" id="L99">        } catch (ChainNotFoundException | ClassNotFoundException | ResolutionException | ReadValueException |</span>
+                RouteNotFoundException | InvalidArgumentException e) {
+<span class="nc" id="L101">            throw new ResolveDependencyStrategyException(e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

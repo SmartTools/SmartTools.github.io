@@ -37,6 +37,9 @@ info.smart_tools.smartactors.core.cached_collection.wrapper
 info.smart_tools.smartactors.core.cached_collection.wrapper.delete
 info.smart_tools.smartactors.core.cached_collection.wrapper.get_item
 info.smart_tools.smartactors.core.cached_collection.wrapper.upsert
+info.smart_tools.smartactors.core.chain_call_receiver
+info.smart_tools.smartactors.core.chain_call_receiver.exceptions
+info.smart_tools.smartactors.core.chain_storage
 info.smart_tools.smartactors.core.class_generator_java_compile_api
 info.smart_tools.smartactors.core.create_new_instance_strategy
 info.smart_tools.smartactors.core.db_storage
@@ -77,6 +80,8 @@ info.smart_tools.smartactors.core.ibootstrap
 info.smart_tools.smartactors.core.ibootstrap.exception
 info.smart_tools.smartactors.core.ibootstrap_item
 info.smart_tools.smartactors.core.ibootstrap_item.exception
+info.smart_tools.smartactors.core.ichain_storage
+info.smart_tools.smartactors.core.ichain_storage.exceptions
 info.smart_tools.smartactors.core.iclass_generator
 info.smart_tools.smartactors.core.iclass_generator.exception
 info.smart_tools.smartactors.core.idatabase_task
@@ -116,6 +121,8 @@ info.smart_tools.smartactors.core.iresolve_dependency_strategy
 info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception
 info.smart_tools.smartactors.core.iresource_source
 info.smart_tools.smartactors.core.iresource_source.exceptions
+info.smart_tools.smartactors.core.irouter
+info.smart_tools.smartactors.core.irouter.exceptions
 info.smart_tools.smartactors.core.iscope
 info.smart_tools.smartactors.core.iscope.exception
 info.smart_tools.smartactors.core.iscope_provider_container
@@ -132,6 +139,7 @@ info.smart_tools.smartactors.core.itask_dispatcher
 info.smart_tools.smartactors.core.ithread_pool
 info.smart_tools.smartactors.core.iwrapper_generator
 info.smart_tools.smartactors.core.iwrapper_generator.exception
+info.smart_tools.smartactors.core.map_router
 info.smart_tools.smartactors.core.message_processing
 info.smart_tools.smartactors.core.message_processing.exceptions
 info.smart_tools.smartactors.core.message_processing_sequence
@@ -171,8 +179,10 @@ info.smart_tools.smartactors.core.thread_pool
 info.smart_tools.smartactors.core.wds_object
 info.smart_tools.smartactors.core.wrapper_generator
 info.smart_tools.smartactors.core.wrapper_generator.class_builder
+info.smart_tools.smartactors.plugin.cached_collection
 info.smart_tools.smartactors.plugin.compile_query
 info.smart_tools.smartactors.plugin.get_form_actor
+info.smart_tools.smartactors.plugin.ifieldname
 info.smart_tools.smartactors.plugin.load_scope_povider
 info.smart_tools.smartactors.plugin.postges_connection_pool
 info.smart_tools.smartactors.plugin.subscribe_scope_provider_on_scope_creation
