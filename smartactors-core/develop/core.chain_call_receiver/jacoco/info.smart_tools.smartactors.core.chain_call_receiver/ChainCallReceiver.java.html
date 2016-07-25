@@ -43,17 +43,15 @@ public class ChainCallReceiver implements IMessageReceiver {
 <span class="fc" id="L43">    }</span>
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction&lt;Throwable&gt; onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
         try {
 <span class="fc" id="L49">            Object chainId = chainChoiceStrategy.chooseChain(processor);</span>
 <span class="fc" id="L50">            IReceiverChain chain = chainStorage.resolve(chainId);</span>
 <span class="fc" id="L51">            processor.getSequence().callChain(chain);</span>
-<span class="fc" id="L52">            onEnd.execute(null);</span>
-<span class="fc" id="L53">        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException |</span>
-                 ActionExecuteException | InvalidArgumentException e) {
-<span class="fc" id="L55">            throw new MessageReceiveException(&quot;Could not call nested chain.&quot;, e);</span>
-<span class="fc" id="L56">        }</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L52">        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException e) {</span>
+<span class="fc" id="L53">            throw new MessageReceiveException(&quot;Could not call nested chain.&quot;, e);</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc" id="L55">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,3 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.message_processor,info.smart_tools.smartactors.core.message_processor,MessageProcessor.ReceiverCallback,3,34,1,3,1,10,1,3,0,2
-core.message_processor,info.smart_tools.smartactors.core.message_processor,MessageProcessor,4,112,0,4,2,36,0,12,0,10
+core.message_processor,info.smart_tools.smartactors.core.message_processor,MessageProcessor,10,382,3,19,2,80,3,22,0,14

@@ -1,3 +1,3 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 core.chain_call_receiver,info.smart_tools.smartactors.core.chain_call_receiver.exceptions,ChainChoiceException,0,9,0,0,0,4,0,2,0,2
-core.chain_call_receiver,info.smart_tools.smartactors.core.chain_call_receiver,ChainCallReceiver,0,51,0,4,0,16,0,4,0,2
+core.chain_call_receiver,info.smart_tools.smartactors.core.chain_call_receiver,ChainCallReceiver,0,48,0,4,0,15,0,4,0,2

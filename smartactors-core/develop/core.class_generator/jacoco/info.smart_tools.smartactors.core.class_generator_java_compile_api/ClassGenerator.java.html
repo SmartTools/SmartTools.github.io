@@ -40,21 +40,20 @@ public class ClassGenerator implements IClassGenerator&lt;String&gt; {
         }
         try {
 <span class="fc" id="L42">            String fullClassName = packageName + &quot;.&quot; + className;</span>
-<span class="fc" id="L43">            Class&lt;?&gt; compiledClass = this.compiler.compile(fullClassName, source, null);</span>
-            //classLoader.
-<span class="fc" id="L45">            return compiledClass;</span>
-<span class="fc" id="L46">        } catch (Throwable e) {</span>
-<span class="fc" id="L47">            throw new ClassGenerationException(&quot;Could not generate class.&quot;, e);</span>
+<span class="fc" id="L43">            Class&lt;?&gt; compiledClass = this.compiler.compile(fullClassName, source);</span>
+<span class="fc" id="L44">            return compiledClass;</span>
+<span class="fc" id="L45">        } catch (Throwable e) {</span>
+<span class="fc" id="L46">            throw new ClassGenerationException(&quot;Could not generate class.&quot;, e);</span>
         }
     }
 
     private String getFirstSubstringByPattern(final String source, final Pattern pattern) {
-<span class="fc" id="L52">        Matcher matcher = pattern.matcher(source);</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (matcher.find()) {</span>
-<span class="fc" id="L54">            return matcher.group(1);</span>
+<span class="fc" id="L51">        Matcher matcher = pattern.matcher(source);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (matcher.find()) {</span>
+<span class="fc" id="L53">            return matcher.group(1);</span>
         }
 
-<span class="fc" id="L57">        return null;</span>
+<span class="fc" id="L56">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -63,7 +63,7 @@ import java.util.List;
 <span class="nc" id="L63">            IChainStorage chainStorage = (IChainStorage) args[2];</span>
 <span class="nc" id="L64">            IRouter router = (IRouter) args[3];</span>
 
-<span class="nc" id="L66">            IKey fieldNameKey = IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString());</span>
+<span class="nc" id="L66">            IKey fieldNameKey = IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName());</span>
 <span class="nc" id="L67">            IKey receiverIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;receiver_id_from_iobject&quot;);</span>
 <span class="nc" id="L68">            IKey chainIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), &quot;chain_id&quot;);</span>
 <span class="nc" id="L69">            IFieldName stepsFieldName = IOC.resolve(fieldNameKey, &quot;steps&quot;);</span>

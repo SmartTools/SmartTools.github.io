@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SkipReceiverExceptionHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.exception_handling_receivers</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.exception_handling_receivers</a> &gt; <span class="el_source">SkipReceiverExceptionHandler.java</span></div><h1>SkipReceiverExceptionHandler.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.exception_handling_receivers;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
-import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -20,21 +18,19 @@ public class SkipReceiverExceptionHandler extends ExceptionHandlingReceiver {
      */
     public SkipReceiverExceptionHandler()
             throws ResolutionException {
-<span class="fc" id="L23">        super();</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L21">        super();</span>
+<span class="fc" id="L22">    }</span>
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction&lt;Throwable&gt; onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
-<span class="fc" id="L29">        IObject context = processor.getContext();</span>
+<span class="fc" id="L27">        IObject context = processor.getContext();</span>
 
         try {
-<span class="fc" id="L32">            processor.getSequence().goTo(getCauseLevel(context), getCauseStep(context) + 1);</span>
-
-<span class="fc" id="L34">            onEnd.execute(null);</span>
-<span class="fc" id="L35">        } catch (ReadValueException | InvalidArgumentException | ActionExecuteException e) {</span>
-<span class="fc" id="L36">            throw new MessageReceiveException(&quot;Exception occurred while skipping a receiver thrown exception&quot;, e);</span>
-<span class="fc" id="L37">        }</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L30">            processor.getSequence().goTo(getCauseLevel(context), getCauseStep(context) + 1);</span>
+<span class="fc" id="L31">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L32">            throw new MessageReceiveException(&quot;Exception occurred while skipping a receiver thrown exception&quot;, e);</span>
+<span class="fc" id="L33">        }</span>
+<span class="fc" id="L34">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

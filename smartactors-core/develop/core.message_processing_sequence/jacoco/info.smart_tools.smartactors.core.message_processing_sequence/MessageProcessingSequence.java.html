@@ -59,11 +59,11 @@ public class MessageProcessingSequence implements IMessageProcessingSequence {
 <span class="fc" id="L59">        this.chainStack = new IReceiverChain[stackDepth];</span>
 <span class="fc" id="L60">        this.stepStack = new int[stackDepth];</span>
 
-<span class="fc" id="L62">        causeLevelFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString()), &quot;causeLevel&quot;);</span>
-<span class="fc" id="L63">        causeStepFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString()), &quot;causeStep&quot;);</span>
-<span class="fc" id="L64">        catchLevelFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString()), &quot;catchLevel&quot;);</span>
-<span class="fc" id="L65">        catchStepFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString()), &quot;catchStep&quot;);</span>
-<span class="fc" id="L66">        exceptionFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString()), &quot;exception&quot;);</span>
+<span class="fc" id="L62">        causeLevelFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;causeLevel&quot;);</span>
+<span class="fc" id="L63">        causeStepFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;causeStep&quot;);</span>
+<span class="fc" id="L64">        catchLevelFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;catchLevel&quot;);</span>
+<span class="fc" id="L65">        catchStepFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;catchStep&quot;);</span>
+<span class="fc" id="L66">        exceptionFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;exception&quot;);</span>
 
 <span class="fc" id="L68">        reset();</span>
 <span class="fc" id="L69">    }</span>

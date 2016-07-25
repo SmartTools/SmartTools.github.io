@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 7,
+      <title>File: 16,
              Errors: 0,
-             Warnings: 0,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>core.class_generator/core.class_generator//checkstyle.html</link>
@@ -47,6 +47,118 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.InMemoryCodeCompiler.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/InMemoryCodeCompiler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.Modifiers.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/Modifiers.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ConstructorInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/ConstructorInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ClassBuilder.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/ClassBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.MethodInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/MethodInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.MethodParameterInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/MethodParameterInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ClassInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/ClassInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.package-info.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ConstructorParameterInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/ConstructorParameterInfo.java</a>
                 </td>
                 <td>
                   0
@@ -89,6 +201,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.CompiledCode.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/CompiledCode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.class_generator/core.class_generator//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.FieldInfo.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/class_builder/FieldInfo.java</a>
                 </td>
                 <td>
                   0

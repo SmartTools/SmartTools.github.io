@@ -72,7 +72,7 @@ public class WDSObjectField implements IField {
 
     @Override
     public &lt;T&gt; T in(final IObject env)
-            throws ReadValueException, InvalidArgumentException, ClassCastException {
+            throws ReadValueException, InvalidArgumentException {
 <span class="fc bfc" id="L76" title="All 2 branches covered.">        if (null == env) {</span>
 <span class="fc" id="L77">            throw new InvalidArgumentException(&quot;Environment should not be null.&quot;);</span>
         }
@@ -100,180 +100,186 @@ public class WDSObjectField implements IField {
     }
 
     @Override
+    public &lt;T&gt; T in(final IObject env, final Class type)
+            throws ReadValueException, InvalidArgumentException {
+<span class="fc" id="L105">        throw new ReadValueException(&quot;Method not implemented.&quot;);</span>
+    }
+
+    @Override
     public &lt;T&gt; void out(final IObject env, final T in)
             throws ChangeValueException, InvalidArgumentException {
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (null == env) {</span>
-<span class="fc" id="L106">            throw new InvalidArgumentException(&quot;Environment should not be null.&quot;);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (null == env) {</span>
+<span class="fc" id="L112">            throw new InvalidArgumentException(&quot;Environment should not be null.&quot;);</span>
         }
-<span class="fc" id="L108">        Object value = in;</span>
+<span class="fc" id="L114">        Object value = in;</span>
         try {
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            for (IObject rule : rules) {</span>
-<span class="fc" id="L111">                List&lt;String&gt; args = (ArrayList&lt;String&gt;) rule.getValue(this.args);</span>
-<span class="fc" id="L112">                String name = (String) rule.getValue(this.strategyName);</span>
-<span class="fc" id="L113">                IFunction&lt;StrategyAndArgs, Object&gt; func = this.strategyExecutors.get(name);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">                if (null == func) {</span>
-<span class="fc" id="L115">                    func = this.strategyExecutors.get(OUTER_STRATEGY_NAME);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            for (IObject rule : rules) {</span>
+<span class="fc" id="L117">                List&lt;String&gt; args = (ArrayList&lt;String&gt;) rule.getValue(this.args);</span>
+<span class="fc" id="L118">                String name = (String) rule.getValue(this.strategyName);</span>
+<span class="fc" id="L119">                IFunction&lt;StrategyAndArgs, Object&gt; func = this.strategyExecutors.get(name);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">                if (null == func) {</span>
+<span class="fc" id="L121">                    func = this.strategyExecutors.get(OUTER_STRATEGY_NAME);</span>
                 }
-<span class="fc" id="L117">                value = func.execute(</span>
-<span class="fc" id="L118">                        new StrategyAndArgs(this.strategies.get(name), env, args, value)</span>
+<span class="fc" id="L123">                value = func.execute(</span>
+<span class="fc" id="L124">                        new StrategyAndArgs(this.strategies.get(name), env, args, value)</span>
                 );
-<span class="fc" id="L120">            }</span>
-<span class="fc" id="L121">        } catch (Exception e) {</span>
-<span class="fc" id="L122">            throw new ChangeValueException(&quot;Could not apply rules.&quot;, e);</span>
-<span class="fc" id="L123">        }</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L126">            }</span>
+<span class="fc" id="L127">        } catch (Exception e) {</span>
+<span class="fc" id="L128">            throw new ChangeValueException(&quot;Could not apply rules.&quot;, e);</span>
+<span class="fc" id="L129">        }</span>
+<span class="fc" id="L130">    }</span>
 
     private Object getValueFromNestedIObject(final IObject source, final String location)
             throws ReadValueException {
         try {
-<span class="fc" id="L129">            String[] separated = location.split(SPLITTER);</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">            if (separated.length == 1) {</span>
-<span class="fc" id="L131">                return source.getValue(IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[0]));</span>
+<span class="fc" id="L135">            String[] separated = location.split(SPLITTER);</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            if (separated.length == 1) {</span>
+<span class="fc" id="L137">                return source.getValue(IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[0]));</span>
             }
-<span class="fc" id="L133">            return getNestedIObject(source, separated).getValue(</span>
-<span class="fc" id="L134">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[separated.length - 1])</span>
+<span class="fc" id="L139">            return getNestedIObject(source, separated).getValue(</span>
+<span class="fc" id="L140">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separated[separated.length - 1])</span>
             );
-<span class="fc" id="L136">        } catch (Throwable e) {</span>
-<span class="fc" id="L137">            throw new ReadValueException(&quot;Could not read value from IObject&quot;, e);</span>
+<span class="fc" id="L142">        } catch (Throwable e) {</span>
+<span class="fc" id="L143">            throw new ReadValueException(&quot;Could not read value from IObject&quot;, e);</span>
         }
     }
 
     private IObject getNestedIObject(final IObject source, final String[] separatedPath)
             throws Exception {
         try {
-<span class="fc" id="L144">            IObject nestedObject = (IObject) source.getValue(</span>
-<span class="fc" id="L145">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separatedPath[0])</span>
+<span class="fc" id="L150">            IObject nestedObject = (IObject) source.getValue(</span>
+<span class="fc" id="L151">                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separatedPath[0])</span>
             );
-<span class="fc bfc" id="L147" title="All 2 branches covered.">            for (int i = 1; i &lt; separatedPath.length - 1; ++i) {</span>
-<span class="fc" id="L148">                nestedObject = (IObject) nestedObject.getValue(</span>
-<span class="fc" id="L149">                        IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separatedPath[i])</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">            for (int i = 1; i &lt; separatedPath.length - 1; ++i) {</span>
+<span class="fc" id="L154">                nestedObject = (IObject) nestedObject.getValue(</span>
+<span class="fc" id="L155">                        IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), separatedPath[i])</span>
                 );
             }
 
-<span class="fc" id="L153">            return nestedObject;</span>
-<span class="fc" id="L154">        } catch (Throwable e) {</span>
-<span class="fc" id="L155">            throw new ReadValueException(&quot;Could not read nested IObject.&quot;, e);</span>
+<span class="fc" id="L159">            return nestedObject;</span>
+<span class="fc" id="L160">        } catch (Throwable e) {</span>
+<span class="fc" id="L161">            throw new ReadValueException(&quot;Could not read nested IObject.&quot;, e);</span>
         }
     }
 
     private void initializeStrategyExecutors() {
-<span class="fc" id="L160">        this.strategyExecutors.put(</span>
+<span class="fc" id="L166">        this.strategyExecutors.put(</span>
                 INNER_SETTER_STRATEGY_NAME,
-<span class="fc" id="L162">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
+<span class="fc" id="L168">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
                     @Override
                     public Object execute(final StrategyAndArgs o)
                             throws FunctionExecutionException, InvalidArgumentException {
                         try {
-<span class="fc" id="L167">                            Object value = resolveSingleArgument(o.getArgs().get(0), o.getEnv(), o.getLocalValue());</span>
-<span class="fc" id="L168">                            String source = o.getArgs().get(1);</span>
-<span class="fc" id="L169">                            String[] split = source.split(SPLITTER);</span>
-<span class="fc" id="L170">                            String fieldName = split[split.length - 1];</span>
-<span class="fc" id="L171">                            String path = source.substring(0, source.lastIndexOf(SLASH));</span>
-<span class="fc" id="L172">                            ((IObject) getValueFromNestedIObject(o.getEnv(), path)).setValue(</span>
-<span class="fc" id="L173">                                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), fieldName), value</span>
+<span class="fc" id="L173">                            Object value = resolveSingleArgument(o.getArgs().get(0), o.getEnv(), o.getLocalValue());</span>
+<span class="fc" id="L174">                            String source = o.getArgs().get(1);</span>
+<span class="fc" id="L175">                            String[] split = source.split(SPLITTER);</span>
+<span class="fc" id="L176">                            String fieldName = split[split.length - 1];</span>
+<span class="fc" id="L177">                            String path = source.substring(0, source.lastIndexOf(SLASH));</span>
+<span class="fc" id="L178">                            ((IObject) getValueFromNestedIObject(o.getEnv(), path)).setValue(</span>
+<span class="fc" id="L179">                                    IOC.resolve(Keys.getOrAdd(FieldName.class.getCanonicalName()), fieldName), value</span>
                             );
 
-<span class="fc" id="L176">                            return null;</span>
-<span class="fc" id="L177">                        } catch (Throwable e) {</span>
-<span class="fc" id="L178">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
+<span class="fc" id="L182">                            return null;</span>
+<span class="fc" id="L183">                        } catch (Throwable e) {</span>
+<span class="fc" id="L184">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
                         }
                     }
                 }
         );
-<span class="fc" id="L183">        this.strategyExecutors.put(</span>
+<span class="fc" id="L189">        this.strategyExecutors.put(</span>
                 INNER_GETTER_STRATEGY_NAME,
-<span class="fc" id="L185">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
+<span class="fc" id="L191">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
                     @Override
                     public Object execute(final StrategyAndArgs o)
                             throws FunctionExecutionException, InvalidArgumentException {
                         try {
-<span class="fc" id="L190">                            return resolveSingleArgument(o.getArgs().get(0), o.getEnv(), o.getLocalValue());</span>
-<span class="fc" id="L191">                        } catch (Throwable e) {</span>
-<span class="fc" id="L192">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
+<span class="fc" id="L196">                            return resolveSingleArgument(o.getArgs().get(0), o.getEnv(), o.getLocalValue());</span>
+<span class="fc" id="L197">                        } catch (Throwable e) {</span>
+<span class="fc" id="L198">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
                         }
                     }
                 }
         );
-<span class="fc" id="L197">        this.strategyExecutors.put(</span>
+<span class="fc" id="L203">        this.strategyExecutors.put(</span>
                 OUTER_STRATEGY_NAME,
-<span class="fc" id="L199">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
+<span class="fc" id="L205">                new IFunction&lt;StrategyAndArgs, Object&gt;() {</span>
                     @Override
                     public Object execute(final StrategyAndArgs o)
                             throws FunctionExecutionException, InvalidArgumentException {
                         try {
-<span class="fc" id="L204">                            return o.getStrategy().resolve(resolveArguments(</span>
-<span class="fc" id="L205">                                    o.getArgs(), o.getEnv(), o.getLocalValue())</span>
+<span class="fc" id="L210">                            return o.getStrategy().resolve(resolveArguments(</span>
+<span class="fc" id="L211">                                    o.getArgs(), o.getEnv(), o.getLocalValue())</span>
                             );
-<span class="fc" id="L207">                        } catch (Throwable e) {</span>
-<span class="fc" id="L208">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
+<span class="fc" id="L213">                        } catch (Throwable e) {</span>
+<span class="fc" id="L214">                            throw new FunctionExecutionException(&quot;Could not execute function.&quot;, e);</span>
                         }
                     }
                 }
         );
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L219">    }</span>
 
     private void initializeArgumentsResolvers() {
-<span class="fc" id="L216">        this.argumentsResolvers.put(</span>
+<span class="fc" id="L222">        this.argumentsResolvers.put(</span>
                 LOCAL_KEYWORD,
-<span class="fc" id="L218">                new IFunction&lt;Arg, Object&gt;() {</span>
+<span class="fc" id="L224">                new IFunction&lt;Arg, Object&gt;() {</span>
                     @Override
                     public Object execute(final Arg o) throws FunctionExecutionException, InvalidArgumentException {
-<span class="fc" id="L221">                        return o.getLocalValue();</span>
+<span class="fc" id="L227">                        return o.getLocalValue();</span>
                     }
                 }
         );
-<span class="fc" id="L225">        this.argumentsResolvers.put(</span>
+<span class="fc" id="L231">        this.argumentsResolvers.put(</span>
                 CONST_KEYWORD,
-<span class="fc" id="L227">                new IFunction&lt;Arg, Object&gt;() {</span>
+<span class="fc" id="L233">                new IFunction&lt;Arg, Object&gt;() {</span>
                     @Override
                     public Object execute(final Arg o) throws FunctionExecutionException, InvalidArgumentException {
-<span class="fc" id="L230">                        return o.getArg().split(SPLITTER)[1];</span>
+<span class="fc" id="L236">                        return o.getArg().split(SPLITTER)[1];</span>
                     }
                 }
         );
-<span class="fc" id="L234">        this.argumentsResolvers.put(</span>
+<span class="fc" id="L240">        this.argumentsResolvers.put(</span>
                 DEFAULT_KEYWORD,
-<span class="fc" id="L236">                new IFunction&lt;Arg, Object&gt;() {</span>
+<span class="fc" id="L242">                new IFunction&lt;Arg, Object&gt;() {</span>
                     @Override
                     public Object execute(final Arg o) throws FunctionExecutionException, InvalidArgumentException {
                         try {
-<span class="fc" id="L240">                            return getValueFromNestedIObject(o.getEnv(), o.getArg());</span>
-<span class="fc" id="L241">                        } catch (Throwable e) {</span>
-<span class="fc" id="L242">                            throw new InvalidArgumentException(&quot;Could not get value from IObject&quot;, e);</span>
+<span class="fc" id="L246">                            return getValueFromNestedIObject(o.getEnv(), o.getArg());</span>
+<span class="fc" id="L247">                        } catch (Throwable e) {</span>
+<span class="fc" id="L248">                            throw new InvalidArgumentException(&quot;Could not get value from IObject&quot;, e);</span>
                         }
                     }
                 }
         );
-<span class="fc" id="L247">    }</span>
+<span class="fc" id="L253">    }</span>
 
     private Object[] resolveArguments(
             final List&lt;String&gt; arguments,
             final IObject env,
             final Object localValue
     ) throws InvalidArgumentException {
-<span class="fc" id="L254">        Object[] resolvedArgs = new Object[arguments.size()];</span>
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        for (int i = 0; i &lt; arguments.size(); ++i) {</span>
-<span class="fc" id="L256">            String key = arguments.get(i).split(SPLITTER)[0];</span>
-<span class="fc" id="L257">            IFunction&lt;Arg, Object&gt; func = this.argumentsResolvers.get(key);</span>
-<span class="fc bfc" id="L258" title="All 2 branches covered.">            if (null == func) {</span>
-<span class="fc" id="L259">                func = this.argumentsResolvers.get(DEFAULT_KEYWORD);</span>
+<span class="fc" id="L260">        Object[] resolvedArgs = new Object[arguments.size()];</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        for (int i = 0; i &lt; arguments.size(); ++i) {</span>
+<span class="fc" id="L262">            String key = arguments.get(i).split(SPLITTER)[0];</span>
+<span class="fc" id="L263">            IFunction&lt;Arg, Object&gt; func = this.argumentsResolvers.get(key);</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">            if (null == func) {</span>
+<span class="fc" id="L265">                func = this.argumentsResolvers.get(DEFAULT_KEYWORD);</span>
             }
-<span class="fc" id="L261">            resolvedArgs[i] = resolveSingleArgument(arguments.get(i), env, localValue);</span>
+<span class="fc" id="L267">            resolvedArgs[i] = resolveSingleArgument(arguments.get(i), env, localValue);</span>
         }
-<span class="fc" id="L263">        return resolvedArgs;</span>
+<span class="fc" id="L269">        return resolvedArgs;</span>
     }
 
     private Object resolveSingleArgument(final String arg, final IObject env, final Object localValue)
             throws InvalidArgumentException {
-<span class="fc" id="L268">        String key = arg.split(SPLITTER)[0];</span>
-<span class="fc" id="L269">        IFunction&lt;Arg, Object&gt; func = this.argumentsResolvers.get(key);</span>
-<span class="fc bfc" id="L270" title="All 2 branches covered.">        if (null == func) {</span>
-<span class="fc" id="L271">            func = this.argumentsResolvers.get(DEFAULT_KEYWORD);</span>
+<span class="fc" id="L274">        String key = arg.split(SPLITTER)[0];</span>
+<span class="fc" id="L275">        IFunction&lt;Arg, Object&gt; func = this.argumentsResolvers.get(key);</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (null == func) {</span>
+<span class="fc" id="L277">            func = this.argumentsResolvers.get(DEFAULT_KEYWORD);</span>
         }
         try {
-<span class="fc" id="L274">            return func.execute(new Arg(arg, env, localValue));</span>
-<span class="fc" id="L275">        } catch (Throwable e) {</span>
-<span class="fc" id="L276">            throw new InvalidArgumentException(&quot;Could not parse strategy argument.&quot;, e);</span>
+<span class="fc" id="L280">            return func.execute(new Arg(arg, env, localValue));</span>
+<span class="fc" id="L281">        } catch (Throwable e) {</span>
+<span class="fc" id="L282">            throw new InvalidArgumentException(&quot;Could not parse strategy argument.&quot;, e);</span>
         }
     }
 }
@@ -299,27 +305,27 @@ class StrategyAndArgs {
             final IResolveDependencyStrategy strategy,
             final IObject env,
             final List&lt;String&gt; args, final Object localValue
-<span class="fc" id="L302">    ) {</span>
-<span class="fc" id="L303">        this.strategy = strategy;</span>
-<span class="fc" id="L304">        this.args = args;</span>
-<span class="fc" id="L305">        this.env = env;</span>
-<span class="fc" id="L306">        this.localValue = localValue;</span>
-<span class="fc" id="L307">    }</span>
+<span class="fc" id="L308">    ) {</span>
+<span class="fc" id="L309">        this.strategy = strategy;</span>
+<span class="fc" id="L310">        this.args = args;</span>
+<span class="fc" id="L311">        this.env = env;</span>
+<span class="fc" id="L312">        this.localValue = localValue;</span>
+<span class="fc" id="L313">    }</span>
 
     IResolveDependencyStrategy getStrategy() {
-<span class="fc" id="L310">        return this.strategy;</span>
+<span class="fc" id="L316">        return this.strategy;</span>
     }
 
     List&lt;String&gt; getArgs() {
-<span class="fc" id="L314">        return this.args;</span>
+<span class="fc" id="L320">        return this.args;</span>
     }
 
     IObject getEnv() {
-<span class="fc" id="L318">        return env;</span>
+<span class="fc" id="L324">        return env;</span>
     }
 
     Object getLocalValue() {
-<span class="fc" id="L322">        return localValue;</span>
+<span class="fc" id="L328">        return localValue;</span>
     }
 }
 
@@ -342,22 +348,22 @@ class Arg {
             final String arg,
             final IObject env,
             final Object localValue
-<span class="fc" id="L345">    ) {</span>
-<span class="fc" id="L346">        this.arg = arg;</span>
-<span class="fc" id="L347">        this.localValue = localValue;</span>
-<span class="fc" id="L348">        this.env = env;</span>
-<span class="fc" id="L349">    }</span>
+<span class="fc" id="L351">    ) {</span>
+<span class="fc" id="L352">        this.arg = arg;</span>
+<span class="fc" id="L353">        this.localValue = localValue;</span>
+<span class="fc" id="L354">        this.env = env;</span>
+<span class="fc" id="L355">    }</span>
 
     String getArg() {
-<span class="fc" id="L352">        return this.arg;</span>
+<span class="fc" id="L358">        return this.arg;</span>
     }
 
     Object getLocalValue() {
-<span class="fc" id="L356">        return this.localValue;</span>
+<span class="fc" id="L362">        return this.localValue;</span>
     }
 
     IObject getEnv() {
-<span class="fc" id="L360">        return this.env;</span>
+<span class="fc" id="L366">        return this.env;</span>
     }
 }
 

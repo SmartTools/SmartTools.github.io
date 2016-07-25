@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 7,
              Errors: 0,
-             Warnings: 1,
+             Warnings: 2,
              Infos: 0
       </title>
             <link>actor.create_async_operation/actor.create_async_operation//checkstyle.html</link>
@@ -46,49 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.wrapper.package-info.java">info/smart_tools/smartactors/actor/create_async_operation/wrapper/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.package-info.java">info/smart_tools/smartactors/actor/create_async_operation/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.exception.package-info.java">info/smart_tools/smartactors/actor/create_async_operation/exception/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.exception.CreateAsyncOperationActorException.java">info/smart_tools/smartactors/actor/create_async_operation/exception/CreateAsyncOperationActorException.java</a>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.exception.CreateAsyncOperationActorException.java">info/smart_tools/smartactors/actors/create_async_operation/exception/CreateAsyncOperationActorException.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.wrapper.AuthOperationData.java">info/smart_tools/smartactors/actor/create_async_operation/wrapper/AuthOperationData.java</a>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.exception.package-info.java">info/smart_tools/smartactors/actors/create_async_operation/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.wrapper.CreateAsyncOperationMessage.java">info/smart_tools/smartactors/actor/create_async_operation/wrapper/CreateAsyncOperationMessage.java</a>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.CreateAsyncOperationActor.java">info/smart_tools/smartactors/actors/create_async_operation/CreateAsyncOperationActor.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +88,49 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actor.create_async_operation.CreateAsyncOperationActor.java">info/smart_tools/smartactors/actor/create_async_operation/CreateAsyncOperationActor.java</a>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.wrapper.AuthOperationData.java">info/smart_tools/smartactors/actors/create_async_operation/wrapper/AuthOperationData.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.wrapper.package-info.java">info/smart_tools/smartactors/actors/create_async_operation/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.wrapper.CreateAsyncOperationMessage.java">info/smart_tools/smartactors/actors/create_async_operation/wrapper/CreateAsyncOperationMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.create_async_operation/actor.create_async_operation//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.package-info.java">info/smart_tools/smartactors/actors/create_async_operation/package-info.java</a>
                 </td>
                 <td>
                   0

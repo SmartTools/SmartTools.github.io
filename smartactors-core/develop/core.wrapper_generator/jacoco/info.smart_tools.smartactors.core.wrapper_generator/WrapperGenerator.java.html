@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>WrapperGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.wrapper_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.wrapper_generator</a> &gt; <span class="el_source">WrapperGenerator.java</span></div><h1>WrapperGenerator.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.wrapper_generator;
 
 import info.smart_tools.smartactors.core.class_generator_java_compile_api.ClassGenerator;
+import info.smart_tools.smartactors.core.field.Field;
 import info.smart_tools.smartactors.core.field_name.FieldName;
 import info.smart_tools.smartactors.core.iclass_generator.IClassGenerator;
 import info.smart_tools.smartactors.core.ifield.IField;
@@ -9,18 +10,20 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionExcep
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
 import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iwrapper_generator.IWrapperGenerator;
 import info.smart_tools.smartactors.core.iwrapper_generator.exception.WrapperGeneratorException;
-import info.smart_tools.smartactors.core.named_keys_storage.Keys;
-import info.smart_tools.smartactors.core.wrapper_generator.class_builder.ClassBuilder;
-import info.smart_tools.smartactors.core.wrapper_generator.class_builder.Modifiers;
+import info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ClassBuilder;
+import info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.Modifiers;
 import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -40,52 +43,57 @@ public class WrapperGenerator implements IWrapperGenerator {
      * Create new instance of {@link WrapperGenerator} by given {@link ClassLoader}
      * @param classLoader the instance of {@link ClassLoader}
      */
-<span class="fc" id="L43">    public WrapperGenerator(final ClassLoader classLoader) {</span>
-<span class="fc" id="L44">        this.classGenerator = new ClassGenerator(classLoader);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L46">    public WrapperGenerator(final ClassLoader classLoader) {</span>
+<span class="fc" id="L47">        this.classGenerator = new ClassGenerator(classLoader);</span>
+<span class="fc" id="L48">    }</span>
 
     @Override
     public &lt;T&gt; T generate(final Class&lt;T&gt; targetInterface)
             throws InvalidArgumentException, WrapperGeneratorException {
-<span class="fc" id="L50">        T instance = null;</span>
+<span class="fc" id="L53">        T instance = null;</span>
 
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (null == targetInterface) {</span>
-<span class="fc" id="L53">            throw new InvalidArgumentException(&quot;Target class should not be null!&quot;);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (null == targetInterface) {</span>
+<span class="fc" id="L56">            throw new InvalidArgumentException(&quot;Target class should not be null!&quot;);</span>
         }
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!targetInterface.isInterface()) {</span>
-<span class="fc" id="L56">            throw new InvalidArgumentException(&quot;Target class should be an interface!&quot;);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (!targetInterface.isInterface()) {</span>
+<span class="fc" id="L59">            throw new InvalidArgumentException(&quot;Target class should be an interface!&quot;);</span>
         }
 
         try {
-<span class="nc" id="L60">            instance = IOC.resolve(Keys.getOrAdd(targetInterface.getCanonicalName()));</span>
-<span class="fc" id="L61">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L63">            instance = IOC.resolve(</span>
+<span class="fc" id="L64">                    IOC.resolve(IOC.getKeyForKeyStorage(), targetInterface.getCanonicalName() + &quot;wrapper&quot;)</span>
+            );
+<span class="fc" id="L66">        } catch (ResolutionException e) {</span>
             // do nothing
             // ToDo: need refactoring
-<span class="nc" id="L64">        }</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (null != instance) {</span>
-<span class="nc" id="L66">            return instance;</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (null != instance) {</span>
+<span class="fc" id="L71">            return instance;</span>
         }
 
         try {
-<span class="fc" id="L70">            Class&lt;T&gt; clazz = generateClass(targetInterface);</span>
+<span class="fc" id="L75">            Class&lt;T&gt; clazz = generateClass(targetInterface);</span>
 
             // May be later CreateNewInstanceStrategy will be replaced by GetInstanceFromPoolStrategy
-<span class="fc" id="L73">            IOC.register(</span>
-<span class="fc" id="L74">                    Keys.getOrAdd(targetInterface.getCanonicalName()),</span>
+            // ToDo: replace this strategy to the future plugin for WrapperGenerator
+<span class="fc" id="L79">            IOC.register(</span>
+<span class="fc" id="L80">                    IOC.resolve(IOC.getKeyForKeyStorage(), targetInterface.getCanonicalName() + &quot;wrapper&quot;),</span>
                     new ApplyFunctionToArgumentsStrategy(
                             (arg) -&gt;  {
                                 try {
-<span class="fc" id="L78">                                    return clazz.newInstance();</span>
-<span class="nc" id="L79">                                } catch (Throwable e) {</span>
-<span class="nc" id="L80">                                    throw new RuntimeException(&quot;Error on creation new instance.&quot;, e);</span>
+<span class="fc" id="L84">                                    return clazz.newInstance();</span>
+<span class="nc" id="L85">                                } catch (Throwable e) {</span>
+<span class="nc" id="L86">                                    throw new RuntimeException(&quot;Error on creation new instance.&quot;, e);</span>
                                 }
                             }
                     )
             );
 
-<span class="fc" id="L86">            return IOC.resolve(Keys.getOrAdd(targetInterface.getCanonicalName()));</span>
-<span class="fc" id="L87">        } catch (Throwable e) {</span>
-<span class="fc" id="L88">            throw new WrapperGeneratorException(</span>
+<span class="fc" id="L92">            return IOC.resolve(</span>
+<span class="fc" id="L93">                    IOC.resolve(IOC.getKeyForKeyStorage(), targetInterface.getCanonicalName() + &quot;wrapper&quot;)</span>
+            );
+<span class="fc" id="L95">        } catch (Throwable e) {</span>
+<span class="fc" id="L96">            throw new WrapperGeneratorException(</span>
                     &quot;Could not implement wrapper interface because of the following error:&quot;,
                     e
             );
@@ -95,146 +103,224 @@ public class WrapperGenerator implements IWrapperGenerator {
     private &lt;T&gt; Class&lt;T&gt; generateClass(final Class&lt;T&gt; targetInterface)
             throws Exception {
 
-<span class="fc" id="L98">        ClassBuilder cb = new ClassBuilder(&quot;\t&quot;, &quot;\n&quot;);</span>
+<span class="fc" id="L106">        ClassBuilder cb = new ClassBuilder(&quot;\t&quot;, &quot;\n&quot;);</span>
 
         // Add package name and imports.
-<span class="fc" id="L101">        cb</span>
-<span class="fc" id="L102">                .addPackageName(targetInterface.getPackage().getName())</span>
-<span class="fc" id="L103">                .addImport(IField.class.getCanonicalName())</span>
-<span class="fc" id="L104">                .addImport(Field.class.getCanonicalName())</span>
-<span class="fc" id="L105">                .addImport(FieldName.class.getCanonicalName())</span>
-<span class="fc" id="L106">                .addImport(InvalidArgumentException.class.getCanonicalName())</span>
-<span class="fc" id="L107">                .addImport(targetInterface.getCanonicalName())</span>
-<span class="fc" id="L108">                .addImport(IObject.class.getCanonicalName())</span>
-<span class="fc" id="L109">                .addImport(IObjectWrapper.class.getCanonicalName())</span>
-<span class="fc" id="L110">                .addImport(ReadValueException.class.getCanonicalName())</span>
-<span class="fc" id="L111">                .addImport(ChangeValueException.class.getCanonicalName())</span>
-<span class="fc" id="L112">                .addImport(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L109">        cb</span>
+<span class="fc" id="L110">                .addPackageName(targetInterface.getPackage().getName())</span>
+<span class="fc" id="L111">                .addImport(IField.class.getCanonicalName())</span>
+<span class="fc" id="L112">                .addImport(Field.class.getCanonicalName())</span>
+<span class="fc" id="L113">                .addImport(FieldName.class.getCanonicalName())</span>
+<span class="fc" id="L114">                .addImport(InvalidArgumentException.class.getCanonicalName())</span>
+<span class="fc" id="L115">                .addImport(targetInterface.getCanonicalName())</span>
+<span class="fc" id="L116">                .addImport(IObject.class.getCanonicalName())</span>
+<span class="fc" id="L117">                .addImport(IObjectWrapper.class.getCanonicalName())</span>
+<span class="fc" id="L118">                .addImport(ReadValueException.class.getCanonicalName())</span>
+<span class="fc" id="L119">                .addImport(ChangeValueException.class.getCanonicalName())</span>
+<span class="fc" id="L120">                .addImport(IFieldName.class.getCanonicalName())</span>
+<span class="fc" id="L121">                .addImport(DeleteValueException.class.getCanonicalName())</span>
+<span class="fc" id="L122">                .addImport(SerializeException.class.getCanonicalName())</span>
+<span class="fc" id="L123">                .addImport(Iterator.class.getCanonicalName())</span>
+<span class="fc" id="L124">                .addImport(Map.class.getCanonicalName())</span>
+<span class="fc" id="L125">                .addImport(HashMap.class.getCanonicalName());</span>
 
-<span class="fc" id="L114">        Map&lt;Class&lt;?&gt;, String&gt; types = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
-<span class="fc" id="L116">            Class&lt;?&gt; returnType = m.getReturnType();</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (!returnType.isPrimitive()) {</span>
-<span class="fc" id="L118">                types.put(returnType, returnType.getCanonicalName());</span>
+<span class="fc" id="L127">        Map&lt;Class&lt;?&gt;, String&gt; types = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
+<span class="fc" id="L129">            Class&lt;?&gt; returnType = m.getReturnType();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            if (!returnType.isPrimitive()) {</span>
+<span class="fc" id="L131">                types.put(returnType, returnType.getCanonicalName());</span>
             }
-<span class="fc" id="L120">            Class&lt;?&gt;[] args = m.getParameterTypes();</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">            for (Class&lt;?&gt; c : args) {</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">                if (!c.isPrimitive()) {</span>
-<span class="fc" id="L123">                    types.put(c, c.getCanonicalName());</span>
+<span class="fc" id="L133">            Class&lt;?&gt;[] args = m.getParameterTypes();</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            for (Class&lt;?&gt; c : args) {</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                if (!c.isPrimitive()) {</span>
+<span class="fc" id="L136">                    types.put(c, c.getCanonicalName());</span>
                 }
             }
         }
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (Object o : types.entrySet()) {</span>
-<span class="fc" id="L128">            Map.Entry entry = (Map.Entry) o;</span>
-<span class="fc" id="L129">            cb.addImport((String) entry.getValue());</span>
-<span class="fc" id="L130">        }</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (Object o : types.entrySet()) {</span>
+<span class="fc" id="L141">            Map.Entry entry = (Map.Entry) o;</span>
+<span class="fc" id="L142">            cb.addImport((String) entry.getValue());</span>
+<span class="fc" id="L143">        }</span>
 
         // Add class header
-<span class="fc" id="L133">        cb</span>
-<span class="fc" id="L134">                .addClass()</span>
-<span class="fc" id="L135">                        .setClassModifier(Modifiers.PUBLIC)</span>
-<span class="fc" id="L136">                        .setClassName(targetInterface.getSimpleName() + &quot;Impl&quot;)</span>
-<span class="fc" id="L137">                        .setInterfaces(&quot;IObjectWrapper&quot;)</span>
-<span class="fc" id="L138">                        .setInterfaces(targetInterface.getSimpleName());</span>
+<span class="fc" id="L146">        cb</span>
+<span class="fc" id="L147">                .addClass()</span>
+<span class="fc" id="L148">                        .setClassModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L149">                        .setClassName(targetInterface.getSimpleName() + &quot;Impl&quot;)</span>
+<span class="fc" id="L150">                        .setInterfaces(&quot;IObjectWrapper&quot;)</span>
+<span class="fc" id="L151">                        .setInterfaces(&quot;IObject&quot;)</span>
+<span class="fc" id="L152">                        .setInterfaces(targetInterface.getSimpleName());</span>
 
         // Add class fields
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
             String methodPrefix;
-<span class="fc bfc" id="L143" title="All 2 branches covered.">            if (Void.TYPE == m.getGenericReturnType()) {</span>
-<span class="fc" id="L144">                methodPrefix = &quot;out&quot;;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (Void.TYPE == m.getGenericReturnType()) {</span>
+<span class="fc" id="L158">                methodPrefix = &quot;out&quot;;</span>
             } else {
-<span class="fc" id="L146">                methodPrefix = &quot;in&quot;;</span>
+<span class="fc" id="L160">                methodPrefix = &quot;in&quot;;</span>
             }
-<span class="fc" id="L148">            cb</span>
-<span class="fc" id="L149">                    .addField().setModifier(Modifiers.PRIVATE).setType(&quot;IField&quot;)</span>
-<span class="fc" id="L150">                            .setName(&quot;fieldFor_&quot; + methodPrefix + &quot;_&quot; + m.getName());</span>
+<span class="fc" id="L162">            cb</span>
+<span class="fc" id="L163">                    .addField().setModifier(Modifiers.PRIVATE).setType(&quot;IField&quot;)</span>
+<span class="fc" id="L164">                            .setName(&quot;fieldFor_&quot; + methodPrefix + &quot;_&quot; + m.getName());</span>
         }
+<span class="fc" id="L166">        cb</span>
+<span class="fc" id="L167">                .addField()</span>
+<span class="fc" id="L168">                .setModifier(Modifiers.PRIVATE)</span>
+<span class="fc" id="L169">                .setType(Map.class.getSimpleName())</span>
+<span class="fc" id="L170">                .setInnerGenericType(IFieldName.class.getSimpleName() + &quot;,&quot; + Field.class.getSimpleName())</span>
+<span class="fc" id="L171">                .setName(&quot;fields&quot;);</span>
 
         // Add class constructors
-<span class="fc" id="L154">        StringBuilder builder = new StringBuilder();</span>
-<span class="fc" id="L155">        builder.append(&quot;\t\t&quot;).append(&quot;try {\n&quot;);</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            String methodPrefix = Void.TYPE == m.getGenericReturnType() ? &quot;out&quot; : &quot;in&quot;;</span>
-<span class="fc" id="L158">            builder</span>
-<span class="fc" id="L159">                    .append(&quot;\t\t\t&quot;).append(&quot;this.fieldFor_&quot;)</span>
-<span class="fc" id="L160">                    .append(methodPrefix)</span>
-<span class="fc" id="L161">                    .append(&quot;_&quot;)</span>
-<span class="fc" id="L162">                    .append(m.getName())</span>
-<span class="fc" id="L163">                    .append(&quot; = new &quot;)</span>
-<span class="fc" id="L164">                    .append(&quot;Field(new FieldName(\&quot;&quot;)</span>
-<span class="fc" id="L165">                    .append(methodPrefix).append(&quot;_&quot;).append(m.getName()).append(&quot;\&quot;&quot; + &quot;));\n&quot;);</span>
+<span class="fc" id="L174">        StringBuilder builder = new StringBuilder();</span>
+<span class="fc" id="L175">        builder.append(&quot;\t\t&quot;).append(&quot;try {\n&quot;);</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            String methodPrefix = Void.TYPE == m.getGenericReturnType() ? &quot;out&quot; : &quot;in&quot;;</span>
+<span class="fc" id="L178">            builder</span>
+<span class="fc" id="L179">                    .append(&quot;\t\t\t&quot;).append(&quot;this.fieldFor_&quot;)</span>
+<span class="fc" id="L180">                    .append(methodPrefix)</span>
+<span class="fc" id="L181">                    .append(&quot;_&quot;)</span>
+<span class="fc" id="L182">                    .append(m.getName())</span>
+<span class="fc" id="L183">                    .append(&quot; = new &quot;)</span>
+<span class="fc" id="L184">                    .append(&quot;Field(new FieldName(\&quot;&quot;)</span>
+<span class="fc" id="L185">                    .append(methodPrefix).append(&quot;_&quot;).append(m.getName()).append(&quot;\&quot;&quot; + &quot;));\n&quot;);</span>
         }
-<span class="fc" id="L167">        builder</span>
-<span class="fc" id="L168">                .append(&quot;\t\t&quot;).append(&quot;} catch (Exception e) {\n&quot;).append(&quot;\t\t\t&quot;)</span>
-<span class="fc" id="L169">                .append(&quot;throw new InvalidArgumentException(\&quot;\&quot;, e);\n&quot;)</span>
-<span class="fc" id="L170">                .append(&quot;\t\t&quot;).append(&quot;}&quot;);</span>
-<span class="fc" id="L171">        cb</span>
-<span class="fc" id="L172">                .addConstructor().setModifier(Modifiers.PUBLIC).setExceptions(&quot;InvalidArgumentException&quot;)</span>
-<span class="fc" id="L173">                        .addStringToBody(builder.toString());</span>
+<span class="fc" id="L187">        builder.append(&quot;this.fields = new HashMap&lt;&gt;();\n&quot;);</span>
+<span class="fc" id="L188">        builder</span>
+<span class="fc" id="L189">                .append(&quot;\t\t&quot;).append(&quot;} catch (Exception e) {\n&quot;).append(&quot;\t\t\t&quot;)</span>
+<span class="fc" id="L190">                .append(&quot;throw new InvalidArgumentException(\&quot;\&quot;, e);\n&quot;)</span>
+<span class="fc" id="L191">                .append(&quot;\t\t&quot;).append(&quot;}&quot;);</span>
+<span class="fc" id="L192">        cb</span>
+<span class="fc" id="L193">                .addConstructor().setModifier(Modifiers.PUBLIC).setExceptions(&quot;InvalidArgumentException&quot;)</span>
+<span class="fc" id="L194">                        .addStringToBody(builder.toString());</span>
 
         // Add 'IObject[] args;' field
-<span class="fc" id="L176">        cb</span>
-<span class="fc" id="L177">                .addField().setModifier(Modifiers.PRIVATE).setType(&quot;IObject&quot;).setName(&quot;env&quot;);</span>
+<span class="fc" id="L197">        cb</span>
+<span class="fc" id="L198">                .addField().setModifier(Modifiers.PRIVATE).setType(&quot;IObject&quot;).setName(&quot;env&quot;);</span>
         // Add init method
-<span class="fc" id="L179">        cb</span>
-<span class="fc" id="L180">                .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;void&quot;).setName(&quot;init&quot;)</span>
-<span class="fc" id="L181">                .addParameter()</span>
-<span class="fc" id="L182">                .setType(&quot;IObject&quot;).setName(&quot;environments&quot;).next()</span>
-<span class="fc" id="L183">                .addStringToBody(&quot;this.env = environments;&quot;);</span>
+<span class="fc" id="L200">        cb</span>
+<span class="fc" id="L201">                .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;void&quot;).setName(&quot;init&quot;)</span>
+<span class="fc" id="L202">                .addParameter()</span>
+<span class="fc" id="L203">                .setType(&quot;IObject&quot;).setName(&quot;environments&quot;).next()</span>
+<span class="fc" id="L204">                .addStringToBody(&quot;this.env = environments;&quot;);</span>
 
         // Add 'getIObjects' method
-<span class="fc" id="L186">        cb</span>
-<span class="fc" id="L187">                .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;IObject&quot;).setName(&quot;getEnvironmentIObject&quot;)</span>
-<span class="fc" id="L188">                .addParameter()</span>
-<span class="fc" id="L189">                        .setType(&quot;IFieldName&quot;)</span>
-<span class="fc" id="L190">                        .setName(&quot;fieldName&quot;)</span>
-<span class="fc" id="L191">                        .next()</span>
-<span class="fc" id="L192">                .setExceptions(&quot;InvalidArgumentException&quot;)</span>
-<span class="fc" id="L193">                .addStringToBody(&quot;try {&quot;)</span>
-<span class="fc" id="L194">                .addStringToBody(&quot;\treturn (IObject) this.env.getValue(fieldName);&quot;)</span>
-<span class="fc" id="L195">                .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
-<span class="fc" id="L196">                .addStringToBody(&quot;throw new InvalidArgumentException(\&quot;Could not get IObject from environments.\&quot;, e);&quot;)</span>
-<span class="fc" id="L197">                .addStringToBody(&quot;}&quot;);</span>
+<span class="fc" id="L207">        cb</span>
+<span class="fc" id="L208">                .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;IObject&quot;).setName(&quot;getEnvironmentIObject&quot;)</span>
+<span class="fc" id="L209">                .addParameter()</span>
+<span class="fc" id="L210">                        .setType(&quot;IFieldName&quot;)</span>
+<span class="fc" id="L211">                        .setName(&quot;fieldName&quot;)</span>
+<span class="fc" id="L212">                        .next()</span>
+<span class="fc" id="L213">                .setExceptions(&quot;InvalidArgumentException&quot;)</span>
+<span class="fc" id="L214">                .addStringToBody(&quot;try {&quot;)</span>
+<span class="fc" id="L215">                .addStringToBody(&quot;\treturn (IObject) this.env.getValue(fieldName);&quot;)</span>
+<span class="fc" id="L216">                .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
+<span class="fc" id="L217">                .addStringToBody(&quot;throw new InvalidArgumentException(\&quot;Could not get IObject from environments.\&quot;, e);&quot;)</span>
+<span class="fc" id="L218">                .addStringToBody(&quot;}&quot;);</span>
 
         // Add getters and setters
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
-<span class="fc bfc" id="L201" title="All 2 branches covered.">            String methodPrefix = Void.TYPE == m.getGenericReturnType() ? &quot;out&quot; : &quot;in&quot;;</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">            if (!m.getReturnType().equals(Void.TYPE)) {</span>
-<span class="fc" id="L203">                cb</span>
-<span class="fc" id="L204">                        .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(m.getGenericReturnType().getTypeName())</span>
-<span class="fc" id="L205">                                .setName(m.getName()).setExceptions(&quot;ReadValueException&quot;)</span>
-<span class="fc" id="L206">                        .addStringToBody(&quot;try {&quot;)</span>
-<span class="fc" id="L207">                        .addStringToBody(</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        for (Method m : targetInterface.getMethods()) {</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            String methodPrefix = Void.TYPE == m.getGenericReturnType() ? &quot;out&quot; : &quot;in&quot;;</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            if (!m.getReturnType().equals(Void.TYPE)) {</span>
+<span class="fc" id="L224">                cb</span>
+<span class="fc" id="L225">                        .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(m.getGenericReturnType().getTypeName())</span>
+<span class="fc" id="L226">                                .setName(m.getName()).setExceptions(&quot;ReadValueException&quot;)</span>
+<span class="fc" id="L227">                        .addStringToBody(&quot;try {&quot;)</span>
+<span class="fc" id="L228">                        .addStringToBody(</span>
                                 &quot;\treturn fieldFor_&quot; +
                                 methodPrefix +
                                 &quot;_&quot; +
-<span class="fc" id="L211">                                m.getName() +</span>
-                                &quot;.in(this.env);&quot;
+<span class="fc" id="L232">                                m.getName() +</span>
+<span class="fc" id="L233">                                &quot;.in(this.env, &quot;+ m.getReturnType().getSimpleName() + &quot;.class);&quot;</span>
                         )
-<span class="fc" id="L214">                        .addStringToBody(&quot;} catch(Throwable e) {&quot;)</span>
-<span class="fc" id="L215">                        .addStringToBody(&quot;\tthrow new ReadValueException(\&quot;Could not get value from iobject.\&quot;, e);&quot;)</span>
-<span class="fc" id="L216">                        .addStringToBody(&quot;}&quot;);</span>
+<span class="fc" id="L235">                        .addStringToBody(&quot;} catch(Throwable e) {&quot;)</span>
+<span class="fc" id="L236">                        .addStringToBody(&quot;\tthrow new ReadValueException(\&quot;Could not get value from iobject.\&quot;, e);&quot;)</span>
+<span class="fc" id="L237">                        .addStringToBody(&quot;}&quot;);</span>
             } else {
-<span class="fc" id="L218">                cb</span>
-<span class="fc" id="L219">                        .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;void&quot;).setName(m.getName())</span>
-<span class="fc" id="L220">                        .setExceptions(&quot;ChangeValueException&quot;)</span>
-<span class="fc" id="L221">                        .addParameter()</span>
-<span class="fc" id="L222">                                .setType(m.getGenericParameterTypes()[0].getTypeName()).setName(&quot;value&quot;).next()</span>
-<span class="fc" id="L223">                        .addStringToBody(&quot;try {&quot;)</span>
-<span class="fc" id="L224">                        .addStringToBody(</span>
+<span class="fc" id="L239">                cb</span>
+<span class="fc" id="L240">                        .addMethod().setModifier(Modifiers.PUBLIC).setReturnType(&quot;void&quot;).setName(m.getName())</span>
+<span class="fc" id="L241">                        .setExceptions(&quot;ChangeValueException&quot;)</span>
+<span class="fc" id="L242">                        .addParameter()</span>
+<span class="fc" id="L243">                                .setType(m.getGenericParameterTypes()[0].getTypeName()).setName(&quot;value&quot;).next()</span>
+<span class="fc" id="L244">                        .addStringToBody(&quot;try {&quot;)</span>
+<span class="fc" id="L245">                        .addStringToBody(</span>
                                 &quot;\tthis.fieldFor_&quot; +
                                 methodPrefix +
                                 &quot;_&quot; +
-<span class="fc" id="L228">                                m.getName() +</span>
+<span class="fc" id="L249">                                m.getName() +</span>
                                 &quot;.out(this.env, value);&quot;
                         )
-<span class="fc" id="L231">                        .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
-<span class="fc" id="L232">                        .addStringToBody(&quot;\tthrow new ChangeValueException(\&quot;Could not set value from iobject.\&quot;, e);&quot;)</span>
-<span class="fc" id="L233">                        .addStringToBody(&quot;}&quot;);</span>
+<span class="fc" id="L252">                        .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
+<span class="fc" id="L253">                        .addStringToBody(&quot;\tthrow new ChangeValueException(\&quot;Could not set value from iobject.\&quot;, e);&quot;)</span>
+<span class="fc" id="L254">                        .addStringToBody(&quot;}&quot;);</span>
             }
         }
+        // Add 'IObject' methods
 
-<span class="fc" id="L237">        return (Class&lt;T&gt;) classGenerator.generate(cb.buildClass().toString());</span>
+<span class="fc" id="L259">        cb</span>
+<span class="fc" id="L260">                .addMethod()</span>
+<span class="fc" id="L261">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L262">                .setReturnType(Object.class.getSimpleName())</span>
+<span class="fc" id="L263">                .setName(&quot;getValue&quot;)</span>
+<span class="fc" id="L264">                .addParameter()</span>
+<span class="fc" id="L265">                .setType(IFieldName.class.getSimpleName())</span>
+<span class="fc" id="L266">                .setName(&quot;name&quot;)</span>
+<span class="fc" id="L267">                .next()</span>
+<span class="fc" id="L268">                .setExceptions(ReadValueException.class.getSimpleName())</span>
+<span class="fc" id="L269">                .setExceptions(InvalidArgumentException.class.getSimpleName())</span>
+<span class="fc" id="L270">                .addStringToBody(&quot;Field field = fields.get(name);&quot;)</span>
+<span class="fc" id="L271">                .addStringToBody(&quot;if (null == field) {&quot;)</span>
+<span class="fc" id="L272">                .addStringToBody(&quot;\tfield = new Field(name);&quot;)</span>
+<span class="fc" id="L273">                .addStringToBody(&quot;\tfields.put(name, field);&quot;)</span>
+<span class="fc" id="L274">                .addStringToBody(&quot;}&quot;)</span>
+<span class="fc" id="L275">                .addStringToBody(&quot;return new Field(name).in(this.env);&quot;);</span>
+<span class="fc" id="L276">        cb</span>
+<span class="fc" id="L277">                .addMethod()</span>
+<span class="fc" id="L278">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L279">                .setReturnType(&quot;void&quot;)</span>
+<span class="fc" id="L280">                .setName(&quot;setValue&quot;)</span>
+<span class="fc" id="L281">                .addParameter()</span>
+<span class="fc" id="L282">                .setType(IFieldName.class.getSimpleName())</span>
+<span class="fc" id="L283">                .setName(&quot;name&quot;)</span>
+<span class="fc" id="L284">                .next()</span>
+<span class="fc" id="L285">                .addParameter()</span>
+<span class="fc" id="L286">                .setType(Object.class.getSimpleName())</span>
+<span class="fc" id="L287">                .setName(&quot;value&quot;)</span>
+<span class="fc" id="L288">                .next()</span>
+<span class="fc" id="L289">                .setExceptions(ChangeValueException.class.getSimpleName())</span>
+<span class="fc" id="L290">                .setExceptions(InvalidArgumentException.class.getSimpleName())</span>
+<span class="fc" id="L291">                .addStringToBody(&quot;Field field = fields.get(name);&quot;)</span>
+<span class="fc" id="L292">                .addStringToBody(&quot;if (null == field) {&quot;)</span>
+<span class="fc" id="L293">                .addStringToBody(&quot;\tfield = new Field(name);&quot;)</span>
+<span class="fc" id="L294">                .addStringToBody(&quot;\tfields.put(name, field);&quot;)</span>
+<span class="fc" id="L295">                .addStringToBody(&quot;}&quot;)</span>
+<span class="fc" id="L296">                .addStringToBody(&quot;new Field(name).out(env, value);&quot;);</span>
+<span class="fc" id="L297">        cb</span>
+<span class="fc" id="L298">                .addMethod()</span>
+<span class="fc" id="L299">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L300">                .setReturnType(&quot;void&quot;)</span>
+<span class="fc" id="L301">                .setName(&quot;deleteField&quot;)</span>
+<span class="fc" id="L302">                .addParameter()</span>
+<span class="fc" id="L303">                .setType(IFieldName.class.getSimpleName())</span>
+<span class="fc" id="L304">                .setName(&quot;name&quot;)</span>
+<span class="fc" id="L305">                .next()</span>
+<span class="fc" id="L306">                .setExceptions(DeleteValueException.class.getSimpleName())</span>
+<span class="fc" id="L307">                .setExceptions(InvalidArgumentException.class.getSimpleName())</span>
+<span class="fc" id="L308">                .addStringToBody(&quot;throw new DeleteValueException(\&quot;Method not implemented.\&quot;);&quot;);</span>
+<span class="fc" id="L309">        cb</span>
+<span class="fc" id="L310">                .addMethod()</span>
+<span class="fc" id="L311">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L312">                .setReturnType(&quot;&lt;T&gt; T&quot;)</span>
+<span class="fc" id="L313">                .setName(&quot;serialize&quot;)</span>
+<span class="fc" id="L314">                .setExceptions(SerializeException.class.getSimpleName())</span>
+<span class="fc" id="L315">                .addStringToBody(&quot;throw new SerializeException(\&quot;Method not implemented.\&quot;);&quot;);</span>
+<span class="fc" id="L316">        cb</span>
+<span class="fc" id="L317">                .addMethod()</span>
+<span class="fc" id="L318">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L319">                .setReturnType(&quot;Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt;&quot;)</span>
+<span class="fc" id="L320">                .setName(&quot;iterator&quot;)</span>
+<span class="fc" id="L321">                .addStringToBody(&quot;return null;&quot;);</span>
+
+<span class="fc" id="L323">        return (Class&lt;T&gt;) classGenerator.generate(cb.buildClass().toString());</span>
     }
 }
 

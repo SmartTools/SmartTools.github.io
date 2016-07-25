@@ -1,7 +1,19 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,ClassGenerator,0,93,2,12,0,20,2,8,0,3
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,InMemoryCodeCompiler,5,163,1,9,1,36,1,8,0,4
 core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,ExtendedStandardJavaFileManager,0,20,0,0,0,7,0,3,0,3
 core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,DynamicClassLoader,4,36,0,2,1,9,0,4,0,3
-core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,ClassGenerator,0,94,2,12,0,20,2,8,0,3
 core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,CompiledCode,0,20,0,0,0,5,0,3,0,3
 core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,SourceCode,0,28,0,0,0,5,0,2,0,2
-core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api,InMemoryCodeCompiler,28,153,6,8,4,35,5,6,0,4
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,ConstructorInfo,0,67,0,0,0,20,0,10,0,10
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,MethodInfo,0,83,0,0,0,26,0,14,0,14
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,ConstructorParameterInfo,0,25,0,0,0,10,0,6,0,6
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,ClassBuilder,24,687,11,39,7,213,9,29,0,13
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,MethodParameterInfo,0,25,0,0,0,10,0,6,0,6
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,Modifiers.new Modifiers() {...},0,8,0,0,0,2,0,2,0,2
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,ClassInfo,0,48,0,0,0,17,0,10,0,10
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,FieldInfo,5,36,0,0,2,14,1,9,1,9
+core.class_generator,info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder,Modifiers,9,49,0,0,0,5,2,2,2,2

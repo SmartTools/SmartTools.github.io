@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ClassInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.class_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder</a> &gt; <span class="el_source">ClassInfo.java</span></div><h1>ClassInfo.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class summary info
+ */
+public class ClassInfo {
+
+    private ClassBuilder builder;
+    private String className;
+    private Modifiers classModifier;
+    private String inherited;
+<span class="fc" id="L15">    private List&lt;String&gt; interfaces = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructor.
+     * Create instance of {@link ClassInfo} by given {@link ClassBuilder}
+     * @param builder the link to parent instance of {@link ClassBuilder}
+     */
+<span class="fc" id="L22">    public ClassInfo(final ClassBuilder builder) {</span>
+<span class="fc" id="L23">        this.builder = builder;</span>
+<span class="fc" id="L24">    }</span>
+
+    /**
+     * Set modifier of class
+     * @param modifierOfClass the class modifier
+     * @return current instance of {@link ClassInfo}
+     */
+    public ClassInfo setClassModifier(final Modifiers modifierOfClass) {
+<span class="fc" id="L32">        this.classModifier = modifierOfClass;</span>
+
+<span class="fc" id="L34">        return this;</span>
+    }
+
+    /**
+     * Set name of class
+     * @param nameOfClass the name of class
+     * @return current instance of {@link ClassInfo}
+     */
+    public ClassInfo setClassName(final String nameOfClass) {
+<span class="fc" id="L43">        this.className = nameOfClass;</span>
+
+<span class="fc" id="L45">        return this;</span>
+    }
+
+    /**
+     * Set inheritable class
+     * @param inheritedClass the name of inherited class
+     * @return current instance of {@link ClassInfo}
+     */
+    public ClassInfo setInherited(final String inheritedClass) {
+<span class="fc" id="L54">        this.inherited = inheritedClass;</span>
+
+<span class="fc" id="L56">        return this;</span>
+    }
+
+    /**
+     * Add new interface by given interface name
+     * @param interfaceName the name of given interface
+     * @return current instance of {@link ClassInfo}
+     */
+    public ClassInfo setInterfaces(final String interfaceName) {
+<span class="fc" id="L65">        this.interfaces.add(interfaceName);</span>
+
+<span class="fc" id="L67">        return this;</span>
+    }
+
+    public String getClassName() {
+<span class="fc" id="L71">        return className;</span>
+    }
+
+    public Modifiers getClassModifier() {
+<span class="fc" id="L75">        return classModifier;</span>
+    }
+
+    public String getInherited() {
+<span class="fc" id="L79">        return inherited;</span>
+    }
+
+    public List&lt;String&gt; getInterfaces() {
+<span class="fc" id="L83">        return interfaces;</span>
+    }
+
+    /**
+     * Return editing to parent parameters
+     * @return the parent instance of {@link ClassBuilder}
+     */
+    public ClassBuilder next() {
+<span class="fc" id="L91">        return this.builder;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

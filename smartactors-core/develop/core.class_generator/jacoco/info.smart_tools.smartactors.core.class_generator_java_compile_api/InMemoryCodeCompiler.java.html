@@ -30,7 +30,7 @@ class InMemoryCodeCompiler {
      * @param classLoader instance of {@link ClassLoader}
      */
 <span class="fc" id="L32">    InMemoryCodeCompiler(final ClassLoader classLoader) {</span>
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        this.classLoader = new DynamicClassLoader(</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        this.classLoader = new DynamicClassLoader(</span>
 <span class="fc" id="L34">                null != classLoader ? classLoader : ClassLoader.getSystemClassLoader()</span>
         );
 <span class="fc" id="L36">    }</span>
@@ -40,32 +40,30 @@ class InMemoryCodeCompiler {
      * compiled class
      * @param className full name of future class
      * @param sourceCodeInText code source
-     * @param additionalClassPaths additional class paths
      * @return compiled class
      * @throws Exception if any errors occurred
      */
     Class&lt;?&gt; compile(
             final String className,
-            final String sourceCodeInText,
-            final String additionalClassPaths
+            final String sourceCodeInText
     )
             throws Exception {
         try {
-<span class="nc" id="L54">            return this.classLoader.loadClass(className);</span>
-<span class="fc" id="L55">        } catch (ClassNotFoundException e) { }</span>
+<span class="nc" id="L52">            return this.classLoader.loadClass(className);</span>
+<span class="fc" id="L53">        } catch (ClassNotFoundException e) { }</span>
         try {
-<span class="fc" id="L57">            List&lt;String&gt; optionList = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">            if (null != this.classLoader) {</span>
-<span class="fc" id="L59">                optionList.addAll(Arrays.asList(&quot;-classpath&quot;, getClassPath(this.classLoader, additionalClassPaths)));</span>
+<span class="fc" id="L55">            List&lt;String&gt; optionList = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (null != this.classLoader) {</span>
+<span class="fc" id="L57">                optionList.addAll(Arrays.asList(&quot;-classpath&quot;, getClassPath(this.classLoader)));</span>
             }
-<span class="fc" id="L61">            SourceCode sourceCode = new SourceCode(className, sourceCodeInText);</span>
-<span class="fc" id="L62">            CompiledCode compiledCode = new CompiledCode(className);</span>
-<span class="fc" id="L63">            List compilationUnits = Collections.singletonList(sourceCode);</span>
-<span class="fc" id="L64">            ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(</span>
-<span class="fc" id="L65">                    javac.getStandardFileManager(null, null, null), compiledCode, this.classLoader</span>
+<span class="fc" id="L59">            SourceCode sourceCode = new SourceCode(className, sourceCodeInText);</span>
+<span class="fc" id="L60">            CompiledCode compiledCode = new CompiledCode(className);</span>
+<span class="fc" id="L61">            List compilationUnits = Collections.singletonList(sourceCode);</span>
+<span class="fc" id="L62">            ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(</span>
+<span class="fc" id="L63">                    javac.getStandardFileManager(null, null, null), compiledCode, this.classLoader</span>
             );
 
-<span class="fc" id="L68">            CompilationTask task = javac.getTask(</span>
+<span class="fc" id="L66">            CompilationTask task = javac.getTask(</span>
                     null,
                     fileManager,
                     null,
@@ -73,51 +71,47 @@ class InMemoryCodeCompiler {
                     null,
                     compilationUnits
             );
-<span class="fc" id="L76">            task.call();</span>
-<span class="fc" id="L77">            return this.classLoader.loadClass(className);</span>
-<span class="fc" id="L78">        } catch (Throwable e) {</span>
-<span class="fc" id="L79">            throw new Exception(e);</span>
+<span class="fc" id="L74">            task.call();</span>
+<span class="fc" id="L75">            return this.classLoader.loadClass(className);</span>
+<span class="fc" id="L76">        } catch (Throwable e) {</span>
+<span class="fc" id="L77">            throw new Exception(e);</span>
         }
     }
 
     /**
      * Return all class paths as instance of {@link String} form given instance of {@link ClassLoader}
      * @param classLoader instance of {@link ClassLoader}
-     * @param additionalClassPaths additional class paths
      * @return all class paths
      */
-    private static String getClassPath(final ClassLoader classLoader, final String additionalClassPaths) {
-<span class="fc" id="L90">        ClassLoader cl = classLoader;</span>
-<span class="fc" id="L91">        StringBuilder buf = new StringBuilder();</span>
-<span class="fc" id="L92">        buf.append(&quot;.&quot;);</span>
-<span class="fc" id="L93">        String separator = System.getProperty(&quot;path.separator&quot;);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        while (null != cl) {</span>
+    private static String getClassPath(final ClassLoader classLoader) {
+<span class="fc" id="L87">        ClassLoader cl = classLoader;</span>
+<span class="fc" id="L88">        StringBuilder buf = new StringBuilder();</span>
+<span class="fc" id="L89">        buf.append(&quot;.&quot;);</span>
+<span class="fc" id="L90">        String separator = System.getProperty(&quot;path.separator&quot;);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        while (null != cl) {</span>
             try {
-<span class="fc" id="L96">                URLClassLoader ucl = (URLClassLoader) cl;</span>
+<span class="fc" id="L93">                URLClassLoader ucl = (URLClassLoader) cl;</span>
 
-<span class="fc" id="L98">                URL[] urls = ucl.getURLs();</span>
-<span class="fc bfc" id="L99" title="All 2 branches covered.">                for (URL url : urls) {</span>
-<span class="fc" id="L100">                    String jarPathName = url.getFile();</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                    if (jarPathName.startsWith(&quot;file:&quot;)) {</span>
-<span class="nc" id="L102">                        jarPathName = jarPathName.substring(</span>
-<span class="nc" id="L103">                                jarPathName.indexOf(&quot;file:&quot;) + &quot;file:&quot;.length(), jarPathName.indexOf(&quot;!/&quot;)</span>
+<span class="fc" id="L95">                URL[] urls = ucl.getURLs();</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                for (URL url : urls) {</span>
+<span class="fc" id="L97">                    String jarPathName = url.getFile();</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                    if (jarPathName.startsWith(&quot;file:&quot;)) {</span>
+<span class="fc" id="L99">                        jarPathName = jarPathName.substring(</span>
+<span class="fc" id="L100">                                jarPathName.indexOf(&quot;file:&quot;) + &quot;file:&quot;.length(), jarPathName.indexOf(&quot;!/&quot;)</span>
                         );
                     }
-<span class="fc" id="L106">                    buf.append(separator).append(</span>
+<span class="fc" id="L103">                    buf.append(separator).append(</span>
                             jarPathName
                     );
                 }
-<span class="fc" id="L110">            } catch (Exception e) {</span>
+<span class="fc" id="L107">            } catch (Exception e) {</span>
                 // do nothing
                 // because this try-catch check cast ClassLoader to URLClassLoader
-<span class="fc" id="L113">            }</span>
-<span class="fc" id="L114">            cl = cl.getParent();</span>
-        }
-<span class="pc bpc" id="L116" title="3 of 4 branches missed.">        if (null != additionalClassPaths &amp;&amp; !additionalClassPaths.isEmpty()) {</span>
-<span class="nc" id="L117">            buf.append(separator).append(additionalClassPaths);</span>
+<span class="fc" id="L110">            }</span>
+<span class="fc" id="L111">            cl = cl.getParent();</span>
         }
 
-<span class="fc" id="L120">        return buf.toString();</span>
+<span class="fc" id="L114">        return buf.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

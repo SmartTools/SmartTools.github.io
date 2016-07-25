@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ReceiverGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.receiver_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.receiver_generator</a> &gt; <span class="el_source">ReceiverGenerator.java</span></div><h1>ReceiverGenerator.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.receiver_generator;
+
+import info.smart_tools.smartactors.core.class_generator_java_compile_api.ClassGenerator;
+import info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.ClassBuilder;
+import info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder.Modifiers;
+import info.smart_tools.smartactors.core.iclass_generator.IClassGenerator;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
+import info.smart_tools.smartactors.core.ireceiver_generator.IReceiverGenerator;
+import info.smart_tools.smartactors.core.ireceiver_generator.exception.ReceiverGeneratorException;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.message_processing.IMessageProcessor;
+import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.core.message_processing.exceptions.AsynchronousOperationException;
+import info.smart_tools.smartactors.core.message_processing.exceptions.MessageReceiveException;
+
+import java.lang.reflect.Method;
+
+/**
+ * Implementation of {@link IReceiverGenerator}.
+ * &lt;pre&gt;
+ * Main features of implementation:
+ * - use class generator based on java compile API;
+ * &lt;/pre&gt;
+ */
+public class ReceiverGenerator implements IReceiverGenerator {
+
+    private IClassGenerator&lt;String&gt; classGenerator;
+
+    /**
+     * Constructor.
+     * Create new instance of {@link ReceiverGenerator} by given {@link ClassLoader}
+     * @param classLoader the instance of {@link ClassLoader}
+     * @throws InvalidArgumentException if initialization of {@link ClassGenerator} was failed
+     */
+    public ReceiverGenerator(final ClassLoader classLoader)
+<span class="fc" id="L37">            throws InvalidArgumentException {</span>
+<span class="fc" id="L38">        this.classGenerator = new ClassGenerator(classLoader);</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public IMessageReceiver generate(
+            final Object objInstance,
+            final IResolveDependencyStrategy wrapperResolutionStrategy,
+            final String methodName
+    ) throws InvalidArgumentException, ReceiverGeneratorException {
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        if (</span>
+                null == objInstance ||
+                null == methodName ||
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">                methodName.isEmpty() ||</span>
+                null == wrapperResolutionStrategy
+        ) {
+<span class="fc" id="L53">            throw new InvalidArgumentException(&quot;One of the arguments null or empty.&quot;);</span>
+        }
+        try {
+<span class="fc" id="L56">            Class&lt;IMessageReceiver&gt; clazz = generateClass(</span>
+                    objInstance,
+                    methodName
+            );
+<span class="fc" id="L60">            return clazz.getConstructor(</span>
+<span class="fc" id="L61">                    new Class[]{objInstance.getClass(), IResolveDependencyStrategy.class}</span>
+            )
+<span class="fc" id="L63">                    .newInstance(new Object[]{objInstance, wrapperResolutionStrategy});</span>
+<span class="fc" id="L64">        } catch (Throwable e) {</span>
+<span class="fc" id="L65">            throw new ReceiverGeneratorException(</span>
+                    &quot;Could not generate message receiver because of the following error:&quot;,
+                    e
+            );
+        }
+    }
+
+    private Class&lt;IMessageReceiver&gt; generateClass(
+            final Object usersObject,
+            final String handlerName
+    )
+            throws Exception {
+<span class="fc" id="L77">        ClassBuilder cb = new ClassBuilder(&quot;\t&quot;, &quot;\n&quot;);</span>
+<span class="fc" id="L78">        Class wrapperInterface = findWrapperInterface(usersObject, handlerName);</span>
+
+        // Add package name and imports
+<span class="fc" id="L81">        cb</span>
+<span class="fc" id="L82">                .addPackageName(usersObject.getClass().getPackage().getName())</span>
+<span class="fc" id="L83">                .addImport(usersObject.getClass().getCanonicalName())</span>
+<span class="fc" id="L84">                .addImport(wrapperInterface.getCanonicalName())</span>
+<span class="fc" id="L85">                .addImport(IMessageProcessor.class.getCanonicalName())</span>
+<span class="fc" id="L86">                .addImport(IMessageReceiver.class.getCanonicalName())</span>
+<span class="fc" id="L87">                .addImport(AsynchronousOperationException.class.getCanonicalName())</span>
+<span class="fc" id="L88">                .addImport(MessageReceiveException.class.getCanonicalName())</span>
+<span class="fc" id="L89">                .addImport(IResolveDependencyStrategy.class.getCanonicalName())</span>
+<span class="fc" id="L90">                .addImport(IObjectWrapper.class.getCanonicalName());</span>
+
+        // Add class header
+<span class="fc" id="L93">        cb</span>
+<span class="fc" id="L94">                .addClass()</span>
+<span class="fc" id="L95">                .setClassModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L96">                .setClassName(usersObject.getClass().getSimpleName() + &quot;_&quot; + handlerName + &quot;_&quot; + &quot;receiver&quot;)</span>
+<span class="fc" id="L97">                .setInterfaces(IMessageReceiver.class.getSimpleName());</span>
+
+        // Add fields
+<span class="fc" id="L100">        cb</span>
+<span class="fc" id="L101">                .addField()</span>
+<span class="fc" id="L102">                        .setModifier(Modifiers.PRIVATE)</span>
+<span class="fc" id="L103">                        .setType(usersObject.getClass().getSimpleName())</span>
+<span class="fc" id="L104">                        .setName(&quot;usersObject&quot;)</span>
+<span class="fc" id="L105">                        .next()</span>
+<span class="fc" id="L106">                .addField()</span>
+<span class="fc" id="L107">                        .setModifier(Modifiers.PRIVATE)</span>
+<span class="fc" id="L108">                        .setType(IResolveDependencyStrategy.class.getSimpleName())</span>
+<span class="fc" id="L109">                        .setName(&quot;strategy&quot;)</span>
+                ;
+
+        // Add constructor
+<span class="fc" id="L113">        cb</span>
+<span class="fc" id="L114">                .addConstructor()</span>
+<span class="fc" id="L115">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L116">                .setParameters()</span>
+<span class="fc" id="L117">                        .setType(usersObject.getClass().getSimpleName())</span>
+<span class="fc" id="L118">                        .setName(&quot;object&quot;)</span>
+<span class="fc" id="L119">                        .next()</span>
+<span class="fc" id="L120">                .setParameters()</span>
+<span class="fc" id="L121">                        .setType(IResolveDependencyStrategy.class.getSimpleName())</span>
+<span class="fc" id="L122">                        .setName(&quot;strategy&quot;)</span>
+<span class="fc" id="L123">                        .next()</span>
+<span class="fc" id="L124">                .addStringToBody(&quot;\tthis.usersObject = object;&quot;)</span>
+<span class="fc" id="L125">                .addStringToBody(&quot;\tthis.strategy = strategy;&quot;);</span>
+
+        // Add method
+<span class="fc" id="L128">        cb</span>
+<span class="fc" id="L129">                .addMethod()</span>
+<span class="fc" id="L130">                .setModifier(Modifiers.PUBLIC)</span>
+<span class="fc" id="L131">                .addParameter()</span>
+<span class="fc" id="L132">                        .setType(IMessageProcessor.class.getSimpleName())</span>
+<span class="fc" id="L133">                        .setName(&quot;processor&quot;)</span>
+<span class="fc" id="L134">                        .next()</span>
+<span class="fc" id="L135">                .setReturnType(&quot;void&quot;)</span>
+<span class="fc" id="L136">                .setName(&quot;receive&quot;)</span>
+<span class="fc" id="L137">                .setExceptions(MessageReceiveException.class.getSimpleName())</span>
+<span class="fc" id="L138">                .setExceptions(AsynchronousOperationException.class.getSimpleName())</span>
+<span class="fc" id="L139">                .addStringToBody(&quot;try {&quot;)</span>
+<span class="fc" id="L140">                .addStringToBody(&quot;\t&quot; + wrapperInterface.getSimpleName() + &quot; wrapper = this.strategy.resolve();&quot;)</span>
+<span class="fc" id="L141">                .addStringToBody(&quot;\t((IObjectWrapper) wrapper).init(processor.getEnvironment());&quot;)</span>
+<span class="fc" id="L142">                .addStringToBody(&quot;\tthis.usersObject.doSomeWork(wrapper);&quot;)</span>
+<span class="fc" id="L143">                .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
+<span class="fc" id="L144">                .addStringToBody(&quot;throw new MessageReceiveException(\&quot;Could not execute receiver operation.\&quot;, e);&quot;)</span>
+<span class="fc" id="L145">                .addStringToBody(&quot;}&quot;);</span>
+
+<span class="fc" id="L147">        return (Class&lt;IMessageReceiver&gt;) classGenerator.generate(cb.buildClass().toString());</span>
+    }
+
+    private Class findWrapperInterface(final Object actor, final String handler) {
+<span class="fc" id="L151">        Method[] methods = actor.getClass().getDeclaredMethods();</span>
+<span class="fc" id="L152">        Class wrapperInterface = null;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for (Method m : methods) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (m.getName().equals(handler)) {</span>
+<span class="fc" id="L155">                wrapperInterface = m.getParameterTypes()[0];</span>
+            }
+        }
+
+<span class="fc" id="L159">        return wrapperInterface;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

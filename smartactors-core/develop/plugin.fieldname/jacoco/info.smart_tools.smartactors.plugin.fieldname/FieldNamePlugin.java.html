@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FieldNamePlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.fieldname</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.fieldname</a> &gt; <span class="el_source">FieldNamePlugin.java</span></div><h1>FieldNamePlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.fieldname;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.resolve_by_name_ioc_with_lambda_strategy.ResolveByNameIocStrategy;
+
+public class FieldNamePlugin implements IPlugin{
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap bootstrap element
+     */
+<span class="nc" id="L26">    public FieldNamePlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L27">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L28">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+
+<span class="nc" id="L34">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;FieldNamePlugin&quot;);</span>
+
+<span class="nc" id="L36">            item</span>
+<span class="nc" id="L37">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L38">                    .process(() -&gt; {</span>
+                        try {
+<span class="nc" id="L40">                            IKey iFieldNameKey = Keys.getOrAdd(FieldName.class.toString());</span>
+<span class="nc" id="L41">                            IOC.register(iFieldNameKey,</span>
+                                    new ResolveByNameIocStrategy(
+                                            (args) -&gt; {
+                                                try {
+<span class="nc" id="L45">                                                    String nameOfFieldName = (String) args[0];</span>
+<span class="nc" id="L46">                                                    return new FieldName(nameOfFieldName);</span>
+<span class="nc" id="L47">                                                } catch (ClassCastException e) {</span>
+<span class="nc" id="L48">                                                    throw new RuntimeException(&quot;Can't cast object to String: &quot; + args[0],</span>
+                                                            e);
+<span class="nc" id="L50">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L51">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't get args: args must contain one or more elements &quot; +
+                                                                    &quot;and first element must be String&quot;,
+                                                            e);
+<span class="nc" id="L55">                                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L56">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't create new field name with this name: &quot; + args[0],
+                                                            e);
+                                                }
+                                            }
+                                    )
+                            );
+<span class="nc" id="L63">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L64">                            throw new ActionExecuteException(&quot;Can't get IFieldName key&quot;);</span>
+<span class="nc" id="L65">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L66">                            throw new ActionExecuteException(&quot;Can't get create strategy&quot;);</span>
+<span class="nc" id="L67">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L68">                            throw new ActionExecuteException(&quot;Can't get register new strategy&quot;);</span>
+<span class="nc" id="L69">                        }</span>
+<span class="nc" id="L70">                    });</span>
+<span class="nc" id="L71">            bootstrap.add(item);</span>
+<span class="nc" id="L72">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L73">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
+<span class="nc" id="L74">        }</span>
+<span class="nc" id="L75">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

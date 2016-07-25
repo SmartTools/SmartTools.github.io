@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MessageProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.message_processor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.message_processor</a> &gt; <span class="el_source">MessageProcessor.java</span></div><h1>MessageProcessor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.message_processor;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
-import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iqueue.IQueue;
 import info.smart_tools.smartactors.core.itask.ITask;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessor;
-import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.core.message_processing.exceptions.AsynchronousOperationException;
 
 /**
  * Task that performs on a message actions defined by a message processing sequence.
@@ -20,137 +20,214 @@ import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
  * @see ITask
  */
 public class MessageProcessor implements ITask, IMessageProcessor {
+    private IObject config;
     private IObject context;
     private IObject message;
     private IObject response;
+    private IObject environment;
+
+    private IFieldName configFieldName;
+    private IFieldName messageFieldName;
+    private IFieldName contextFieldName;
+    private IFieldName responseFieldName;
+    private IFieldName sequenceFieldName;
+    private IFieldName argumentsFieldName;
+
+    /**
+     * True if processing was interrupted (using {@link #pauseProcess()}) during execution of last receiver.
+     */
+    private boolean interrupted;
+
+    /**
+     * Depth of asynchronous operations. Any asynchronous operation (started by {@link #pauseProcess()}) may start another
+     * before it is completed.
+     *
+     * Example is a actor that wants to interrupt message processing (execution of actor is asynchronous operation itself
+     * as may require awaiting for a actor to finish previous operations).
+     */
+    // TODO: Use atomic if any more dangerous situation than described one will appear (and race condition will be possible)
+    private int asyncOpDepth;
+
+    /**
+     * Exception occurred in a asynchronous operation. If more than one asynchronous operation is performed only the last
+     * one exception will be processed using chain-level exception handling. Exceptions from another operations will be
+     * suppressed.
+     *
+     * @see IMessageProcessingSequence#catchException
+     */
+    private Throwable asyncException;
 
     private final IQueue&lt;ITask&gt; taskQueue;
     private final IMessageProcessingSequence messageProcessingSequence;
-
-    private final ReceiverCallback receiverCallback;
-
-    /**
-     * {@link IAction} that will be passed to {@link IMessageReceiver}'s.
-     */
-<span class="fc" id="L35">    private class ReceiverCallback implements IAction&lt;Throwable&gt; {</span>
-        @Override
-        public void execute(final Throwable exception)
-                throws ActionExecuteException, InvalidArgumentException {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (null != exception) {</span>
-                try {
-<span class="fc" id="L41">                    handleCompletedExceptionally(exception);</span>
-<span class="fc" id="L42">                } catch (Exception e) {</span>
-                    // TODO: Exception rethrown by receiver may be caught successful by MessageProcessor#execute()
-<span class="fc" id="L44">                    complete();</span>
-<span class="fc" id="L45">                    throw new ActionExecuteException(&quot;Exception occurred while handling exception occurred in message receiver.&quot;, e);</span>
-<span class="fc" id="L46">                }</span>
-            } else {
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                if (messageProcessingSequence.next()) {</span>
-<span class="fc" id="L49">                    MessageProcessor.this.enqueue();</span>
-                } else {
-<span class="nc" id="L51">                    MessageProcessor.this.complete();</span>
-                }
-            }
-<span class="fc" id="L54">        }</span>
-    }
 
     /**
      * The constructor.
      *
      * @param taskQueue                    the queue to be executed from
      * @param messageProcessingSequence    a {@link IMessageProcessingSequence} to use
+     * @param config                       the global configuration object to use
      * @throws InvalidArgumentException if taskQueue is {@code null}
      * @throws InvalidArgumentException if messageProcessingSequence is {@code null}
      * @throws ResolutionException if failed to resolve any dependency
      */
-    public MessageProcessor(final IQueue&lt;ITask&gt; taskQueue, final IMessageProcessingSequence messageProcessingSequence)
-<span class="fc" id="L67">            throws InvalidArgumentException, ResolutionException {</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (null == taskQueue) {</span>
-<span class="fc" id="L69">            throw new InvalidArgumentException(&quot;Task queue should not be null.&quot;);</span>
+    public MessageProcessor(final IQueue&lt;ITask&gt; taskQueue, final IMessageProcessingSequence messageProcessingSequence, final IObject config)
+<span class="fc" id="L74">            throws InvalidArgumentException, ResolutionException {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (null == taskQueue) {</span>
+<span class="fc" id="L76">            throw new InvalidArgumentException(&quot;Task queue should not be null.&quot;);</span>
         }
 
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (null == messageProcessingSequence) {</span>
-<span class="fc" id="L73">            throw new InvalidArgumentException(&quot;Message processing sequence should not be null.&quot;);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (null == messageProcessingSequence) {</span>
+<span class="fc" id="L80">            throw new InvalidArgumentException(&quot;Message processing sequence should not be null.&quot;);</span>
         }
 
-<span class="fc" id="L76">        this.taskQueue = taskQueue;</span>
-<span class="fc" id="L77">        this.messageProcessingSequence = messageProcessingSequence;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (null == config) {</span>
+<span class="fc" id="L84">            throw new InvalidArgumentException(&quot;Configuration object should not be null.&quot;);</span>
+        }
 
-<span class="fc" id="L79">        this.receiverCallback = new ReceiverCallback();</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L87">        this.taskQueue = taskQueue;</span>
+<span class="fc" id="L88">        this.messageProcessingSequence = messageProcessingSequence;</span>
+<span class="fc" id="L89">        this.config = config;</span>
 
-    /**
-     * Process given message in given context.
-     *
-     * @param theMessage the message to process
-     * @param theContext the context to process message in
-     * @throws InvalidArgumentException if theMessage is {@code null}
-     * @throws InvalidArgumentException if theContext is {@code null}
-     * @throws ResolutionException if fails to resolve any dependency
-     */
+<span class="fc" id="L91">        this.interrupted = false;</span>
+<span class="fc" id="L92">        this.asyncOpDepth = 0;</span>
+
+<span class="fc" id="L94">        this.environment = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()));</span>
+
+<span class="fc" id="L96">        configFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;config&quot;);</span>
+<span class="fc" id="L97">        messageFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;message&quot;);</span>
+<span class="fc" id="L98">        contextFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;context&quot;);</span>
+<span class="fc" id="L99">        responseFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;response&quot;);</span>
+<span class="fc" id="L100">        sequenceFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;sequence&quot;);</span>
+<span class="fc" id="L101">        argumentsFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;arguments&quot;);</span>
+<span class="fc" id="L102">    }</span>
+
     @Override
     public void process(final IObject theMessage, final IObject theContext)
-            throws InvalidArgumentException, ResolutionException {
+            throws InvalidArgumentException, ResolutionException, ChangeValueException {
         // TODO: Ensure that there is no process in progress
-<span class="fc" id="L95">        this.message = theMessage;</span>
-<span class="fc" id="L96">        this.context = theContext;</span>
-<span class="fc" id="L97">        this.response = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class));</span>
-<span class="fc" id="L98">        messageProcessingSequence.reset();</span>
-        // TODO: Save messageProcessingSequence in context (?).
-<span class="fc" id="L100">        enqueue();</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L108">        this.message = theMessage;</span>
+<span class="fc" id="L109">        this.context = theContext;</span>
+<span class="fc" id="L110">        this.response = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()));</span>
+
+<span class="fc" id="L112">        environment.setValue(configFieldName, config);</span>
+<span class="fc" id="L113">        environment.setValue(sequenceFieldName, messageProcessingSequence);</span>
+<span class="fc" id="L114">        environment.setValue(responseFieldName, response);</span>
+<span class="fc" id="L115">        environment.setValue(messageFieldName, theMessage);</span>
+<span class="fc" id="L116">        environment.setValue(contextFieldName, theContext);</span>
+
+<span class="fc" id="L118">        messageProcessingSequence.reset();</span>
+<span class="fc" id="L119">        enqueue();</span>
+<span class="fc" id="L120">    }</span>
+
+    @Override
+    public void pauseProcess() throws AsynchronousOperationException {
+        // TODO: Check if called outside of receiver call after completion of all asynchronous operations
+<span class="fc" id="L125">        this.interrupted = true;</span>
+<span class="fc" id="L126">        ++this.asyncOpDepth;</span>
+<span class="fc" id="L127">    }</span>
+
+    @Override
+    public void continueProcess(final Throwable e)
+            throws AsynchronousOperationException {
+<span class="fc" id="L132">        int asOp = --this.asyncOpDepth;</span>
+
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (asOp &lt; 0) {</span>
+<span class="fc" id="L135">            throw new AsynchronousOperationException(&quot;Too many calls of #continueProcess.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (null != e) {</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            if (null != asyncException) {</span>
+<span class="nc" id="L140">                e.addSuppressed(asyncException);</span>
+            }
+
+<span class="fc" id="L143">            asyncException = e;</span>
+        }
+
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (asOp == 0) {</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (null != asyncException) {</span>
+                try {
+<span class="fc" id="L149">                    messageProcessingSequence.catchException(asyncException, context);</span>
+<span class="fc" id="L150">                } catch (Exception e1) {</span>
+<span class="fc" id="L151">                    throw new AsynchronousOperationException(</span>
+                            &quot;Exception occurred while processing exceptional completion of operation.&quot;, e1);
+<span class="fc" id="L153">                }</span>
+            }
+
+<span class="fc" id="L156">            enqueueNext();</span>
+        }
+<span class="fc" id="L158">    }</span>
 
     @Override
     public IObject getContext() {
-<span class="fc" id="L105">        return context;</span>
+<span class="fc" id="L162">        return context;</span>
     }
 
     @Override
     public IObject getResponse() {
-<span class="fc" id="L110">        return response;</span>
+<span class="fc" id="L167">        return response;</span>
     }
 
     @Override
     public  IObject getMessage() {
-<span class="fc" id="L115">        return message;</span>
+<span class="fc" id="L172">        return message;</span>
     }
 
     @Override
     public IMessageProcessingSequence getSequence() {
-<span class="fc" id="L120">        return messageProcessingSequence;</span>
+<span class="fc" id="L177">        return messageProcessingSequence;</span>
     }
+
+    @Override
+    public IObject getEnvironment() {
+<span class="fc" id="L182">        return environment;</span>
+    }
+
+    @Override
+    public void setConfig(final IObject config) throws InvalidArgumentException {
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (null == config) {</span>
+<span class="fc" id="L188">            throw new InvalidArgumentException(&quot;Configuration object should not be null.&quot;);</span>
+        }
+<span class="fc" id="L190">        this.config = config;</span>
+<span class="fc" id="L191">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
         try {
-<span class="fc" id="L126">            messageProcessingSequence.getCurrentReceiver().receive(</span>
-<span class="fc" id="L127">                    this, messageProcessingSequence.getCurrentReceiverArguments(), receiverCallback);</span>
-<span class="fc" id="L128">        } catch (Throwable e) {</span>
             try {
-<span class="nc" id="L130">                handleCompletedExceptionally(e);</span>
-<span class="fc" id="L131">            } catch (final Exception e1) {</span>
-<span class="fc" id="L132">                complete();</span>
-<span class="fc" id="L133">                throw new TaskExecutionException(&quot;Exception occurred while handling exception occurred in message receiver.&quot;, e1);</span>
-<span class="nc" id="L134">            }</span>
-<span class="fc" id="L135">        }</span>
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L197">                this.interrupted = false;</span>
+<span class="fc" id="L198">                this.asyncOpDepth = 0;</span>
+<span class="fc" id="L199">                this.asyncException = null;</span>
+<span class="fc" id="L200">                this.environment.setValue(argumentsFieldName, messageProcessingSequence.getCurrentReceiverArguments());</span>
+<span class="fc" id="L201">                messageProcessingSequence.getCurrentReceiver().receive(this);</span>
+<span class="fc" id="L202">            } catch (Throwable e) {</span>
+<span class="nc" id="L203">                messageProcessingSequence.catchException(e, context);</span>
+<span class="fc" id="L204">            }</span>
 
-    private void handleCompletedExceptionally(final Throwable exception)
-            throws Exception {
-<span class="fc" id="L140">        messageProcessingSequence.catchException(exception, context);</span>
-<span class="fc" id="L141">        enqueue();</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">            if (!interrupted) {</span>
+<span class="fc" id="L207">                enqueueNext();</span>
+            }
+<span class="fc" id="L209">        } catch (final Exception e1) {</span>
+<span class="fc" id="L210">            complete();</span>
+<span class="fc" id="L211">            throw new TaskExecutionException(&quot;Exception occurred while handling exception occurred in message receiver.&quot;, e1);</span>
+<span class="fc" id="L212">        }</span>
+<span class="fc" id="L213">    }</span>
+
+    private void enqueueNext() {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (messageProcessingSequence.next()) {</span>
+<span class="fc" id="L217">            enqueue();</span>
+        }
+<span class="fc" id="L219">    }</span>
 
     private void enqueue() {
         try {
-<span class="fc" id="L146">            taskQueue.put(this);</span>
-<span class="fc" id="L147">        } catch (final InterruptedException e) {</span>
-<span class="fc" id="L148">            Thread.currentThread().interrupt();</span>
-<span class="fc" id="L149">        }</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L223">            taskQueue.put(this);</span>
+<span class="fc" id="L224">        } catch (final InterruptedException e) {</span>
+<span class="fc" id="L225">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L226">        }</span>
+<span class="fc" id="L227">    }</span>
 
     private void complete() {
         // TODO: Return message, context, response and {@code this} to the pool
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L231">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -47,7 +47,7 @@ public class CreateCachedCollectionPlugin implements IPlugin {
 
 <span class="nc" id="L48">            item</span>
 <span class="nc" id="L49">                .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L50">                .after(&quot;FieldPlugin&quot;)</span>
+<span class="nc" id="L50">                .after(&quot;IFieldPlugin&quot;)</span>
 <span class="nc" id="L51">                .process(() -&gt; {</span>
                     try {
 <span class="nc" id="L53">                        IKey cachedCollectionKey = Keys.getOrAdd(ICachedCollection.class.toString());</span>

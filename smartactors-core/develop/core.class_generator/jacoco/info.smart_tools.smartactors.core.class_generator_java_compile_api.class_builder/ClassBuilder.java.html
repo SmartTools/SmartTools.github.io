@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ClassBuilder.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.class_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder</a> &gt; <span class="el_source">ClassBuilder.java</span></div><h1>ClassBuilder.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.class_generator_java_compile_api.class_builder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Class builder.
+ * Build class by given class attributes.
+ */
+public class ClassBuilder {
+
+<span class="fc" id="L14">    private String tabSymbol = &quot;\0&quot;;</span>
+<span class="fc" id="L15">    private String lineBreakSymbol = &quot;\0&quot;;</span>
+<span class="fc" id="L16">    private List&lt;String&gt; importsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L17">    private String packageName = &quot;&quot;;</span>
+    private ClassInfo classInfo;
+<span class="fc" id="L19">    private List&lt;FieldInfo&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L20">    private List&lt;MethodInfo&gt; methods = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L21">    private List&lt;ConstructorInfo&gt; constructors = new ArrayList&lt;&gt;();</span>
+
+    private static final char OPEN = '{';
+    private static final char CLOSE = '}';
+    private static final char OPEN_B = '(';
+    private static final char CLOSE_B = ')';
+    private static final char OPEN_TB = '&lt;';
+    private static final char CLOSE_TB = '&gt;';
+    private static final char SPACE = ' ';
+    private static final char COMMA = ',';
+    private static final char SEMICOLON = ';';
+    private static final String CLASS = &quot;class&quot;;
+    private static final String EXTENDS = &quot;extends&quot;;
+    private static final String IMPLEMENTS = &quot;implements&quot;;
+    private static final String THROWS = &quot;throws&quot;;
+    private static final String PACKAGE = &quot;package&quot;;
+    private static final String IMPORT = &quot;import&quot;;
+
+<span class="fc" id="L39">    private static Map&lt;String, String&gt; mapPrimitiveToClass = new HashMap&lt;&gt;();</span>
+    static {
+<span class="fc" id="L41">        mapPrimitiveToClass.put(int.class.getName(), &quot;Integer&quot;);</span>
+<span class="fc" id="L42">        mapPrimitiveToClass.put(long.class.getName(), &quot;Long&quot;);</span>
+<span class="fc" id="L43">        mapPrimitiveToClass.put(float.class.getName(), &quot;Float&quot;);</span>
+<span class="fc" id="L44">        mapPrimitiveToClass.put(double.class.getName(), &quot;Double&quot;);</span>
+<span class="fc" id="L45">        mapPrimitiveToClass.put(byte.class.getName(), &quot;Byte&quot;);</span>
+<span class="fc" id="L46">        mapPrimitiveToClass.put(boolean.class.getName(), &quot;Boolean&quot;);</span>
+<span class="fc" id="L47">        mapPrimitiveToClass.put(char.class.getName(), &quot;Character&quot;);</span>
+<span class="fc" id="L48">        mapPrimitiveToClass.put(short.class.getName(), &quot;Short&quot;);</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Constructor.
+     * Creates instance of {@link ClassBuilder} with given setting
+     * @param tabSymbol the symbol for indent between string beginning and language words
+     * @param lineBreakSymbol the newline character
+     */
+<span class="fc" id="L57">    public ClassBuilder(final String tabSymbol, final String lineBreakSymbol) {</span>
+<span class="fc" id="L58">        this.tabSymbol = tabSymbol;</span>
+<span class="fc" id="L59">        this.lineBreakSymbol = lineBreakSymbol;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Add package name
+     * @param nameOfPackage the name of package
+     * @return current instance of {@link ClassBuilder}
+     */
+    public ClassBuilder addPackageName(final String nameOfPackage) {
+<span class="fc" id="L68">        this.packageName = nameOfPackage;</span>
+
+<span class="fc" id="L70">        return this;</span>
+    }
+
+    /**
+     * Add import
+     * @param value the import string
+     * @return current instance of {@link ClassBuilder}
+     */
+    public ClassBuilder addImport(final String value) {
+<span class="fc" id="L79">        this.importsList.add(value);</span>
+
+<span class="fc" id="L81">        return this;</span>
+    }
+
+    /**
+     * Start editing parameters of {@link ClassInfo}
+     * @return instance of {@link ClassInfo}
+     */
+    public ClassInfo addClass() {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (null == this.classInfo) {</span>
+<span class="fc" id="L90">            this.classInfo = new ClassInfo(this);</span>
+        }
+
+<span class="fc" id="L93">        return this.classInfo;</span>
+    }
+
+    /**
+     * Add new method and start editing parameters of new method
+     * @return instance of {@link MethodInfo}
+     */
+    public MethodInfo addMethod() {
+<span class="fc" id="L101">        MethodInfo method = new MethodInfo(this);</span>
+<span class="fc" id="L102">        this.methods.add(method);</span>
+
+<span class="fc" id="L104">        return method;</span>
+    }
+
+    /**
+     * Add new constructor and start editing parameters of new constructor
+     * @return instance of {@link ConstructorInfo}
+     */
+    public ConstructorInfo addConstructor() {
+<span class="fc" id="L112">        ConstructorInfo constructorInfo = new ConstructorInfo(this);</span>
+<span class="fc" id="L113">        this.constructors.add(constructorInfo);</span>
+
+<span class="fc" id="L115">        return constructorInfo;</span>
+    }
+
+    /**
+     * Add new field and start editing parameters of new field
+     * @return instance of {@link FieldInfo}
+     */
+    public FieldInfo addField() {
+<span class="fc" id="L123">        FieldInfo fieldInfo = new FieldInfo(this);</span>
+<span class="fc" id="L124">        this.fields.add(fieldInfo);</span>
+
+<span class="fc" id="L126">        return fieldInfo;</span>
+    }
+
+    public ClassInfo getClassInfo() {
+<span class="fc" id="L130">        return classInfo;</span>
+    }
+
+    public List&lt;FieldInfo&gt; getFields() {
+<span class="fc" id="L134">        return fields;</span>
+    }
+
+    public List&lt;MethodInfo&gt; getMethods() {
+<span class="fc" id="L138">        return methods;</span>
+    }
+
+    public List&lt;ConstructorInfo&gt; getConstructors() {
+<span class="fc" id="L142">        return constructors;</span>
+    }
+
+    /**
+     * Build string containing class by completed before class info, fields, constructors and methods
+     * @return instance of {@link StringBuilder}
+     */
+    public StringBuilder buildClass() {
+<span class="fc" id="L150">        StringBuilder builder = new StringBuilder();</span>
+
+        // Add package string
+<span class="fc" id="L153">        builder</span>
+<span class="fc" id="L154">                .append(PACKAGE)</span>
+<span class="fc" id="L155">                .append(SPACE)</span>
+<span class="fc" id="L156">                .append(this.packageName)</span>
+<span class="fc" id="L157">                .append(SEMICOLON)</span>
+<span class="fc" id="L158">                .append(this.lineBreakSymbol)</span>
+<span class="fc" id="L159">                .append(this.lineBreakSymbol);</span>
+
+        // Add imports
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        for (String str : this.importsList) {</span>
+<span class="fc" id="L163">            builder</span>
+<span class="fc" id="L164">                    .append(IMPORT)</span>
+<span class="fc" id="L165">                    .append(SPACE)</span>
+<span class="fc" id="L166">                    .append(str)</span>
+<span class="fc" id="L167">                    .append(SEMICOLON)</span>
+<span class="fc" id="L168">                    .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L169">        }</span>
+<span class="fc" id="L170">        builder.append(this.lineBreakSymbol);</span>
+
+        // Add class
+<span class="fc" id="L173">        builder</span>
+<span class="fc" id="L174">                .append(getClassInfo().getClassModifier().getValue())</span>
+<span class="fc" id="L175">                .append(SPACE)</span>
+<span class="fc" id="L176">                .append(CLASS)</span>
+<span class="fc" id="L177">                .append(SPACE)</span>
+<span class="fc" id="L178">                .append(getClassInfo().getClassName())</span>
+<span class="fc" id="L179">                .append(SPACE);</span>
+<span class="pc bpc" id="L180" title="2 of 4 branches missed.">        if (null != getClassInfo().getInherited() &amp;&amp; !getClassInfo().getInherited().isEmpty()) {</span>
+<span class="fc" id="L181">            builder</span>
+<span class="fc" id="L182">                    .append(EXTENDS)</span>
+<span class="fc" id="L183">                    .append(SPACE)</span>
+<span class="fc" id="L184">                    .append(getClassInfo().getInherited())</span>
+<span class="fc" id="L185">                    .append(SPACE);</span>
+        }
+
+<span class="fc" id="L188">        int listSize = getClassInfo().getInterfaces().size();</span>
+<span class="fc" id="L189">        int count = 1;</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (listSize &gt; 0) {</span>
+<span class="fc" id="L191">            builder</span>
+<span class="fc" id="L192">                    .append(IMPLEMENTS)</span>
+<span class="fc" id="L193">                    .append(SPACE);</span>
+        }
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        for (String str : getClassInfo().getInterfaces()) {</span>
+<span class="fc" id="L196">            builder.append(str);</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            if (listSize != count) {</span>
+<span class="fc" id="L198">                builder.append(COMMA);</span>
+            }
+<span class="fc" id="L200">            builder.append(SPACE);</span>
+<span class="fc" id="L201">            ++count;</span>
+<span class="fc" id="L202">        }</span>
+        // Open class
+<span class="fc" id="L204">        builder</span>
+<span class="fc" id="L205">                .append(OPEN)</span>
+<span class="fc" id="L206">                .append(this.lineBreakSymbol);</span>
+
+        // Add fields
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        for (FieldInfo field : this.getFields()) {</span>
+<span class="fc" id="L210">            builder</span>
+<span class="fc" id="L211">                    .append(this.tabSymbol)</span>
+<span class="fc" id="L212">                    .append(field.getModifier().getValue())</span>
+<span class="fc" id="L213">                    .append(SPACE)</span>
+<span class="fc" id="L214">                    .append(field.getType());</span>
+<span class="pc bpc" id="L215" title="3 of 4 branches missed.">            if (field.getInnerGenericType() != null &amp;&amp; !field.getInnerGenericType().isEmpty()) {</span>
+<span class="nc" id="L216">                String genericType = mapPrimitiveToClass.get(field.getInnerGenericType());</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                if (null == genericType) {</span>
+<span class="nc" id="L218">                    genericType = field.getInnerGenericType();</span>
+                }
+<span class="nc" id="L220">                builder</span>
+<span class="nc" id="L221">                        .append(OPEN_TB)</span>
+<span class="nc" id="L222">                        .append(genericType)</span>
+<span class="nc" id="L223">                        .append(CLOSE_TB);</span>
+            }
+<span class="fc" id="L225">            builder</span>
+<span class="fc" id="L226">                    .append(SPACE)</span>
+<span class="fc" id="L227">                    .append(field.getName())</span>
+<span class="fc" id="L228">                    .append(SEMICOLON)</span>
+<span class="fc" id="L229">                    .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L230">        }</span>
+<span class="fc" id="L231">        builder.append(this.lineBreakSymbol);</span>
+
+        // Add constructors
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for (ConstructorInfo constructorInfo : this.getConstructors()) {</span>
+<span class="fc" id="L235">            builder</span>
+<span class="fc" id="L236">                    .append(this.tabSymbol)</span>
+<span class="fc" id="L237">                    .append(constructorInfo.getModifier().getValue())</span>
+<span class="fc" id="L238">                    .append(SPACE)</span>
+<span class="fc" id="L239">                    .append(getClassInfo().getClassName())</span>
+<span class="fc" id="L240">                    .append(OPEN_B);</span>
+<span class="fc" id="L241">            listSize = constructorInfo.getParameters().size();</span>
+<span class="fc" id="L242">            count = 1;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            for (ConstructorParameterInfo parameterInfo : constructorInfo.getParameters()) {</span>
+<span class="fc" id="L244">                builder</span>
+<span class="fc" id="L245">                        .append(parameterInfo.getType())</span>
+<span class="fc" id="L246">                        .append(SPACE)</span>
+<span class="fc" id="L247">                        .append(parameterInfo.getName());</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">                if (listSize != count) {</span>
+<span class="fc" id="L249">                    builder</span>
+<span class="fc" id="L250">                            .append(COMMA)</span>
+<span class="fc" id="L251">                            .append(SPACE);</span>
+                }
+<span class="fc" id="L253">                ++count;</span>
+<span class="fc" id="L254">            }</span>
+<span class="fc" id="L255">            builder</span>
+<span class="fc" id="L256">                    .append(CLOSE_B)</span>
+<span class="fc" id="L257">                    .append(SPACE);</span>
+<span class="fc" id="L258">            listSize = constructorInfo.getExceptions().size();</span>
+<span class="fc" id="L259">            count = 1;</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">            if (listSize &gt; 0) {</span>
+<span class="fc" id="L261">                builder</span>
+<span class="fc" id="L262">                        .append(THROWS)</span>
+<span class="fc" id="L263">                        .append(SPACE);</span>
+            }
+<span class="fc bfc" id="L265" title="All 2 branches covered.">            for (String exception : constructorInfo.getExceptions()) {</span>
+<span class="fc" id="L266">                builder</span>
+<span class="fc" id="L267">                        .append(exception);</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">                if (listSize != count) {</span>
+<span class="fc" id="L269">                    builder.append(COMMA);</span>
+                }
+<span class="fc" id="L271">                builder.append(SPACE);</span>
+<span class="fc" id="L272">                ++count;</span>
+<span class="fc" id="L273">            }</span>
+<span class="fc" id="L274">            builder</span>
+<span class="fc" id="L275">                    .append(SPACE)</span>
+<span class="fc" id="L276">                    .append(OPEN)</span>
+<span class="fc" id="L277">                    .append(this.lineBreakSymbol);</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">            for (String bodyString : constructorInfo.getBody()) {</span>
+<span class="fc" id="L279">                builder</span>
+<span class="fc" id="L280">                        .append(this.tabSymbol)</span>
+<span class="fc" id="L281">                        .append(this.tabSymbol)</span>
+<span class="fc" id="L282">                        .append(bodyString)</span>
+<span class="fc" id="L283">                        .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L284">            }</span>
+<span class="fc" id="L285">            builder</span>
+<span class="fc" id="L286">                    .append(this.lineBreakSymbol)</span>
+<span class="fc" id="L287">                    .append(CLOSE)</span>
+<span class="fc" id="L288">                    .append(this.lineBreakSymbol)</span>
+<span class="fc" id="L289">                    .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L290">        }</span>
+
+        // Add methods
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        for (MethodInfo methodInfo : this.getMethods()) {</span>
+<span class="fc" id="L294">            builder</span>
+<span class="fc" id="L295">                    .append(this.tabSymbol)</span>
+<span class="fc" id="L296">                    .append(methodInfo.getModifier().getValue())</span>
+<span class="fc" id="L297">                    .append(SPACE)</span>
+<span class="fc" id="L298">                    .append(methodInfo.getReturnType())</span>
+<span class="fc" id="L299">                    .append(SPACE)</span>
+<span class="fc" id="L300">                    .append(methodInfo.getName())</span>
+<span class="fc" id="L301">                    .append(OPEN_B);</span>
+<span class="fc" id="L302">            listSize = methodInfo.getParameters().size();</span>
+<span class="fc" id="L303">            count = 1;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">            for (MethodParameterInfo parameterInfo : methodInfo.getParameters()) {</span>
+<span class="fc" id="L305">                builder</span>
+<span class="fc" id="L306">                        .append(parameterInfo.getType())</span>
+<span class="fc" id="L307">                        .append(SPACE)</span>
+<span class="fc" id="L308">                        .append(parameterInfo.getName());</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">                if (listSize != count) {</span>
+<span class="fc" id="L310">                    builder</span>
+<span class="fc" id="L311">                            .append(COMMA)</span>
+<span class="fc" id="L312">                            .append(SPACE);</span>
+                }
+<span class="fc" id="L314">                ++count;</span>
+<span class="fc" id="L315">            }</span>
+<span class="fc" id="L316">            builder</span>
+<span class="fc" id="L317">                    .append(CLOSE_B)</span>
+<span class="fc" id="L318">                    .append(SPACE);</span>
+<span class="fc" id="L319">            listSize = methodInfo.getExceptions().size();</span>
+<span class="fc" id="L320">            count = 1;</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">            if (listSize &gt; 0) {</span>
+<span class="fc" id="L322">                builder</span>
+<span class="fc" id="L323">                        .append(THROWS)</span>
+<span class="fc" id="L324">                        .append(SPACE);</span>
+            }
+<span class="fc bfc" id="L326" title="All 2 branches covered.">            for (String exception : methodInfo.getExceptions()) {</span>
+<span class="fc" id="L327">                builder</span>
+<span class="fc" id="L328">                        .append(exception);</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">                if (listSize != count) {</span>
+<span class="fc" id="L330">                    builder.append(COMMA);</span>
+                }
+<span class="fc" id="L332">                builder.append(SPACE);</span>
+<span class="fc" id="L333">                ++count;</span>
+<span class="fc" id="L334">            }</span>
+<span class="fc" id="L335">            builder</span>
+<span class="fc" id="L336">                    .append(SPACE)</span>
+<span class="fc" id="L337">                    .append(OPEN)</span>
+<span class="fc" id="L338">                    .append(this.lineBreakSymbol);</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">            for (String bodyString : methodInfo.getBody()) {</span>
+<span class="fc" id="L340">                builder</span>
+<span class="fc" id="L341">                        .append(this.tabSymbol)</span>
+<span class="fc" id="L342">                        .append(this.tabSymbol)</span>
+<span class="fc" id="L343">                        .append(bodyString)</span>
+<span class="fc" id="L344">                        .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L345">            }</span>
+<span class="fc" id="L346">            builder</span>
+<span class="fc" id="L347">                    .append(this.lineBreakSymbol)</span>
+<span class="fc" id="L348">                    .append(CLOSE)</span>
+<span class="fc" id="L349">                    .append(this.lineBreakSymbol)</span>
+<span class="fc" id="L350">                    .append(this.lineBreakSymbol);</span>
+<span class="fc" id="L351">        }</span>
+
+        // Close class
+<span class="fc" id="L354">        builder.append(CLOSE);</span>
+
+<span class="fc" id="L356">        return builder;</span>
+    }
+}
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
