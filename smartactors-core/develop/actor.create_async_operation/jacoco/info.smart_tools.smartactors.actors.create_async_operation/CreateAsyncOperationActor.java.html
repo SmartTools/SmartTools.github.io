@@ -12,6 +12,8 @@ import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -19,12 +21,15 @@ import java.util.UUID;
  */
 public class CreateAsyncOperationActor {
 
+    //TODO:: this format should be setted for whole project?
+<span class="fc" id="L25">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+
     /**
      * Constructor needed for registry actor
      * @param params iobject
      */
-<span class="fc" id="L26">    public CreateAsyncOperationActor(final IObject params) {</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L31">    public CreateAsyncOperationActor(final IObject params) {</span>
+<span class="fc" id="L32">    }</span>
 
     /**
      * Generates token and creates asynchronous operation.
@@ -39,19 +44,20 @@ public class CreateAsyncOperationActor {
 
         try {
             //TODO:: move generate to util class and add server number
-<span class="fc" id="L42">            String token = String.valueOf(UUID.randomUUID());</span>
-<span class="fc" id="L43">            IAsyncOperationCollection collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()));</span>
-<span class="fc" id="L44">            String expiredTime = message.getExpiredTime();</span>
-<span class="fc" id="L45">            AuthOperationData authOperationData = IOC.resolve(Keys.getOrAdd(AuthOperationData.class.toString()));</span>
-<span class="fc" id="L46">            authOperationData.setSessionId(message.getSessionId());</span>
-//            collection.createAsyncOperation(((IObjectWrapper) authOperationData).getIObjects()[0], token, expiredTime);
-<span class="fc" id="L48">            collection.createAsyncOperation(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), authOperationData), token, expiredTime);</span>
+<span class="fc" id="L47">            String token = String.valueOf(UUID.randomUUID());</span>
+<span class="fc" id="L48">            IAsyncOperationCollection collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()));</span>
+<span class="fc" id="L49">            Long amountOfHoursToExpireFromNow = message.getExpiredTime();</span>
+<span class="fc" id="L50">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(FORMATTER);</span>
+            //TODO:: use wrapper generator or field or get this iobject from configuration json of a map
+<span class="fc" id="L52">            AuthOperationData authOperationData = IOC.resolve(Keys.getOrAdd(AuthOperationData.class.toString()));</span>
+<span class="fc" id="L53">            authOperationData.setSessionId(message.getSessionId());</span>
+<span class="fc" id="L54">            collection.createAsyncOperation(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), authOperationData), token, expiredTime);</span>
 
             //NOTE: this setter should set token to session and to response!
-<span class="fc" id="L51">            message.setAsyncOperationToken(token);</span>
-<span class="fc" id="L52">        } catch (ReadValueException | ResolutionException | ChangeValueException | CreateAsyncOperationException e) {</span>
-<span class="fc" id="L53">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
-<span class="fc" id="L54">        }</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L57">            message.setAsyncOperationToken(token);</span>
+<span class="fc" id="L58">        } catch (ReadValueException | ResolutionException | ChangeValueException | CreateAsyncOperationException e) {</span>
+<span class="fc" id="L59">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
