@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>                 .addStringToBody(<span class="jxr_string">"try {"</span>)
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>                 .addStringToBody(<span class="jxr_string">"\t"</span> + wrapperInterface.getSimpleName() + <span class="jxr_string">" wrapper = this.strategy.resolve();"</span>)
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>                 .addStringToBody(<span class="jxr_string">"\t((IObjectWrapper) wrapper).init(processor.getEnvironment());"</span>)
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>                 .addStringToBody(<span class="jxr_string">"\tthis.usersObject.doSomeWork(wrapper);"</span>)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>                 .addStringToBody(<span class="jxr_string">"\tthis.usersObject."</span> + handlerName + <span class="jxr_string">"(wrapper);"</span>)
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>                 .addStringToBody(<span class="jxr_string">"} catch (Throwable e) {"</span>)
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>                 .addStringToBody(<span class="jxr_string">"throw new MessageReceiveException(\&quot;Could not execute receiver operation.\&quot;, e);"</span>)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>                 .addStringToBody(<span class="jxr_string">"}"</span>);

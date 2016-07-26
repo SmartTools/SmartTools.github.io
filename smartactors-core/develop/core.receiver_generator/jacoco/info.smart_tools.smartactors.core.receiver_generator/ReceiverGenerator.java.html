@@ -139,7 +139,7 @@ public class ReceiverGenerator implements IReceiverGenerator {
 <span class="fc" id="L139">                .addStringToBody(&quot;try {&quot;)</span>
 <span class="fc" id="L140">                .addStringToBody(&quot;\t&quot; + wrapperInterface.getSimpleName() + &quot; wrapper = this.strategy.resolve();&quot;)</span>
 <span class="fc" id="L141">                .addStringToBody(&quot;\t((IObjectWrapper) wrapper).init(processor.getEnvironment());&quot;)</span>
-<span class="fc" id="L142">                .addStringToBody(&quot;\tthis.usersObject.doSomeWork(wrapper);&quot;)</span>
+<span class="fc" id="L142">                .addStringToBody(&quot;\tthis.usersObject.&quot; + handlerName + &quot;(wrapper);&quot;)</span>
 <span class="fc" id="L143">                .addStringToBody(&quot;} catch (Throwable e) {&quot;)</span>
 <span class="fc" id="L144">                .addStringToBody(&quot;throw new MessageReceiveException(\&quot;Could not execute receiver operation.\&quot;, e);&quot;)</span>
 <span class="fc" id="L145">                .addStringToBody(&quot;}&quot;);</span>
