@@ -1,6 +1,3 @@
-info.smart_tools.smartactors.actors.authentication
-info.smart_tools.smartactors.actors.authentication.exception
-info.smart_tools.smartactors.actors.authentication.wrapper
 info.smart_tools.smartactors.actors.check_user_by_email
 info.smart_tools.smartactors.actors.check_user_by_email.exception
 info.smart_tools.smartactors.actors.check_user_by_email.wrapper
@@ -202,9 +199,14 @@ info.smart_tools.smartactors.core.task_dispatcher
 info.smart_tools.smartactors.core.thread_pool
 info.smart_tools.smartactors.core.wds_object
 info.smart_tools.smartactors.core.wrapper_generator
+info.smart_tools.smartactors.plugin.authentication
+info.smart_tools.smartactors.plugin.authentication.exception
+info.smart_tools.smartactors.plugin.authentication.wrapper
 info.smart_tools.smartactors.plugin.cached_collection
+info.smart_tools.smartactors.plugin.check_user_by_email_actor
 info.smart_tools.smartactors.plugin.check_user_is_new_actor
 info.smart_tools.smartactors.plugin.check_validity_async_operation_actor
+info.smart_tools.smartactors.plugin.close_async_operation_actor
 info.smart_tools.smartactors.plugin.collection_name
 info.smart_tools.smartactors.plugin.compile_query
 info.smart_tools.smartactors.plugin.create_async_operation

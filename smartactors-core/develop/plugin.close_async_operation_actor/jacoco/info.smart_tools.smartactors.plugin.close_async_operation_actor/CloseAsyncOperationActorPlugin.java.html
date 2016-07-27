@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CloseAsyncOperationActorPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.close_async_operation_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.close_async_operation_actor</a> &gt; <span class="el_source">CloseAsyncOperationActorPlugin.java</span></div><h1>CloseAsyncOperationActorPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.close_async_operation_actor;
+
+import info.smart_tools.smartactors.actors.close_async_operation.CloseAsyncOperationActor;
+import info.smart_tools.smartactors.actors.close_async_operation.wrapper.ActorParams;
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.util.Arrays;
+/**
+ * Plugin for implement @CloseAsyncOperationActor
+ */
+public class CloseAsyncOperationActorPlugin implements IPlugin {
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap bootstrap element
+     */
+<span class="nc" id="L31">    public CloseAsyncOperationActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L32">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L33">    }</span>
+
+    /**
+     * Loading plugin
+     * @throws PluginException throw when plugin can't be loaded
+     */
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="nc" id="L42">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CloseAsyncOperationActorPlugin&quot;);</span>
+
+<span class="nc" id="L44">            item</span>
+<span class="nc" id="L45">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L46">                    .process(() -&gt; {</span>
+                        try {
+<span class="nc" id="L48">                            IKey checkUserByEmailActorKey = Keys.getOrAdd(CloseAsyncOperationActor.class.getCanonicalName());</span>
+<span class="nc" id="L49">                            IOC.register(checkUserByEmailActorKey,</span>
+                                    new CreateNewInstanceStrategy(
+                                            (args) -&gt; {
+                                                try {
+<span class="nc" id="L53">                                                    ActorParams actorParams =</span>
+<span class="nc" id="L54">                                                            IOC.resolve(</span>
+<span class="nc" id="L55">                                                                    Keys.getOrAdd(ActorParams.class.toString()),</span>
+                                                                    args[0]);
+<span class="nc" id="L57">                                                    return new CloseAsyncOperationActor(actorParams);</span>
+<span class="nc" id="L58">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L59">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't get args: args must contain one or more elements &quot; +
+                                                                    &quot;and first element must be IObject&quot;,
+                                                            e);
+<span class="nc" id="L63">                                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L64">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't create actor with this args: &quot;
+<span class="nc" id="L66">                                                                    + Arrays.toString(args),</span>
+                                                            e);
+<span class="nc" id="L68">                                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L69">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't get ActorParams wrapper or Key for ActorParams&quot;,
+                                                            e);
+                                                }
+                                            }
+                                    )
+                            );
+<span class="nc" id="L76">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L77">                            throw new ActionExecuteException(&quot;Can't get CloseAsyncOperationActor key&quot;);</span>
+<span class="nc" id="L78">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L79">                            throw new ActionExecuteException(&quot;Can't get create strategy&quot;);</span>
+<span class="nc" id="L80">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L81">                            throw new ActionExecuteException(&quot;Can't get register new strategy&quot;);</span>
+<span class="nc" id="L82">                        }</span>
+<span class="nc" id="L83">                    });</span>
+<span class="nc" id="L84">            bootstrap.add(item);</span>
+<span class="nc" id="L85">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L86">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
+<span class="nc" id="L87">        }</span>
+<span class="nc" id="L88">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

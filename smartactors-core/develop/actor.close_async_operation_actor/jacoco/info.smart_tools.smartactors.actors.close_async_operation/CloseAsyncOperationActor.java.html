@@ -22,7 +22,7 @@ public class CloseAsyncOperationActor {
      * @param params the params for constructor
      * @throws InvalidArgumentException Throw when can't read some value from message or resolving key or dependency is throw exception
      */
-<span class="nc" id="L25">    CloseAsyncOperationActor(final ActorParams params) throws InvalidArgumentException {</span>
+<span class="nc" id="L25">    public CloseAsyncOperationActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
 <span class="nc" id="L27">            collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()), params.getCollectionName());</span>
 <span class="nc" id="L28">        } catch (ReadValueException e) {</span>
