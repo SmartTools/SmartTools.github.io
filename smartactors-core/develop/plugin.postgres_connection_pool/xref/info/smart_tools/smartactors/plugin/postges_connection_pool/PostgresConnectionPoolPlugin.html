@@ -9,22 +9,22 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.plugin.postges_connection_pool;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.create_<strong class="jxr_keyword">new</strong>_instance_strategy.CreateNewInstanceStrategy;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.exception.PluginException;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.istorage_connection.exception.StorageException;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.named_keys_storage.Keys;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.pool.Pool;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.postgres_connection.PostgresConnection;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.istorage_connection.exception.StorageException;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.named_keys_storage.Keys;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.pool.Pool;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.postgres_connection.PostgresConnection;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * Plugin.</em>
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                  .process(() -&gt; {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                          IKey postgresConnectionPoolKey = Keys.getOrAdd(<span class="jxr_string">"PostgresConnectionPool"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                          IOC.register(postgresConnectionPoolKey, <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                          IOC.register(postgresConnectionPoolKey, <strong class="jxr_keyword">new</strong> ApplyFunctionToArgumentsStrategy(
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>                              (args) -&gt; {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>                                  ConnectionOptions connectionOptions = (ConnectionOptions) args[0];
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>                                  <strong class="jxr_keyword">if</strong> (connectionOptions == <strong class="jxr_keyword">null</strong>) {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostgresConnectionPoolPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.postgres_connection_pool</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.postges_connection_pool</a> &gt; <span class="el_source">PostgresConnectionPoolPlugin.java</span></div><h1>PostgresConnectionPoolPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.postges_connection_pool;
 
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
-import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
@@ -17,6 +16,7 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.pool.Pool;
 import info.smart_tools.smartactors.core.postgres_connection.PostgresConnection;
 import info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
 /**
  * Plugin.
@@ -50,7 +50,7 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
 <span class="nc" id="L50">                .process(() -&gt; {</span>
                     try {
 <span class="nc" id="L52">                        IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
-<span class="nc" id="L53">                        IOC.register(postgresConnectionPoolKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L53">                        IOC.register(postgresConnectionPoolKey, new ApplyFunctionToArgumentsStrategy(</span>
                             (args) -&gt; {
 <span class="nc" id="L55">                                ConnectionOptions connectionOptions = (ConnectionOptions) args[0];</span>
 <span class="nc bnc" id="L56" title="All 2 branches missed.">                                if (connectionOptions == null) {</span>
