@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ValidateFormDataActor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.validate_form_data_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.validate_form_data</a> &gt; <span class="el_source">ValidateFormDataActor.java</span></div><h1>ValidateFormDataActor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.validate_form_data;
+
+import info.smart_tools.smartactors.actors.validate_form_data.exception.ValidateFormException;
+import info.smart_tools.smartactors.actors.validate_form_data.parser.Parser;
+import info.smart_tools.smartactors.actors.validate_form_data.wrapper.ValidateFormDataMessage;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.field.Field;
+
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * Actor for validating form data from client
+ */
+public class ValidateFormDataActor {
+    private Field validationRulesF;
+
+    /**
+     * Constructor
+     * @param params the empty IObject
+     */
+<span class="fc" id="L27">    public ValidateFormDataActor(final IObject params) throws InvalidArgumentException {</span>
+        try {
+<span class="fc" id="L29">            validationRulesF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;validationRules&quot;);</span>
+<span class="nc" id="L30">        } catch (Exception e) {</span>
+<span class="nc" id="L31">            throw new InvalidArgumentException(e);</span>
+<span class="fc" id="L32">        }</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Validate form data from client
+     * @param message the message
+     * @throws ValidateFormException if form is not valid
+     */
+    public void validate(final ValidateFormDataMessage message) throws ValidateFormException {
+        try {
+<span class="fc" id="L42">            IObject formFields = message.getForm();</span>
+<span class="fc" id="L43">            IObject clientData = message.getFormFromRequest();</span>
+
+<span class="fc" id="L45">            IObject resultObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="fc" id="L47">            Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; fieldsIterator = formFields.iterator();</span>
+<span class="fc" id="L48">            Map.Entry&lt;IFieldName, Object&gt; entry = fieldsIterator.next();</span>
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            while (entry != null) {</span>
+<span class="fc" id="L51">                IFieldName key = entry.getKey();</span>
+
+<span class="fc" id="L53">                String rules = validationRulesF.in((IObject) formFields.getValue(key));</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">                if (rules != null) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">                    if (!new Parser(rules, (String) clientData.getValue(key)).validate()) {</span>
+<span class="fc" id="L56">                        throw new ValidateFormException(&quot;Fields is not correct&quot;);</span>
+                    }
+                }
+<span class="fc" id="L59">                resultObject.setValue(key, clientData.getValue(key));</span>
+
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                if (!fieldsIterator.hasNext()) {</span>
+<span class="fc" id="L62">                    break;</span>
+                }
+<span class="nc" id="L64">                entry = fieldsIterator.next();</span>
+<span class="nc" id="L65">            }</span>
+<span class="fc" id="L66">            message.setFormData(resultObject);</span>
+<span class="fc" id="L67">        } catch (Exception e) {</span>
+<span class="fc" id="L68">            throw new ValidateFormException(e);</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

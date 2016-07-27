@@ -11,6 +11,9 @@ info.smart_tools.smartactors.actors.close_async_operation.wrapper
 info.smart_tools.smartactors.actors.create_async_operation
 info.smart_tools.smartactors.actors.create_async_operation.exception
 info.smart_tools.smartactors.actors.create_async_operation.wrapper
+info.smart_tools.smartactors.actors.create_session
+info.smart_tools.smartactors.actors.create_session.exception
+info.smart_tools.smartactors.actors.create_session.wrapper
 info.smart_tools.smartactors.actors.create_user
 info.smart_tools.smartactors.actors.create_user.wrapper
 info.smart_tools.smartactors.actors.get_async_operation
@@ -20,6 +23,10 @@ info.smart_tools.smartactors.actors.get_form
 info.smart_tools.smartactors.actors.get_form.exception
 info.smart_tools.smartactors.actors.get_form.strategy
 info.smart_tools.smartactors.actors.get_form.wrapper
+info.smart_tools.smartactors.actors.validate_form_data
+info.smart_tools.smartactors.actors.validate_form_data.exception
+info.smart_tools.smartactors.actors.validate_form_data.parser
+info.smart_tools.smartactors.actors.validate_form_data.wrapper
 info.smart_tools.smartactors.core.actor_receiver
 info.smart_tools.smartactors.core.actors.check_validity_async_operation
 info.smart_tools.smartactors.core.actors.check_validity_async_operation.exception
@@ -201,8 +208,10 @@ info.smart_tools.smartactors.plugin.check_validity_async_operation_actor
 info.smart_tools.smartactors.plugin.collection_name
 info.smart_tools.smartactors.plugin.compile_query
 info.smart_tools.smartactors.plugin.create_async_operation
+info.smart_tools.smartactors.plugin.create_session
 info.smart_tools.smartactors.plugin.fieldname
 info.smart_tools.smartactors.plugin.get_async_operation
+info.smart_tools.smartactors.plugin.get_cookie_rule
 info.smart_tools.smartactors.plugin.get_form_actor
 info.smart_tools.smartactors.plugin.get_header_from_request_rule
 info.smart_tools.smartactors.plugin.ifield
