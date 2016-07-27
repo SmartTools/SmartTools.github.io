@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 525,
+      <title>File: 527,
              Errors: 0,
-             Warnings: 199,
+             Warnings: 188,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -402,7 +402,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -607,6 +607,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.chain_call_receiver.package-info.java">info/smart_tools/smartactors/core/chain_call_receiver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.ifieldname.package-info.java">info/smart_tools/smartactors/plugin/ifieldname/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -2222,7 +2236,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -2432,7 +2446,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0
@@ -2740,7 +2754,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -3524,7 +3538,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -5898,6 +5912,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.fieldname.package-info.java">info/smart_tools/smartactors/plugin/fieldname/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.scope_guard.ScopeGuard.java">info/smart_tools/smartactors/core/scope_guard/ScopeGuard.java</a>
                 </td>
                 <td>
@@ -6814,7 +6842,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0
