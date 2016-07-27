@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResolveStandardTypesStrategiesPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.resolve_standard_types_strategies</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.resolve_standard_types_strategies</a> &gt; <span class="el_source">ResolveStandardTypesStrategiesPlugin.java</span></div><h1>ResolveStandardTypesStrategiesPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.resolve_standard_types_strategies;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.resolve_by_type_strategy.ResolveByTypeStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.DoubleToBigDecimalResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.StringToBigDecimalResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_date_strategies.StringToDateResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.DoubleToIntResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.StringToIntResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.BooleanArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ByteArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.CharArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.DoubleArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.FloatArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.IntArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.LongArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ObjectArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ShortArrayToListResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.BooleanToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ByteToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.CharToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.DoubleToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.FloatToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.IntToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.LongToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ObjectToStringResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ShortToStringResolveDependencyStrategy;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Plugin.
+ * Implements {@link IPlugin}
+ * Load strategies for resolving standard types
+ */
+public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap bootstrap element
+     */
+<span class="nc" id="L55">    public ResolveStandardTypesStrategiesPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L56">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L57">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+
+        try {
+<span class="nc" id="L63">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;ResolveStandardTypesStrategiesPlugin&quot;);</span>
+<span class="nc" id="L64">            item</span>
+<span class="nc" id="L65">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L66">                    .process(() -&gt; {</span>
+                        try {
+                            // to String strategies
+<span class="nc" id="L69">                            IKey stringKey = Keys.getOrAdd(String.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L70">                            ResolveByTypeStrategy stringStrategy = new ResolveByTypeStrategy();</span>
+
+<span class="nc" id="L72">                            stringStrategy.register(Object.class,</span>
+                                    new ObjectToStringResolveDependencyStrategy());
+<span class="nc" id="L74">                            stringStrategy.register(int.class,</span>
+                                    new IntToStringResolveDependencyStrategy());
+<span class="nc" id="L76">                            stringStrategy.register(long.class,</span>
+                                    new LongToStringResolveDependencyStrategy());
+<span class="nc" id="L78">                            stringStrategy.register(float.class,</span>
+                                    new FloatToStringResolveDependencyStrategy());
+<span class="nc" id="L80">                            stringStrategy.register(double.class,</span>
+                                    new DoubleToStringResolveDependencyStrategy());
+<span class="nc" id="L82">                            stringStrategy.register(boolean.class,</span>
+                                    new BooleanToStringResolveDependencyStrategy());
+<span class="nc" id="L84">                            stringStrategy.register(byte.class,</span>
+                                    new ByteToStringResolveDependencyStrategy());
+<span class="nc" id="L86">                            stringStrategy.register(short.class,</span>
+                                    new ShortToStringResolveDependencyStrategy());
+<span class="nc" id="L88">                            stringStrategy.register(char.class,</span>
+                                    new CharToStringResolveDependencyStrategy());
+
+<span class="nc" id="L91">                            IOC.register(stringKey, stringStrategy);</span>
+
+                            // to Integer strategies
+<span class="nc" id="L94">                            IKey integerKey = Keys.getOrAdd(Integer.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L95">                            ResolveByTypeStrategy integerStrategy = new ResolveByTypeStrategy();</span>
+
+<span class="nc" id="L97">                            integerStrategy.register(String.class,</span>
+                                    new StringToIntResolveDependencyStrategy());
+<span class="nc" id="L99">                            integerStrategy.register(Double.class,</span>
+                                    new DoubleToIntResolveDependencyStrategy());
+
+<span class="nc" id="L102">                            IOC.register(integerKey, integerStrategy);</span>
+
+                            // to BigDecimal strategies
+<span class="nc" id="L105">                            IKey bigDecimalKey = Keys.getOrAdd(BigDecimal.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L106">                            ResolveByTypeStrategy bigDecimalStrategy = new ResolveByTypeStrategy();</span>
+
+<span class="nc" id="L108">                            bigDecimalStrategy.register(String.class,</span>
+                                    new StringToBigDecimalResolveDependencyStrategy());
+<span class="nc" id="L110">                            bigDecimalStrategy.register(Double.class,</span>
+                                    new DoubleToBigDecimalResolveDependencyStrategy());
+
+<span class="nc" id="L113">                            IOC.register(bigDecimalKey, bigDecimalStrategy);</span>
+
+                            // to LocalDateTime strategies
+<span class="nc" id="L116">                            IKey localDateTimeKey = Keys.getOrAdd(LocalDateTime.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L117">                            ResolveByTypeStrategy localDateTimeStrategy = new ResolveByTypeStrategy();</span>
+
+<span class="nc" id="L119">                            localDateTimeStrategy.register(String.class,</span>
+                                    new StringToDateResolveDependencyStrategy());
+
+<span class="nc" id="L122">                            IOC.register(localDateTimeKey, localDateTimeStrategy);</span>
+
+                            // to list strategies
+<span class="nc" id="L125">                            IKey listKey = Keys.getOrAdd(List.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L126">                            ResolveByTypeStrategy listStrategy = new ResolveByTypeStrategy();</span>
+
+<span class="nc" id="L128">                            listStrategy.register(boolean[].class, new BooleanArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L129">                            listStrategy.register(byte[].class, new ByteArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L130">                            listStrategy.register(char[].class, new CharArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L131">                            listStrategy.register(double[].class, new DoubleArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L132">                            listStrategy.register(float[].class, new FloatArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L133">                            listStrategy.register(int[].class, new IntArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L134">                            listStrategy.register(long[].class, new LongArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L135">                            listStrategy.register(Object[].class, new ObjectArrayToListResolveDependencyStrategy());</span>
+<span class="nc" id="L136">                            listStrategy.register(short[].class, new ShortArrayToListResolveDependencyStrategy());</span>
+
+<span class="nc" id="L138">                            IOC.register(listKey, listStrategy);</span>
+
+<span class="nc" id="L140">                        } catch (RegistrationException | ResolutionException e) {</span>
+<span class="nc" id="L141">                            throw new RuntimeException(e);</span>
+<span class="nc" id="L142">                        }</span>
+<span class="nc" id="L143">                    });</span>
+<span class="nc" id="L144">            bootstrap.add(item);</span>
+<span class="nc" id="L145">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L146">            throw new PluginException(&quot;Can't load ResolveStandardTypesStrategies plugin&quot;, e);</span>
+<span class="nc" id="L147">        }</span>
+<span class="nc" id="L148">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

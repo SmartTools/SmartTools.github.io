@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>core.resolve_standard_types_strategies - Checkstyle report</title>
+    <link>core.resolve_standard_types_strategies/core.resolve_standard_types_strategies/</link>
+    <description>core.resolve_standard_types_strategies - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2016</copyright>
+    <item>
+      <title>File: 28,
+             Errors: 0,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html</link>
+      <description>
+        <p>Click <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_date_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_date_strategies/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.FloatToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/FloatToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.BooleanToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/BooleanToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.DoubleArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/DoubleArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.FloatArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/FloatArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.BooleanArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/BooleanArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.DoubleToBigDecimalResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_bigdecimal/DoubleToBigDecimalResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.IntArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/IntArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.LongArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/LongArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.LongToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/LongToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ShortArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/ShortArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ShortToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ShortToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.CharToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/CharToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.CharArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/CharArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_date_strategies.StringToDateResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_date_strategies/StringToDateResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ObjectToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ObjectToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ByteToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ByteToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.DoubleToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/DoubleToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.DoubleToIntResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/DoubleToIntResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.StringToIntResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/StringToIntResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ObjectArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/ObjectArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_bigdecimal/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.IntToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/IntToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.ByteArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/ByteArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.StringToBigDecimalResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_bigdecimal/StringToBigDecimalResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

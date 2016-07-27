@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InMemoryCodeCompiler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.class_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.class_generator_java_compile_api</a> &gt; <span class="el_source">InMemoryCodeCompiler.java</span></div><h1>InMemoryCodeCompiler.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.class_generator_java_compile_api;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,7 +24,7 @@ class InMemoryCodeCompiler {
     /**
      * System java compiler
      */
-<span class="fc" id="L24">    private static JavaCompiler javac = ToolProvider.getSystemJavaCompiler();</span>
+<span class="fc" id="L27">    private static JavaCompiler javac = ToolProvider.getSystemJavaCompiler();</span>
     private DynamicClassLoader classLoader;
 
     /**
@@ -29,11 +32,11 @@ class InMemoryCodeCompiler {
      * Creates instance of {@link InMemoryCodeCompiler} by given class loader
      * @param classLoader instance of {@link ClassLoader}
      */
-<span class="fc" id="L32">    InMemoryCodeCompiler(final ClassLoader classLoader) {</span>
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        this.classLoader = new DynamicClassLoader(</span>
-<span class="fc" id="L34">                null != classLoader ? classLoader : ClassLoader.getSystemClassLoader()</span>
+<span class="fc" id="L35">    InMemoryCodeCompiler(final ClassLoader classLoader) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        this.classLoader = new DynamicClassLoader(</span>
+<span class="fc" id="L37">                null != classLoader ? classLoader : ClassLoader.getSystemClassLoader()</span>
         );
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Compile {@link String} with custom class to java byte code and represent
@@ -49,32 +52,41 @@ class InMemoryCodeCompiler {
     )
             throws Exception {
         try {
-<span class="nc" id="L52">            return this.classLoader.loadClass(className);</span>
-<span class="fc" id="L53">        } catch (ClassNotFoundException e) { }</span>
+<span class="nc" id="L55">            return this.classLoader.loadClass(className);</span>
+<span class="fc" id="L56">        } catch (ClassNotFoundException e) { }</span>
         try {
-<span class="fc" id="L55">            List&lt;String&gt; optionList = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (null != this.classLoader) {</span>
-<span class="fc" id="L57">                optionList.addAll(Arrays.asList(&quot;-classpath&quot;, getClassPath(this.classLoader)));</span>
+<span class="fc" id="L58">            List&lt;String&gt; optionList = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">            if (null != this.classLoader) {</span>
+<span class="fc" id="L60">                optionList.addAll(Arrays.asList(&quot;-classpath&quot;, getClassPath(this.classLoader)));</span>
             }
-<span class="fc" id="L59">            SourceCode sourceCode = new SourceCode(className, sourceCodeInText);</span>
-<span class="fc" id="L60">            CompiledCode compiledCode = new CompiledCode(className);</span>
-<span class="fc" id="L61">            List compilationUnits = Collections.singletonList(sourceCode);</span>
-<span class="fc" id="L62">            ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(</span>
-<span class="fc" id="L63">                    javac.getStandardFileManager(null, null, null), compiledCode, this.classLoader</span>
+<span class="fc" id="L62">            SourceCode sourceCode = new SourceCode(className, sourceCodeInText);</span>
+<span class="fc" id="L63">            CompiledCode compiledCode = new CompiledCode(className);</span>
+<span class="fc" id="L64">            List compilationUnits = Collections.singletonList(sourceCode);</span>
+<span class="fc" id="L65">            ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(</span>
+<span class="fc" id="L66">                    javac.getStandardFileManager(null, null, null), compiledCode, this.classLoader</span>
             );
-
-<span class="fc" id="L66">            CompilationTask task = javac.getTask(</span>
+<span class="fc" id="L68">            DiagnosticCollector&lt;JavaFileObject&gt; diagnostics = new DiagnosticCollector&lt;&gt;();</span>
+<span class="fc" id="L69">            CompilationTask task = javac.getTask(</span>
                     null,
                     fileManager,
-                    null,
+                    diagnostics,
                     optionList,
                     null,
                     compilationUnits
             );
-<span class="fc" id="L74">            task.call();</span>
-<span class="fc" id="L75">            return this.classLoader.loadClass(className);</span>
-<span class="fc" id="L76">        } catch (Throwable e) {</span>
-<span class="fc" id="L77">            throw new Exception(e);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (!task.call()) {</span>
+<span class="fc" id="L78">                StringBuilder s = new StringBuilder();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">                for (Diagnostic&lt;?&gt; diagnostic : diagnostics.getDiagnostics()) {</span>
+<span class="fc" id="L80">                    s</span>
+<span class="fc" id="L81">                            .append(&quot;\n&quot;)</span>
+<span class="fc" id="L82">                            .append(diagnostic);</span>
+<span class="fc" id="L83">                }</span>
+<span class="fc" id="L84">                throw new Exception(&quot;Failed to compile &quot; + className + s.toString());</span>
+
+            }
+<span class="fc" id="L87">            return this.classLoader.loadClass(className);</span>
+<span class="fc" id="L88">        } catch (Throwable e) {</span>
+<span class="fc" id="L89">            throw new Exception(e);</span>
         }
     }
 
@@ -84,34 +96,34 @@ class InMemoryCodeCompiler {
      * @return all class paths
      */
     private static String getClassPath(final ClassLoader classLoader) {
-<span class="fc" id="L87">        ClassLoader cl = classLoader;</span>
-<span class="fc" id="L88">        StringBuilder buf = new StringBuilder();</span>
-<span class="fc" id="L89">        buf.append(&quot;.&quot;);</span>
-<span class="fc" id="L90">        String separator = System.getProperty(&quot;path.separator&quot;);</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        while (null != cl) {</span>
+<span class="fc" id="L99">        ClassLoader cl = classLoader;</span>
+<span class="fc" id="L100">        StringBuilder buf = new StringBuilder();</span>
+<span class="fc" id="L101">        buf.append(&quot;.&quot;);</span>
+<span class="fc" id="L102">        String separator = System.getProperty(&quot;path.separator&quot;);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        while (null != cl) {</span>
             try {
-<span class="fc" id="L93">                URLClassLoader ucl = (URLClassLoader) cl;</span>
+<span class="fc" id="L105">                URLClassLoader ucl = (URLClassLoader) cl;</span>
 
-<span class="fc" id="L95">                URL[] urls = ucl.getURLs();</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">                for (URL url : urls) {</span>
-<span class="fc" id="L97">                    String jarPathName = url.getFile();</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">                    if (jarPathName.startsWith(&quot;file:&quot;)) {</span>
-<span class="fc" id="L99">                        jarPathName = jarPathName.substring(</span>
-<span class="fc" id="L100">                                jarPathName.indexOf(&quot;file:&quot;) + &quot;file:&quot;.length(), jarPathName.indexOf(&quot;!/&quot;)</span>
+<span class="fc" id="L107">                URL[] urls = ucl.getURLs();</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">                for (URL url : urls) {</span>
+<span class="fc" id="L109">                    String jarPathName = url.getFile();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">                    if (jarPathName.startsWith(&quot;file:&quot;)) {</span>
+<span class="fc" id="L111">                        jarPathName = jarPathName.substring(</span>
+<span class="fc" id="L112">                                jarPathName.indexOf(&quot;file:&quot;) + &quot;file:&quot;.length(), jarPathName.indexOf(&quot;!/&quot;)</span>
                         );
                     }
-<span class="fc" id="L103">                    buf.append(separator).append(</span>
+<span class="fc" id="L115">                    buf.append(separator).append(</span>
                             jarPathName
                     );
                 }
-<span class="fc" id="L107">            } catch (Exception e) {</span>
+<span class="fc" id="L119">            } catch (Exception e) {</span>
                 // do nothing
                 // because this try-catch check cast ClassLoader to URLClassLoader
-<span class="fc" id="L110">            }</span>
-<span class="fc" id="L111">            cl = cl.getParent();</span>
+<span class="fc" id="L122">            }</span>
+<span class="fc" id="L123">            cl = cl.getParent();</span>
         }
 
-<span class="fc" id="L114">        return buf.toString();</span>
+<span class="fc" id="L126">        return buf.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

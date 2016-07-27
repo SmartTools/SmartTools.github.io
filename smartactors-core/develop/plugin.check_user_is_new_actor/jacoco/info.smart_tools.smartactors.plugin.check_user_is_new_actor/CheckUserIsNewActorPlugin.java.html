@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CheckUserIsNewActorPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.check_user_is_new_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.check_user_is_new_actor</a> &gt; <span class="el_source">CheckUserIsNewActorPlugin.java</span></div><h1>CheckUserIsNewActorPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.check_user_is_new_actor;
+
+
+import info.smart_tools.smartactors.actors.check_user_is_new.CheckUserIsNewActor;
+import info.smart_tools.smartactors.actors.check_user_is_new.wrapper.ActorParams;
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.util.Arrays;
+
+public class CheckUserIsNewActorPlugin implements IPlugin {
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap bootstrap element
+     */
+<span class="nc" id="L30">    public CheckUserIsNewActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L31">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L32">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="nc" id="L37">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CheckUserIsNewActorPlugin&quot;);</span>
+
+<span class="nc" id="L39">            item</span>
+<span class="nc" id="L40">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L41">                    .process(() -&gt; {</span>
+                        try {
+<span class="nc" id="L43">                            IKey checkUserIsNewActorKey = Keys.getOrAdd(CheckUserIsNewActor.class.getCanonicalName());</span>
+<span class="nc" id="L44">                            IOC.register(checkUserIsNewActorKey,</span>
+                                    new CreateNewInstanceStrategy(
+                                            (args) -&gt; {
+                                                try {
+<span class="nc" id="L48">                                                    ActorParams actorParams =</span>
+<span class="nc" id="L49">                                                            IOC.resolve(</span>
+<span class="nc" id="L50">                                                                    Keys.getOrAdd(ActorParams.class.getCanonicalName()),</span>
+                                                                    args[0]);
+<span class="nc" id="L52">                                                    return new CheckUserIsNewActor(actorParams);</span>
+<span class="nc" id="L53">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L54">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't get args: args must contain one or more elements &quot; +
+                                                                    &quot;and first element must be IObject&quot;,
+                                                            e);
+<span class="nc" id="L58">                                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L59">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't create actor with this args: &quot;
+<span class="nc" id="L61">                                                                    + Arrays.toString(args),</span>
+                                                            e);
+<span class="nc" id="L63">                                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L64">                                                    throw new RuntimeException(</span>
+                                                            &quot;Can't get ActorParams wrapper or Key for ActorParams&quot;,
+                                                            e);
+                                                }
+                                            }
+                                    )
+                            );
+<span class="nc" id="L71">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L72">                            throw new ActionExecuteException(&quot;Can't get CheckUserIsNewActor key&quot;);</span>
+<span class="nc" id="L73">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L74">                            throw new ActionExecuteException(&quot;Can't get create strategy&quot;);</span>
+<span class="nc" id="L75">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L76">                            throw new ActionExecuteException(&quot;Can't get register new strategy&quot;);</span>
+<span class="nc" id="L77">                        }</span>
+<span class="nc" id="L78">                    });</span>
+<span class="nc" id="L79">            bootstrap.add(item);</span>
+<span class="nc" id="L80">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L81">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
+<span class="nc" id="L82">        }</span>
+<span class="nc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

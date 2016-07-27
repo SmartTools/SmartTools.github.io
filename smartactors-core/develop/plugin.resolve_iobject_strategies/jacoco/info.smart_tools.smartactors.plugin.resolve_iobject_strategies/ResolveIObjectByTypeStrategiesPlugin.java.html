@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResolveIObjectByTypeStrategiesPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.resolve_iobject_strategies</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.resolve_iobject_strategies</a> &gt; <span class="el_source">ResolveIObjectByTypeStrategiesPlugin.java</span></div><h1>ResolveIObjectByTypeStrategiesPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.resolve_iobject_strategies;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.resolve_by_type_strategy.ResolveByTypeStrategy;
+import info.smart_tools.smartactors.core.resolve_iobject_strategies.MapToIObjectResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.resolve_iobject_strategies.StringToIObjectResolveDependencyStrategy;
+
+import java.util.Map;
+
+/**
+ * Plugin registers resolve by type strategy for IObject and fills it by
+ * concrete converting IObject strategies from different classes (map, string)
+ */
+public class ResolveIObjectByTypeStrategiesPlugin implements IPlugin {
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap bootstrap element
+     * @throws InvalidArgumentException if bootstrap is null
+     */
+<span class="nc" id="L34">    public ResolveIObjectByTypeStrategiesPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) throws InvalidArgumentException {</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (null == bootstrap) {</span>
+<span class="nc" id="L36">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+        }
+<span class="nc" id="L38">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L39">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="nc" id="L44">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;ResolveIObjectByTypeStrategiesPlugin&quot;);</span>
+<span class="nc" id="L45">            item</span>
+<span class="nc" id="L46">                .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L47">                .process(() -&gt; {</span>
+                    try {
+<span class="nc" id="L49">                        IKey typeStrategy = Keys.getOrAdd(IObject.class.getCanonicalName() + &quot;convert&quot;);</span>
+<span class="nc" id="L50">                        ResolveByTypeStrategy resolveStrategy = new ResolveByTypeStrategy();</span>
+<span class="nc" id="L51">                        resolveStrategy.register(Map.class, new MapToIObjectResolveDependencyStrategy());</span>
+<span class="nc" id="L52">                        resolveStrategy.register(String.class, new StringToIObjectResolveDependencyStrategy());</span>
+<span class="nc" id="L53">                        IOC.register(typeStrategy, resolveStrategy);</span>
+<span class="nc" id="L54">                    } catch (ResolutionException | RegistrationException e) {</span>
+<span class="nc" id="L55">                        throw new RuntimeException(e);</span>
+<span class="nc" id="L56">                    }</span>
+<span class="nc" id="L57">                });</span>
+<span class="nc" id="L58">            bootstrap.add(item);</span>
+<span class="nc" id="L59">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L60">            throw new PluginException(&quot;Can't load resolve iobject by type strategies plugin&quot;, e);</span>
+<span class="nc" id="L61">        }</span>
+<span class="nc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
