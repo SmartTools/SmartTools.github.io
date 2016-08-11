@@ -1,0 +1,2 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+plugin.handler_routing_receiver_creator,info.smart_tools.smartactors.plugin.handler_routing_receiver_creator,HandlerRoutingReceiverCreatorPlugin,28,79,0,2,8,25,0,4,0,3

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostgresQueryWriterResolver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_schema</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_schema.search</a> &gt; <span class="el_source">PostgresQueryWriterResolver.java</span></div><h1>PostgresQueryWriterResolver.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_schema.search;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Resolves writers of query for Postgres database and jsonb documents.
+ */
+public class PostgresQueryWriterResolver implements QueryWriterResolver {
+
+    /**
+     * The set of all registered query writers.
+     */
+<span class="fc" id="L16">    private Map&lt;String, QueryWriter&gt; queryWriters = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Default condition to join other operators.
+     */
+    private static final String DEFAULT_COMPOSITION_OPERATOR = &quot;$and&quot;;
+
+    /**
+     * Creates the resolver to convert criteria into request to jsonb documents.
+     */
+<span class="fc" id="L26">    public PostgresQueryWriterResolver() {</span>
+<span class="fc" id="L27">        addQueryWriter(&quot;$and&quot;, Conditions::writeAndCondition);</span>
+<span class="fc" id="L28">        addQueryWriter(&quot;$or&quot;, Conditions::writeOrCondition);</span>
+<span class="fc" id="L29">        addQueryWriter(&quot;$not&quot;, Conditions::writeNotCondition);</span>
+<span class="fc" id="L30">        Operators.addAll(this);</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Registers new query writer.
+     * @param name name of the operator in the query criteria, for example '$eq' or '$and'
+     * @param writer new writer to register
+     */
+    public void addQueryWriter(final String name, final QueryWriter writer) {
+<span class="fc" id="L39">        queryWriters.put(name, writer);</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Resolves valid field path in dotted notation ('a.b') to jsonb notation ('document#&gt;{a,b}').
+     * @param name name of field path in dotted notation from the criteria.
+     * @return a FieldPath object with valid field path
+     * @throws QueryBuildException when field path is invalid
+     */
+    public FieldPath resolveFieldName(final String name) throws QueryBuildException {
+<span class="fc" id="L49">        return PostgresFieldPath.fromString(name);</span>
+    }
+
+    @Override
+    public QueryWriter resolve(final String name) throws QueryBuildException {
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (name == null) {</span>
+<span class="fc" id="L55">            return this.resolve(DEFAULT_COMPOSITION_OPERATOR);</span>
+        }
+
+<span class="fc" id="L58">        QueryWriter operatorWriter = queryWriters.get(name);</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (operatorWriter != null) {</span>
+<span class="fc" id="L61">            return operatorWriter;</span>
+        }
+
+<span class="fc" id="L64">        return resolveFieldWriter(name);</span>
+    }
+
+    /**
+     * Creates the writer for the field name to access the field in jsonb document.
+     * @param fieldName name of the field from the criteria, like 'a.b'
+     * @return the writer which writes field access in jsonb format, like 'document#&gt;{a,b}'
+     * @throws QueryBuildException if something goes wrong
+     */
+    private QueryWriter resolveFieldWriter(final String fieldName)
+        throws QueryBuildException {
+<span class="fc" id="L75">        final FieldPath path = this.resolveFieldName(fieldName);</span>
+
+<span class="fc" id="L77">        return (query, resolver, contextFieldName, queryParameter) -&gt; {</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">            if (contextFieldName != null) {</span>
+<span class="nc" id="L79">                throw new QueryBuildException(&quot;Field names not allowed inside of field context&quot;);</span>
+            }
+<span class="fc" id="L81">            this.resolve(null).write(query, resolver, path, queryParameter);</span>
+<span class="fc" id="L82">        };</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

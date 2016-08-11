@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostgresGetByIdTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_getbyid_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_getbyid_task</a> &gt; <span class="el_source">PostgresGetByIdTask.java</span></div><h1>PostgresGetByIdTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_getbyid_task;
+
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_connection.JDBCCompiledQuery;
+import info.smart_tools.smartactors.core.postgres_connection.QueryStatement;
+import info.smart_tools.smartactors.core.postgres_schema.PostgresSchema;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+/**
+ * The database task which is able to select documents from Postgres database by the document ID.
+ */
+public class PostgresGetByIdTask implements IDatabaseTask {
+
+    /**
+     * Connection to the database.
+     */
+    private IStorageConnection connection;
+    /**
+     * Name of the collection.
+     */
+    private CollectionName collection;
+    /**
+     * Id of the document to search.
+     */
+    private Object id;
+    /**
+     * Callback function to call when the object is found.
+     */
+    private IAction&lt;IObject&gt; callback;
+    /**
+     * Query, prepared during prepare(), to be compiled during execute().
+     */
+    private QueryStatement preparedQuery;
+
+    /**
+     * Creates the task
+     * @param connection the database connection where to perform upserts
+     */
+<span class="fc" id="L49">    public PostgresGetByIdTask(final IStorageConnection connection) {</span>
+<span class="fc" id="L50">        this.connection = connection;</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void prepare(final IObject query) throws TaskPrepareException {
+        try {
+<span class="fc" id="L56">            GetByIdMessage message = IOC.resolve(Keys.getOrAdd(GetByIdMessage.class.getCanonicalName()), query);</span>
+<span class="fc" id="L57">            collection = message.getCollectionName();</span>
+<span class="fc" id="L58">            id = message.getId();</span>
+<span class="fc" id="L59">            callback = message.getCallback();</span>
+
+<span class="fc" id="L61">            preparedQuery = new QueryStatement();</span>
+<span class="fc" id="L62">            PostgresSchema.getById(preparedQuery, collection);</span>
+<span class="fc" id="L63">            preparedQuery.pushParameterSetter((statement, index) -&gt; {</span>
+<span class="fc" id="L64">                statement.setObject(index++, id);</span>
+<span class="fc" id="L65">                return index;</span>
+            });
+<span class="nc" id="L67">        } catch (Exception e) {</span>
+<span class="nc" id="L68">            throw new TaskPrepareException(e);</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
+
+    @Override
+    public void execute() throws TaskExecutionException {
+        try {
+<span class="fc" id="L75">            JDBCCompiledQuery compiledQuery = (JDBCCompiledQuery) connection.compileQuery(preparedQuery);</span>
+<span class="fc" id="L76">            PreparedStatement statement = compiledQuery.getPreparedStatement();</span>
+<span class="fc" id="L77">            statement.execute();</span>
+
+<span class="fc" id="L79">            ResultSet resultSet = statement.getResultSet();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (resultSet.next()) {</span>
+<span class="fc" id="L81">                String sqlDoc = resultSet.getString(1);</span>
+<span class="fc" id="L82">                IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()), sqlDoc);</span>
+<span class="fc" id="L83">                callback.execute(document);</span>
+<span class="fc" id="L84">                connection.commit();</span>
+<span class="fc" id="L85">            } else {</span>
+<span class="fc" id="L86">                connection.commit();</span>
+<span class="fc" id="L87">                throw new TaskExecutionException(&quot;Not found in &quot; + collection + &quot;: id = &quot; + id);</span>
+            }
+<span class="fc" id="L89">        } catch (TaskExecutionException te) {</span>
+<span class="fc" id="L90">            throw te;</span>
+<span class="fc" id="L91">        } catch (Exception e) {</span>
+            try {
+<span class="fc" id="L93">                connection.rollback();</span>
+<span class="nc" id="L94">            } catch (Exception re) {</span>
+                // ignoring rollback failure
+<span class="fc" id="L96">            }</span>
+<span class="fc" id="L97">            throw new TaskExecutionException(&quot;Select in &quot; + collection + &quot; failed: id = &quot; + id, e);</span>
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

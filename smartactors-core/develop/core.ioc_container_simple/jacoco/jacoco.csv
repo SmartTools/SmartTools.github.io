@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.ioc_container_simple,info.smart_tools.smartactors.core.ioc_container_simple,Container,0,57,0,0,0,18,0,6,0,6
+core.ioc_container_simple,info.smart_tools.smartactors.core.ioc_container_simple,Container,0,73,0,0,0,20,0,6,0,6

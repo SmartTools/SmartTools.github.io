@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ThreadPool.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.thread_pool</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.thread_pool</a> &gt; <span class="el_source">ThreadPool.java</span></div><h1>ThreadPool.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.thread_pool;
 
+import info.smart_tools.smartactors.core.iscope.IScope;
+import info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
 import info.smart_tools.smartactors.core.itask.ITask;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.ithread_pool.IThreadPool;
+import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -12,31 +15,38 @@ import java.util.concurrent.BlockingQueue;
  */
 public class ThreadPool implements IThreadPool {
     private final BlockingQueue&lt;ThreadImpl&gt; threadsQueue;
+    private IScope scope;
 
     /**
      * The constructor.
      *
      * @param threadCount    initial count of threads.
      */
-<span class="fc" id="L21">    public ThreadPool(final int threadCount) {</span>
-<span class="fc" id="L22">        threadsQueue = new ArrayBlockingQueue&lt;&gt;(threadCount);</span>
+<span class="fc" id="L25">    public ThreadPool(final int threadCount) {</span>
+<span class="fc" id="L26">        threadsQueue = new ArrayBlockingQueue&lt;&gt;(threadCount);</span>
 
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        for (int i = 0; i &lt; threadCount; i++) {</span>
-<span class="fc" id="L25">            threadsQueue.offer(new ThreadImpl(this));</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        for (int i = 0; i &lt; threadCount; i++) {</span>
+<span class="fc" id="L29">            threadsQueue.offer(new ThreadImpl(this));</span>
         }
-<span class="fc" id="L27">    }</span>
+
+        try {
+<span class="fc" id="L33">            this.scope = ScopeProvider.getCurrentScope();</span>
+<span class="fc" id="L34">        } catch (ScopeProviderException e) {</span>
+<span class="fc" id="L35">            this.scope = null;</span>
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">    }</span>
 
     @Override
     public boolean tryExecute(final ITask task)
             throws TaskExecutionException {
-<span class="fc" id="L32">        ThreadImpl thread = threadsQueue.poll();</span>
+<span class="fc" id="L42">        ThreadImpl thread = threadsQueue.poll();</span>
 
-<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (null != thread) {</span>
-<span class="fc" id="L35">            thread.execute(task);</span>
-<span class="fc" id="L36">            return true;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (null != thread) {</span>
+<span class="fc" id="L45">            thread.execute(task);</span>
+<span class="fc" id="L46">            return true;</span>
         }
 
-<span class="fc" id="L39">        return false;</span>
+<span class="fc" id="L49">        return false;</span>
     }
 
     /**
@@ -45,9 +55,13 @@ public class ThreadPool implements IThreadPool {
      * @param thread the thread
      */
     void returnThread(final ThreadImpl thread) {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (!threadsQueue.offer(thread)) {</span>
-<span class="fc" id="L49">            thread.interrupt();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (!threadsQueue.offer(thread)) {</span>
+<span class="fc" id="L59">            thread.interrupt();</span>
         }
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L61">    }</span>
+
+    IScope getScope() {
+<span class="fc" id="L64">        return this.scope;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

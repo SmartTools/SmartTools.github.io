@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.AuthenticationActor.java">info/smart_tools/smartactors/plugin/authentication/AuthenticationActor.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.wrapper.package-info.java">info/smart_tools/smartactors/actors/authentication/wrapper/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.wrapper.AuthenticationMessage.java">info/smart_tools/smartactors/plugin/authentication/wrapper/AuthenticationMessage.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.wrapper.AuthenticationMessage.java">info/smart_tools/smartactors/actors/authentication/wrapper/AuthenticationMessage.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.wrapper.package-info.java">info/smart_tools/smartactors/plugin/authentication/wrapper/package-info.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.package-info.java">info/smart_tools/smartactors/actors/authentication/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.exception.AuthFailException.java">info/smart_tools/smartactors/plugin/authentication/exception/AuthFailException.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.exception.AuthFailException.java">info/smart_tools/smartactors/actors/authentication/exception/AuthFailException.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.package-info.java">info/smart_tools/smartactors/plugin/authentication/package-info.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.AuthenticationActor.java">info/smart_tools/smartactors/actors/authentication/AuthenticationActor.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.plugin.authentication.exception.package-info.java">info/smart_tools/smartactors/plugin/authentication/exception/package-info.java</a>
+                  <a href="actor.authentication_actor/actor.authentication_actor//checkstyle.html#info.smart_tools.smartactors.actors.authentication.exception.package-info.java">info/smart_tools/smartactors/actors/authentication/exception/package-info.java</a>
                 </td>
                 <td>
                   0

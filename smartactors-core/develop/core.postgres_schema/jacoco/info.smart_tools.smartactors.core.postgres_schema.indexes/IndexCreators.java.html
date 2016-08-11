@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IndexCreators.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_schema</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_schema.indexes</a> &gt; <span class="el_source">IndexCreators.java</span></div><h1>IndexCreators.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_schema.indexes;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_schema.search.FieldPath;
+import info.smart_tools.smartactors.core.postgres_schema.search.PostgresFieldPath;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+
+/**
+ * A set of classes to write CREATE INDEX SQL statements.
+ */
+public class IndexCreators {
+
+    /**
+     * Set of index creation functions.
+     */
+<span class="fc" id="L26">    private static final Map&lt;String, IndexWriterResolver&gt; INDEX_WRITERS = new HashMap&lt;String, IndexWriterResolver&gt;() {{</span>
+<span class="fc" id="L27">        put(&quot;ordered&quot;, (indexDefinition) -&gt; IndexCreators::writeOrderedIndex);</span>
+<span class="fc" id="L28">        put(&quot;datetime&quot;, (indexDefinition) -&gt; IndexCreators::writeDatetimeIndex);</span>
+<span class="fc" id="L29">        put(&quot;tags&quot;, (indexDefinition) -&gt; IndexCreators::writeTagsIndex);</span>
+<span class="fc" id="L30">        put(&quot;fulltext&quot;, FulltextIndexWriter::resolve);</span>
+<span class="fc" id="L31">    }};</span>
+
+    /**
+     * Private constructor to avoid instantiation.
+     */
+<span class="nc" id="L36">    private IndexCreators() {</span>
+<span class="nc" id="L37">    }</span>
+
+    /**
+     * Writes CREATE INDEX statements to the SQL statement body.
+     * @param body where to write SQL
+     * @param collection name of the collection
+     * @param options document describing create collection options
+     * @throws Exception when something goes wrong
+     */
+    public static void writeIndexes(Writer body, CollectionName collection, IObject options) throws Exception {
+        try {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            if (options == null) {</span>
+                // no indexes definition, ignoring
+<span class="nc" id="L50">                return;</span>
+            }
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            for (String indexType : INDEX_WRITERS.keySet()) {</span>
+<span class="fc" id="L53">                writeCreateIndex(indexType, body, collection, options);</span>
+<span class="fc" id="L54">            }</span>
+<span class="nc" id="L55">        } catch (ReadValueException e) {</span>
+            // no indexes definition, ignoring
+<span class="fc" id="L57">        }</span>
+<span class="fc" id="L58">    }</span>
+
+    private static void writeCreateIndex(final String indexType, final Writer body, final CollectionName collection, IObject options)
+            throws Exception {
+<span class="fc" id="L62">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L63">        Object indexFields = null;</span>
+        try {
+<span class="fc" id="L65">            IFieldName indexDefinitionField = IOC.resolve(fieldNameKey, indexType);</span>
+<span class="fc" id="L66">            indexFields = options.getValue(indexDefinitionField);</span>
+<span class="nc" id="L67">        } catch (ReadValueException e) {</span>
+            // ignoring absence of this index type definition
+<span class="nc" id="L69">            return;</span>
+<span class="fc" id="L70">        }</span>
+
+<span class="fc" id="L72">        List&lt;FieldPath&gt; fieldPaths = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (indexFields instanceof String) {</span>
+<span class="fc" id="L74">            fieldPaths.add(PostgresFieldPath.fromString((String) indexFields));</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        } else if (indexFields instanceof List) {</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            for (Object fieldName : (List) indexFields) {</span>
+<span class="fc" id="L77">                fieldPaths.add(PostgresFieldPath.fromString((String) fieldName));</span>
+<span class="fc" id="L78">            }</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        } else if (indexFields == null) {</span>
+            // ignoring absence of this index type definition
+<span class="fc" id="L81">            return;</span>
+        } else {
+<span class="fc" id="L83">            throw new QueryBuildException(&quot;Unknown index definition for &quot; + indexType + &quot;: &quot; + indexFields);</span>
+        }
+
+<span class="fc" id="L86">        INDEX_WRITERS.get(indexType).resolve(options).write(body, collection, fieldPaths);</span>
+<span class="fc" id="L87">    }</span>
+
+    private static void writeOrderedIndex(final Writer body, final CollectionName collection,
+                                          final List&lt;FieldPath&gt; fields) throws IOException {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (FieldPath field : fields) {</span>
+<span class="fc" id="L92">            body.write(&quot;CREATE INDEX ON &quot;);</span>
+<span class="fc" id="L93">            body.write(collection.toString());</span>
+<span class="fc" id="L94">            body.write(&quot; USING BTREE ((&quot;);</span>
+<span class="fc" id="L95">            body.write(field.toSQL());</span>
+<span class="fc" id="L96">            body.write(&quot;));\n&quot;);</span>
+<span class="fc" id="L97">        }</span>
+
+<span class="fc" id="L99">    }</span>
+
+    private static void writeDatetimeIndex(final Writer body, final CollectionName collection,
+                                           final List&lt;FieldPath&gt; fields) throws IOException {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (FieldPath field : fields) {</span>
+<span class="fc" id="L104">            body.write(&quot;CREATE INDEX ON &quot;);</span>
+<span class="fc" id="L105">            body.write(collection.toString());</span>
+<span class="fc" id="L106">            body.write(&quot; USING BTREE (&quot;);</span>
+<span class="fc" id="L107">            body.write(&quot;(parse_timestamp_immutable(&quot;);</span>
+<span class="fc" id="L108">            body.write(field.toSQL());</span>
+<span class="fc" id="L109">            body.write(&quot;))&quot;);</span>
+<span class="fc" id="L110">            body.write(&quot;);\n&quot;);</span>
+<span class="fc" id="L111">        }</span>
+<span class="fc" id="L112">    }</span>
+
+    private static void writeTagsIndex(final Writer body, final CollectionName collection,
+                                       final List&lt;FieldPath&gt; fields) throws IOException {
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (FieldPath field : fields) {</span>
+<span class="fc" id="L117">            body.write(&quot;CREATE INDEX ON &quot;);</span>
+<span class="fc" id="L118">            body.write(collection.toString());</span>
+<span class="fc" id="L119">            body.write(&quot; USING GIN ((&quot;);</span>
+<span class="fc" id="L120">            body.write(field.toSQL());</span>
+<span class="fc" id="L121">            body.write(&quot;));\n&quot;);</span>
+<span class="fc" id="L122">        }</span>
+<span class="fc" id="L123">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

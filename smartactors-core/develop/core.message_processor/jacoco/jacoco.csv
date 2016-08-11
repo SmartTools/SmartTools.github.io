@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.message_processor,info.smart_tools.smartactors.core.message_processor,MessageProcessor,10,382,3,19,2,80,3,22,0,14
+core.message_processor,info.smart_tools.smartactors.core.message_processor,MessageProcessor,10,472,3,25,2,95,3,26,0,15

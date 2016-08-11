@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostgresFieldPath.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_schema</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_schema.search</a> &gt; <span class="el_source">PostgresFieldPath.java</span></div><h1>PostgresFieldPath.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_schema.search;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+
+/**
+ * Valid field path for Postgres database to represent path in jsonb document.
+ * If it's the path in
+ * {@see FiledPath} {@link FieldPath}
+ */
+public class PostgresFieldPath implements FieldPath {
+    private String path;
+
+<span class="fc" id="L13">    private PostgresFieldPath(final String[] parts) {</span>
+<span class="fc" id="L14">        this.path = String.format(&quot;%s#&gt;\'{%s}\'&quot;,</span>
+                &quot;document&quot;,
+<span class="fc" id="L16">                String.join(&quot;,&quot;, parts));</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="nc" id="L19">    private PostgresFieldPath(final String column, final String castFunction) {</span>
+<span class="nc" id="L20">        this.path = String.format(&quot;%s(%s)&quot;, castFunction, column);</span>
+<span class="nc" id="L21">    }</span>
+
+    /**
+     * {@see FieldPath#toSQL()} {@link FieldPath#toSQL()}
+     * @return valid representation of field path.
+     */
+    public String toSQL() {
+<span class="fc" id="L28">        return this.path;</span>
+    }
+
+    public static PostgresFieldPath fromString(final String path)
+            throws QueryBuildException {
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (!FieldPath.isValid(path)) {</span>
+<span class="fc" id="L34">            throw new QueryBuildException(&quot;Invalid field path: &quot; + path);</span>
+        }
+
+        // TODO: add a special support for ID column (it depends on collection name)
+//        if (path.equals(&quot;id&quot;)) {
+//            return new PostgresFieldPath(PostgresSchema.ID_COLUMN, Schema.ID_TO_JSONB_CAST_FUNCTION);
+//        }
+
+<span class="fc" id="L42">        return new PostgresFieldPath(FieldPath.splitParts(path));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              chainsMap.put(
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>                      chainId,
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                      IOC.resolve(
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                              IOC.resolve(IOC.getKeyForKeyStorage(), IReceiverChain.<strong class="jxr_keyword">class</strong>.toString()),
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                              IOC.resolve(IOC.getKeyForKeyStorage(), IReceiverChain.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                              chainId, description, <strong class="jxr_keyword">this</strong>, router));
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          } <strong class="jxr_keyword">catch</strong> (ResolutionException  e) {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/ichain_storage/exceptions/ChainCreationException.html">ChainCreationException</a>(<span class="jxr_string">"Could not create a chain"</span>, e);

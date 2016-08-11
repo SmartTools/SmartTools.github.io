@@ -16,18 +16,24 @@ import info.smart_tools.smartactors.core.async_operation_collection.wrapper.upda
 import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.ipool.IPool;
+import info.smart_tools.smartactors.core.itask.ITask;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.pool_guard.IPoolGuard;
@@ -37,6 +43,7 @@ import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Implementation of collection for asynchronous operations
@@ -54,172 +61,143 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
      * @param collectionName string with name
      * @throws InvalidArgumentException if we can't create collection name or field
      */
-<span class="nc" id="L57">    public AsyncOperationCollection(final IPool connectionPool, final String collectionName) throws InvalidArgumentException {</span>
-<span class="nc" id="L58">        this.connectionPool = connectionPool;</span>
+<span class="nc" id="L64">    public AsyncOperationCollection(final IPool connectionPool, final String collectionName) throws InvalidArgumentException {</span>
+<span class="nc" id="L65">        this.connectionPool = connectionPool;</span>
         try {
-<span class="nc" id="L60">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;id&quot;);</span>
-<span class="nc" id="L61">            this.collectionName = CollectionName.fromString(collectionName);</span>
-<span class="nc" id="L62">        } catch (QueryBuildException e) {</span>
-<span class="nc" id="L63">            throw new InvalidArgumentException(&quot;Can't create async operations collection.&quot;, e);</span>
-<span class="nc" id="L64">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L65">            throw new InvalidArgumentException(&quot;Can't create field&quot;, e);</span>
-<span class="nc" id="L66">        }</span>
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L67">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;id&quot;);</span>
+<span class="nc" id="L68">            this.collectionName = CollectionName.fromString(collectionName);</span>
+<span class="nc" id="L69">        } catch (QueryBuildException e) {</span>
+<span class="nc" id="L70">            throw new InvalidArgumentException(&quot;Can't create async operations collection.&quot;, e);</span>
+<span class="nc" id="L71">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L72">            throw new InvalidArgumentException(&quot;Can't create field&quot;, e);</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">    }</span>
 
     @Override
     public IObject getAsyncOperation(final String token) throws GetAsyncOperationException {
+<span class="nc" id="L78">        try (IPoolGuard guard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L79">            IObject result = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="nc" id="L72">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L73">            IDatabaseTask getItemTask = IOC.resolve(Keys.getOrAdd(GetAsyncOperationTask.class.toString()));</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (getItemTask == null) {</span>
-<span class="nc" id="L75">                IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L76">                    Keys.getOrAdd(IDatabaseTask.class.toString()), GetAsyncOperationTask.class.toString()</span>
-                );
-<span class="nc bnc" id="L78" title="All 2 branches missed.">                if (nestedTask == null) {</span>
-<span class="nc" id="L79">                    throw new GetAsyncOperationException(&quot;Can't create nested task for getItem task.&quot;);</span>
-                }
-<span class="nc" id="L81">                getItemTask = new GetAsyncOperationTask(nestedTask);</span>
-<span class="nc" id="L82">                IOC.register(Keys.getOrAdd(GetAsyncOperationTask.class.toString()), new SingletonStrategy(getItemTask));</span>
-            }
-<span class="nc" id="L84">            GetAsyncOperationQuery getItemQuery = IOC.resolve(Keys.getOrAdd(GetAsyncOperationQuery.class.toString()));</span>
-<span class="nc" id="L85">            getItemQuery.setCollectionName(collectionName);</span>
-<span class="nc" id="L86">            getItemQuery.setToken(token);</span>
-<span class="nc" id="L87">            getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
-<span class="nc" id="L88">            getItemTask.prepare(getItemQuery.wrapped());</span>
-<span class="nc" id="L89">            getItemTask.execute();</span>
-<span class="nc" id="L90">            List&lt;IObject&gt; searchResult = getItemQuery.getSearchResult();</span>
-<span class="nc bnc" id="L91" title="All 4 branches missed.">            if (searchResult == null || searchResult.isEmpty()) {</span>
-<span class="nc" id="L92">                throw new GetAsyncOperationException(&quot;Can't find operation.&quot;);</span>
+<span class="nc" id="L81">            IDatabaseTask getItemTask = IOC.resolve(</span>
+<span class="nc" id="L82">                Keys.getOrAdd(&quot;db.async_ops_collection.get&quot;),</span>
+<span class="nc" id="L83">                guard.getObject(),</span>
+                collectionName,
+                token,
+                (IAction&lt;IObject&gt;) doc -&gt; {
+                    try {
+<span class="nc" id="L88">                        result.setValue(new FieldName(&quot;result&quot;), doc);</span>
+<span class="nc" id="L89">                    } catch (ChangeValueException e) {</span>
+<span class="nc" id="L90">                        throw new ActionExecuteException(e);</span>
+<span class="nc" id="L91">                    }</span>
+<span class="nc" id="L92">                }</span>
+            );
+<span class="nc" id="L94">            getItemTask.execute();</span>
+
+<span class="nc" id="L96">            IObject searchResult = (IObject) result.getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;result&quot;));</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (searchResult == null) {</span>
+<span class="nc" id="L98">                throw new GetAsyncOperationException(&quot;Can't find operation.&quot;);</span>
             }
 
-<span class="nc" id="L95">            return searchResult.get(0);</span>
-<span class="nc bnc" id="L96" title="All 8 branches missed.">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L97">            throw new GetAsyncOperationException(&quot;Can't resolve object during get operation.&quot;, e);</span>
-<span class="nc" id="L98">        } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L99">            throw new GetAsyncOperationException(&quot;Can't register strategy for getItem task.&quot;, e);</span>
-<span class="nc" id="L100">        } catch (PoolGuardException e) {</span>
-<span class="nc" id="L101">            throw new GetAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L102">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L103">            throw new GetAsyncOperationException(&quot;Can't read asynchronous operation.&quot;, e);</span>
-<span class="nc" id="L104">        } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L105">            throw new GetAsyncOperationException(&quot;Can't set connection to read task.&quot;, e);</span>
-<span class="nc" id="L106">        } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L107">            throw new GetAsyncOperationException(&quot;Error during preparing read task.&quot;, e);</span>
-<span class="nc" id="L108">        } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L109">            throw new GetAsyncOperationException(&quot;Error during execution read task.&quot;, e);</span>
+<span class="nc" id="L101">            return searchResult;</span>
+<span class="nc bnc" id="L102" title="All 8 branches missed.">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L103">            throw new GetAsyncOperationException(&quot;Can't resolve object during get operation.&quot;, e);</span>
+<span class="nc" id="L104">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L105">            throw new GetAsyncOperationException(&quot;Can't register strategy for getItem task.&quot;, e);</span>
+<span class="nc" id="L106">        } catch (PoolGuardException e) {</span>
+<span class="nc" id="L107">            throw new GetAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L108">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L109">            throw new GetAsyncOperationException(&quot;Error during preparing read task.&quot;, e);</span>
+<span class="nc" id="L110">        } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L111">            throw new GetAsyncOperationException(&quot;Error during execution read task.&quot;, e);</span>
         }
     }
 
     @Override
-    public void createAsyncOperation(final IObject data, final String token, final String expiredTime)
-        throws CreateAsyncOperationException {
+    public void createAsyncOperation(final IObject data, final String token, final String expiredTime) throws CreateAsyncOperationException {
+        try {
+<span class="nc" id="L118">            CreateOperationQuery query = IOC.resolve(Keys.getOrAdd(CreateOperationQuery.class.toString()));</span>
+<span class="nc" id="L119">            query.setAsyncData(data);</span>
+<span class="nc" id="L120">            query.setExpiredTime(expiredTime);</span>
+<span class="nc" id="L121">            query.setToken(token);</span>
 
-<span class="nc" id="L117">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L118">            IDatabaseTask task = IOC.resolve(Keys.getOrAdd(CreateAsyncOperationTask.class.toString()));</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (task == null) {</span>
-<span class="nc" id="L120">                IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L121">                        Keys.getOrAdd(IDatabaseTask.class.toString()), CreateAsyncOperationTask.class.toString()</span>
+<span class="nc" id="L123">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+
+
+<span class="nc" id="L126">                IDatabaseTask createItemTask = IOC.resolve(</span>
+<span class="nc" id="L127">                        Keys.getOrAdd(&quot;db.async_ops_collection.create&quot;),</span>
+<span class="nc" id="L128">                        poolGuard.getObject(),</span>
+                        collectionName,
+                        token,
+                        expiredTime
                 );
-<span class="nc bnc" id="L123" title="All 2 branches missed.">                if (nestedTask == null) {</span>
-<span class="nc" id="L124">                    throw new CreateAsyncOperationException(&quot;Can't create nested task for createtItem task.&quot;);</span>
-                }
-<span class="nc" id="L126">                task = new CreateAsyncOperationTask(nestedTask);</span>
-<span class="nc" id="L127">                IOC.register(Keys.getOrAdd(GetAsyncOperationTask.class.toString()), new SingletonStrategy(task));</span>
-            }
-<span class="nc" id="L129">            CreateOperationQuery query = IOC.resolve(Keys.getOrAdd(CreateOperationQuery.class.toString()));</span>
-<span class="nc" id="L130">            query.setCollectionName(collectionName);</span>
-<span class="nc" id="L131">            query.setAsyncData(data);</span>
-<span class="nc" id="L132">            query.setExpiredTime(expiredTime);</span>
-<span class="nc" id="L133">            query.setToken(token);</span>
-<span class="nc" id="L134">            task.setConnection((StorageConnection) poolGuard.getObject());</span>
-<span class="nc" id="L135">            task.prepare(query.getIObject());</span>
-<span class="nc" id="L136">            task.execute();</span>
-<span class="nc bnc" id="L137" title="All 8 branches missed.">        } catch (Exception e) {</span>
-<span class="nc" id="L138">            throw new CreateAsyncOperationException(&quot;Failed to create async operation.&quot;);</span>
+<span class="nc" id="L133">                createItemTask.execute();</span>
+<span class="nc bnc" id="L134" title="All 8 branches missed.">            } catch (Exception e) {</span>
+<span class="nc" id="L135">                throw new CreateAsyncOperationException(&quot;Failed to create async operation.&quot;);</span>
+<span class="nc" id="L136">            }</span>
+<span class="nc" id="L137">        } catch (Exception e) {</span>
+<span class="nc" id="L138">            throw new CreateAsyncOperationException(&quot;Failed to create async operation.&quot;, e);</span>
 <span class="nc" id="L139">        }</span>
 <span class="nc" id="L140">    }</span>
 
     @Override
-    public void complete(final IObject asyncOperation) throws CompleteAsyncOperationException {
-
-<span class="nc" id="L145">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L146">            IDatabaseTask updateTask = IOC.resolve(Keys.getOrAdd(UpdateAsyncOperationTask.class.toString()));</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">            if (updateTask == null) {</span>
-<span class="nc" id="L148">                IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L149">                    Keys.getOrAdd(IDatabaseTask.class.toString()), UpdateAsyncOperationTask.class.toString()</span>
-                );
-<span class="nc bnc" id="L151" title="All 2 branches missed.">                if (nestedTask == null) {</span>
-<span class="nc" id="L152">                    throw new CompleteAsyncOperationException(&quot;Can't create nested task for update task.&quot;);</span>
-                }
-<span class="nc" id="L154">                updateTask = new UpdateAsyncOperationTask(nestedTask);</span>
-<span class="nc" id="L155">                IOC.register(Keys.getOrAdd(UpdateAsyncOperationTask.class.toString()), new SingletonStrategy(updateTask));</span>
-            }
-<span class="nc" id="L157">            UpdateAsyncOperationQuery upsertQuery = IOC.resolve(Keys.getOrAdd(UpdateAsyncOperationQuery.class.toString()));</span>
-<span class="nc" id="L158">            upsertQuery.setCollectionName(collectionName);</span>
-<span class="nc" id="L159">            upsertQuery.setUpdateItem(asyncOperation);</span>
-
-<span class="nc" id="L161">            updateTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
-<span class="nc" id="L162">            updateTask.prepare(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), upsertQuery));</span>
-<span class="nc" id="L163">            updateTask.execute();</span>
-<span class="nc bnc" id="L164" title="All 8 branches missed.">        } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L165">            throw new CompleteAsyncOperationException(&quot;Error during execution complete.&quot;, e);</span>
-<span class="nc" id="L166">        } catch (PoolGuardException e) {</span>
-<span class="nc" id="L167">            throw new CompleteAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L168">        } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L169">            throw new CompleteAsyncOperationException(&quot;Can't set connection to update task.&quot;, e);</span>
-<span class="nc" id="L170">        } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L171">            throw new CompleteAsyncOperationException(&quot;Error during preparing update task.&quot;, e);</span>
-<span class="nc" id="L172">        } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L173">            throw new CompleteAsyncOperationException(&quot;Can't register strategy for update task.&quot;, e);</span>
-<span class="nc" id="L174">        } catch (ChangeValueException e) {</span>
-<span class="nc" id="L175">            throw new CompleteAsyncOperationException(&quot;Can't complete async operation.&quot;, e);</span>
-<span class="nc" id="L176">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L177">            throw new CompleteAsyncOperationException(&quot;Can't resolve async operation object.&quot;, e);</span>
-<span class="nc" id="L178">        } catch (UpdateAsyncOperationException e) {</span>
-<span class="nc" id="L179">            throw new CompleteAsyncOperationException(&quot;Can't create new UpdateAsyncOperationTask.&quot;, e);</span>
-<span class="nc" id="L180">        }</span>
-<span class="nc" id="L181">    }</span>
-
-    @Override
     public void delete(final String token) throws DeleteAsyncOperationException {
 
-<span class="nc" id="L186">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L187">            IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteAsyncOperationTask.class.toString()));</span>
-<span class="nc bnc" id="L188" title="All 2 branches missed.">            if (deleteTask == null) {</span>
-<span class="nc" id="L189">                IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L190">                    Keys.getOrAdd(IDatabaseTask.class.toString()), DeleteAsyncOperationTask.class.toString()</span>
-                );
-<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (nestedTask == null) {</span>
-<span class="nc" id="L193">                    throw new DeleteAsyncOperationException(&quot;Can't create nested task for update task.&quot;);</span>
-                }
-<span class="nc" id="L195">                deleteTask = new DeleteAsyncOperationTask(nestedTask);</span>
-<span class="nc" id="L196">                IOC.register(Keys.getOrAdd(DeleteAsyncOperationTask.class.toString()), new SingletonStrategy(deleteTask));</span>
-            }
-<span class="nc" id="L198">            DeleteAsyncOperationQuery deleteQuery = IOC.resolve(Keys.getOrAdd(DeleteAsyncOperationQuery.class.toString()));</span>
-<span class="nc" id="L199">            deleteQuery.setCollectionName(collectionName);</span>
-<span class="nc" id="L200">            IObject deleteItem = getAsyncOperation(token);</span>
-<span class="nc" id="L201">            deleteQuery.setDocumentIds(Collections.singletonList(idField.in(deleteItem)));</span>
+<span class="nc" id="L145">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
 
-<span class="nc" id="L203">            deleteTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
-<span class="nc" id="L204">            deleteTask.prepare(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), deleteQuery));</span>
-<span class="nc" id="L205">            deleteTask.execute();</span>
-<span class="nc bnc" id="L206" title="All 8 branches missed.">        } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L207">            throw new DeleteAsyncOperationException(&quot;Error during execution complete.&quot;, e);</span>
-<span class="nc" id="L208">        } catch (PoolGuardException e) {</span>
-<span class="nc" id="L209">            throw new DeleteAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L210">        } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L211">            throw new DeleteAsyncOperationException(&quot;Can't set connection to update task.&quot;, e);</span>
-<span class="nc" id="L212">        } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L213">            throw new DeleteAsyncOperationException(&quot;Error during preparing update task.&quot;, e);</span>
-<span class="nc" id="L214">        } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L215">            throw new DeleteAsyncOperationException(&quot;Can't register strategy for update task.&quot;, e);</span>
-<span class="nc" id="L216">        } catch (ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L217">            throw new DeleteAsyncOperationException(&quot;Can't complete async operation.&quot;, e);</span>
-<span class="nc" id="L218">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L219">            throw new DeleteAsyncOperationException(&quot;Can't resolve async operation object.&quot;, e);</span>
-<span class="nc" id="L220">        } catch (GetAsyncOperationException e) {</span>
-<span class="nc" id="L221">            throw new DeleteAsyncOperationException(&quot;Can't get async operation by token.&quot;, e);</span>
-<span class="nc" id="L222">        }</span>
-<span class="nc" id="L223">    }</span>
+<span class="nc" id="L147">            ITask task = IOC.resolve(</span>
+<span class="nc" id="L148">                    Keys.getOrAdd(&quot;db.async_ops_collection.delete&quot;),</span>
+<span class="nc" id="L149">                    poolGuard.getObject(),</span>
+                    collectionName,
+                    token
+            );
+<span class="nc" id="L153">            task.execute();</span>
+<span class="nc bnc" id="L154" title="All 8 branches missed.">        } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L155">            throw new DeleteAsyncOperationException(&quot;Error during execution complete.&quot;, e);</span>
+<span class="nc" id="L156">        } catch (PoolGuardException e) {</span>
+<span class="nc" id="L157">            throw new DeleteAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L158">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L159">            throw new DeleteAsyncOperationException(&quot;Can't get Task from IOC&quot;, e);</span>
+<span class="nc" id="L160">        }</span>
+<span class="nc" id="L161">    }</span>
+
+
+    @Override
+    public void complete(final IObject asyncOperation) throws CompleteAsyncOperationException {
+
+<span class="nc" id="L167">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+
+<span class="nc" id="L169">            ITask updateTask = IOC.resolve(Keys.getOrAdd(&quot;db.async_ops_collection.complete&quot;),</span>
+<span class="nc" id="L170">                    poolGuard.getObject(),</span>
+                    collectionName,
+                    asyncOperation
+            );
+
+<span class="nc" id="L175">            updateTask.execute();</span>
+
+            /*IDatabaseTask updateTask = IOC.resolve(Keys.getOrAdd(UpdateAsyncOperationTask.class.toString()));
+            if (updateTask == null) {
+                IDatabaseTask nestedTask = IOC.resolve(
+                    Keys.getOrAdd(IDatabaseTask.class.toString()), UpdateAsyncOperationTask.class.toString()
+                );
+                if (nestedTask == null) {
+                    throw new CompleteAsyncOperationException(&quot;Can't create nested task for update task.&quot;);
+                }
+                updateTask = new UpdateAsyncOperationTask(nestedTask);
+                IOC.register(Keys.getOrAdd(UpdateAsyncOperationTask.class.toString()), new SingletonStrategy(updateTask));
+            }
+            UpdateAsyncOperationQuery upsertQuery = IOC.resolve(Keys.getOrAdd(UpdateAsyncOperationQuery.class.toString()));
+            upsertQuery.setCollectionName(collectionName);
+            upsertQuery.setUpdateItem(asyncOperation);
+
+            updateTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+            updateTask.prepare(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), upsertQuery));*/
+<span class="nc bnc" id="L194" title="All 8 branches missed.">        } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L195">            throw new CompleteAsyncOperationException(&quot;Error during execution complete.&quot;, e);</span>
+<span class="nc" id="L196">        } catch (PoolGuardException e) {</span>
+<span class="nc" id="L197">            throw new CompleteAsyncOperationException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L198">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L199">            throw new CompleteAsyncOperationException(&quot;Can't resolve async operation object.&quot;, e);</span>
+<span class="nc" id="L200">        }</span>
+<span class="nc" id="L201">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

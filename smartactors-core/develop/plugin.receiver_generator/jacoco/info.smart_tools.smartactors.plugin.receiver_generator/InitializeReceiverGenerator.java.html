@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InitializeReceiverGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.receiver_generator</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.receiver_generator</a> &gt; <span class="el_source">InitializeReceiverGenerator.java</span></div><h1>InitializeReceiverGenerator.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.receiver_generator;
 
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
@@ -26,38 +29,40 @@ public class InitializeReceiverGenerator implements IPlugin {
      * @throws InvalidArgumentException if any errors occurred
      */
     public InitializeReceiverGenerator(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap)
-<span class="fc" id="L29">            throws InvalidArgumentException {</span>
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (null == bootstrap) {</span>
-<span class="fc" id="L31">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+<span class="fc" id="L32">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (null == bootstrap) {</span>
+<span class="fc" id="L34">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
         }
-<span class="fc" id="L33">        this.bootstrap = bootstrap;</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L36">        this.bootstrap = bootstrap;</span>
+<span class="fc" id="L37">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="fc" id="L39">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;InitializeReceiverGenerator&quot;);</span>
-<span class="fc" id="L40">            item</span>
-<span class="fc" id="L41">                    .process(</span>
+<span class="fc" id="L42">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;InitializeReceiverGenerator&quot;);</span>
+<span class="fc" id="L43">            item</span>
+<span class="fc" id="L44">                    .after(&quot;IOC&quot;)</span>
+<span class="fc" id="L45">                    .process(</span>
                             () -&gt; {
                                 try {
-<span class="fc" id="L44">                                    IReceiverGenerator rg = new ReceiverGenerator(this.getClass().getClassLoader());</span>
-<span class="fc" id="L45">                                    IOC.register(</span>
-<span class="fc" id="L46">                                            IOC.resolve(</span>
-<span class="fc" id="L47">                                                    IOC.getKeyForKeyStorage(),</span>
-<span class="fc" id="L48">                                                    ReceiverGenerator.class.getCanonicalName()</span>
-                                            ),
+<span class="fc" id="L48">                                    IReceiverGenerator rg = new ReceiverGenerator(this.getClass().getClassLoader());</span>
+<span class="fc" id="L49">                                    IOC.register(</span>
+<span class="fc" id="L50">                                            Keys.getOrAdd(IReceiverGenerator.class.getCanonicalName()),</span>
                                             new SingletonStrategy(rg)
                                     );
-<span class="nc" id="L52">                                } catch (Exception e) {</span>
-<span class="nc" id="L53">                                    throw new RuntimeException(&quot;Could not initialize receiver generator.&quot;, e);</span>
-<span class="fc" id="L54">                                }</span>
-<span class="fc" id="L55">                            }</span>
+<span class="nc" id="L53">                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L54">                                    throw new ActionExecuteException(&quot;InitializeReceiverGenerator plugin can't load: can't get InitializeReceiverGenerator key&quot;, e);</span>
+<span class="nc" id="L55">                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L56">                                    throw new ActionExecuteException(&quot;InitializeReceiverGenerator plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L57">                                } catch (RegistrationException e) {</span>
+<span class="nc" id="L58">                                    throw new ActionExecuteException(&quot;InitializeReceiverGenerator plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="fc" id="L59">                                }</span>
+<span class="fc" id="L60">                            }</span>
                         );
-<span class="fc" id="L57">            this.bootstrap.add(item);</span>
-<span class="fc" id="L58">        } catch (Throwable e) {</span>
-<span class="fc" id="L59">            throw new PluginException(&quot;Could not load 'ReceiverGenerator plugin'&quot;, e);</span>
-<span class="fc" id="L60">        }</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L62">            this.bootstrap.add(item);</span>
+<span class="fc" id="L63">        } catch (Throwable e) {</span>
+<span class="fc" id="L64">            throw new PluginException(&quot;Could not load 'ReceiverGenerator plugin'&quot;, e);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

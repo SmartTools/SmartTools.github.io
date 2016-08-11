@@ -3,6 +3,7 @@
 import info.smart_tools.smartactors.core.actors.check_validity_async_operation.CheckValidityAsyncOperationActor;
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
@@ -26,31 +27,35 @@ public class CheckValidityAsyncOperationPlugin implements IPlugin {
      * Constructor for create instance of CheckValidityAsyncOperationPlugin
      * @param bootstrap the bootstrap
      */
-<span class="nc" id="L29">    public CheckValidityAsyncOperationPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L30">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L30">    public CheckValidityAsyncOperationPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L31">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L32">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L36">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateCheckValidityAsyncOperationActor&quot;);</span>
+<span class="nc" id="L37">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateCheckValidityAsyncOperationActor&quot;);</span>
 
-<span class="nc" id="L38">            item.process(() -&gt; {</span>
+<span class="nc" id="L39">            item.process(() -&gt; {</span>
                 try {
-<span class="nc" id="L40">                    IKey operationKey = Keys.getOrAdd(CheckValidityAsyncOperationActor.class.getCanonicalName());</span>
-<span class="nc" id="L41">                    IOC.register(operationKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L41">                    IKey operationKey = Keys.getOrAdd(CheckValidityAsyncOperationActor.class.getCanonicalName());</span>
+<span class="nc" id="L42">                    IOC.register(operationKey, new CreateNewInstanceStrategy(</span>
                             (args) -&gt; {
-<span class="nc" id="L43">                                return new CheckValidityAsyncOperationActor((IObject) args[0]);</span>
+<span class="nc" id="L44">                                return new CheckValidityAsyncOperationActor((IObject) args[0]);</span>
                         }
                     ));
-<span class="nc" id="L46">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
-<span class="nc" id="L47">                    throw new RuntimeException(e);</span>
-<span class="nc" id="L48">                }</span>
-<span class="nc" id="L49">            });</span>
-<span class="nc" id="L50">            bootstrap.add(item);</span>
-<span class="nc" id="L51">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L52">            throw new PluginException(&quot;Can't load CheckValidityAsyncOperation plugin&quot;, e);</span>
-<span class="nc" id="L53">        }</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L47">                } catch (ResolutionException e) {</span>
+<span class="nc" id="L48">                    throw new ActionExecuteException(&quot;CheckValidityAsyncOperationActor plugin can't load: can't get CheckValidityAsyncOperationActor key&quot;, e);</span>
+<span class="nc" id="L49">                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L50">                    throw new ActionExecuteException(&quot;CheckValidityAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L51">                } catch (RegistrationException e) {</span>
+<span class="nc" id="L52">                    throw new ActionExecuteException(&quot;CheckValidityAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L53">                }</span>
+<span class="nc" id="L54">            });</span>
+<span class="nc" id="L55">            bootstrap.add(item);</span>
+<span class="nc" id="L56">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L57">            throw new PluginException(&quot;Can't load CheckValidityAsyncOperation plugin&quot;, e);</span>
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

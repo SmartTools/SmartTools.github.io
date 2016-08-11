@@ -5,6 +5,7 @@ import info.smart_tools.smartactors.actors.get_form.strategy.IFormsStrategy;
 import info.smart_tools.smartactors.actors.get_form.wrapper.GetFormMessage;
 import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
+import info.smart_tools.smartactors.core.ds_object.DSObject;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.ioc.IOC;
@@ -24,14 +25,14 @@ public class GetFormActor {
      * @param params the wrapper for IObject, contains collectionName
      * @throws GetFormActorException for errors during create
      */
-<span class="fc" id="L27">    public GetFormActor(final IObject params) throws GetFormActorException {</span>
+<span class="fc" id="L28">    public GetFormActor(final IObject params) throws GetFormActorException {</span>
         try {
-<span class="fc" id="L29">            IField field = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L30">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), field.in(params), KEY_NAME);</span>
-<span class="fc" id="L31">        } catch (Exception e) {</span>
-<span class="fc" id="L32">            throw new GetFormActorException(&quot;Can't create GetFormActor&quot;, e);</span>
-<span class="fc" id="L33">        }</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L30">            IField field = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L31">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), field.in(params), KEY_NAME);</span>
+<span class="fc" id="L32">        } catch (Exception e) {</span>
+<span class="fc" id="L33">            throw new GetFormActorException(&quot;Can't create GetFormActor&quot;, e);</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Set form to message using strategy
@@ -40,12 +41,13 @@ public class GetFormActor {
      */
     public void getForm(final GetFormMessage message) throws  GetFormActorException {
         try {
-<span class="fc" id="L43">            List&lt;IObject&gt; forms = collection.getItems(message.getFormKey());</span>
-<span class="fc" id="L44">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());</span>
-<span class="fc" id="L45">            message.setForm(strategy.getForm(forms));</span>
-<span class="nc" id="L46">        } catch (Exception e) {</span>
-<span class="nc" id="L47">            throw new GetFormActorException(&quot;Failed to get form from collection&quot;, e);</span>
-<span class="fc" id="L48">        }</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L44">            List&lt;IObject&gt; forms = collection.getItems(message.getFormKey());</span>
+<span class="fc" id="L45">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());</span>
+<span class="fc" id="L46">            message.setForm(strategy.getForm(forms));</span>
+
+<span class="nc" id="L48">        } catch (Exception e) {</span>
+<span class="nc" id="L49">            throw new GetFormActorException(&quot;Failed to get form from collection&quot;, e);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

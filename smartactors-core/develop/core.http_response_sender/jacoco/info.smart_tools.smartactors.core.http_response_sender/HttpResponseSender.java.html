@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HttpResponseSender.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.http_response_sender</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.http_response_sender</a> &gt; <span class="el_source">HttpResponseSender.java</span></div><h1>HttpResponseSender.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.http_response_sender;
+
+import info.smart_tools.smartactors.core.ichannel_handler.IChannelHandler;
+import info.smart_tools.smartactors.core.icookies_extractor.ICookiesSetter;
+import info.smart_tools.smartactors.core.icookies_extractor.exceptions.CookieSettingException;
+import info.smart_tools.smartactors.core.iheaders_extractor.IHeadersExtractor;
+import info.smart_tools.smartactors.core.iheaders_extractor.exceptions.HeadersSetterException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iresponse.IResponse;
+import info.smart_tools.smartactors.core.iresponse_sender.IResponseSender;
+import info.smart_tools.smartactors.core.iresponse_sender.exceptions.ResponseSendingException;
+import info.smart_tools.smartactors.core.iresponse_status_extractor.IResponseStatusExtractor;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
+
+/**
+ * Response sender object for received HTTP request.
+ * It sends a response to the request and closes the connection.
+ */
+public class HttpResponseSender implements IResponseSender {
+    /**
+     * Constructor for http response sender
+     */
+    private final ICookiesSetter cookiesSetter;
+    private final IHeadersExtractor headersSetter;
+    private final IResponseStatusExtractor responseStatusSetter;
+    private final String name;
+
+    /**
+     * Constructor for response sender
+     *
+     * @param name Name of the response sender
+     * @throws ResolutionException if dependencies did not register
+     */
+<span class="fc" id="L41">    public HttpResponseSender(final String name) throws ResolutionException {</span>
+<span class="fc" id="L42">        this.name = name;</span>
+<span class="fc" id="L43">        cookiesSetter = IOC.resolve(Keys.getOrAdd(ICookiesSetter.class.getCanonicalName()), name);</span>
+<span class="fc" id="L44">        headersSetter = IOC.resolve(Keys.getOrAdd(IHeadersExtractor.class.getCanonicalName()), name);</span>
+<span class="fc" id="L45">        responseStatusSetter = IOC.resolve(Keys.getOrAdd(IResponseStatusExtractor.class.getCanonicalName()), name);</span>
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void send(final IResponse responseObject, final IObject environment,
+                     final IChannelHandler ctx) throws ResponseSendingException {
+<span class="fc" id="L51">        FullHttpResponse response = new DefaultFullHttpResponse(</span>
+<span class="fc" id="L52">                HttpVersion.HTTP_1_1, getResponseStatus(environment),</span>
+<span class="fc" id="L53">                Unpooled.wrappedBuffer(responseObject.getContent()));</span>
+        try {
+<span class="fc" id="L55">            headersSetter.set(response, environment);</span>
+<span class="nc" id="L56">        } catch (HeadersSetterException e) {</span>
+<span class="nc" id="L57">            throw new ResponseSendingException(&quot;Failed to set headers to response&quot;, e);</span>
+<span class="fc" id="L58">        }</span>
+        try {
+<span class="fc" id="L60">            cookiesSetter.set(response, environment);</span>
+<span class="nc" id="L61">        } catch (CookieSettingException e) {</span>
+<span class="nc" id="L62">            throw new ResponseSendingException(&quot;Failed to set cookies to response&quot;, e);</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">        ctx.send(response);</span>
+<span class="fc" id="L65">    }</span>
+
+    private HttpResponseStatus getResponseStatus(final IObject environment) {
+<span class="fc" id="L68">        Integer responseStatusCode = responseStatusSetter.extract(environment);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (null != responseStatusCode) {</span>
+<span class="fc" id="L70">            return HttpResponseStatus.valueOf(responseStatusCode);</span>
+        }
+<span class="nc" id="L72">        return HttpResponseStatus.OK;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

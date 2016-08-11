@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Server.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.server_with_iobject</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.server_with_iobject</a> &gt; <span class="el_source">Server.java</span></div><h1>Server.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.server_with_iobject;
 
+import info.smart_tools.smartactors.core.configuration_object.ConfigurationObject;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
 import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
 import info.smart_tools.smartactors.core.ioc.IOC;
@@ -18,162 +20,299 @@ import info.smart_tools.smartactors.core.strategy_container.StrategyContainer;
 import info.smart_tools.smartactors.core.string_ioc_key.Key;
 import info.smart_tools.smartactors.core.wds_object.WDSObject;
 import info.smart_tools.smartactors.core.wrapper_generator.WrapperGenerator;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of {@link IServer} with
  */
-<span class="fc" id="L28">public class Server implements IServer {</span>
+<span class="fc" id="L33">public class Server implements IServer {</span>
+
+    private IObject ds_config;
+    private IObject co_config;
 
     @Override
     public void initialize() throws ServerInitializeException {
         try {
-<span class="fc" id="L33">            scopeInit();</span>
-<span class="fc" id="L34">            registerKeysStorageStrategyAndFieldNameStrategy();</span>
-<span class="fc" id="L35">            registerWrapperGenerator();</span>
-<span class="nc" id="L36">        } catch (Throwable e) {</span>
-<span class="nc" id="L37">            throw new ServerInitializeException(&quot;Could not initialize server.&quot;);</span>
-<span class="fc" id="L38">        }</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L41">            scopeInit();</span>
+<span class="fc" id="L42">            registerKeysStorageStrategyAndFieldNameStrategy();</span>
+<span class="fc" id="L43">            registerWrapperGenerator();</span>
+<span class="fc" id="L44">            initObjects();</span>
+<span class="nc" id="L45">        } catch (Throwable e) {</span>
+<span class="nc" id="L46">            throw new ServerInitializeException(&quot;Could not initialize server.&quot;);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
 
     @Override
     public void start()
             throws ServerExecutionException {
         try {
             /** Get wrapper generator by IOC.resolve */
-<span class="fc" id="L46">            IWrapperGenerator wg = IOC.resolve(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()));</span>
+<span class="fc" id="L55">            IWrapperGenerator wg = IOC.resolve(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()));</span>
 
             /** Get message, context, response */
-<span class="fc" id="L49">            IObject message = getMessage();</span>
-<span class="fc" id="L50">            IObject context = getContext();</span>
-<span class="fc" id="L51">            IObject response = getResponse();</span>
-<span class="fc" id="L52">            IObject environment = new DSObject();</span>
-<span class="fc" id="L53">            environment.setValue(new FieldName(&quot;message&quot;), message);</span>
-<span class="fc" id="L54">            environment.setValue(new FieldName(&quot;context&quot;), context);</span>
-<span class="fc" id="L55">            environment.setValue(new FieldName(&quot;response&quot;), response);</span>
+<span class="fc" id="L58">            IObject message = getMessage();</span>
+<span class="fc" id="L59">            IObject context = getContext();</span>
+<span class="fc" id="L60">            IObject response = getResponse();</span>
+<span class="fc" id="L61">            IObject environment = new DSObject();</span>
+<span class="fc" id="L62">            environment.setValue(new FieldName(&quot;message&quot;), message);</span>
+<span class="fc" id="L63">            environment.setValue(new FieldName(&quot;context&quot;), context);</span>
+<span class="fc" id="L64">            environment.setValue(new FieldName(&quot;response&quot;), response);</span>
 
             /** Generate wrapper class by given interface and create instance of generated class */
-<span class="fc" id="L58">            IWrapper wrapper = wg.generate(IWrapper.class);</span>
+<span class="fc" id="L67">            IWrapper wrapper = wg.generate(IWrapper.class);</span>
 
             /** Check registration of IWrapper instance creation strategy to IOC */
-<span class="fc" id="L61">            IWrapper newInstanceOfWrapper = IOC.resolve(Keys.getOrAdd(IWrapper.class.getCanonicalName() + &quot;wrapper&quot;));</span>
+<span class="fc" id="L70">            IWrapper newInstanceOfWrapper = IOC.resolve(Keys.getOrAdd(IWrapper.class.getCanonicalName() + &quot;wrapper&quot;));</span>
 
-<span class="fc" id="L63">            WDSObject wds = new WDSObject(((IObject) getWDSConfig().getValue(new FieldName(&quot;wrapper&quot;))));</span>
+<span class="fc" id="L72">            WDSObject wds = new WDSObject(((IObject) this.co_config.getValue(new FieldName(&quot;wrapper&quot;))));</span>
 
             /** Initialize wrapper */
-<span class="fc" id="L66">            wds.init(environment);</span>
-<span class="fc" id="L67">            ((IObjectWrapper) wrapper).init(wds);</span>
+<span class="fc" id="L75">            wds.init(environment);</span>
+<span class="fc" id="L76">            ((IObjectWrapper) wrapper).init(wds);</span>
 
             /** Wrapper usage: get values */
-<span class="fc" id="L70">            Integer i = wrapper.getIntValue();</span>
-<span class="fc" id="L71">            String s = wrapper.getStringValue();</span>
-<span class="fc" id="L72">            Boolean b = wrapper.getBoolValue();</span>
-<span class="fc" id="L73">            IObject io = wrapper.getIObject();</span>
-<span class="fc" id="L74">            List&lt;Integer&gt; intList = wrapper.getListOfInt();</span>
-<span class="fc" id="L75">            List&lt;String&gt; stringList = wrapper.getListOfString();</span>
+<span class="fc" id="L79">            Integer i = wrapper.getIntValue();</span>
+<span class="fc" id="L80">            String s = wrapper.getStringValue();</span>
+<span class="fc" id="L81">            Boolean b = wrapper.getBoolValue();</span>
+<span class="fc" id="L82">            IObject io = wrapper.getIObject();</span>
+<span class="fc" id="L83">            List&lt;Integer&gt; intList = wrapper.getListOfInt();</span>
+<span class="fc" id="L84">            List&lt;String&gt; stringList = wrapper.getListOfString();</span>
 
             /** Wrapper usage: set values */
-<span class="fc" id="L78">            wrapper.setIntValue(2);</span>
-<span class="fc" id="L79">            wrapper.setBoolValue(false);</span>
-<span class="fc" id="L80">            wrapper.setStringValue(&quot;new text&quot;);</span>
-<span class="fc" id="L81">            wrapper.setIObject(new DSObject());</span>
-<span class="fc" id="L82">            wrapper.setListOfString(new ArrayList&lt;String&gt;() {{ add(&quot;new string&quot;); }});</span>
-<span class="fc" id="L83">            wrapper.setListOfInt(new ArrayList&lt;Integer&gt;() {{ add(2); }});</span>
+<span class="fc" id="L87">            wrapper.setIntValue(2);</span>
+<span class="fc" id="L88">            wrapper.setBoolValue(false);</span>
+<span class="fc" id="L89">            wrapper.setStringValue(&quot;new text&quot;);</span>
+<span class="fc" id="L90">            wrapper.setIObject(new DSObject());</span>
+<span class="fc" id="L91">            wrapper.setListOfString(new ArrayList&lt;String&gt;() {{ add(&quot;new string&quot;); }});</span>
+<span class="fc" id="L92">            wrapper.setListOfInt(new ArrayList&lt;Integer&gt;() {{ add(2); }});</span>
 
-<span class="nc" id="L85">        } catch (Throwable e) {</span>
-<span class="nc" id="L86">            throw new ServerExecutionException(e);</span>
-<span class="fc" id="L87">        }</span>
-<span class="fc" id="L88">    }</span>
+<span class="nc" id="L94">        } catch (Throwable e) {</span>
+<span class="nc" id="L95">            throw new ServerExecutionException(e);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">    }</span>
 
     private void scopeInit()
             throws Exception {
-<span class="fc" id="L92">        ScopeProvider.subscribeOnCreationNewScope(</span>
+<span class="fc" id="L101">        ScopeProvider.subscribeOnCreationNewScope(</span>
                 scope -&gt; {
                     try {
-<span class="fc" id="L95">                        scope.setValue(IOC.getIocKey(), new StrategyContainer());</span>
-<span class="nc" id="L96">                    } catch (Exception e) {</span>
-<span class="nc" id="L97">                        throw new Error(e);</span>
-<span class="fc" id="L98">                    }</span>
-<span class="fc" id="L99">                }</span>
+<span class="fc" id="L104">                        scope.setValue(IOC.getIocKey(), new StrategyContainer());</span>
+<span class="nc" id="L105">                    } catch (Exception e) {</span>
+<span class="nc" id="L106">                        throw new Error(e);</span>
+<span class="fc" id="L107">                    }</span>
+<span class="fc" id="L108">                }</span>
         );
 
 
-<span class="fc" id="L103">        Object keyOfMainScope = ScopeProvider.createScope(null);</span>
-<span class="fc" id="L104">        IScope mainScope = ScopeProvider.getScope(keyOfMainScope);</span>
-<span class="fc" id="L105">        ScopeProvider.setCurrentScope(mainScope);</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L112">        Object keyOfMainScope = ScopeProvider.createScope(null);</span>
+<span class="fc" id="L113">        IScope mainScope = ScopeProvider.getScope(keyOfMainScope);</span>
+<span class="fc" id="L114">        ScopeProvider.setCurrentScope(mainScope);</span>
+<span class="fc" id="L115">    }</span>
 
     private void registerKeysStorageStrategyAndFieldNameStrategy()
             throws Exception {
-<span class="fc" id="L110">        IOC.register(</span>
-<span class="fc" id="L111">                IOC.getKeyForKeyStorage(),</span>
+<span class="fc" id="L119">        IOC.register(</span>
+<span class="fc" id="L120">                IOC.getKeyForKeyStorage(),</span>
                 new ResolveByNameIocStrategy(
                         (arg) -&gt; {
                             try {
-<span class="fc" id="L115">                                return new Key((String) arg[0]);</span>
-<span class="nc" id="L116">                            } catch (Exception e) {</span>
-<span class="nc" id="L117">                                throw new RuntimeException(e);</span>
+<span class="fc" id="L124">                                return new Key((String) arg[0]);</span>
+<span class="nc" id="L125">                            } catch (Exception e) {</span>
+<span class="nc" id="L126">                                throw new RuntimeException(e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L122">        IOC.register(</span>
-<span class="fc" id="L123">                Keys.getOrAdd(FieldName.class.getCanonicalName()),</span>
+<span class="fc" id="L131">        IOC.register(</span>
+<span class="fc" id="L132">                Keys.getOrAdd(FieldName.class.getCanonicalName()),</span>
                 new ResolveByNameIocStrategy(
                         (a) -&gt; {
                             try {
-<span class="fc" id="L127">                                return new FieldName((String) a[0]);</span>
-<span class="nc" id="L128">                            } catch (Exception e) {</span>
-<span class="nc" id="L129">                                throw new RuntimeException(e);</span>
+<span class="fc" id="L136">                                return new FieldName((String) a[0]);</span>
+<span class="nc" id="L137">                            } catch (Exception e) {</span>
+<span class="nc" id="L138">                                throw new RuntimeException(e);</span>
                             }
                         })
         );
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L142">    }</span>
 
     private void registerWrapperGenerator()
             throws Exception {
-<span class="fc" id="L137">        IWrapperGenerator wg = new WrapperGenerator(null);</span>
-<span class="fc" id="L138">        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()), new SingletonStrategy(wg));</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L146">        IWrapperGenerator wg = new WrapperGenerator(null);</span>
+<span class="fc" id="L147">        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()), new SingletonStrategy(wg));</span>
+<span class="fc" id="L148">    }</span>
 
     private IObject getMessage()
             throws Exception {
-<span class="fc" id="L143">        IObject obj = new DSObject();</span>
-<span class="fc" id="L144">        obj.setValue(new FieldName(&quot;IntValue&quot;), 1);</span>
-<span class="fc" id="L145">        obj.setValue(new FieldName(&quot;StringValue&quot;), &quot;some text&quot;);</span>
-<span class="fc" id="L146">        obj.setValue(</span>
+<span class="fc" id="L152">        IObject obj = new DSObject();</span>
+<span class="fc" id="L153">        obj.setValue(new FieldName(&quot;IntValue&quot;), 1);</span>
+<span class="fc" id="L154">        obj.setValue(new FieldName(&quot;StringValue&quot;), &quot;some text&quot;);</span>
+<span class="fc" id="L155">        obj.setValue(</span>
                 new FieldName(&quot;ListOfInt&quot;),
-<span class="fc" id="L148">                new ArrayList&lt;Integer&gt;() {{ add(1); add(2); }}</span>
+<span class="fc" id="L157">                new ArrayList&lt;Integer&gt;() {{ add(1); add(2); }}</span>
         );
-<span class="fc" id="L150">        obj.setValue(</span>
+<span class="fc" id="L159">        obj.setValue(</span>
                 new FieldName(&quot;ListOfString&quot;),
-<span class="fc" id="L152">                new ArrayList&lt;String&gt;() {{ add(&quot;some text&quot;); add(&quot;another text&quot;); }}</span>
+<span class="fc" id="L161">                new ArrayList&lt;String&gt;() {{ add(&quot;some text&quot;); add(&quot;another text&quot;); }}</span>
         );
-
-<span class="fc" id="L155">        return obj;</span>
-    }
-
-    private IObject getContext()
-            throws Exception {
-<span class="fc" id="L160">        IObject obj = new DSObject();</span>
-<span class="fc" id="L161">        obj.setValue(new FieldName(&quot;BoolValue&quot;), true);</span>
-<span class="fc" id="L162">        obj.setValue(new FieldName(&quot;IObject&quot;), new DSObject());</span>
 
 <span class="fc" id="L164">        return obj;</span>
     }
 
-    private IObject getResponse()
+    private IObject getContext()
             throws Exception {
 <span class="fc" id="L169">        IObject obj = new DSObject();</span>
+<span class="fc" id="L170">        obj.setValue(new FieldName(&quot;BoolValue&quot;), true);</span>
+<span class="fc" id="L171">        obj.setValue(new FieldName(&quot;IObject&quot;), new DSObject());</span>
 
-<span class="fc" id="L171">        return obj;</span>
+<span class="fc" id="L173">        return obj;</span>
     }
 
-    private IObject getWDSConfig()
+    private IObject getResponse()
             throws Exception {
-<span class="fc" id="L176">        IObject config = new DSObject(&quot;{\n&quot; +</span>
+<span class="fc" id="L178">        IObject obj = new DSObject();</span>
+
+<span class="fc" id="L180">        return obj;</span>
+    }
+
+    private void initObjects()
+            throws Exception {
+<span class="fc" id="L185">        IOC.register(</span>
+<span class="fc" id="L186">                IOC.resolve(</span>
+<span class="fc" id="L187">                        IOC.getKeyForKeyStorage(), &quot;configuration object&quot;</span>
+                ),
+                new ApplyFunctionToArgumentsStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="nc" id="L192">                                return new ConfigurationObject((String) a[0]);</span>
+<span class="nc" id="L193">                            } catch (Throwable e) {</span>
+<span class="nc" id="L194">                                throw new RuntimeException(</span>
+                                        &quot;Could not create new instance of Configuration Object.&quot;
+                                );
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L201">        IOC.register(</span>
+<span class="fc" id="L202">                IOC.resolve(</span>
+<span class="fc" id="L203">                        IOC.getKeyForKeyStorage(), &quot;configuration object default strategy&quot;</span>
+                ),
+                new ApplyFunctionToArgumentsStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="nc" id="L208">                                return a[0];</span>
+<span class="nc" id="L209">                            } catch (Throwable e) {</span>
+<span class="nc" id="L210">                                throw new RuntimeException(</span>
+                                        &quot;Error in configuration 'default' rule.&quot;, e
+                                );
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L217">        IOC.register(</span>
+<span class="fc" id="L218">                IOC.resolve(</span>
+<span class="fc" id="L219">                        IOC.getKeyForKeyStorage(), &quot;configuration object in_ strategy&quot;</span>
+                ),
+                new ApplyFunctionToArgumentsStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="nc" id="L224">                                Object obj = a[0];</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">                                if (obj instanceof String) {</span>
+<span class="nc" id="L226">                                    IObject innerObject = new ConfigurationObject();</span>
+<span class="nc" id="L227">                                    innerObject.setValue(new FieldName(&quot;name&quot;), &quot;wds_getter_strategy&quot;);</span>
+<span class="nc" id="L228">                                    innerObject.setValue(new FieldName(&quot;args&quot;), new ArrayList&lt;String&gt;() {{ add((String) obj); }} );</span>
+
+<span class="nc" id="L230">                                    return new ArrayList&lt;IObject&gt;() {{ add(innerObject); }};</span>
+                                }
+<span class="nc" id="L232">                                return obj;</span>
+<span class="nc" id="L233">                            } catch (Throwable e) {</span>
+<span class="nc" id="L234">                                throw new RuntimeException(</span>
+                                        &quot;Error in configuration 'wrapper' rule.&quot;, e
+                                );
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L241">        IOC.register(</span>
+<span class="fc" id="L242">                IOC.resolve(</span>
+<span class="fc" id="L243">                        IOC.getKeyForKeyStorage(), &quot;configuration object out_ strategy&quot;</span>
+                ),
+                new ApplyFunctionToArgumentsStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="nc" id="L248">                                Object obj = a[0];</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                                if (obj instanceof String) {</span>
+<span class="nc" id="L250">                                    IObject innerObject = new ConfigurationObject();</span>
+<span class="nc" id="L251">                                    innerObject.setValue(new FieldName(&quot;name&quot;), &quot;wds_target_strategy&quot;);</span>
+<span class="nc" id="L252">                                    innerObject.setValue(new FieldName(&quot;args&quot;), new ArrayList&lt;String&gt;() {{ add(&quot;local/value&quot;); add((String) obj); }} );</span>
+
+<span class="nc" id="L254">                                    return new ArrayList&lt;List&lt;IObject&gt;&gt;() {{</span>
+<span class="nc" id="L255">                                        add(new ArrayList&lt;IObject&gt;() {{  add(innerObject); }});</span>
+<span class="nc" id="L256">                                    }};</span>
+                                }
+<span class="nc bnc" id="L258" title="All 2 branches missed.">                                if (obj instanceof List) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">                                    for (Object o : (List) obj) {</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">                                        if (o instanceof List) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">                                            for (Object innerObject : (List) o) {</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">                                                if (((IObject) innerObject).getValue(new FieldName(&quot;name&quot;)).equals(&quot;target&quot;)) {</span>
+<span class="nc" id="L263">                                                    ((IObject) innerObject).setValue(new FieldName(&quot;name&quot;), &quot;wds_target_strategy&quot;);</span>
+<span class="nc" id="L264">                                                    ((IObject) innerObject).setValue(new FieldName(&quot;args&quot;), new ArrayList&lt;String&gt;() {{</span>
+<span class="nc" id="L265">                                                                add(&quot;local/value&quot;);</span>
+<span class="nc" id="L266">                                                                add((String) ((List) ((IObject) innerObject)</span>
+<span class="nc" id="L267">                                                                        .getValue(new FieldName(&quot;args&quot;))).get(0));</span>
+<span class="nc" id="L268">                                                            }}</span>
+                                                    );
+                                                }
+<span class="nc" id="L271">                                            }</span>
+                                        }
+<span class="nc" id="L273">                                    }</span>
+                                }
+<span class="nc" id="L275">                                return obj;</span>
+<span class="nc" id="L276">                            } catch (Throwable e) {</span>
+<span class="nc" id="L277">                                throw new RuntimeException(&quot;Error in configuration 'wrapper' rule.&quot;, e);</span>
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L282">        IOC.register(</span>
+<span class="fc" id="L283">                IOC.resolve(</span>
+<span class="fc" id="L284">                        IOC.getKeyForKeyStorage(), &quot;resolve key for configuration object&quot;</span>
+                ),
+                new ApplyFunctionToArgumentsStrategy(
+                        (a) -&gt; {
+                            try {
+<span class="nc" id="L289">                                Map&lt;String, String&gt; keys = new HashMap&lt;String, String&gt;() {{</span>
+<span class="nc" id="L290">                                    put(&quot;in_&quot;, &quot;configuration object in_ strategy&quot;);</span>
+<span class="nc" id="L291">                                    put(&quot;out_&quot;, &quot;configuration object out_ strategy&quot;);</span>
+<span class="nc" id="L292">                                }};</span>
+<span class="nc" id="L293">                                char[] symbols = a[1].toString().toCharArray();</span>
+<span class="nc" id="L294">                                String resolvedKey = &quot;configuration object default strategy&quot;;</span>
+<span class="nc" id="L295">                                StringBuilder key = new StringBuilder();</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">                                for (char c : symbols) {</span>
+<span class="nc" id="L297">                                    key.append(c);</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">                                    if (null != keys.get(key.toString())) {</span>
+<span class="nc" id="L299">                                        resolvedKey = keys.get(key.toString());</span>
+<span class="nc" id="L300">                                        break;</span>
+                                    }
+                                }
+<span class="nc" id="L303">                                return IOC.resolve(</span>
+<span class="nc" id="L304">                                        IOC.resolve(IOC.getKeyForKeyStorage(), resolvedKey),</span>
+                                        a[0]
+                                );
+<span class="nc" id="L307">                            } catch (Throwable e) {</span>
+<span class="nc" id="L308">                                throw new RuntimeException(</span>
+                                        &quot;Configuration object key resolution failed.&quot;
+                                );
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L315">        this.co_config = new DSObject(&quot;{\n&quot; +</span>
                 &quot;  \&quot;wrapper\&quot;: {\n&quot; +
                 &quot;    \&quot;in_getIntValue\&quot;: [{\n&quot; +
                 &quot;      \&quot;name\&quot;: \&quot;wds_getter_strategy\&quot;,\n&quot; +
@@ -237,99 +376,6 @@ import java.util.List;
                 &quot;    ]\n&quot; +
                 &quot;  }\n&quot; +
                 &quot;}&quot;);
-//
-//        List&lt;IObject&gt; list_in_getIntValue= new ArrayList&lt;&gt;();
-//        IObject in_getIntValue = new DSObject(&quot;{\n&quot; +
-//                &quot;      \&quot;name\&quot;: \&quot;wds_getter_strategy\&quot;,\n&quot; +
-//                &quot;      \&quot;args\&quot;: [\&quot;message/IntValue\&quot;]\n&quot; +
-//                &quot;    }&quot;);
-//        list_in_getIntValue.add(in_getIntValue);
-//        config.setValue(new FieldName(&quot;in_getIntValue&quot;), list_in_getIntValue);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_setIntValue = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_setIntValue = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_setIntValue.add(inner_list_out_setIntValue);
-//        IObject out_setIntValue = new DSObject(&quot;{\n&quot; +
-//                &quot;        \&quot;name\&quot;: \&quot;wds_target_strategy\&quot;,\n&quot; +
-//                &quot;        \&quot;args\&quot;: [\&quot;local/value\&quot;, \&quot;response/IntValue\&quot;]\n&quot; +
-//                &quot;      }&quot;);
-//        inner_list_out_setIntValue.add(out_setIntValue);
-//        config.setValue(new FieldName(&quot;out_setIntValue&quot;), list_out_setIntValue);
-//
-//        List&lt;IObject&gt; list_in_getStringValue = new ArrayList&lt;&gt;();
-//        IObject in_getStringValue = new DSObject(&quot;{\n&quot; +
-//                &quot;      \&quot;name\&quot;: \&quot;wds_getter_strategy\&quot;,\n&quot; +
-//                &quot;      \&quot;args\&quot;: [\&quot;message/StringValue\&quot;]\n&quot; +
-//                &quot;    }&quot;);
-//        list_in_getStringValue.add(in_getStringValue);
-//        config.setValue(new FieldName(&quot;in_getStringValue&quot;), list_in_getStringValue);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_setStringValue = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_setStringValue = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_setStringValue.add(inner_list_out_setStringValue);
-//        IObject out_setStringValue = new DSObject(&quot;{\n&quot; +
-//                &quot;        \&quot;name\&quot;: \&quot;wds_target_strategy\&quot;,\n&quot; +
-//                &quot;        \&quot;args\&quot;: [\&quot;local/value\&quot;, \&quot;response/StringValue\&quot;]\n&quot; +
-//                &quot;      }&quot;);
-//        inner_list_out_setStringValue.add(out_setStringValue);
-//        config.setValue(new FieldName(&quot;out_setStringValue&quot;), list_out_setStringValue);
-//
-//        List&lt;IObject&gt; list_in_getListOfInt = new ArrayList&lt;&gt;();
-//        IObject in_getListOfInt = new DSObject(&quot;{\n&quot; +
-//                &quot;      \&quot;name\&quot;: \&quot;wds_getter_strategy\&quot;,\n&quot; +
-//                &quot;      \&quot;args\&quot;: [\&quot;message/ListOfInt\&quot;]\n&quot; +
-//                &quot;    }&quot;);
-//        list_in_getListOfInt.add(in_getListOfInt);
-//        config.setValue(new FieldName(&quot;in_getListOfInt&quot;), list_in_getListOfInt);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_setListOfInt = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_setListOfInt = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_setListOfInt.add(inner_list_out_setListOfInt);
-//        IObject out_setListOfInt = new DSObject(&quot;{\n&quot; +
-//                &quot;        \&quot;name\&quot;: \&quot;wds_target_strategy\&quot;,\n&quot; +
-//                &quot;        \&quot;args\&quot;: [\&quot;local/value\&quot;, \&quot;response/ListOfInt\&quot;]\n&quot; +
-//                &quot;      }&quot;);
-//        inner_list_out_setListOfInt.add(out_setListOfInt);
-//        config.setValue(new FieldName(&quot;out_setListOfInt&quot;), list_out_setListOfInt);
-//
-//        List&lt;IObject&gt; list_in_getListOfString = new ArrayList&lt;&gt;();
-//        IObject in_getListOfString = new DSObject();
-//        list_in_getListOfString.add(in_getListOfString);
-//        config.setValue(new FieldName(&quot;in_getListOfString&quot;), list_in_getListOfString);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_setListOfString = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_setListOfString = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_setListOfString.add(inner_list_out_setListOfString);
-//        IObject out_setListOfString = new DSObject(&quot;&quot;);
-//        inner_list_out_.add(out_);
-//        config.setValue(new FieldName(&quot;out_&quot;), list_out_);
-//
-//        List&lt;IObject&gt; list_in_ = new ArrayList&lt;&gt;();
-//        IObject in_ = new DSObject();
-//        list_in_.add(in_);
-//        config.setValue(new FieldName(&quot;in_&quot;), list_in_);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_ = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_ = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_.add(inner_list_out_);
-//        IObject out_ = new DSObject(&quot;&quot;);
-//        inner_list_out_.add(out_);
-//        config.setValue(new FieldName(&quot;out_&quot;), list_out_);
-//
-//
-//        List&lt;IObject&gt; list_in_ = new ArrayList&lt;&gt;();
-//        IObject in_ = new DSObject();
-//        list_in_.add(in_);
-//        config.setValue(new FieldName(&quot;in_&quot;), list_in_);
-//
-//        ArrayList&lt;IObject&gt; inner_list_out_ = new ArrayList&lt;&gt;();
-//        List&lt;List&lt;IObject&gt;&gt; list_out_ = new ArrayList&lt;List&lt;IObject&gt;&gt;();
-//        list_out_.add(inner_list_out_);
-//        IObject out_ = new DSObject(&quot;&quot;);
-//        inner_list_out_.add(out_);
-//        config.setValue(new FieldName(&quot;out_&quot;), list_out_);
-
-<span class="fc" id="L332">        return config;</span>
-    }
+<span class="fc" id="L379">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

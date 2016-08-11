@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HttpsEndpointPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.https_endpoint</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.https_endpoint</a> &gt; <span class="el_source">HttpsEndpointPlugin.java</span></div><h1>HttpsEndpointPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.https_endpoint;
+
+import info.smart_tools.smartactors.core.HttpEndpoint;
+import info.smart_tools.smartactors.core.IDeserializeStrategy;
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.channel_handler_netty.ChannelHandlerNetty;
+import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.deserialize_strategy_post_json.DeserializeStrategyPostJson;
+import info.smart_tools.smartactors.core.ds_object.DSObject;
+import info.smart_tools.smartactors.core.environment_handler.EnvironmentHandler;
+import info.smart_tools.smartactors.core.http_response_sender.HttpResponseSender;
+import info.smart_tools.smartactors.core.https_endpoint.HttpsEndpoint;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.icookies_extractor.ICookiesSetter;
+import info.smart_tools.smartactors.core.ienvironment_handler.IEnvironmentHandler;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iheaders_extractor.IHeadersExtractor;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.imessage_mapper.IMessageMapper;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.iqueue.IQueue;
+import info.smart_tools.smartactors.core.iresponse_sender.IResponseSender;
+import info.smart_tools.smartactors.core.iresponse_status_extractor.IResponseStatusExtractor;
+import info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
+import info.smart_tools.smartactors.core.issl_engine_provider.ISslEngineProvider;
+import info.smart_tools.smartactors.core.issl_engine_provider.exception.SSLEngineProviderException;
+import info.smart_tools.smartactors.core.message_processing.IReceiverChain;
+import info.smart_tools.smartactors.core.message_to_bytes_mapper.MessageToBytesMapper;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
+import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
+import info.smart_tools.smartactors.core.ssl_engine_provider.SslEngineProvider;
+import info.smart_tools.smartactors.strategy.cookies_setter.CookiesSetter;
+import info.smart_tools.smartactors.strategy.http_headers_setter.HttpHeadersExtractor;
+import info.smart_tools.smartactors.strategy.respons_status_extractor.ResponseStatusExtractor;
+import io.netty.channel.ChannelHandlerContext;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+/**
+ * Plugin for register http/https endpoint at IOC
+ */
+public class HttpsEndpointPlugin implements IPlugin {
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     *
+     * @param bootstrap bootstrap
+     */
+<span class="fc" id="L60">    public HttpsEndpointPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="fc" id="L61">        this.bootstrap = bootstrap;</span>
+<span class="fc" id="L62">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="fc" id="L67">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateHttpsEndpoint&quot;);</span>
+<span class="fc" id="L68">            item</span>
+<span class="fc" id="L69">                    .after(&quot;IOC&quot;)</span>
+<span class="fc" id="L70">                    .after(&quot;message_processor&quot;)</span>
+<span class="fc" id="L71">                    .after(&quot;message_processing_sequence&quot;)</span>
+<span class="fc" id="L72">                    .after(&quot;response&quot;)</span>
+<span class="fc" id="L73">                    .after(&quot;response_content_strategy&quot;)</span>
+<span class="fc" id="L74">                    .after(&quot;field_name&quot;)</span>
+<span class="fc" id="L75">                    .before(&quot;configure&quot;)</span>
+<span class="fc" id="L76">                    .process(</span>
+                            () -&gt; {
+                                try {
+                                    IFieldName typeFieldName =
+<span class="fc" id="L80">                                            IOC.resolve(</span>
+<span class="fc" id="L81">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;type&quot;
+                                            );
+                                    IFieldName portFieldName =
+<span class="fc" id="L85">                                            IOC.resolve(</span>
+<span class="fc" id="L86">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;port&quot;
+                                            );
+                                    IFieldName startChainNameFieldName =
+<span class="fc" id="L90">                                            IOC.resolve(</span>
+<span class="fc" id="L91">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;startChain&quot;
+                                            );
+                                    IFieldName stackDepthFieldName =
+<span class="fc" id="L95">                                            IOC.resolve(</span>
+<span class="fc" id="L96">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;stackDepth&quot;
+                                            );
+                                    IFieldName maxContentLengthFieldName =
+<span class="fc" id="L100">                                            IOC.resolve(</span>
+<span class="fc" id="L101">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;maxContentLength&quot;
+                                            );
+                                    IFieldName endpointNameFieldName =
+<span class="fc" id="L105">                                            IOC.resolve(</span>
+<span class="fc" id="L106">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;endpointName&quot;
+                                            );
+
+                                    IFieldName queueFieldName =
+<span class="fc" id="L111">                                            IOC.resolve(</span>
+<span class="fc" id="L112">                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                                                    &quot;queue&quot;
+                                            );
+<span class="fc" id="L115">                                    ICookiesSetter cookiesSetter = new CookiesSetter();</span>
+<span class="fc" id="L116">                                    IKey httpsEndpointKey = Keys.getOrAdd(&quot;https_endpoint&quot;);</span>
+<span class="fc" id="L117">                                    IKey cookiesSetterKey = Keys.getOrAdd(ICookiesSetter.class.getCanonicalName());</span>
+<span class="fc" id="L118">                                    IOC.register(cookiesSetterKey,</span>
+                                            new SingletonStrategy(cookiesSetter));
+
+<span class="fc" id="L121">                                    IHeadersExtractor headersSetter = new HttpHeadersExtractor();</span>
+
+<span class="fc" id="L123">                                    IKey headersSetterKey = Keys.getOrAdd(IHeadersExtractor.class.getCanonicalName());</span>
+<span class="fc" id="L124">                                    IOC.register(headersSetterKey,</span>
+                                            new SingletonStrategy(headersSetter));
+
+<span class="fc" id="L127">                                    IResponseStatusExtractor responseStatusExtractor = new ResponseStatusExtractor();</span>
+<span class="fc" id="L128">                                    IKey responseStatusExtractorKey = Keys.getOrAdd(</span>
+<span class="fc" id="L129">                                            IResponseStatusExtractor.class.getCanonicalName());</span>
+<span class="fc" id="L130">                                    IOC.register(responseStatusExtractorKey,</span>
+                                            new SingletonStrategy(responseStatusExtractor));
+
+<span class="fc" id="L133">                                    IOC.register(Keys.getOrAdd(ISslEngineProvider.class.getCanonicalName()),</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+<span class="nc" id="L136">                                                        ISslEngineProvider sslContextProvider = new SslEngineProvider();</span>
+                                                        try {
+<span class="nc" id="L138">                                                            sslContextProvider.init((IObject) args[0]);</span>
+<span class="nc" id="L139">                                                        } catch (SSLEngineProviderException e) {</span>
+<span class="nc" id="L140">                                                        }</span>
+<span class="nc" id="L141">                                                        return sslContextProvider;</span>
+                                                    }
+                                            )
+                                    );
+
+<span class="fc" id="L146">                                    IOC.register(</span>
+<span class="fc" id="L147">                                            Keys.getOrAdd(IEnvironmentHandler.class.getCanonicalName()),</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+<span class="nc" id="L150">                                                        IObject configuration = (IObject) args[0];</span>
+<span class="nc" id="L151">                                                        IQueue queue = null;</span>
+<span class="nc" id="L152">                                                        Integer stackDepth = null;</span>
+                                                        try {
+<span class="nc" id="L154">                                                            queue = (IQueue) configuration.getValue(queueFieldName);</span>
+<span class="nc" id="L155">                                                            stackDepth =</span>
+<span class="nc" id="L156">                                                                    (Integer) configuration.getValue(stackDepthFieldName);</span>
+<span class="nc" id="L157">                                                            return new EnvironmentHandler(queue, stackDepth);</span>
+<span class="nc" id="L158">                                                        } catch (ReadValueException | InvalidArgumentException e) {</span>
+                                                        }
+<span class="nc" id="L160">                                                        return null;</span>
+                                                    }
+                                            )
+                                    );
+
+
+<span class="fc" id="L166">                                    IOC.register(Keys.getOrAdd(FileInputStream.class.getCanonicalName()),</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+                                                        try {
+<span class="nc" id="L170">                                                            return new FileInputStream((String) args[0]);</span>
+<span class="nc" id="L171">                                                        } catch (FileNotFoundException e) {</span>
+                                                        }
+<span class="nc" id="L173">                                                        return null;</span>
+                                                    }
+                                            ));
+
+<span class="fc" id="L177">                                    IOC.register(httpsEndpointKey,</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+<span class="nc" id="L180">                                                        IObject configuration = (IObject) args[0];</span>
+                                                        try {
+<span class="nc" id="L182">                                                            IEnvironmentHandler environmentHandler = IOC.resolve(</span>
+<span class="nc" id="L183">                                                                    Keys.getOrAdd(IEnvironmentHandler.class.getCanonicalName()),</span>
+                                                                    configuration);
+<span class="nc" id="L185">                                                            ISslEngineProvider sslContextProvider =</span>
+<span class="nc" id="L186">                                                                    IOC.resolve(</span>
+<span class="nc" id="L187">                                                                            Keys.getOrAdd(ISslEngineProvider.class.getCanonicalName()),</span>
+                                                                            configuration
+                                                                    );
+<span class="nc" id="L190">                                                            return new HttpsEndpoint((Integer) configuration.getValue(portFieldName),</span>
+<span class="nc" id="L191">                                                                    (Integer) configuration.getValue(maxContentLengthFieldName),</span>
+<span class="nc" id="L192">                                                                    ScopeProvider.getCurrentScope(), environmentHandler,</span>
+<span class="nc" id="L193">                                                                    (IReceiverChain) configuration.getValue(startChainNameFieldName),</span>
+                                                                    sslContextProvider);
+<span class="nc" id="L195">                                                        } catch (ReadValueException | InvalidArgumentException</span>
+                                                                | ScopeProviderException | ResolutionException e) {
+                                                        }
+<span class="nc" id="L198">                                                        return null;</span>
+                                                    }
+                                            )
+                                    );
+<span class="fc" id="L202">                                    IOC.register(Keys.getOrAdd(&quot;http_endpoint&quot;),</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+<span class="nc" id="L205">                                                        IObject configuration = (IObject) args[0];</span>
+                                                        try {
+<span class="nc" id="L207">                                                            IEnvironmentHandler environmentHandler = IOC.resolve(</span>
+<span class="nc" id="L208">                                                                    Keys.getOrAdd(IEnvironmentHandler.class.getCanonicalName()),</span>
+                                                                    configuration);
+<span class="nc" id="L210">                                                            return new HttpEndpoint((Integer) configuration.getValue(portFieldName),</span>
+<span class="nc" id="L211">                                                                    (Integer) configuration.getValue(maxContentLengthFieldName),</span>
+<span class="nc" id="L212">                                                                    ScopeProvider.getCurrentScope(), environmentHandler,</span>
+<span class="nc" id="L213">                                                                    (IReceiverChain) configuration.getValue(startChainNameFieldName));</span>
+<span class="nc" id="L214">                                                        } catch (ReadValueException | InvalidArgumentException</span>
+                                                                | ScopeProviderException | ResolutionException e) {
+                                                        }
+<span class="nc" id="L217">                                                        return null;</span>
+                                                    }
+                                            )
+                                    );
+<span class="fc" id="L221">                                    IMessageMapper&lt;byte[]&gt; messageMapper = new MessageToBytesMapper();</span>
+<span class="fc" id="L222">                                    IDeserializeStrategy deserializeStrategy =</span>
+                                            new DeserializeStrategyPostJson(messageMapper);
+<span class="fc" id="L224">                                    IKey deserializeStrategyKey = Keys.getOrAdd(IDeserializeStrategy.class.getCanonicalName());</span>
+
+<span class="fc" id="L226">                                    IOC.register(deserializeStrategyKey, new SingletonStrategy(deserializeStrategy));</span>
+
+<span class="fc" id="L228">                                    IKey httpResponseSender = Keys.getOrAdd(IResponseSender.class.getCanonicalName());</span>
+                                    // TODO: 21.07.16 add opportunity to set custom name of the sender
+<span class="fc" id="L230">                                    HttpResponseSender sender = new HttpResponseSender(&quot;default&quot;);</span>
+<span class="fc" id="L231">                                    IOC.register(httpResponseSender,</span>
+                                            new SingletonStrategy(
+                                                    sender
+                                            ));
+
+<span class="fc" id="L236">                                    IKey emptyIObjectKey = Keys.getOrAdd(&quot;EmptyIObject&quot;);</span>
+<span class="fc" id="L237">                                    IOC.register(emptyIObjectKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L238">                                                    (args) -&gt; new DSObject()</span>
+                                            )
+                                    );
+
+<span class="fc" id="L242">                                    IKey channelHandlerNettyKey = Keys.getOrAdd(ChannelHandlerNetty.class.getCanonicalName());</span>
+<span class="fc" id="L243">                                    IOC.register(channelHandlerNettyKey,</span>
+                                            new CreateNewInstanceStrategy(
+                                                    (args) -&gt; {
+<span class="nc" id="L246">                                                        ChannelHandlerNetty channelHandlerNetty = new ChannelHandlerNetty();</span>
+<span class="nc" id="L247">                                                        channelHandlerNetty.init((ChannelHandlerContext) args[0]);</span>
+<span class="nc" id="L248">                                                        return channelHandlerNetty;</span>
+                                                    }
+                                            ));
+
+<span class="nc" id="L252">                                } catch (Exception e) {</span>
+<span class="nc" id="L253">                                    throw new RuntimeException(e);</span>
+<span class="fc" id="L254">                                }</span>
+
+<span class="fc" id="L256">                            }</span>
+                    );
+<span class="fc" id="L258">            bootstrap.add(item);</span>
+<span class="fc" id="L259">        } catch (Exception e) {</span>
+<span class="fc" id="L260">            throw new PluginException(&quot;Can't load \&quot;CreateHttpsEndpoint\&quot; plugin&quot;, e);</span>
+<span class="fc" id="L261">        }</span>
+<span class="fc" id="L262">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

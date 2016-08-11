@@ -26,7 +26,7 @@ public class UpdateAsyncOperationTask implements IDatabaseTask {
     /**
      * Constructor
      * @param upsertTask nested task for update operation
-     * @throws ResolutionException Throw when task can't be created (for example, when can't resolve some of field)
+     * @throws UpdateAsyncOperationException Throw when task can't be created (for example, when can't resolve some of field)
      */
 <span class="nc" id="L31">    public UpdateAsyncOperationTask(final IDatabaseTask upsertTask) throws UpdateAsyncOperationException {</span>
 <span class="nc" id="L32">        this.upsertTask = upsertTask;</span>
@@ -50,13 +50,8 @@ public class UpdateAsyncOperationTask implements IDatabaseTask {
 <span class="nc" id="L50">    }</span>
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="nc" id="L54">        upsertTask.setConnection(connection);</span>
-<span class="nc" id="L55">    }</span>
-
-    @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L59">        upsertTask.execute();</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L54">        upsertTask.execute();</span>
+<span class="nc" id="L55">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

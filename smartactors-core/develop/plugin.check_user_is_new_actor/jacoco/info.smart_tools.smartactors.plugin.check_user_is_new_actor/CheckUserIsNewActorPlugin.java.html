@@ -19,6 +19,9 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
 import java.util.Arrays;
 
+/**
+ * Plugin for load IOC-strategy for check user is new actor
+ */
 public class CheckUserIsNewActorPlugin implements IPlugin {
 
     private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
@@ -27,59 +30,59 @@ public class CheckUserIsNewActorPlugin implements IPlugin {
      * Constructor
      * @param bootstrap bootstrap element
      */
-<span class="nc" id="L30">    public CheckUserIsNewActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L31">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L33">    public CheckUserIsNewActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L34">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L35">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L37">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CheckUserIsNewActorPlugin&quot;);</span>
+<span class="nc" id="L40">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CheckUserIsNewActorPlugin&quot;);</span>
 
-<span class="nc" id="L39">            item</span>
-<span class="nc" id="L40">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L41">                    .process(() -&gt; {</span>
+<span class="nc" id="L42">            item</span>
+<span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L44">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L43">                            IKey checkUserIsNewActorKey = Keys.getOrAdd(CheckUserIsNewActor.class.getCanonicalName());</span>
-<span class="nc" id="L44">                            IOC.register(checkUserIsNewActorKey,</span>
+<span class="nc" id="L46">                            IKey checkUserIsNewActorKey = Keys.getOrAdd(CheckUserIsNewActor.class.getCanonicalName());</span>
+<span class="nc" id="L47">                            IOC.register(checkUserIsNewActorKey,</span>
                                     new CreateNewInstanceStrategy(
                                             (args) -&gt; {
                                                 try {
-<span class="nc" id="L48">                                                    ActorParams actorParams =</span>
-<span class="nc" id="L49">                                                            IOC.resolve(</span>
-<span class="nc" id="L50">                                                                    Keys.getOrAdd(ActorParams.class.getCanonicalName()),</span>
+<span class="nc" id="L51">                                                    ActorParams actorParams =</span>
+<span class="nc" id="L52">                                                            IOC.resolve(</span>
+<span class="nc" id="L53">                                                                    Keys.getOrAdd(ActorParams.class.getCanonicalName()),</span>
                                                                     args[0]);
-<span class="nc" id="L52">                                                    return new CheckUserIsNewActor(actorParams);</span>
-<span class="nc" id="L53">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
-<span class="nc" id="L54">                                                    throw new RuntimeException(</span>
+<span class="nc" id="L55">                                                    return new CheckUserIsNewActor(actorParams);</span>
+<span class="nc" id="L56">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L57">                                                    throw new RuntimeException(</span>
                                                             &quot;Can't get args: args must contain one or more elements &quot; +
                                                                     &quot;and first element must be IObject&quot;,
                                                             e);
-<span class="nc" id="L58">                                                } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L59">                                                    throw new RuntimeException(</span>
+<span class="nc" id="L61">                                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L62">                                                    throw new RuntimeException(</span>
                                                             &quot;Can't create actor with this args: &quot;
-<span class="nc" id="L61">                                                                    + Arrays.toString(args),</span>
+<span class="nc" id="L64">                                                                    + Arrays.toString(args),</span>
                                                             e);
-<span class="nc" id="L63">                                                } catch (ResolutionException e) {</span>
-<span class="nc" id="L64">                                                    throw new RuntimeException(</span>
+<span class="nc" id="L66">                                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L67">                                                    throw new RuntimeException(</span>
                                                             &quot;Can't get ActorParams wrapper or Key for ActorParams&quot;,
                                                             e);
                                                 }
                                             }
                                     )
                             );
-<span class="nc" id="L71">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L72">                            throw new ActionExecuteException(&quot;Can't get CheckUserIsNewActor key&quot;);</span>
-<span class="nc" id="L73">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L74">                            throw new ActionExecuteException(&quot;Can't get create strategy&quot;);</span>
-<span class="nc" id="L75">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L76">                            throw new ActionExecuteException(&quot;Can't get register new strategy&quot;);</span>
-<span class="nc" id="L77">                        }</span>
-<span class="nc" id="L78">                    });</span>
-<span class="nc" id="L79">            bootstrap.add(item);</span>
-<span class="nc" id="L80">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L81">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
-<span class="nc" id="L82">        }</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L74">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L75">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't get CheckUserIsNewActor key&quot;, e);</span>
+<span class="nc" id="L76">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L77">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L78">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L79">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L80">                        }</span>
+<span class="nc" id="L81">                    });</span>
+<span class="nc" id="L82">            bootstrap.add(item);</span>
+<span class="nc" id="L83">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L84">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

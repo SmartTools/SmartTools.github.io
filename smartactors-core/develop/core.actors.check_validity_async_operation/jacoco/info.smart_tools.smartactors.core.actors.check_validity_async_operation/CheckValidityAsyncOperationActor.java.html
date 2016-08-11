@@ -24,19 +24,19 @@ public class CheckValidityAsyncOperationActor {
     /**
      * Check validity asynchronous operation, if invalid - throw exception
      * @param message input message
-     * @throws InvalidAsyncOperationIdException
+     * @throws InvalidAsyncOperationIdException Calling when any error
      */
     public void check(final CheckValidityMessage message) throws InvalidAsyncOperationIdException {
         try {
 <span class="fc" id="L31">            List&lt;String&gt; validIds = message.getIdentifiers();</span>
 <span class="fc bfc" id="L32" title="All 4 branches covered.">            if (validIds == null || validIds.isEmpty()) {</span>
-<span class="fc" id="L33">                throw new ReadValueException(&quot;List of valid id is empty&quot;);</span>
+<span class="fc" id="L33">                throw new InvalidAsyncOperationIdException(&quot;List of valid id is empty&quot;);</span>
             }
 <span class="pc bpc" id="L35" title="1 of 2 branches missed.">            if (!validIds.contains(message.getAsyncOperationId())) {</span>
-<span class="fc" id="L36">                throw new InvalidAsyncOperationIdException(&quot;List with all identifiers not contains Id from client.&quot;);</span>
+<span class="fc" id="L36">                throw new InvalidAsyncOperationIdException(&quot;List of async operations does not contain operation with received token&quot;);</span>
             }
-<span class="fc" id="L38">        } catch (ReadValueException e) {</span>
-<span class="fc" id="L39">            throw new InvalidAsyncOperationIdException(e);</span>
+<span class="nc" id="L38">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L39">            throw new InvalidAsyncOperationIdException(e);</span>
 <span class="nc" id="L40">        }</span>
 
 <span class="nc" id="L42">    }</span>

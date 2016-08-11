@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Server.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server.server_for_intern</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.server.server_for_intern</a> &gt; <span class="el_source">Server.java</span></div><h1>Server.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.server.server_for_intern;
+
+import info.smart_tools.smartactors.core.bootstrap.Bootstrap;
+import info.smart_tools.smartactors.core.feature_manager.FeatureManager;
+import info.smart_tools.smartactors.core.filesystem_tracker.FilesystemTracker;
+import info.smart_tools.smartactors.core.filesystem_tracker.ListenerTask;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager;
+import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
+import info.smart_tools.smartactors.core.ipath.IPath;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin_creator.IPluginCreator;
+import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
+import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
+import info.smart_tools.smartactors.core.iserver.IServer;
+import info.smart_tools.smartactors.core.iserver.exception.ServerExecutionException;
+import info.smart_tools.smartactors.core.iserver.exception.ServerInitializeException;
+import info.smart_tools.smartactors.core.path.Path;
+import info.smart_tools.smartactors.core.plugin_creator.PluginCreator;
+import info.smart_tools.smartactors.core.plugin_loader_from_jar.ExpansibleURLClassLoader;
+import info.smart_tools.smartactors.core.plugin_loader_from_jar.PluginLoader;
+import info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementation.PluginLoaderVisitor;
+
+import java.io.File;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ *
+ */
+<span class="nc" id="L38">public class Server implements IServer {</span>
+
+    private static final String PLUGIN_FILE_NAME = &quot;plugins.list&quot;;
+    private static final String STARTER_FILE_NAME = &quot;plugins.list&quot;;
+
+<span class="nc" id="L43">    private List&lt;String&gt; corePlugins = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L44">    private List&lt;String&gt; usersPlugins = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L45">    private List&lt;String&gt; starterPlugins = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L46">    private ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());</span>
+<span class="nc" id="L47">    private IPath corePath = new Path(&quot;core&quot;);</span>
+<span class="nc" id="L48">    private IPath pluginsPath = new Path(&quot;plugins&quot;);</span>
+<span class="nc" id="L49">    private IPath starterPath = new Path(&quot;starter&quot;);</span>
+    private IFeatureManager featureManager;
+<span class="nc" id="L51">    private BootstrapItems items = new BootstrapItems();</span>
+
+    public static void main(final String[] args) throws Exception {
+<span class="nc" id="L54">        Server server = new Server();</span>
+<span class="nc" id="L55">        server.initialize();</span>
+<span class="nc" id="L56">        server.start();</span>
+<span class="nc" id="L57">    }</span>
+
+    @Override
+    public void initialize()
+            throws ServerInitializeException {
+        try {
+<span class="nc" id="L63">            this.featureManager = new FeatureManager();</span>
+<span class="nc" id="L64">            getCorePluginsList();</span>
+<span class="nc" id="L65">            getUserPluginsList();</span>
+<span class="nc" id="L66">            getStarterList();</span>
+<span class="nc" id="L67">            loadCorePlugins();</span>
+<span class="nc" id="L68">        } catch (Throwable e) {</span>
+<span class="nc" id="L69">            e.printStackTrace();</span>
+<span class="nc" id="L70">            throw new ServerInitializeException(e);</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">    }</span>
+
+    @Override
+    public void start()
+            throws ServerExecutionException {
+        try {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
+<span class="nc" id="L79">                Thread.sleep(1L);</span>
+            }
+<span class="nc" id="L81">        } catch (Throwable e) {</span>
+<span class="nc" id="L82">            throw new ServerExecutionException(e);</span>
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">    }</span>
+
+    private void loadCorePlugins()
+            throws Exception {
+<span class="nc" id="L88">        IBootstrap bootstrap = new Bootstrap();</span>
+<span class="nc" id="L89">        IPluginCreator creator = new PluginCreator();</span>
+<span class="nc" id="L90">        IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
+<span class="nc" id="L91">        IPluginLoader&lt;Collection&lt;IPath&gt;&gt; pluginLoader = new PluginLoader(</span>
+                this.urlClassLoader,
+                (t) -&gt; {
+                    try {
+<span class="nc" id="L95">                        IPlugin plugin = creator.create(t, bootstrap);</span>
+<span class="nc" id="L96">                        plugin.load();</span>
+<span class="nc" id="L97">                    } catch (Exception e) {</span>
+<span class="nc" id="L98">                        throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
+<span class="nc" id="L99">                    }</span>
+<span class="nc" id="L100">                },</span>
+                visitor
+        );
+<span class="nc" id="L103">        IPath coreJarsDir = this.corePath;</span>
+<span class="nc" id="L104">        Files.createDirectories(FileSystems.getDefault().getPath(coreJarsDir.getPath()));</span>
+
+<span class="nc" id="L106">        IFilesystemTracker jarFilesTracker = new FilesystemTracker(</span>
+<span class="nc" id="L107">                (path) -&gt; path.getPath().endsWith(&quot;.jar&quot;),</span>
+                ListenerTask::new);
+
+<span class="nc" id="L110">        jarFilesTracker.addErrorHandler((e) -&gt; {</span>
+<span class="nc" id="L111">            System.out.println(&quot;Server initialization failed!&quot;);</span>
+<span class="nc" id="L112">            e.printStackTrace();</span>
+<span class="nc" id="L113">        });</span>
+<span class="nc" id="L114">        IFeature coreFeature = this.featureManager.newFeature(&quot;smartactors.core&quot;, jarFilesTracker);</span>
+<span class="nc" id="L115">        coreFeature.whenPresent(files -&gt; {</span>
+            try {
+<span class="nc" id="L117">                pluginLoader.loadPlugin(files);</span>
+<span class="nc" id="L118">                items.setItems(bootstrap.start());</span>
+<span class="nc" id="L119">                System.out.println(&quot;--------------------------------- Core plugins has been loaded ---------------------------------&quot;);</span>
+<span class="nc" id="L120">                loadUsersPlugins();</span>
+<span class="nc" id="L121">            } catch (Throwable e) {</span>
+<span class="nc" id="L122">                throw new RuntimeException(&quot;Plugin loading failed.&quot;, e);</span>
+<span class="nc" id="L123">            }</span>
+<span class="nc" id="L124">        });</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (String jarName : this.corePlugins) {</span>
+<span class="nc" id="L126">            coreFeature.requireFile(jarName);</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">        coreFeature.listen();</span>
+<span class="nc" id="L129">        jarFilesTracker.start(coreJarsDir);</span>
+<span class="nc" id="L130">        System.out.println(&quot;--------------------------------- Loading plugins from &quot; + this.corePath + &quot; listed in &quot; + this.corePath + File.separator + PLUGIN_FILE_NAME + &quot; ---------------------------------&quot;);</span>
+<span class="nc" id="L131">    }</span>
+
+    private void loadUsersPlugins()
+            throws Exception {
+<span class="nc" id="L135">        IBootstrap bootstrap = new Bootstrap(items.getItems());</span>
+<span class="nc" id="L136">        IPluginCreator creator = new PluginCreator();</span>
+<span class="nc" id="L137">        IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
+<span class="nc" id="L138">        IPluginLoader&lt;Collection&lt;IPath&gt;&gt; pluginLoader = new PluginLoader(</span>
+                this.urlClassLoader,
+                (t) -&gt; {
+                    try {
+<span class="nc" id="L142">                        IPlugin plugin = creator.create(t, bootstrap);</span>
+<span class="nc" id="L143">                        plugin.load();</span>
+<span class="nc" id="L144">                    } catch (Exception e) {</span>
+<span class="nc" id="L145">                        throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
+<span class="nc" id="L146">                    }</span>
+<span class="nc" id="L147">                },</span>
+                visitor
+        );
+<span class="nc" id="L150">        IPath usersJarsDir = this.pluginsPath;</span>
+<span class="nc" id="L151">        Files.createDirectories(FileSystems.getDefault().getPath(usersJarsDir.getPath()));</span>
+
+<span class="nc" id="L153">        IFilesystemTracker jarFilesTracker = new FilesystemTracker(</span>
+<span class="nc" id="L154">                (path) -&gt; path.getPath().endsWith(&quot;.jar&quot;),</span>
+                ListenerTask::new);
+
+<span class="nc" id="L157">        jarFilesTracker.addErrorHandler((e) -&gt; {</span>
+<span class="nc" id="L158">            System.out.println(&quot;Server initialization failed!&quot;);</span>
+<span class="nc" id="L159">            e.printStackTrace();</span>
+<span class="nc" id="L160">        });</span>
+<span class="nc" id="L161">        IFeature pluginsFeature = featureManager.newFeature(&quot;smartactors.plugins&quot;, jarFilesTracker);</span>
+<span class="nc" id="L162">        pluginsFeature.whenPresent(files -&gt; {</span>
+            try {
+<span class="nc" id="L164">                pluginLoader.loadPlugin(files);</span>
+<span class="nc" id="L165">                items.setItems(bootstrap.start());</span>
+<span class="nc" id="L166">                System.out.println(&quot;--------------------------------- Users plugins has been loaded ---------------------------------&quot;);</span>
+<span class="nc" id="L167">                loadStarterPlugins();</span>
+<span class="nc" id="L168">            } catch (Throwable e) {</span>
+<span class="nc" id="L169">                throw new RuntimeException(&quot;Plugin loading failed.&quot;, e);</span>
+<span class="nc" id="L170">            }</span>
+<span class="nc" id="L171">        });</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        for (String jarName : this.usersPlugins) {</span>
+<span class="nc" id="L173">            pluginsFeature.requireFile(jarName);</span>
+<span class="nc" id="L174">        }</span>
+<span class="nc" id="L175">        pluginsFeature.listen();</span>
+<span class="nc" id="L176">        jarFilesTracker.start(usersJarsDir);</span>
+<span class="nc" id="L177">        System.out.println(&quot;--------------------------------- Loading plugins from &quot; + this.pluginsPath + &quot; listed in &quot; + this.pluginsPath + File.separator + PLUGIN_FILE_NAME + &quot; ---------------------------------&quot;);</span>
+<span class="nc" id="L178">    }</span>
+
+    private void loadStarterPlugins()
+            throws Exception {
+<span class="nc" id="L182">        IBootstrap bootstrap = new Bootstrap(items.getItems());</span>
+<span class="nc" id="L183">        IPluginCreator creator = new PluginCreator();</span>
+<span class="nc" id="L184">        IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
+<span class="nc" id="L185">        IPluginLoader&lt;Collection&lt;IPath&gt;&gt; pluginLoader = new PluginLoader(</span>
+                this.urlClassLoader,
+                (t) -&gt; {
+                    try {
+<span class="nc" id="L189">                        IPlugin plugin = creator.create(t, bootstrap);</span>
+<span class="nc" id="L190">                        plugin.load();</span>
+<span class="nc" id="L191">                    } catch (Exception e) {</span>
+<span class="nc" id="L192">                        throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
+<span class="nc" id="L193">                    }</span>
+<span class="nc" id="L194">                },</span>
+                visitor
+        );
+<span class="nc" id="L197">        IPath starterJarsDir = this.starterPath;</span>
+<span class="nc" id="L198">        Files.createDirectories(FileSystems.getDefault().getPath(starterJarsDir.getPath()));</span>
+
+<span class="nc" id="L200">        IFilesystemTracker jarFilesTracker = new FilesystemTracker(</span>
+<span class="nc" id="L201">                (path) -&gt; path.getPath().endsWith(&quot;.jar&quot;),</span>
+                ListenerTask::new);
+<span class="nc" id="L203">        jarFilesTracker.addErrorHandler((e) -&gt; {</span>
+<span class="nc" id="L204">            System.out.println(&quot;Server initialization failed!&quot;);</span>
+<span class="nc" id="L205">            e.printStackTrace();</span>
+<span class="nc" id="L206">        });</span>
+<span class="nc" id="L207">        IFeature starterFeature = featureManager.newFeature(&quot;smartactors.starter&quot;, jarFilesTracker);</span>
+<span class="nc" id="L208">        starterFeature.whenPresent(files -&gt; {</span>
+            try {
+<span class="nc" id="L210">                System.out.println(&quot;--------------------------------- Start system ---------------------------------&quot;);</span>
+<span class="nc" id="L211">                pluginLoader.loadPlugin(files);</span>
+<span class="nc" id="L212">                items.setItems(bootstrap.start());</span>
+<span class="nc" id="L213">            } catch (Throwable e) {</span>
+<span class="nc" id="L214">                throw new RuntimeException(&quot;Plugin loading failed.&quot;, e);</span>
+<span class="nc" id="L215">            }</span>
+<span class="nc" id="L216">        });</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        for (String jarName : this.starterPlugins) {</span>
+<span class="nc" id="L218">            starterFeature.requireFile(jarName);</span>
+<span class="nc" id="L219">        }</span>
+<span class="nc" id="L220">        starterFeature.listen();</span>
+<span class="nc" id="L221">        jarFilesTracker.start(starterJarsDir);</span>
+<span class="nc" id="L222">        System.out.println(&quot;--------------------------------- Loading plugins from &quot; + this.starterPath + &quot; listed in &quot; + this.starterPath + File.separator + PLUGIN_FILE_NAME + &quot; ---------------------------------&quot;);</span>
+<span class="nc" id="L223">    }</span>
+
+    private void getCorePluginsList()
+            throws Exception {
+<span class="nc" id="L227">        Scanner s = new Scanner(new File(this.corePath + File.separator + PLUGIN_FILE_NAME));</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        while (s.hasNext()) {</span>
+<span class="nc" id="L229">            this.corePlugins.add(s.next());</span>
+        }
+<span class="nc" id="L231">    }</span>
+
+    private void getUserPluginsList()
+            throws Exception {
+<span class="nc" id="L235">        Scanner s = new Scanner(new File(this.pluginsPath + File.separator + PLUGIN_FILE_NAME));</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        while (s.hasNext()) {</span>
+<span class="nc" id="L237">            this.usersPlugins.add(s.next());</span>
+        }
+<span class="nc" id="L239">    }</span>
+
+    private void getStarterList()
+            throws Exception {
+<span class="nc" id="L243">        Scanner s = new Scanner(new File(this.starterPath + File.separator + STARTER_FILE_NAME));</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        while (s.hasNext()) {</span>
+<span class="nc" id="L245">            this.starterPlugins.add(s.next());</span>
+        }
+<span class="nc" id="L247">    }</span>
+}
+
+<span class="nc" id="L250">class BootstrapItems {</span>
+<span class="nc" id="L251">    private List&lt;IBootstrapItem&lt;String&gt;&gt; items = new ArrayList&lt;&gt;();</span>
+
+    public List&lt;IBootstrapItem&lt;String&gt;&gt; getItems() {
+<span class="nc" id="L254">        return items;</span>
+    }
+
+    public void setItems(final List&lt;IBootstrapItem&lt;String&gt;&gt; items) {
+<span class="nc" id="L258">        this.items = items;</span>
+<span class="nc" id="L259">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

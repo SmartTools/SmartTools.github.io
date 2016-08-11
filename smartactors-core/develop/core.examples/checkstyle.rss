@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 20,
+      <title>File: 23,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 6,
              Infos: 0
       </title>
             <link>core.examples/core.examples//checkstyle.html</link>
@@ -116,6 +116,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.package-info.java">info/smart_tools/smartactors/core/examples/db_collection/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.PluginServer.java">info/smart_tools/smartactors/core/examples/plugin/PluginServer.java</a>
                 </td>
                 <td>
@@ -187,6 +201,34 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.RecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/RecursiveContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.TestConnectionOptions.java">info/smart_tools/smartactors/core/examples/db_collection/TestConnectionOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.DBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/DBCollectionServer.java</a>
                 </td>
                 <td>
                   0

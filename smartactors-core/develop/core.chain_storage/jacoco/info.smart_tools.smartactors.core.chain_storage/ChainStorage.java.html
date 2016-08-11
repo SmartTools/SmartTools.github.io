@@ -45,15 +45,15 @@ public class ChainStorage implements IChainStorage {
     public void register(final Object chainId, final IObject description)
             throws ChainCreationException {
         try {
-<span class="fc" id="L48">            chainsMap.put(</span>
+<span class="pc" id="L48">            chainsMap.put(</span>
                     chainId,
-<span class="fc" id="L50">                    IOC.resolve(</span>
-<span class="fc" id="L51">                            IOC.resolve(IOC.getKeyForKeyStorage(), IReceiverChain.class.toString()),</span>
+<span class="nc" id="L50">                    IOC.resolve(</span>
+<span class="nc" id="L51">                            IOC.resolve(IOC.getKeyForKeyStorage(), IReceiverChain.class.getCanonicalName()),</span>
                             chainId, description, this, router));
 <span class="fc" id="L53">        } catch (ResolutionException  e) {</span>
 <span class="fc" id="L54">            throw new ChainCreationException(&quot;Could not create a chain&quot;, e);</span>
-<span class="fc" id="L55">        }</span>
-<span class="fc" id="L56">    }</span>
+<span class="nc" id="L55">        }</span>
+<span class="nc" id="L56">    }</span>
 
     @Override
     public IReceiverChain resolve(final Object chainId)

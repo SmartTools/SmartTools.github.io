@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UpsertIntoCachedCollectionTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection.task</a> &gt; <span class="el_source">UpsertIntoCachedCollectionTask.java</span></div><h1>UpsertIntoCachedCollectionTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection.task;
 
 import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -12,6 +10,7 @@ import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
@@ -24,23 +23,28 @@ import java.time.format.DateTimeFormatter;
 public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
     private IDatabaseTask upsertTask;
+    private IStorageConnection connection;
 
     private IField startDateTimeField;
+    private IField collectionNameField;
+    private IField documentField;
     //TODO:: this format should be setted for whole project?
-<span class="fc" id="L30">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+<span class="fc" id="L32">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
 
     /**
-     * @param upsertTask Target update task
+     * @param connection storage connection for executing query
      * @throws CreateCachedCollectionTaskException for create task error
      */
-<span class="fc" id="L36">    public UpsertIntoCachedCollectionTask(final IDatabaseTask upsertTask) throws CreateCachedCollectionTaskException {</span>
-<span class="fc" id="L37">        this.upsertTask = upsertTask;</span>
+<span class="fc" id="L38">    public UpsertIntoCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
+<span class="fc" id="L39">        this.connection = connection;</span>
         try {
-<span class="fc" id="L39">            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document/startDateTime&quot;);</span>
-<span class="nc" id="L40">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L41">            throw new CreateCachedCollectionTaskException(&quot;Can't create UpsertIntoCachedCollectionTask.&quot;, e);</span>
-<span class="fc" id="L42">        }</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L41">            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document/startDateTime&quot;);</span>
+<span class="fc" id="L42">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L43">            this.documentField  = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="nc" id="L44">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L45">            throw new CreateCachedCollectionTaskException(&quot;Can't create UpsertIntoCachedCollectionTask.&quot;, e);</span>
+<span class="fc" id="L46">        }</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Prepares database query
@@ -59,19 +63,19 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (startDateTimeField.in(query) == null) {</span>
-<span class="fc" id="L63">                startDateTimeField.out(query, LocalDateTime.now().format(FORMATTER));</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (startDateTimeField.in(query) == null) {</span>
+<span class="fc" id="L67">                startDateTimeField.out(query, LocalDateTime.now().format(FORMATTER));</span>
             }
-<span class="fc" id="L65">            upsertTask.prepare(query);</span>
-<span class="fc" id="L66">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
-<span class="fc" id="L67">            throw new TaskPrepareException(&quot;Can't prepare query for upsert into cached collection&quot;, e);</span>
-<span class="fc" id="L68">        }</span>
-<span class="fc" id="L69">    }</span>
-
-    @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
-<span class="fc" id="L73">        upsertTask.setConnection(connection);</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L69">            upsertTask = IOC.resolve(</span>
+<span class="fc" id="L70">                Keys.getOrAdd(&quot;db.collection.upsert&quot;),</span>
+                connection,
+<span class="fc" id="L72">                collectionNameField.in(query),</span>
+<span class="fc" id="L73">                documentField.in(query)</span>
+            );
+<span class="fc" id="L75">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException | ResolutionException e) {</span>
+<span class="fc" id="L76">            throw new TaskPrepareException(&quot;Can't prepare query for upsert into cached collection&quot;, e);</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Execute the task.
@@ -80,7 +84,7 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
      */
     @Override
     public void execute() throws TaskExecutionException {
-<span class="fc" id="L83">        upsertTask.execute();</span>
-<span class="fc" id="L84">    }</span>
+<span class="nc" id="L87">        upsertTask.execute();</span>
+<span class="nc" id="L88">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

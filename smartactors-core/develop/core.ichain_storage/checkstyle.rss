@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 4,
+      <title>File: 5,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>core.ichain_storage/core.ichain_storage//checkstyle.html</link>
@@ -47,6 +47,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.ichain_storage/core.ichain_storage//checkstyle.html#info.smart_tools.smartactors.core.ichain_storage.IChainStorage.java">info/smart_tools/smartactors/core/ichain_storage/IChainStorage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.ichain_storage/core.ichain_storage//checkstyle.html#info.smart_tools.smartactors.core.ichain_storage.exceptions.package-info.java">info/smart_tools/smartactors/core/ichain_storage/exceptions/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -80,7 +94,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0

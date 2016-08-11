@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 27,
              Errors: 0,
-             Warnings: 1,
+             Warnings: 3,
              Infos: 0
       </title>
             <link>core.cached_collection/core.cached_collection//checkstyle.html</link>
@@ -242,20 +242,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/GetObjectFromCachedCollectionTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/UpsertIntoCachedCollectionTask.java</a>
                 </td>
                 <td>
@@ -291,6 +277,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.cached_collection/core.cached_collection//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.GetItemFromCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/GetItemFromCachedCollectionTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
                 </td>
                 <td>
                   0

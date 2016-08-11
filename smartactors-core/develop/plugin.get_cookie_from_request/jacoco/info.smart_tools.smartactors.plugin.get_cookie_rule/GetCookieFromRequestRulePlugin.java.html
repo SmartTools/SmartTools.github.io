@@ -2,6 +2,7 @@
 
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
@@ -24,33 +25,37 @@ public class GetCookieFromRequestRulePlugin implements IPlugin {
      * Constructor
      * @param bootstrap bootstrap element
      */
-<span class="nc" id="L27">    public GetCookieFromRequestRulePlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L28">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L29">    }</span>
+<span class="nc" id="L28">    public GetCookieFromRequestRulePlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L29">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L30">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L34">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;GetCookieFromRequestRulePlugin&quot;);</span>
+<span class="nc" id="L35">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;GetCookieFromRequestRulePlugin&quot;);</span>
 
-<span class="nc" id="L36">            item</span>
-<span class="nc" id="L37">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L38">                    .process(() -&gt; {</span>
+<span class="nc" id="L37">            item</span>
+<span class="nc" id="L38">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L39">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L40">                            IKey ruleKey = Keys.getOrAdd(GetCookieFromRequestRule.class.getCanonicalName());</span>
-<span class="nc" id="L41">                            IOC.register(ruleKey,</span>
+<span class="nc" id="L41">                            IKey ruleKey = Keys.getOrAdd(GetCookieFromRequestRule.class.getCanonicalName());</span>
+<span class="nc" id="L42">                            IOC.register(ruleKey,</span>
                                     new CreateNewInstanceStrategy(
-<span class="nc" id="L43">                                            (args) -&gt; new GetCookieFromRequestRule()</span>
+<span class="nc" id="L44">                                            (args) -&gt; new GetCookieFromRequestRule()</span>
                                     )
                             );
-<span class="nc" id="L46">                        } catch (InvalidArgumentException | ResolutionException | RegistrationException e) {</span>
-<span class="nc" id="L47">                            throw new RuntimeException(&quot;Failed to register new strategy&quot;);</span>
-<span class="nc" id="L48">                        }</span>
-<span class="nc" id="L49">                    });</span>
-<span class="nc" id="L50">            bootstrap.add(item);</span>
-<span class="nc" id="L51">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L52">            throw new PluginException(&quot;Can't load GetCookieFromRequestRule plugin&quot;, e);</span>
-<span class="nc" id="L53">        }</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L47">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L48">                            throw new ActionExecuteException(&quot;GetCookieFromRequestRule plugin can't load: can't get GetCookieFromRequestRule key&quot;, e);</span>
+<span class="nc" id="L49">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L50">                            throw new ActionExecuteException(&quot;GetCookieFromRequestRule plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L51">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L52">                            throw new ActionExecuteException(&quot;GetCookieFromRequestRule plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L53">                        }</span>
+<span class="nc" id="L54">                    });</span>
+<span class="nc" id="L55">            bootstrap.add(item);</span>
+<span class="nc" id="L56">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L57">            throw new PluginException(&quot;Can't load GetCookieFromRequestRule plugin&quot;, e);</span>
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

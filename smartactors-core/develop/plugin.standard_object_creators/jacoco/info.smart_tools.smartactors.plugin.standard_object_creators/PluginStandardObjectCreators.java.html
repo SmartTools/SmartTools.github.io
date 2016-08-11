@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PluginStandardObjectCreators.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.standard_object_creators</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.standard_object_creators</a> &gt; <span class="el_source">PluginStandardObjectCreators.java</span></div><h1>PluginStandardObjectCreators.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.standard_object_creators;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.iroutable_object_creator.IRoutedObjectCreator;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
+
+/**
+ *
+ */
+public class PluginStandardObjectCreators implements IPlugin {
+    private IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * The constructor.
+     *
+     * @param bootstrap    the bootstrap
+     */
+<span class="nc" id="L28">    public PluginStandardObjectCreators(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L29">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="nc" id="L35">            BootstrapItem creatorsItem = new BootstrapItem(&quot;standard_object_creators&quot;);</span>
+
+<span class="nc" id="L37">            creatorsItem</span>
+<span class="nc" id="L38">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L39">                    .after(&quot;FieldNamePlugin&quot;)</span>
+<span class="nc" id="L40">                    .after(&quot;IFieldNamePlugin&quot;)</span>
+<span class="nc" id="L41">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L42">                    .process(() -&gt; {</span>
+                        try {
+<span class="nc" id="L44">                            IOC.register(</span>
+<span class="nc" id="L45">                                    Keys.getOrAdd(IRoutedObjectCreator.class.getCanonicalName() + &quot;#raw&quot;),</span>
+                                    new SingletonStrategy(new RawObjectCreator()));
+<span class="nc" id="L47">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L48">                            throw new ActionExecuteException(&quot;StandardObjectCreators plugin can't load: can't get StandardObjectCreators key&quot;, e);</span>
+<span class="nc" id="L49">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L50">                            throw new ActionExecuteException(&quot;StandardObjectCreators plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L51">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L52">                            throw new ActionExecuteException(&quot;StandardObjectCreators plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L53">                        }</span>
+<span class="nc" id="L54">                    });</span>
+
+<span class="nc" id="L56">            bootstrap.add(creatorsItem);</span>
+<span class="nc" id="L57">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L58">            throw new PluginException(e);</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

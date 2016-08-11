@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostgresCreateTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_create_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_create_task</a> &gt; <span class="el_source">PostgresCreateTask.java</span></div><h1>PostgresCreateTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_create_task;
+
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
+import info.smart_tools.smartactors.core.istorage_connection.exception.StorageException;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_connection.JDBCCompiledQuery;
+import info.smart_tools.smartactors.core.postgres_connection.QueryStatement;
+import info.smart_tools.smartactors.core.postgres_schema.PostgresSchema;
+
+import java.sql.PreparedStatement;
+
+/**
+ * The database task which is create documents collection in Postgres database.
+ */
+public class PostgresCreateTask implements IDatabaseTask {
+
+    /**
+     * Connection to the database.
+     */
+    private IStorageConnection connection;
+    /**
+     * Name of the collection.
+     */
+    private CollectionName collection;
+    /**
+     * Collection creation options.
+     */
+    private IObject options;
+    /**
+     * Query, prepared during prepare(), to be compiled during execute().
+     */
+    private QueryStatement preparedQuery;
+
+    /**
+     * Creates the task
+     * @param connection the database connection
+     */
+<span class="fc" id="L45">    public PostgresCreateTask(final IStorageConnection connection) {</span>
+<span class="fc" id="L46">        this.connection = connection;</span>
+<span class="fc" id="L47">    }</span>
+
+    @Override
+    public void prepare(final IObject query) throws TaskPrepareException {
+        try {
+<span class="fc" id="L52">            CreateCollectionMessage message = IOC.resolve(Keys.getOrAdd(CreateCollectionMessage.class.getCanonicalName()), query);</span>
+<span class="fc" id="L53">            collection = message.getCollectionName();</span>
+<span class="fc" id="L54">            options = message.getOptions();</span>
+<span class="fc" id="L55">            preparedQuery = new QueryStatement();</span>
+<span class="fc" id="L56">            PostgresSchema.create(preparedQuery, collection, options);</span>
+<span class="fc" id="L57">        } catch (Exception e) {</span>
+<span class="fc" id="L58">            throw new TaskPrepareException(e);</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    public void execute() throws TaskExecutionException {
+        try {
+<span class="fc" id="L65">            JDBCCompiledQuery compiledQuery = (JDBCCompiledQuery) connection.compileQuery(preparedQuery);</span>
+<span class="fc" id="L66">            PreparedStatement statement = compiledQuery.getPreparedStatement();</span>
+<span class="fc" id="L67">            statement.execute();</span>
+<span class="fc" id="L68">            connection.commit();</span>
+<span class="fc" id="L69">        } catch (Exception e) {</span>
+            try {
+<span class="fc" id="L71">                connection.rollback();</span>
+<span class="nc" id="L72">            } catch (StorageException se) {</span>
+                // ignoring rollback failure
+<span class="fc" id="L74">            }</span>
+            try {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                throw new TaskExecutionException(&quot;Create &quot; + collection + &quot; collection failed, options: &quot; +</span>
+<span class="pc" id="L77">                        (options != null ? options.serialize() : &quot;null&quot;), e);</span>
+<span class="nc" id="L78">            } catch (SerializeException se) {</span>
+<span class="nc" id="L79">                throw new TaskExecutionException(&quot;Create &quot; + collection + &quot; collection failed&quot;, e);</span>
+            }
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -5,48 +5,81 @@ import info.smart_tools.smartactors.core.ibootstrap.exception.ProcessExecutionEx
 import info.smart_tools.smartactors.core.ibootstrap.exception.RevertProcessExecutionException;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IBootstrap}
  */
-<span class="fc" id="L14">public class Bootstrap implements IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; {</span>
+public class Bootstrap implements IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; {
 
-<span class="fc" id="L16">    private List&lt;IBootstrapItem&lt;String&gt;&gt; itemStorage = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L18">    private List&lt;IBootstrapItem&lt;String&gt;&gt; itemStorage = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Default constructor.
+     */
+<span class="fc" id="L23">    public Bootstrap() {</span>
+<span class="fc" id="L24">    }</span>
+
+    /**
+     * Constructor.
+     * Creates instance of {@link IBootstrap} and initialize field {@code loadedItems} by given agrument
+     * @param loadedItems the list of already loaded items
+     */
+<span class="fc" id="L31">    public Bootstrap(final List&lt;IBootstrapItem&lt;String&gt;&gt; loadedItems) {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        for (IBootstrapItem&lt;String&gt; item : loadedItems) {</span>
+<span class="pc" id="L33">            this.itemStorage.add(item.process(() -&gt; {}));</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
 
     @Override
     public void add(final IBootstrapItem&lt;String&gt; bootstrapItem) {
-<span class="fc" id="L20">        itemStorage.add(bootstrapItem);</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L39">        itemStorage.add(bootstrapItem);</span>
+<span class="fc" id="L40">    }</span>
 
     @Override
-    public void start()
+    public List&lt;IBootstrapItem&lt;String&gt;&gt; start()
             throws ProcessExecutionException {
         try {
-<span class="fc" id="L27">            TopologicalSort ts = new TopologicalSort(itemStorage);</span>
-<span class="fc" id="L28">            List&lt;IBootstrapItem&lt;String&gt;&gt; orderedItems = ts.getOrderedList(false);</span>
-<span class="fc bfc" id="L29" title="All 2 branches covered.">            for (IBootstrapItem&lt;String&gt; item : orderedItems) {</span>
-<span class="fc" id="L30">                item.executeProcess();</span>
-<span class="fc" id="L31">            }</span>
-<span class="fc" id="L32">        } catch (Throwable e) {</span>
-<span class="fc" id="L33">            throw new ProcessExecutionException(&quot;Could not execute plugin process.&quot;, e);</span>
-<span class="fc" id="L34">        }</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L46">            TopologicalSort ts = new TopologicalSort(itemStorage);</span>
+<span class="fc" id="L47">            List&lt;IBootstrapItem&lt;String&gt;&gt; orderedItems = ts.getOrderedList(false);</span>
+<span class="fc" id="L48">            List&lt;IBootstrapItem&lt;String&gt;&gt; doneItems = new ArrayList&lt;&gt;(orderedItems.size());</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            for (IBootstrapItem&lt;String&gt; item : orderedItems) {</span>
+                try {
+<span class="fc" id="L51">                    item.executeProcess();</span>
+<span class="fc" id="L52">                    doneItems.add(item);</span>
+<span class="fc" id="L53">                } catch (Throwable e) {</span>
+<span class="fc" id="L54">                    throw new ProcessExecutionException(</span>
+<span class="fc" id="L55">                            MessageFormat.format(</span>
+                                    &quot;\n\nError occurred processing item \&quot;{0}\&quot;.\nProcessed items are: {1}.\nAll items are: {2}\n&quot;,
+<span class="fc" id="L57">                                    item.getItemName(),</span>
+<span class="fc" id="L58">                                    String.join(&quot;, &quot;, doneItems.stream().map(IBootstrapItem::getItemName).collect(Collectors.toList())),</span>
+<span class="fc" id="L59">                                    String.join(&quot;, &quot;, orderedItems.stream().map(IBootstrapItem::getItemName).collect(Collectors.toList()))),</span>
+                            e);
+<span class="fc" id="L61">                }</span>
+<span class="fc" id="L62">            }</span>
+<span class="fc" id="L63">            return doneItems;</span>
+<span class="fc" id="L64">        } catch (ProcessExecutionException e) {</span>
+<span class="fc" id="L65">            throw e;</span>
+<span class="nc" id="L66">        } catch (Throwable e) {</span>
+<span class="nc" id="L67">            throw new ProcessExecutionException(&quot;Could not execute plugin process.&quot;, e);</span>
+        }
+    }
 
     @Override
     public void revert()
             throws RevertProcessExecutionException {
         try {
-<span class="fc" id="L41">            TopologicalSort ts = new TopologicalSort(itemStorage);</span>
-<span class="fc" id="L42">            List&lt;IBootstrapItem&lt;String&gt;&gt; orderedItems = ts.getOrderedList(true);</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">            for (IBootstrapItem&lt;String&gt; item : orderedItems) {</span>
-<span class="fc" id="L44">                item.executeRevertProcess();</span>
-<span class="fc" id="L45">            }</span>
-<span class="fc" id="L46">        } catch (Throwable e) {</span>
-<span class="fc" id="L47">            throw new RevertProcessExecutionException(&quot;Could not execute plugin revert process.&quot;, e);</span>
-<span class="fc" id="L48">        }</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L75">            TopologicalSort ts = new TopologicalSort(itemStorage);</span>
+<span class="fc" id="L76">            List&lt;IBootstrapItem&lt;String&gt;&gt; orderedItems = ts.getOrderedList(true);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            for (IBootstrapItem&lt;String&gt; item : orderedItems) {</span>
+<span class="fc" id="L78">                item.executeRevertProcess();</span>
+<span class="fc" id="L79">            }</span>
+<span class="fc" id="L80">        } catch (Throwable e) {</span>
+<span class="fc" id="L81">            throw new RevertProcessExecutionException(&quot;Could not execute plugin revert process.&quot;, e);</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">    }</span>
 }
-
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

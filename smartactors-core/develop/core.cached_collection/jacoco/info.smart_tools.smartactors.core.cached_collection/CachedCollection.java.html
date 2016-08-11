@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CachedCollection.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection</a> &gt; <span class="el_source">CachedCollection.java</span></div><h1>CachedCollection.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection;
 
-import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.cached_collection.exception.DeleteCacheItemException;
 import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
 import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCacheItemException;
-import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
-import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
-import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.ifield.IField;
-import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -26,8 +19,9 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.pool_guard.IPoolGuard;
 import info.smart_tools.smartactors.core.pool_guard.PoolGuard;
 import info.smart_tools.smartactors.core.pool_guard.exception.PoolGuardException;
-import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,7 +44,7 @@ public class CachedCollection implements ICachedCollection {
     private IField searchResultField;
 
     private IPool connectionPool;
-    private CollectionName collectionName;
+    private String collectionName;
     private String keyName;
     private ConcurrentMap&lt;String, List&lt;IObject&gt;&gt; map;
 
@@ -64,25 +58,25 @@ public class CachedCollection implements ICachedCollection {
      * }
      * @throws InvalidArgumentException Except when actor can't be created with @config
      */
-<span class="nc" id="L67">    public CachedCollection(final IObject config) throws InvalidArgumentException {</span>
+<span class="nc" id="L61">    public CachedCollection(final IObject config) throws InvalidArgumentException {</span>
         try {
-<span class="nc" id="L69">            this.map = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="nc" id="L70">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L71">            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;connectionPool&quot;);</span>
-<span class="nc" id="L72">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
-<span class="nc" id="L73">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyValue&quot;);</span>
-<span class="nc" id="L74">            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
-<span class="nc" id="L75">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;id&quot;);</span>
-<span class="nc" id="L76">            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;isActive&quot;);</span>
-<span class="nc" id="L77">            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;searchResult&quot;);</span>
-<span class="nc" id="L78">            this.collectionName = collectionNameField.in(config);</span>
-<span class="nc" id="L79">            this.connectionPool = connectionPoolField.in(config);</span>
-<span class="nc" id="L80">            this.keyName = keyNameField.in(config);</span>
-<span class="nc" id="L81">            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName);</span>
-<span class="nc" id="L82">        } catch (ResolutionException | ReadValueException e) {</span>
-<span class="nc" id="L83">            throw new InvalidArgumentException(&quot;Can't create cached collection.&quot;, e);</span>
-<span class="nc" id="L84">        }</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L63">            this.map = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="nc" id="L64">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L65">            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;connectionPool&quot;);</span>
+<span class="nc" id="L66">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
+<span class="nc" id="L67">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyValue&quot;);</span>
+<span class="nc" id="L68">            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
+<span class="nc" id="L69">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;id&quot;);</span>
+<span class="nc" id="L70">            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;isActive&quot;);</span>
+<span class="nc" id="L71">            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;searchResult&quot;);</span>
+<span class="nc" id="L72">            this.collectionName = collectionNameField.in(config);</span>
+<span class="nc" id="L73">            this.connectionPool = connectionPoolField.in(config);</span>
+<span class="nc" id="L74">            this.keyName = keyNameField.in(config);</span>
+<span class="nc" id="L75">            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName);</span>
+<span class="nc" id="L76">        } catch (ResolutionException | ReadValueException e) {</span>
+<span class="nc" id="L77">            throw new InvalidArgumentException(&quot;Can't create cached collection.&quot;, e);</span>
+<span class="nc" id="L78">        }</span>
+<span class="nc" id="L79">    }</span>
 
     /**
      * Looks for value by key inside cache, if cache doesn't return any result, collection
@@ -101,51 +95,36 @@ public class CachedCollection implements ICachedCollection {
     public List&lt;IObject&gt; getItems(final String key) throws GetCacheItemException {
 
         try {
-<span class="nc" id="L104">            List&lt;IObject&gt; items = map.get(key);</span>
-<span class="nc bnc" id="L105" title="All 4 branches missed.">            if (items == null || items.isEmpty()) {</span>
-<span class="nc" id="L106">                try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L107">                    IDatabaseTask getItemTask = IOC.resolve(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()));</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">                    if (getItemTask == null) {</span>
-                        //NOTE:: we should have strategy for creating nested tasks for task-facade with smth like map
-                        //with name of task-facade as a key
-<span class="nc" id="L111">                        IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L112">                            Keys.getOrAdd(IDatabaseTask.class.toString()), GetObjectFromCachedCollectionTask.class.toString()</span>
-                        );
-<span class="nc bnc" id="L114" title="All 2 branches missed.">                        if (nestedTask == null) {</span>
-<span class="nc" id="L115">                            throw new GetCacheItemException(&quot;Can't create nested task for getItem task.&quot;);</span>
-                        }
-<span class="nc" id="L117">                        getItemTask = new GetObjectFromCachedCollectionTask(nestedTask);</span>
-<span class="nc" id="L118">                        IOC.register(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()), new SingletonStrategy(getItemTask));</span>
-                    }
-<span class="nc" id="L120">                    IObject getItemQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
-<span class="nc" id="L121">                    collectionNameField.out(getItemQuery, collectionName);</span>
-<span class="nc" id="L122">                    keyNameField.out(getItemQuery, keyName);</span>
-<span class="nc" id="L123">                    keyValueField.out(getItemQuery, key);</span>
-<span class="nc" id="L124">                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
-<span class="nc" id="L125">                    getItemTask.prepare(getItemQuery);</span>
-<span class="nc" id="L126">                    getItemTask.execute();</span>
-<span class="nc" id="L127">                    items = searchResultField.in(getItemQuery);</span>
-<span class="nc" id="L128">                    map.put(key, items);</span>
-<span class="nc bnc" id="L129" title="All 8 branches missed.">                } catch (PoolGuardException e) {</span>
-<span class="nc" id="L130">                    throw new GetCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L131">                } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L132">                    throw new GetCacheItemException(&quot;Can't register strategy for getItem task.&quot;, e);</span>
-<span class="nc" id="L133">                } catch (CreateCachedCollectionTaskException e) {</span>
-<span class="nc" id="L134">                    throw new GetCacheItemException(&quot;Can't create getItem task.&quot;, e);</span>
-<span class="nc" id="L135">                }</span>
+<span class="nc" id="L98">            final List&lt;IObject&gt; items = map.getOrDefault(key, new ArrayList&lt;&gt;());</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (items.isEmpty()) {</span>
+<span class="nc" id="L100">                try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L101">                    IDatabaseTask getItemTask = IOC.resolve(</span>
+<span class="nc" id="L102">                            Keys.getOrAdd(&quot;db.cached_collection.get_item&quot;),</span>
+<span class="nc" id="L103">                            poolGuard.getObject(),</span>
+                            collectionName,
+                            keyName,
+                            key,
+                            (IAction&lt;IObject[]&gt;) foundDocs -&gt; {
+                                try {
+<span class="nc" id="L109">                                    items.addAll(Arrays.asList(foundDocs));</span>
+<span class="nc" id="L110">                                } catch (Exception e) {</span>
+<span class="nc" id="L111">                                    throw new ActionExecuteException(e);</span>
+<span class="nc" id="L112">                                }</span>
+<span class="nc" id="L113">                            }</span>
+                    );
+
+<span class="nc" id="L116">                    getItemTask.execute();</span>
+<span class="nc" id="L117">                    map.put(key, items);</span>
+<span class="nc bnc" id="L118" title="All 8 branches missed.">                } catch (PoolGuardException e) {</span>
+<span class="nc" id="L119">                    throw new GetCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L120">                }</span>
             }
 
-<span class="nc" id="L138">            return items;</span>
-<span class="nc" id="L139">        } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L140">            throw new GetCacheItemException(&quot;Can't set connection to read task.&quot;, e);</span>
-<span class="nc" id="L141">        } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L142">            throw new GetCacheItemException(&quot;Error during preparing read task.&quot;, e);</span>
-<span class="nc" id="L143">        } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L144">            throw new GetCacheItemException(&quot;Error during execution read task.&quot;, e);</span>
-<span class="nc" id="L145">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L146">            throw new GetCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
-<span class="nc" id="L147">        } catch (ChangeValueException | ReadValueException e) {</span>
-<span class="nc" id="L148">            throw new GetCacheItemException(&quot;Can't read cached object.&quot;, e);</span>
+<span class="nc" id="L123">            return items;</span>
+<span class="nc" id="L124">        } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L125">            throw new GetCacheItemException(&quot;Error during execution read task.&quot;, e);</span>
+<span class="nc" id="L126">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L127">            throw new GetCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
         }
     }
 
@@ -162,55 +141,36 @@ public class CachedCollection implements ICachedCollection {
     @Override
     public void delete(final IObject message) throws DeleteCacheItemException {
         try {
-<span class="nc" id="L165">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L166">                IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()));</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (deleteTask == null) {</span>
-<span class="nc" id="L168">                    IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L169">                        Keys.getOrAdd(IDatabaseTask.class.toString()), DeleteFromCachedCollectionTask.class.toString()</span>
-                    );
-<span class="nc bnc" id="L171" title="All 2 branches missed.">                    if (nestedTask == null) {</span>
-<span class="nc" id="L172">                        throw new DeleteCacheItemException(&quot;Can't create nested task for delete task.&quot;);</span>
-                    }
-<span class="nc" id="L174">                    deleteTask = new DeleteFromCachedCollectionTask(nestedTask);</span>
-<span class="nc" id="L175">                    IOC.register(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()), new SingletonStrategy(deleteTask));</span>
-                }
-<span class="nc" id="L177">                IObject deleteQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
-<span class="nc" id="L178">                collectionNameField.out(deleteQuery, collectionName);</span>
-<span class="nc" id="L179">                documentField.out(deleteQuery, message);</span>
-<span class="nc" id="L180">                StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject());</span>
-<span class="nc" id="L181">                deleteTask.setConnection(connection);</span>
-<span class="nc" id="L182">                deleteTask.prepare(deleteQuery);</span>
-<span class="nc" id="L183">                deleteTask.execute();</span>
-<span class="nc bnc" id="L184" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
-<span class="nc" id="L185">                throw new DeleteCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L186">            } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L187">                throw new DeleteCacheItemException(&quot;Can't set connection to delete task.&quot;, e);</span>
-<span class="nc" id="L188">            } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L189">                throw new DeleteCacheItemException(&quot;Error during preparing delete task.&quot;, e);</span>
-<span class="nc" id="L190">            } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L191">                throw new DeleteCacheItemException(&quot;Error during execution delete task.&quot;, e);</span>
-<span class="nc" id="L192">            } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L193">                throw new DeleteCacheItemException(&quot;Can't register strategy for delete task.&quot;, e);</span>
-<span class="nc" id="L194">            } catch (CreateCachedCollectionTaskException e) {</span>
-<span class="nc" id="L195">                throw new DeleteCacheItemException(&quot;Can't create delete task.&quot;, e);</span>
-<span class="nc" id="L196">            }</span>
+<span class="nc" id="L144">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L145">                IDatabaseTask deleteTask = IOC.resolve(</span>
+<span class="nc" id="L146">                    Keys.getOrAdd(&quot;db.cached_collection.delete&quot;),</span>
+<span class="nc" id="L147">                    poolGuard.getObject(),</span>
+                    collectionName,
+                    message
+                );
+<span class="nc" id="L151">                deleteTask.execute();</span>
+<span class="nc bnc" id="L152" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
+<span class="nc" id="L153">                throw new DeleteCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L154">            } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L155">                throw new DeleteCacheItemException(&quot;Error during execution delete task.&quot;, e);</span>
+<span class="nc" id="L156">            }</span>
 
-<span class="nc" id="L198">            String key = specificKeyNameField.in(message);</span>
-<span class="nc" id="L199">            List&lt;IObject&gt; items = map.get(key);</span>
-<span class="nc bnc" id="L200" title="All 2 branches missed.">            if (items != null) {</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">                for (IObject obj : items) {</span>
-<span class="nc bnc" id="L202" title="All 2 branches missed.">                    if (idField.in(obj).equals(idField.in(message))) {</span>
-<span class="nc" id="L203">                        items.remove(obj);</span>
-<span class="nc" id="L204">                        break;</span>
+<span class="nc" id="L158">            String key = specificKeyNameField.in(message);</span>
+<span class="nc" id="L159">            List&lt;IObject&gt; items = map.get(key);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (items != null) {</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                for (IObject obj : items) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                    if (idField.in(obj).equals(idField.in(message))) {</span>
+<span class="nc" id="L163">                        items.remove(obj);</span>
+<span class="nc" id="L164">                        break;</span>
                     }
-<span class="nc" id="L206">                }</span>
+<span class="nc" id="L166">                }</span>
             }
-<span class="nc" id="L208">        }  catch (ResolutionException e) {</span>
-<span class="nc" id="L209">            throw new DeleteCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
-<span class="nc" id="L210">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L211">            throw new DeleteCacheItemException(&quot;Can't delete cached object.&quot;, e);</span>
-<span class="nc" id="L212">        }</span>
-<span class="nc" id="L213">    }</span>
+<span class="nc" id="L168">        }  catch (ResolutionException e) {</span>
+<span class="nc" id="L169">            throw new DeleteCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
+<span class="nc" id="L170">        } catch (InvalidArgumentException | ReadValueException e) {</span>
+<span class="nc" id="L171">            throw new DeleteCacheItemException(&quot;Can't delete cached object.&quot;, e);</span>
+<span class="nc" id="L172">        }</span>
+<span class="nc" id="L173">    }</span>
 
     /**
      * Adds or updates object into cache and into DB.
@@ -226,61 +186,44 @@ public class CachedCollection implements ICachedCollection {
     public void upsert(final IObject message) throws UpsertCacheItemException {
 
         try {
-<span class="nc" id="L229">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
-<span class="nc" id="L230">                IDatabaseTask upsertTask = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()));</span>
-<span class="nc bnc" id="L231" title="All 2 branches missed.">                if (upsertTask == null) {</span>
-<span class="nc" id="L232">                    IDatabaseTask nestedTask = IOC.resolve(</span>
-<span class="nc" id="L233">                        Keys.getOrAdd(IDatabaseTask.class.toString()), UpsertIntoCachedCollectionTask.class.toString()</span>
-                    );
-<span class="nc bnc" id="L235" title="All 2 branches missed.">                    if (nestedTask == null) {</span>
-<span class="nc" id="L236">                        throw new UpsertCacheItemException(&quot;Can't create nested task for upsert task.&quot;);</span>
-                    }
-<span class="nc" id="L238">                    upsertTask = new UpsertIntoCachedCollectionTask(nestedTask);</span>
-<span class="nc" id="L239">                    IOC.register(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()), new SingletonStrategy(upsertTask));</span>
-                }
-<span class="nc" id="L241">                IObject upsertQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
-<span class="nc" id="L242">                Boolean isActive = isActiveField.in(message);</span>
-<span class="nc" id="L243">                isActiveField.out(message, true);</span>
-<span class="nc" id="L244">                collectionNameField.out(upsertQuery, collectionName);</span>
-<span class="nc" id="L245">                documentField.out(upsertQuery, message);</span>
-
-<span class="nc" id="L247">                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));</span>
-<span class="nc" id="L248">                upsertTask.prepare(upsertQuery);</span>
+<span class="nc" id="L189">            try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L190">                Boolean isActive = isActiveField.in(message);</span>
+<span class="nc" id="L191">                isActiveField.out(message, true);</span>
+<span class="nc" id="L192">                IDatabaseTask upsertTask = IOC.resolve(</span>
+<span class="nc" id="L193">                    Keys.getOrAdd(&quot;db.cached_collection.upsert&quot;),</span>
+<span class="nc" id="L194">                    poolGuard.getObject(),</span>
+                    collectionName,
+                    message
+                );
                 try {
-<span class="nc" id="L250">                    upsertTask.execute();</span>
-<span class="nc" id="L251">                } catch (TaskExecutionException e) {</span>
-<span class="nc" id="L252">                    isActiveField.out(message, isActive);</span>
-<span class="nc" id="L253">                    throw new UpsertCacheItemException(&quot;Error during execution upsert task.&quot;, e);</span>
-<span class="nc" id="L254">                }</span>
-<span class="nc bnc" id="L255" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
-<span class="nc" id="L256">                throw new UpsertCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
-<span class="nc" id="L257">            } catch (TaskSetConnectionException e) {</span>
-<span class="nc" id="L258">                throw new UpsertCacheItemException(&quot;Can't set connection to upsert task.&quot;, e);</span>
-<span class="nc" id="L259">            } catch (TaskPrepareException e) {</span>
-<span class="nc" id="L260">                throw new UpsertCacheItemException(&quot;Error during preparing upsert task.&quot;, e);</span>
-<span class="nc" id="L261">            } catch (InvalidArgumentException | RegistrationException e) {</span>
-<span class="nc" id="L262">                throw new UpsertCacheItemException(&quot;Can't register strategy for upsert task.&quot;, e);</span>
-<span class="nc" id="L263">            }  catch (CreateCachedCollectionTaskException e) {</span>
-<span class="nc" id="L264">                throw new UpsertCacheItemException(&quot;Can't create upsert task.&quot;, e);</span>
-<span class="nc" id="L265">            }</span>
-<span class="nc" id="L266">            String key = specificKeyNameField.in(message);</span>
-<span class="nc" id="L267">            List&lt;IObject&gt; items = map.get(key);</span>
-<span class="nc bnc" id="L268" title="All 4 branches missed.">            if (items != null &amp;&amp; !items.isEmpty()) {</span>
-<span class="nc bnc" id="L269" title="All 2 branches missed.">                for (IObject obj : items) {</span>
-<span class="nc bnc" id="L270" title="All 2 branches missed.">                    if (idField.in(obj).equals(idField.in(message))) {</span>
-<span class="nc" id="L271">                        items.remove(obj);</span>
-<span class="nc" id="L272">                        items.add(message);</span>
-<span class="nc" id="L273">                        break;</span>
+<span class="nc" id="L199">                    upsertTask.execute();</span>
+<span class="nc" id="L200">                } catch (TaskExecutionException e) {</span>
+<span class="nc" id="L201">                    isActiveField.out(message, isActive);</span>
+<span class="nc" id="L202">                    throw new UpsertCacheItemException(&quot;Error during execution upsert task.&quot;, e);</span>
+<span class="nc" id="L203">                }</span>
+<span class="nc bnc" id="L204" title="All 8 branches missed.">            } catch (PoolGuardException e) {</span>
+<span class="nc" id="L205">                throw new UpsertCacheItemException(&quot;Can't get connection from pool.&quot;, e);</span>
+<span class="nc" id="L206">            } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L207">                throw new UpsertCacheItemException(&quot;Error during operate with isActive field.&quot;, e);</span>
+<span class="nc" id="L208">            }</span>
+<span class="nc" id="L209">            String key = specificKeyNameField.in(message);</span>
+<span class="nc" id="L210">            List&lt;IObject&gt; items = map.get(key);</span>
+<span class="nc bnc" id="L211" title="All 4 branches missed.">            if (items != null &amp;&amp; !items.isEmpty()) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                for (IObject obj : items) {</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">                    if (idField.in(obj).equals(idField.in(message))) {</span>
+<span class="nc" id="L214">                        items.remove(obj);</span>
+<span class="nc" id="L215">                        items.add(message);</span>
+<span class="nc" id="L216">                        break;</span>
                     }
-<span class="nc" id="L275">                }</span>
+<span class="nc" id="L218">                }</span>
             } else {
-<span class="nc" id="L277">                map.put(key, Collections.singletonList(message));</span>
+<span class="nc" id="L220">                map.put(key, Collections.singletonList(message));</span>
             }
-<span class="nc" id="L279">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
-<span class="nc" id="L280">            throw new UpsertCacheItemException(&quot;Can't add or update cached object.&quot;, e);</span>
-<span class="nc" id="L281">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L282">            throw new UpsertCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
-<span class="nc" id="L283">        }</span>
-<span class="nc" id="L284">    }</span>
+<span class="nc" id="L222">        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L223">            throw new UpsertCacheItemException(&quot;Can't add or update cached object.&quot;, e);</span>
+<span class="nc" id="L224">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L225">            throw new UpsertCacheItemException(&quot;Can't resolve cached object.&quot;, e);</span>
+<span class="nc" id="L226">        }</span>
+<span class="nc" id="L227">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.chain_storage,info.smart_tools.smartactors.core.chain_storage,ChainStorage,0,85,0,6,0,19,0,6,0,3
+core.chain_storage,info.smart_tools.smartactors.core.chain_storage,ChainStorage,34,51,0,6,4,15,0,6,0,3

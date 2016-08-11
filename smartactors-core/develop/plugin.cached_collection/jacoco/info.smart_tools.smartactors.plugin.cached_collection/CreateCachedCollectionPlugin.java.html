@@ -4,6 +4,7 @@ import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.cached_collection.CachedCollection;
 import info.smart_tools.smartactors.core.cached_collection.ICachedCollection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.ifield.IField;
@@ -35,56 +36,56 @@ public class CreateCachedCollectionPlugin implements IPlugin {
      * Constructor
      * @param bootstrap bootstrap
      */
-<span class="nc" id="L38">    public CreateCachedCollectionPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L39">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L39">    public CreateCachedCollectionPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L40">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L41">    }</span>
 
     @Override
     public void load() throws PluginException {
 
         try {
-<span class="nc" id="L46">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateCachedCollectionPlugin&quot;);</span>
+<span class="nc" id="L47">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateCachedCollectionPlugin&quot;);</span>
 
-<span class="nc" id="L48">            item</span>
-<span class="nc" id="L49">                .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L50">                .after(&quot;IFieldPlugin&quot;)</span>
-<span class="nc" id="L51">                .process(() -&gt; {</span>
+<span class="nc" id="L49">            item</span>
+<span class="nc" id="L50">                .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L51">                .after(&quot;IFieldPlugin&quot;)</span>
+<span class="nc" id="L52">                .process(() -&gt; {</span>
                     try {
-<span class="nc" id="L53">                        IKey cachedCollectionKey = Keys.getOrAdd(ICachedCollection.class.toString());</span>
-<span class="nc" id="L54">                        IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;connectionPool&quot;);</span>
-<span class="nc" id="L55">                        IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L56">                        IField keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
-<span class="nc" id="L57">                        IOC.register(cachedCollectionKey, new ResolveByCompositeNameIOCStrategy(</span>
+<span class="nc" id="L54">                        IKey cachedCollectionKey = Keys.getOrAdd(ICachedCollection.class.toString());</span>
+<span class="nc" id="L55">                        IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;connectionPool&quot;);</span>
+<span class="nc" id="L56">                        IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L57">                        IField keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
+<span class="nc" id="L58">                        IOC.register(cachedCollectionKey, new ResolveByCompositeNameIOCStrategy(</span>
                             (args) -&gt; {
                                 try {
-<span class="nc" id="L60">                                    CollectionName collectionName = IOC.resolve(Keys.getOrAdd(CollectionName.class.toString()), args[0]);</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">                                    if (collectionName == null) {</span>
-<span class="nc" id="L62">                                        throw new RuntimeException(&quot;Can't resolve cached collection: collectionName is null&quot;);</span>
+<span class="nc" id="L61">                                    CollectionName collectionName = IOC.resolve(Keys.getOrAdd(CollectionName.class.toString()), args[0]);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                                    if (collectionName == null) {</span>
+<span class="nc" id="L63">                                        throw new RuntimeException(&quot;Can't resolve cached collection: collectionName is null&quot;);</span>
                                     }
-<span class="nc" id="L64">                                    String keyName = String.valueOf(args[1]);</span>
+<span class="nc" id="L65">                                    String keyName = String.valueOf(args[1]);</span>
                                     //TODO:: clarify about generators
                                     //TODO:: wrapperGenerator should be resolved by IOC
-<span class="nc" id="L67">                                    IWrapperGenerator wrapperGenerator = new WrapperGenerator(this.getClass().getClassLoader());</span>
-<span class="nc" id="L68">                                    ConnectionOptions connectionOptionsWrapper = wrapperGenerator.generate(ConnectionOptions.class);</span>
-<span class="nc" id="L69">                                    IPool connectionPool = IOC.resolve(Keys.getOrAdd(&quot;PostgresConnectionPool&quot;), connectionOptionsWrapper);</span>
-<span class="nc" id="L70">                                    IObject config = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
-<span class="nc" id="L71">                                    connectionPoolField.out(config, connectionPool);</span>
-<span class="nc" id="L72">                                    collectionNameField.out(config, collectionName);</span>
-<span class="nc" id="L73">                                    keyNameField.out(config, keyName);</span>
+<span class="nc" id="L68">                                    IWrapperGenerator wrapperGenerator = new WrapperGenerator(this.getClass().getClassLoader());</span>
+<span class="nc" id="L69">                                    ConnectionOptions connectionOptionsWrapper = wrapperGenerator.generate(ConnectionOptions.class);</span>
+<span class="nc" id="L70">                                    IPool connectionPool = IOC.resolve(Keys.getOrAdd(&quot;PostgresConnectionPool&quot;), connectionOptionsWrapper);</span>
+<span class="nc" id="L71">                                    IObject config = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));</span>
+<span class="nc" id="L72">                                    connectionPoolField.out(config, connectionPool);</span>
+<span class="nc" id="L73">                                    collectionNameField.out(config, collectionName);</span>
+<span class="nc" id="L74">                                    keyNameField.out(config, keyName);</span>
 
-<span class="nc" id="L75">                                    return new CachedCollection(config);</span>
-<span class="nc" id="L76">                                } catch (Exception e) {</span>
-<span class="nc" id="L77">                                    throw new RuntimeException(e);</span>
+<span class="nc" id="L76">                                    return new CachedCollection(config);</span>
+<span class="nc" id="L77">                                } catch (Exception e) {</span>
+<span class="nc" id="L78">                                    throw new RuntimeException(e);</span>
                                 }
                             }));
-<span class="nc" id="L80">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
-<span class="nc" id="L81">                    throw new RuntimeException(e);</span>
-<span class="nc" id="L82">                }</span>
-<span class="nc" id="L83">            });</span>
-<span class="nc" id="L84">            bootstrap.add(item);</span>
-<span class="nc" id="L85">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L86">            throw new PluginException(&quot;Can't load CreateCollectionActor plugin&quot;, e);</span>
-<span class="nc" id="L87">        }</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L81">                } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
+<span class="nc" id="L82">                    throw new ActionExecuteException(&quot;CreateCachedCollection plugin can't load&quot;, e);</span>
+<span class="nc" id="L83">                }</span>
+<span class="nc" id="L84">            });</span>
+<span class="nc" id="L85">            bootstrap.add(item);</span>
+<span class="nc" id="L86">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L87">            throw new PluginException(&quot;Can't load CreateCollectionActor plugin&quot;, e);</span>
+<span class="nc" id="L88">        }</span>
+<span class="nc" id="L89">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

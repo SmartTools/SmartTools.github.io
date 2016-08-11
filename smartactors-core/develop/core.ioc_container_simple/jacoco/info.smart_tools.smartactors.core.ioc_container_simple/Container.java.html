@@ -5,9 +5,12 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.DeletionExcepti
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.string_ioc_key.Key;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,9 +20,21 @@ import java.util.concurrent.ConcurrentHashMap;
  * - fast and simple
  * &lt;/pre&gt;
  */
-<span class="fc" id="L20">public class Container implements IContainer {</span>
+public class Container implements IContainer {
 
-<span class="fc" id="L22">    private Map&lt;IKey, IResolveDependencyStrategy&gt; storage = new ConcurrentHashMap&lt;IKey, IResolveDependencyStrategy&gt;();</span>
+<span class="fc" id="L25">    private Map&lt;IKey, IResolveDependencyStrategy&gt; storage = new ConcurrentHashMap&lt;IKey, IResolveDependencyStrategy&gt;();</span>
+
+    private final IKey keyForKeyStorage;
+
+    /**
+     * The constructor.
+     *
+     * @throws InvalidArgumentException if fails to construct key storage
+     */
+    public Container()
+<span class="fc" id="L35">            throws InvalidArgumentException {</span>
+<span class="fc" id="L36">        keyForKeyStorage = new Key(UUID.randomUUID().toString());</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * Return specific instance of {@link IKey} for container ID
@@ -27,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
      */
     @Override
     public IKey getIocKey() {
-<span class="fc" id="L30">        return null;</span>
+<span class="fc" id="L45">        return null;</span>
     }
 
     /**
@@ -36,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
      */
     @Override
     public IKey getKeyForKeyStorage() {
-<span class="fc" id="L39">        return null;</span>
+<span class="fc" id="L54">        return keyForKeyStorage;</span>
     }
 
     /**
@@ -51,10 +66,10 @@ import java.util.concurrent.ConcurrentHashMap;
     public &lt;T&gt; T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {
-<span class="fc" id="L54">            IResolveDependencyStrategy strategy = storage.get(key);</span>
-<span class="fc" id="L55">            return (T) strategy.resolve(args);</span>
-<span class="fc" id="L56">        } catch (Exception e) {</span>
-<span class="fc" id="L57">            throw new ResolutionException(&quot;Resolution of dependency failed.&quot;);</span>
+<span class="fc" id="L69">            IResolveDependencyStrategy strategy = storage.get(key);</span>
+<span class="fc" id="L70">            return (T) strategy.resolve(args);</span>
+<span class="fc" id="L71">        } catch (Exception e) {</span>
+<span class="fc" id="L72">            throw new ResolutionException(&quot;Resolution of dependency failed: &quot; + key, e);</span>
         }
     }
 
@@ -68,11 +83,11 @@ import java.util.concurrent.ConcurrentHashMap;
     public void register(final IKey key, final IResolveDependencyStrategy strategy)
             throws RegistrationException {
         try {
-<span class="fc" id="L71">            storage.put(key, strategy);</span>
-<span class="fc" id="L72">        } catch (Exception e) {</span>
-<span class="fc" id="L73">            throw new RegistrationException(&quot;Registration of dependency failed.&quot;, e);</span>
-<span class="fc" id="L74">        }</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L86">            storage.put(key, strategy);</span>
+<span class="fc" id="L87">        } catch (Exception e) {</span>
+<span class="fc" id="L88">            throw new RegistrationException(&quot;Registration of dependency failed.&quot;, e);</span>
+<span class="fc" id="L89">        }</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      *
@@ -84,10 +99,10 @@ import java.util.concurrent.ConcurrentHashMap;
     public void remove(final IKey key)
             throws DeletionException {
         try {
-<span class="fc" id="L87">            storage.remove(key);</span>
-<span class="fc" id="L88">        } catch (Exception e) {</span>
-<span class="fc" id="L89">            throw new DeletionException(&quot;Deletion of dependency failed.&quot;, e);</span>
-<span class="fc" id="L90">        }</span>
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L102">            storage.remove(key);</span>
+<span class="fc" id="L103">        } catch (Exception e) {</span>
+<span class="fc" id="L104">            throw new DeletionException(&quot;Deletion of dependency failed.&quot;, e);</span>
+<span class="fc" id="L105">        }</span>
+<span class="fc" id="L106">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

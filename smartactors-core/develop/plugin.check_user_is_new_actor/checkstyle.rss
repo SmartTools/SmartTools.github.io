@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 1,
+      <title>File: 2,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 0,
              Infos: 0
       </title>
             <link>plugin.check_user_is_new_actor/plugin.check_user_is_new_actor//checkstyle.html</link>
@@ -46,13 +46,27 @@ under the License.
           <tbody>
                           <tr>
                 <td>
+                  <a href="plugin.check_user_is_new_actor/plugin.check_user_is_new_actor//checkstyle.html#info.smart_tools.smartactors.plugin.check_user_is_new_actor.package-info.java">info/smart_tools/smartactors/plugin/check_user_is_new_actor/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="plugin.check_user_is_new_actor/plugin.check_user_is_new_actor//checkstyle.html#info.smart_tools.smartactors.plugin.check_user_is_new_actor.CheckUserIsNewActorPlugin.java">info/smart_tools/smartactors/plugin/check_user_is_new_actor/CheckUserIsNewActorPlugin.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0

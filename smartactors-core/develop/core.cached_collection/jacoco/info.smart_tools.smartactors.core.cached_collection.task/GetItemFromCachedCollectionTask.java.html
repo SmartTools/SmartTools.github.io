@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetItemFromCachedCollectionTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.cached_collection</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.cached_collection.task</a> &gt; <span class="el_source">GetItemFromCachedCollectionTask.java</span></div><h1>GetItemFromCachedCollectionTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.cached_collection.task;
+
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * Task must search objects with target task
+ */
+public class GetItemFromCachedCollectionTask implements IDatabaseTask {
+
+    private IDatabaseTask getItemTask;
+    private IStorageConnection connection;
+
+    private IField collectionNameField;
+    private IField callbackField;
+    private IField keyNameField;
+    private IField keyValueField;
+    private IField criteriaEqualsIsActiveField;
+    private IField criteriaDateToStartDateTimeField;
+    //TODO:: this format should be setted for whole project?
+<span class="fc" id="L35">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+
+    /**
+     * @param connection storage connection for executing query
+     * @throws CreateCachedCollectionTaskException for error during creating
+     */
+<span class="fc" id="L41">    public GetItemFromCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
+<span class="fc" id="L42">        this.connection = connection;</span>
+        try {
+<span class="fc" id="L44">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L45">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyName&quot;);</span>
+<span class="fc" id="L46">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;key&quot;);</span>
+<span class="fc" id="L47">            this.callbackField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="fc" id="L48">            this.criteriaEqualsIsActiveField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria/isActive/$eq&quot;);</span>
+<span class="fc" id="L49">            this.criteriaDateToStartDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria/startDateTime/$date-to&quot;);</span>
+<span class="nc" id="L50">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L51">            throw new CreateCachedCollectionTaskException(&quot;Can't create GetItemFromCachedCollectionTask.&quot;, e);</span>
+<span class="fc" id="L52">        }</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Prepare
+     * @param query query object
+     *              &lt;pre&gt;
+     *              {
+     *                  &quot;keyName&quot; : KEY_OF_COLLECTION,
+     *                  &quot;key&quot;: &quot;VALUE_FOR_KEY&quot;,
+     *                  &quot;collectionName&quot; : &quot;COLLECTION _NAME&quot;
+     *              }    
+     *              &lt;/pre&gt;
+     * Query which would be passed to the nested task:
+     * TODO:: change this format after finish task's refactoring
+     *              &lt;pre&gt;
+     *              {
+     *                  &quot;pageSize&quot;: 100,
+     *                  &quot;pageNumber&quot;: 1,
+     *                  &quot;collectionName&quot; : &quot;COLLECTION _NAME&quot;,
+     *                  &quot;criteria&quot;:
+     *                      &quot;criteria&quot; :    [
+     *                          {&quot;isActive&quot;: {&quot;$eq&quot;: true}},
+     *                          {&quot;startDateTime&quot;: {&quot;date-to&quot;: &quot;now&quot;}},
+     *                          {&quot;&lt;keyName&gt;&quot;: {&quot;$eq&quot;: &quot;&lt;keyValue&gt;&quot;}}
+     *                      ]
+     *              }
+     *              &lt;/pre&gt;
+     * @throws TaskPrepareException Throw when some was incorrect in preparing query
+     */
+    @Override
+    public void prepare(final IObject query) throws TaskPrepareException {
+        try {
+<span class="fc" id="L85">            IObject queryForNestedTask  = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="fc" id="L87">            collectionNameField.out(queryForNestedTask, collectionNameField.in(query));</span>
+<span class="fc" id="L88">            criteriaEqualsIsActiveField.out(queryForNestedTask, true);</span>
+<span class="fc" id="L89">            criteriaDateToStartDateTimeField.out(queryForNestedTask, LocalDateTime.now().format(FORMATTER));</span>
+<span class="fc" id="L90">            String keyName = keyNameField.in(query);</span>
+<span class="fc" id="L91">            String keyValue = keyValueField.in(query);</span>
+<span class="fc" id="L92">            IField criteriaEqualsKeyField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria/&quot; +keyName + &quot;/$eq/&quot; + keyValue);</span>
+<span class="fc" id="L93">            criteriaEqualsKeyField.in(queryForNestedTask);</span>
+
+<span class="fc" id="L95">            getItemTask = IOC.resolve(</span>
+<span class="fc" id="L96">                Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
+                connection,
+<span class="fc" id="L98">                collectionNameField.in(query),</span>
+                queryForNestedTask,
+<span class="fc" id="L100">                callbackField.in(query)</span>
+            );
+
+<span class="fc" id="L103">        } catch (ResolutionException e) {</span>
+<span class="fc" id="L104">            throw new TaskPrepareException(&quot;Can't create searchQuery from input query&quot;, e);</span>
+<span class="nc" id="L105">        } catch (InvalidArgumentException | ChangeValueException | ReadValueException e) {</span>
+<span class="nc" id="L106">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * @throws TaskExecutionException Throw when target task can't execute query
+     */
+    @Override
+    public void execute() throws TaskExecutionException {
+<span class="fc" id="L115">        getItemTask.execute();</span>
+<span class="fc" id="L116">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

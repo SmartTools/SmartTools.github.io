@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConfigurationManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.configuration_manager</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.configuration_manager</a> &gt; <span class="el_source">ConfigurationManager.java</span></div><h1>ConfigurationManager.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.configuration_manager;
+
+import info.smart_tools.smartactors.core.iconfiguration_manager.IConfigurationManager;
+import info.smart_tools.smartactors.core.iconfiguration_manager.ISectionStrategy;
+import info.smart_tools.smartactors.core.iconfiguration_manager.exceptions.ConfigurationProcessingException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.invalid_state_exception.InvalidStateException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Implementation of {@link IConfigurationManager}
+ */
+public class ConfigurationManager implements IConfigurationManager {
+    private final List&lt;ISectionStrategy&gt; sectionStrategies;
+    private final Set&lt;IFieldName&gt; registeredSections;
+
+    private IObject currentConfig;
+    private boolean isInitialConfigurationApplied;
+
+    /**
+     * The constructor.
+     */
+<span class="fc" id="L29">    public ConfigurationManager() {</span>
+<span class="fc" id="L30">        sectionStrategies = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L31">        registeredSections = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L32">        currentConfig = null;</span>
+<span class="fc" id="L33">        isInitialConfigurationApplied = false;</span>
+<span class="fc" id="L34">    }</span>
+
+    @Override
+    public void addSectionStrategy(final ISectionStrategy strategy) throws InvalidArgumentException {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (null == strategy) {</span>
+<span class="fc" id="L39">            throw new InvalidArgumentException(&quot;Strategy should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (!registeredSections.add(strategy.getSectionName())) {</span>
+<span class="fc" id="L43">            throw new InvalidArgumentException(&quot;Strategy for the section is already registered.&quot;);</span>
+        }
+
+<span class="fc" id="L46">        sectionStrategies.add(strategy);</span>
+<span class="fc" id="L47">    }</span>
+
+    @Override
+    public void setInitialConfig(final IObject config) throws InvalidArgumentException, InvalidStateException {
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (null == config) {</span>
+<span class="fc" id="L52">            throw new InvalidArgumentException(&quot;Config should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (isInitialConfigurationApplied) {</span>
+<span class="fc" id="L56">            throw new InvalidStateException(&quot;Initial configuration is already applied.&quot;);</span>
+        }
+
+<span class="fc" id="L59">        currentConfig = config;</span>
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    public IObject getConfig() {
+<span class="fc" id="L64">        return currentConfig;</span>
+    }
+
+    @Override
+    public void configure() throws ConfigurationProcessingException, InvalidStateException {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (null == currentConfig) {</span>
+<span class="fc" id="L70">            throw new InvalidStateException(&quot;Initial configuration is not set.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (isInitialConfigurationApplied) {</span>
+<span class="fc" id="L74">            throw new InvalidStateException(&quot;Initial configuration is already applied.&quot;);</span>
+        }
+
+<span class="fc" id="L77">        isInitialConfigurationApplied = true;</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (ISectionStrategy sectionStrategy : sectionStrategies) {</span>
+<span class="fc" id="L80">            sectionStrategy.onLoadConfig(currentConfig);</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

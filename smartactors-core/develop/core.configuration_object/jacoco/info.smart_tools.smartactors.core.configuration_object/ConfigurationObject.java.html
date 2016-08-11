@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConfigurationObject.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.configuration_object</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.configuration_object</a> &gt; <span class="el_source">ConfigurationObject.java</span></div><h1>ConfigurationObject.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.configuration_object;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonTokenId;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * Implementation of {@link @IObject}.
+ * This implementation gets value on {@code getValue} method, leads it in to the canonical form and returns result.
+ */
+public class ConfigurationObject implements IObject {
+
+    //private IObject source;
+    private Map&lt;IFieldName, Object&gt; body;
+<span class="fc" id="L35">    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();</span>
+    static {
+<span class="fc" id="L37">        OBJECT_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);</span>
+<span class="fc" id="L38">        SimpleModule module = new SimpleModule(&quot;Nested IObject serialization module&quot;);</span>
+<span class="fc" id="L39">        module.addDeserializer(Object.class, new ObjectDeserializer());</span>
+<span class="fc" id="L40">        OBJECT_MAPPER.registerModule(module);</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Serialize incoming string and create new instance of {@link ConfigurationObject}
+     * @param body incoming string data
+     * @throws InvalidArgumentException if any errors occurred on object creation
+     */
+    public ConfigurationObject(final String body)
+<span class="fc" id="L49">            throws InvalidArgumentException {</span>
+        try {
+<span class="fc" id="L51">            this.body = OBJECT_MAPPER.reader(new TypeReference&lt;Map&lt;FieldName, Object&gt;&gt;() { }).readValue(body);</span>
+<span class="fc" id="L52">        } catch (Throwable e) {</span>
+<span class="fc" id="L53">            throw new InvalidArgumentException(e);</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Create new instance of {@link ConfigurationObject} by given body of pairs {@link IFieldName}, {@link Object}
+     * @param objectEntries map of pairs {@link IFieldName}, {@link Object}
+     * @throws InvalidArgumentException if argument is null
+     */
+    public ConfigurationObject(final Map&lt;IFieldName, Object&gt; objectEntries)
+<span class="fc" id="L63">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (null == objectEntries) {</span>
+<span class="nc" id="L65">            throw new InvalidArgumentException(&quot;Argument should not be null.&quot;);</span>
+        }
+<span class="fc" id="L67">        this.body = new HashMap&lt;IFieldName, Object&gt;(0);</span>
+<span class="fc" id="L68">        this.body.putAll((HashMap&lt;IFieldName, Object&gt;) objectEntries);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Create empty instance of {@link ConfigurationObject}
+     */
+<span class="fc" id="L74">    public ConfigurationObject() {</span>
+<span class="fc" id="L75">        this.body = new HashMap&lt;&gt;(0);</span>
+<span class="fc" id="L76">    }</span>
+
+    @Override
+    public Object getValue(final IFieldName name)
+            throws ReadValueException, InvalidArgumentException {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L82">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+        }
+        try {
+<span class="fc" id="L85">            return IOC.resolve(</span>
+<span class="fc" id="L86">                    IOC.resolve(IOC.getKeyForKeyStorage(), &quot;resolve key for configuration object&quot;),</span>
+<span class="fc" id="L87">                    body.get(name),</span>
+                    name
+            );
+<span class="fc" id="L90">        } catch (Throwable e) {</span>
+<span class="fc" id="L91">            throw new ReadValueException(&quot;Can't read value for current field name&quot;);</span>
+        }
+    }
+
+//    @Override
+//    public void setValue(final IFieldName name, final Object value)
+//            throws ChangeValueException, InvalidArgumentException {
+//        throw new ChangeValueException(&quot;Method not implemented.&quot;);
+//    }
+
+    @Override
+    public void setValue(final IFieldName name, final Object value)
+            throws ChangeValueException, InvalidArgumentException {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (null == name) {</span>
+<span class="nc" id="L105">            throw new InvalidArgumentException(&quot;Name parameter should not be null.&quot;);</span>
+        }
+<span class="fc" id="L107">        body.put(name, value);</span>
+<span class="fc" id="L108">    }</span>
+
+    @Override
+    public void deleteField(final IFieldName name)
+            throws DeleteValueException, InvalidArgumentException {
+<span class="fc" id="L113">        throw new DeleteValueException(&quot;Method not implemented.&quot;);</span>
+    }
+
+    @Override
+    public &lt;T&gt; T serialize()
+            throws SerializeException {
+<span class="fc" id="L119">        throw new SerializeException(&quot;Method not implemented.&quot;);</span>
+    }
+
+    @Override
+    public Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; iterator() {
+<span class="fc" id="L124">        return null;</span>
+    }
+}
+
+/**
+ * Custom deserializer.
+ * Cast all nested json objects to {@link IObject}.
+ */
+<span class="fc" id="L132">class ObjectDeserializer extends UntypedObjectDeserializer {</span>
+
+    @Override
+    public Object deserialize(final JsonParser jp, final DeserializationContext ctxt)
+            throws IOException {
+        try {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (JsonTokenId.ID_START_OBJECT == jp.getCurrentTokenId()) {</span>
+<span class="fc" id="L139">                return new ConfigurationObject(</span>
+<span class="fc" id="L140">                        (Map&lt;IFieldName, Object&gt;) jp.readValueAs(new TypeReference&lt;Map&lt;FieldName, Object&gt;&gt;() { })</span>
+                );
+            }
+<span class="nc" id="L143">        } catch (Exception e) {</span>
+<span class="nc" id="L144">            return super.deserialize(jp, ctxt);</span>
+<span class="fc" id="L145">        }</span>
+<span class="fc" id="L146">        return super.deserialize(jp, ctxt);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

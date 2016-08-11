@@ -71,10 +71,10 @@ import java.util.Collection;
             });
 
             // FeatureManager &amp; Feature creation
-<span class="fc" id="L74">            IFeatureManager featureManager = new FeatureManager(jarFilesTracker);</span>
+<span class="fc" id="L74">            IFeatureManager featureManager = new FeatureManager();</span>
 
 
-<span class="fc" id="L77">            IFeature coreFeature = featureManager.newFeature(&quot;smartactors.core&quot;);</span>
+<span class="fc" id="L77">            IFeature coreFeature = featureManager.newFeature(&quot;smartactors.core&quot;, jarFilesTracker);</span>
 <span class="fc" id="L78">            coreFeature.whenPresent(files -&gt; {</span>
                 try {
 <span class="nc" id="L80">                    pluginLoader.loadPlugin(files);</span>

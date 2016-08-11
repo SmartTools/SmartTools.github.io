@@ -1,4 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature,7,168,1,13,2,41,1,11,0,5
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature.FileHandlerAction,11,121,0,10,2,25,0,7,0,2
-core.feature_manager,info.smart_tools.smartactors.core.feature_manager,FeatureManager,0,28,0,2,0,8,0,3,0,2
+core.feature_manager,info.smart_tools.smartactors.core.feature_manager,ExecutionPair,13,9,0,0,5,4,1,1,1,1
+core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature,17,167,2,14,3,41,2,11,0,5
+core.feature_manager,info.smart_tools.smartactors.core.feature_manager,Feature.FileHandlerAction,53,74,6,4,12,13,5,2,0,2
+core.feature_manager,info.smart_tools.smartactors.core.feature_manager,FeatureManager.new Runnable() {...},19,6,0,0,7,1,1,1,1,1
+core.feature_manager,info.smart_tools.smartactors.core.feature_manager,FeatureManager,0,42,0,2,0,10,0,3,0,2

@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 2,
+      <title>File: 3,
              Errors: 0,
-             Warnings: 0,
+             Warnings: 2,
              Infos: 0
       </title>
             <link>plugin.cached_collection/plugin.cached_collection//checkstyle.html</link>
@@ -67,6 +67,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="plugin.cached_collection/plugin.cached_collection//checkstyle.html#info.smart_tools.smartactors.plugin.cached_collection.CachedCollectionTasksPlugin.java">info/smart_tools/smartactors/plugin/cached_collection/CachedCollectionTasksPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
                 <td>
                   0

@@ -6,33 +6,50 @@ import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManag
 import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
  * Implementation of {@link IFeatureManager}.
  */
 public class FeatureManager implements IFeatureManager {
-    private IFilesystemTracker filesystemTracker;
+<span class="fc" id="L16">    private final BlockingQueue&lt;ExecutionPair&gt; queue = new LinkedBlockingQueue&lt;&gt;(10);</span>
 
     /**
      * The constructor.
      *
-     * @param filesystemTracker the {@link IFilesystemTracker} instance to use
      * @throws InvalidArgumentException if {@code filesystemTracker} is {@code null}
      */
-    public FeatureManager(final IFilesystemTracker filesystemTracker)
-<span class="fc" id="L22">            throws InvalidArgumentException {</span>
-<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (null == filesystemTracker) {</span>
-<span class="fc" id="L24">            throw new InvalidArgumentException(&quot;Filesystem tracker should not be null.&quot;);</span>
-        }
+    public FeatureManager()
+<span class="fc" id="L24">            throws InvalidArgumentException {</span>
 
-<span class="fc" id="L27">        this.filesystemTracker = filesystemTracker;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L26">        Runnable queueWorker = new Runnable() {</span>
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+<span class="nc" id="L31">                        queue.take().execute();</span>
+                    }
+<span class="nc" id="L33">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L34">                    Thread.currentThread().interrupt();</span>
+<span class="nc" id="L35">                } catch (Exception e) {</span>
+<span class="nc" id="L36">                    throw new RuntimeException(&quot;FeatureManager queue processing has been failed.&quot;, e);</span>
+<span class="nc" id="L37">                }</span>
+<span class="nc" id="L38">            }</span>
+        };
+<span class="fc" id="L40">        new Thread(queueWorker).start();</span>
+<span class="fc" id="L41">    }</span>
 
     @Override
-    public IFeature newFeature(final String name) throws FeatureManagementException {
+    public IFeature newFeature(final String name, final IFilesystemTracker tracker)
+            throws FeatureManagementException, InvalidArgumentException {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (null == tracker) {</span>
+<span class="fc" id="L47">            throw new InvalidArgumentException(&quot;Tracke should not be null.&quot;);</span>
+        }
         try {
-<span class="fc" id="L33">            return new Feature(name, this.filesystemTracker);</span>
-<span class="fc" id="L34">        } catch (InvalidArgumentException e) {</span>
-<span class="fc" id="L35">            throw new FeatureManagementException(&quot;Error creating new feature.&quot;, e);</span>
+<span class="fc" id="L50">            return new Feature(name, tracker, this.queue);</span>
+<span class="fc" id="L51">        } catch (InvalidArgumentException e) {</span>
+<span class="fc" id="L52">            throw new FeatureManagementException(&quot;Error creating new feature.&quot;, e);</span>
         }
     }
 }

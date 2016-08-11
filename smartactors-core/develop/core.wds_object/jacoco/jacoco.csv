@@ -7,5 +7,5 @@ core.wds_object,info.smart_tools.smartactors.core.wds_object,WDSObjectField.new 
 core.wds_object,info.smart_tools.smartactors.core.wds_object,WDSObjectField.new IFunction() {...},0,13,0,0,0,2,0,2,0,2
 core.wds_object,info.smart_tools.smartactors.core.wds_object,WDSObjectField.new IFunction() {...},0,21,0,0,0,4,0,2,0,2
 core.wds_object,info.smart_tools.smartactors.core.wds_object,Arg,0,21,0,0,0,8,0,4,0,4
-core.wds_object,info.smart_tools.smartactors.core.wds_object,WDSObjectField,0,498,0,30,0,94,0,25,0,10
+core.wds_object,info.smart_tools.smartactors.core.wds_object,WDSObjectField,0,507,0,30,0,94,0,25,0,10
 core.wds_object,info.smart_tools.smartactors.core.wds_object,StrategyAndArgs,0,27,0,0,0,10,0,5,0,5

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>NettyServer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.netty_server</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.netty_server</a> &gt; <span class="el_source">NettyServer.java</span></div><h1>NettyServer.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.netty_server;
+
+import info.smart_tools.smartactors.core.CompletableNettyFuture;
+import info.smart_tools.smartactors.core.iasync_service.IAsyncService;
+import io.netty.bootstrap.AbstractBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.EventLoopGroup;
+import io.netty.util.concurrent.Future;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Base class for netty based servers. It holds a common initialization/shutdown logic.
+ */
+public abstract class NettyServer implements IAsyncService&lt;NettyServer&gt; {
+    private final int port;
+    private Channel channel;
+
+<span class="nc" id="L23">    public NettyServer(final int port) {</span>
+<span class="nc" id="L24">        this.port = port;</span>
+<span class="nc" id="L25">    }</span>
+
+    @Override
+    public CompletableFuture&lt;NettyServer&gt; start() {
+<span class="nc" id="L29">        AbstractBootstrap&lt;?, ? extends Channel&gt; bootstrap = bootstrapServer();</span>
+
+<span class="nc" id="L31">        final NettyServer me = this;</span>
+<span class="nc" id="L32">        final ChannelFuture channelFuture = bootstrap.bind(port).addListener(new ChannelFutureListener() {</span>
+            @Override
+            public void operationComplete(final ChannelFuture channelFuture) throws Exception {
+<span class="nc" id="L35">                me.channel = channelFuture.channel();</span>
+<span class="nc" id="L36">            }</span>
+        });
+
+<span class="nc" id="L39">        return wrapToCompletableFuture(channelFuture);</span>
+    }
+
+    @Override
+    public CompletableFuture&lt;NettyServer&gt; stop() {
+<span class="nc" id="L44">        final NettyServer me = this;</span>
+<span class="nc" id="L45">        return CompletableFuture.allOf(</span>
+<span class="nc" id="L46">                wrapToCompletableFuture(channel.close()),</span>
+<span class="nc" id="L47">                CompletableFuture.allOf(</span>
+<span class="nc" id="L48">                        getEventLoopGroups().stream()</span>
+<span class="nc" id="L49">                                .map(x -&gt; wrapToCompletableFuture(x.shutdownGracefully()))</span>
+<span class="nc" id="L50">                                .toArray(CompletableFuture[]::new)</span>
+                )
+<span class="nc" id="L52">        ).thenApply(x -&gt; me);</span>
+    }
+
+    /**
+     * Get a bootstrap object used to initialize the concrete server (basically, it's just a configuration holder).
+     * @return a bootstrap object
+     */
+    protected abstract AbstractBootstrap&lt;?, ? extends Channel&gt; bootstrapServer();
+
+    /**
+     * Get server event loop groups in order to shutdown them properly.
+     * @return a list of {@link EventLoopGroup} used by the server
+     */
+    protected List&lt;EventLoopGroup&gt; getEventLoopGroups() {
+<span class="nc" id="L66">        return Collections.emptyList();</span>
+    }
+
+    private &lt;T&gt; CompletableFuture&lt;NettyServer&gt; wrapToCompletableFuture(final Future&lt;T&gt; future) {
+<span class="nc" id="L70">        final NettyServer me = this;</span>
+<span class="nc" id="L71">        return CompletableNettyFuture.from(future).thenApply(x -&gt; me);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

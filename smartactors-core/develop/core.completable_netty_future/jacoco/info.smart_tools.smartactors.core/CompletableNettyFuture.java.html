@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CompletableNettyFuture.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.completable_netty_future</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core</a> &gt; <span class="el_source">CompletableNettyFuture.java</span></div><h1>CompletableNettyFuture.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core;
+
+import java.util.concurrent.CompletableFuture;
+
+
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.FutureListener;
+
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Adapter from netty {@link Future} to java {@link CompletableFuture}
+ * TODO: should we properly handle a call to {@link CompletableFuture#complete(Object)} method?
+ *
+ * @param &lt;T&gt; type of value returned by Future.
+ */
+public final class CompletableNettyFuture&lt;T&gt; extends CompletableFuture&lt;T&gt; {
+    private Future&lt;T&gt; nettyFuture;
+
+<span class="fc" id="L20">    private CompletableNettyFuture(final Future&lt;T&gt; nettyFuture) {</span>
+<span class="fc" id="L21">        this.nettyFuture = nettyFuture;</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * Factory method for convenient wrapping of the given Future.
+     *
+     * @param nettyFuture netty future to be wrapped
+     * @param &lt;T&gt;         type of value returned by Future
+     * @return a {@link CompletableFuture} that wraps the given one
+     */
+    public static &lt;T&gt; CompletableFuture&lt;T&gt; from(final Future&lt;T&gt; nettyFuture) {
+<span class="fc" id="L32">        CompletableFuture&lt;T&gt; result = new CompletableNettyFuture&lt;&gt;(nettyFuture);</span>
+
+<span class="fc" id="L34">        nettyFuture.addListener(new FutureListener&lt;T&gt;() {</span>
+            @Override
+            public void operationComplete(final Future&lt;T&gt; future) throws Exception {
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (future.isSuccess()) {</span>
+<span class="fc" id="L38">                    result.complete(future.getNow());</span>
+                } else {
+<span class="fc" id="L40">                    result.completeExceptionally(future.cause());</span>
+                }
+<span class="fc" id="L42">            }</span>
+        });
+
+<span class="fc" id="L45">        return result;</span>
+    }
+
+    @Override
+    public boolean cancel(final boolean mayInterruptIfRunning) {
+<span class="fc" id="L50">        boolean result = nettyFuture.cancel(mayInterruptIfRunning);</span>
+<span class="fc" id="L51">        super.cancel(mayInterruptIfRunning);</span>
+<span class="fc" id="L52">        return result;</span>
+    }
+
+    @Override
+    public boolean isDone() {
+<span class="fc" id="L57">        return nettyFuture.isDone();</span>
+    }
+
+    @Override
+    public boolean isCancelled() {
+<span class="fc" id="L62">        return nettyFuture.isCancelled();</span>
+    }
+
+    @Override
+    public boolean isCompletedExceptionally() {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        return !nettyFuture.isSuccess();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

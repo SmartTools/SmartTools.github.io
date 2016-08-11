@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ThreadImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.thread_pool</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.thread_pool</a> &gt; <span class="el_source">ThreadImpl.java</span></div><h1>ThreadImpl.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.thread_pool;
 
+import info.smart_tools.smartactors.core.iscope_provider_container.exception.ScopeProviderException;
 import info.smart_tools.smartactors.core.itask.ITask;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -17,31 +19,33 @@ class ThreadImpl {
     /**
      * The {@link Runnable} that will run on Java thread.
      */
-<span class="fc" id="L20">    private class ThreadRunnable implements Runnable {</span>
+<span class="fc" id="L22">    private class ThreadRunnable implements Runnable {</span>
         @Override
         public void run() {
-<span class="fc bfc" id="L23" title="All 2 branches covered.">            while (!Thread.interrupted()) {</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            while (!Thread.interrupted()) {</span>
                 try {
-<span class="fc" id="L25">                    synchronized (lock) {</span>
-<span class="fc bfc" id="L26" title="All 2 branches covered.">                        while (setTaskRef.get() == null) {</span>
-<span class="fc" id="L27">                            lock.wait();</span>
+<span class="fc" id="L27">                    synchronized (lock) {</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                        while (setTaskRef.get() == null) {</span>
+<span class="fc" id="L29">                            lock.wait();</span>
                         }
-<span class="fc" id="L29">                    }</span>
-<span class="fc" id="L30">                } catch (InterruptedException e) {</span>
-<span class="fc" id="L31">                    Thread.currentThread().interrupt();</span>
-<span class="fc" id="L32">                    continue;</span>
-<span class="fc" id="L33">                }</span>
+<span class="fc" id="L31">                    }</span>
+<span class="fc" id="L32">                } catch (InterruptedException e) {</span>
+<span class="fc" id="L33">                    Thread.currentThread().interrupt();</span>
+<span class="fc" id="L34">                    continue;</span>
+<span class="fc" id="L35">                }</span>
 
                 try {
-<span class="fc" id="L36">                    setTaskRef.get().execute();</span>
-<span class="fc" id="L37">                } catch (TaskExecutionException e) {</span>
+<span class="fc" id="L38">                    ScopeProvider.setCurrentScope(pool.getScope());</span>
+<span class="fc" id="L39">                    setTaskRef.get().execute();</span>
+<span class="fc" id="L40">                } catch (TaskExecutionException | ScopeProviderException e) {</span>
                     // TODO: Handle
-<span class="fc" id="L39">                }</span>
+<span class="fc" id="L42">                    e.printStackTrace();</span>
+<span class="fc" id="L43">                }</span>
 
-<span class="fc" id="L41">                setTaskRef.set(null);</span>
-<span class="fc" id="L42">                pool.returnThread(ThreadImpl.this);</span>
+<span class="fc" id="L45">                setTaskRef.set(null);</span>
+<span class="fc" id="L46">                pool.returnThread(ThreadImpl.this);</span>
             }
-<span class="fc" id="L44">        }</span>
+<span class="fc" id="L48">        }</span>
     }
 
     /**
@@ -49,16 +53,16 @@ class ThreadImpl {
      *
      * @param pool    the thread pool that owns this thread
      */
-<span class="fc" id="L52">    ThreadImpl(final ThreadPool pool) {</span>
-<span class="fc" id="L53">        this.pool = pool;</span>
+<span class="fc" id="L56">    ThreadImpl(final ThreadPool pool) {</span>
+<span class="fc" id="L57">        this.pool = pool;</span>
 
-<span class="fc" id="L55">        this.setTaskRef = new AtomicReference&lt;&gt;(null);</span>
-<span class="fc" id="L56">        this.lock = new Object();</span>
+<span class="fc" id="L59">        this.setTaskRef = new AtomicReference&lt;&gt;(null);</span>
+<span class="fc" id="L60">        this.lock = new Object();</span>
 
-<span class="fc" id="L58">        this.thread = new Thread(new ThreadRunnable());</span>
+<span class="fc" id="L62">        this.thread = new Thread(new ThreadRunnable());</span>
 
-<span class="fc" id="L60">        this.thread.start();</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L64">        this.thread.start();</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Start execution of given task in this thread.
@@ -68,24 +72,24 @@ class ThreadImpl {
      * @throws TaskExecutionException if the thread is already not alive
      */
     void execute(final ITask task) throws TaskExecutionException {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (!setTaskRef.compareAndSet(null, task)) {</span>
-<span class="fc" id="L72">            throw new TaskExecutionException(&quot;Another task is being executed.&quot;);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (!setTaskRef.compareAndSet(null, task)) {</span>
+<span class="fc" id="L76">            throw new TaskExecutionException(&quot;Another task is being executed.&quot;);</span>
         }
 
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (!thread.isAlive()) {</span>
-<span class="fc" id="L76">            throw new TaskExecutionException(&quot;Thread is dead.&quot;);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (!thread.isAlive()) {</span>
+<span class="fc" id="L80">            throw new TaskExecutionException(&quot;Thread is dead.&quot;);</span>
         }
 
-<span class="fc" id="L79">        synchronized (this.lock) {</span>
-<span class="fc" id="L80">            this.lock.notifyAll();</span>
-<span class="pc" id="L81">        }</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L83">        synchronized (this.lock) {</span>
+<span class="fc" id="L84">            this.lock.notifyAll();</span>
+<span class="pc" id="L85">        }</span>
+<span class="fc" id="L86">    }</span>
 
     /**
      * Interrupt the underlying Java thread (using {@link Thread#interrupt()} method).
      */
     void interrupt() {
-<span class="fc" id="L88">        this.thread.interrupt();</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L92">        this.thread.interrupt();</span>
+<span class="fc" id="L93">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

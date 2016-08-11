@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+server.server_for_intern,info.smart_tools.smartactors.server.server_for_intern,Server,626,0,14,0,145,0,29,0,22,0
+server.server_for_intern,info.smart_tools.smartactors.server.server_for_intern,BootstrapItems,15,0,0,0,5,0,3,0,3,0

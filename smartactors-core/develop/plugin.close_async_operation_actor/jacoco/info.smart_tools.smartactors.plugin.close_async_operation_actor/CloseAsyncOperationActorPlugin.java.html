@@ -74,11 +74,11 @@ public class CloseAsyncOperationActorPlugin implements IPlugin {
                                     )
                             );
 <span class="nc" id="L76">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L77">                            throw new ActionExecuteException(&quot;Can't get CloseAsyncOperationActor key&quot;);</span>
+<span class="nc" id="L77">                            throw new ActionExecuteException(&quot;CloseAsyncOperationActor plugin can't load: can't get CloseAsyncOperationActor key&quot;, e);</span>
 <span class="nc" id="L78">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L79">                            throw new ActionExecuteException(&quot;Can't get create strategy&quot;);</span>
+<span class="nc" id="L79">                            throw new ActionExecuteException(&quot;CloseAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
 <span class="nc" id="L80">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L81">                            throw new ActionExecuteException(&quot;Can't get register new strategy&quot;);</span>
+<span class="nc" id="L81">                            throw new ActionExecuteException(&quot;CloseAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
 <span class="nc" id="L82">                        }</span>
 <span class="nc" id="L83">                    });</span>
 <span class="nc" id="L84">            bootstrap.add(item);</span>
