@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-plugin.postgres_connection_pool,info.smart_tools.smartactors.plugin.postges_connection_pool,PostgresConnectionPoolPlugin,108,0,4,0,33,0,7,0,5,0
+plugin.postgres_connection_pool,info.smart_tools.smartactors.plugin.postges_connection_pool,PostgresConnectionPoolPlugin,110,0,4,0,34,0,7,0,5,0

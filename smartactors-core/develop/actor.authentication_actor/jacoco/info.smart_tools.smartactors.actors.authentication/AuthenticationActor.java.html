@@ -28,7 +28,7 @@ public class AuthenticationActor {
 <span class="fc" id="L28">            String requestAuthInfo = message.getRequestUserAgent();</span>
 <span class="fc" id="L29">            String sessionAuthInfo = message.getSessionUserAgent();</span>
 <span class="pc bpc" id="L30" title="1 of 4 branches missed.">            if (requestAuthInfo == null || !Objects.equals(requestAuthInfo, sessionAuthInfo)) {</span>
-<span class="fc" id="L31">                throw new AuthFailException(&quot;Failed to validate session&quot;);</span>
+<span class="fc" id="L31">                throw new AuthFailException(&quot;Failed to validate session: authentication info is incorrect&quot;);</span>
             }
 <span class="nc" id="L33">        } catch (ReadValueException e) {</span>
 <span class="nc" id="L34">            throw new TaskExecutionException(&quot;Failed to validate session&quot;, e);</span>

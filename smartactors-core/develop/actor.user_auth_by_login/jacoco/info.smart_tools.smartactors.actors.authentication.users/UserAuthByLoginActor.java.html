@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UserAuthByLoginActor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.user_auth_by_login</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.authentication.users</a> &gt; <span class="el_source">UserAuthByLoginActor.java</span></div><h1>UserAuthByLoginActor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.authentication.users;
+
+import info.smart_tools.smartactors.actors.authentication.users.exceptions.AuthenticateUserException;
+import info.smart_tools.smartactors.actors.authentication.users.wrappers.IUserAuthByLoginMessage;
+import info.smart_tools.smartactors.actors.authentication.users.wrappers.IUserAuthByLoginParams;
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.ipool.IPool;
+import info.smart_tools.smartactors.core.itask.ITask;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.pool_guard.IPoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.PoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.exception.PoolGuardException;
+import info.smart_tools.smartactors.core.security.encoding.encoders.EncodingException;
+import info.smart_tools.smartactors.core.security.encoding.encoders.IPasswordEncoder;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Actor for authenticate users by given login and password.
+ *
+ */
+public class UserAuthByLoginActor {
+    /** Name of a some collection in database where is users documents. */
+    private String collection;
+    private IPool connectionPool;
+
+    /** Encoder for obtaining a some hash of given user's password. */
+    private IPasswordEncoder passwordEncoder;
+
+    private IField loginF;
+    private IField passwordF;
+    private IField equalsF;
+
+    /* ToDo : Needs message source. */
+    private static final String AUTH_ERROR_MSG = &quot;User authentication has been failed because: &quot;;
+
+    private static final String AUTH_ERROR_RESPONSE_MSG = &quot;Такой почтовый адрес не зарегистрирован, либо пароль неверный. &quot; +
+            &quot;Если Вы уверены, что регистрировались на нашем сайте, но не помните пароль, &quot; +
+            &quot;то попробуйте его восстановить ниже по форме. Просто введите свой электронный адрес, &quot; +
+            &quot;и Вам на электронную почту придет ссылка. Пройдя по ссылке, &quot; +
+            &quot;Вы сможете ввести новый удобный для Вас пароль.&quot;;
+
+    private static final String INTERNAL_ERROR_MSG = &quot;Во время обработки запроса произошла ошибка. &quot; +
+            &quot;Пожалуйста попробуйте повторить операцию. Приносим свои извинения за доставленные неудобства.&quot;;
+
+    /**
+     * Default constructor for actor.
+     * Necessary for resolving from IOC.
+     *
+     * @param params - parameters for initialize actor.
+     *               All parameters must not be a NULL or empty.
+     * @see IUserAuthByLoginParams
+     *
+     * @throws InvalidArgumentException when given parameters is invalid.
+     */
+<span class="nc" id="L68">    public UserAuthByLoginActor(@Nonnull final IUserAuthByLoginParams params) throws InvalidArgumentException {</span>
+        try {
+<span class="nc" id="L70">            checkParams(params);</span>
+<span class="nc" id="L71">            this.collection = params.getCollection();</span>
+<span class="nc" id="L72">            this.connectionPool = params.getConnectionPool();</span>
+
+<span class="nc" id="L74">            loginF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;email&quot;);</span>
+<span class="nc" id="L75">            passwordF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;пароль&quot;);</span>
+<span class="nc" id="L76">            equalsF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;$eq&quot;);</span>
+
+<span class="nc" id="L78">            this.passwordEncoder = IOC.resolve(</span>
+<span class="nc" id="L79">                    Keys.getOrAdd(&quot;PasswordEncoder&quot;),</span>
+<span class="nc" id="L80">                    params.getAlgorithm(),</span>
+<span class="nc" id="L81">                    params.getEncoder(),</span>
+<span class="nc" id="L82">                    params.getCharset()</span>
+            );
+<span class="nc" id="L84">        } catch (ResolutionException | ReadValueException e) {</span>
+<span class="nc" id="L85">            throw new InvalidArgumentException(e.getMessage(), e);</span>
+<span class="nc" id="L86">        }</span>
+<span class="nc" id="L87">    }</span>
+
+    /**
+     * Try to authenticate a some user by given login and password.
+     * If authentication is successfully sets the status &quot;SUCCESS&quot; into the given auth message,
+     *              else sets status &quot;FAIL&quot; and error message into the given auth message.
+     *
+     * @param message - message for authentication with user's login and password.
+     *                The user's login and password must not be a NULL or empty.
+     * @see IUserAuthByLoginMessage
+     *
+     * @throws AuthenticateUserException when:
+     *                1. User with given login hasn't registered in the system.
+     *                2. Given password is invalid.
+     *                3. In the system has a few users with given login.
+     *                4. In the system user with given login saved without password.
+     *                5. A wrong work of search database task : task not prepare a query.
+     */
+    public void authenticateUser(@Nonnull final IUserAuthByLoginMessage message)
+            throws AuthenticateUserException {
+<span class="nc" id="L107">        try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L108">            checkMsg(message);</span>
+<span class="nc" id="L109">            IObject user = resolveLogin(message, poolGuard);</span>
+<span class="nc" id="L110">            validatePassword(message, user);</span>
+<span class="nc" id="L111">            setSuccessResponse(message);</span>
+<span class="nc bnc" id="L112" title="All 8 branches missed.">        } catch (PoolGuardException | ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+            try {
+<span class="nc" id="L114">                setFailResponse(message, INTERNAL_ERROR_MSG);</span>
+<span class="nc" id="L115">            } catch (ChangeValueException ignored) { }</span>
+<span class="nc" id="L116">            throw new AuthenticateUserException(AUTH_ERROR_MSG + e.getMessage(), e);</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">    }</span>
+
+    private IObject resolveLogin(final IUserAuthByLoginMessage message, final IPoolGuard connectionPoolGuard)
+        throws AuthenticateUserException {
+
+        try {
+<span class="nc" id="L124">            IObject searchQuery = prepareQueryParams(message);</span>
+<span class="nc" id="L125">            List&lt;IObject&gt; items = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L126">            ITask searchTask = IOC.resolve(</span>
+<span class="nc" id="L127">                Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
+<span class="nc" id="L128">                connectionPoolGuard.getObject(),</span>
+                collection,
+                searchQuery,
+                (IAction&lt;IObject[]&gt;) foundDocs -&gt; {
+                    try {
+<span class="nc" id="L133">                        items.addAll(Arrays.asList(foundDocs));</span>
+<span class="nc" id="L134">                    } catch (Exception e) {</span>
+<span class="nc" id="L135">                        throw new ActionExecuteException(e);</span>
+<span class="nc" id="L136">                    }</span>
+<span class="nc" id="L137">                }</span>
+            );
+
+<span class="nc" id="L140">            searchTask.execute();</span>
+
+<span class="nc" id="L142">            validateSearchResult(items, message);</span>
+
+<span class="nc" id="L144">            return items.get(0);</span>
+<span class="nc" id="L145">        } catch (ResolutionException | TaskExecutionException | InvalidArgumentException | ChangeValueException | ReadValueException e) {</span>
+<span class="nc" id="L146">            throw new AuthenticateUserException(AUTH_ERROR_MSG + e.getMessage(), e);</span>
+        }
+    }
+
+    private void validateSearchResult(final List&lt;IObject&gt; searchResult, final IUserAuthByLoginMessage message)
+        throws AuthenticateUserException {
+
+        try {
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (searchResult.isEmpty()) {</span>
+<span class="nc" id="L155">                setFailResponse(message, AUTH_ERROR_RESPONSE_MSG);</span>
+<span class="nc" id="L156">                throw new AuthenticateUserException(AUTH_ERROR_MSG +</span>
+<span class="nc" id="L157">                        &quot;user with login: [&quot; + message.getLogin() + &quot;] doesn't exist!&quot;);</span>
+            }
+<span class="nc bnc" id="L159" title="All 2 branches missed.">            if (searchResult.size() &gt; 1) {</span>
+<span class="nc" id="L160">                setFailResponse(message, AUTH_ERROR_RESPONSE_MSG);</span>
+<span class="nc" id="L161">                throw new AuthenticateUserException(AUTH_ERROR_MSG +</span>
+<span class="nc" id="L162">                        &quot;too many users with login: [&quot; + message.getLogin() + &quot;]!&quot;);</span>
+            }
+<span class="nc" id="L164">        } catch (ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L165">            throw new AuthenticateUserException(AUTH_ERROR_MSG + e.getMessage(), e);</span>
+<span class="nc" id="L166">        }</span>
+<span class="nc" id="L167">    }</span>
+
+    private void validatePassword(final IUserAuthByLoginMessage message, final IObject user)
+            throws AuthenticateUserException {
+        try {
+<span class="nc" id="L172">            String password = passwordF.in(user);</span>
+<span class="nc bnc" id="L173" title="All 4 branches missed.">            if (password == null || password.isEmpty()) {</span>
+<span class="nc" id="L174">                setFailResponse(message, AUTH_ERROR_RESPONSE_MSG);</span>
+<span class="nc" id="L175">                throw new AuthenticateUserException(AUTH_ERROR_MSG +</span>
+<span class="nc" id="L176">                        &quot;user with login: [&quot; + message.getLogin() + &quot;] hasn't password!&quot;);</span>
+            }
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            if (!password.equals(passwordEncoder.encode(message.getPassword()))) {</span>
+<span class="nc" id="L179">                setFailResponse(message, AUTH_ERROR_RESPONSE_MSG);</span>
+<span class="nc" id="L180">                throw new AuthenticateUserException(AUTH_ERROR_MSG +</span>
+<span class="nc" id="L181">                        &quot;Invalid password: [&quot; + message.getPassword() + &quot;] for login: [&quot; + message.getLogin() + &quot;]!&quot;);</span>
+            }
+<span class="nc" id="L183">        } catch (EncodingException | InvalidArgumentException | ReadValueException | ChangeValueException e) {</span>
+<span class="nc" id="L184">            throw new AuthenticateUserException(AUTH_ERROR_MSG + e.getMessage(), e);</span>
+<span class="nc" id="L185">        }</span>
+<span class="nc" id="L186">    }</span>
+
+    private IObject prepareQueryParams(final IUserAuthByLoginMessage message)
+        throws ResolutionException, ChangeValueException, InvalidArgumentException, ReadValueException {
+
+<span class="nc" id="L191">        IObject filter = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L192">        IObject page = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L193">        IObject searchQuery = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="nc" id="L195">        IField collectionNameF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L196">        collectionNameF.out(searchQuery, this.collection);</span>
+<span class="nc" id="L197">        IField pageSizeF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;size&quot;);</span>
+<span class="nc" id="L198">        pageSizeF.out(page, 1);</span>
+<span class="nc" id="L199">        IField pageNumberF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;number&quot;);</span>
+<span class="nc" id="L200">        pageNumberF.out(page, 1);</span>
+<span class="nc" id="L201">        IField pageF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;page&quot;);</span>
+<span class="nc" id="L202">        pageF.out(searchQuery, page);</span>
+<span class="nc" id="L203">        IField filterF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;filter&quot;);</span>
+<span class="nc" id="L204">        filterF.out(searchQuery, filter);</span>
+
+<span class="nc" id="L206">        IObject loginObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L207">        equalsF.out(loginObject, message.getLogin());</span>
+<span class="nc" id="L208">        loginF.out(filter, loginObject);</span>
+
+<span class="nc" id="L210">        return searchQuery;</span>
+    }
+
+    private void setSuccessResponse(final IUserAuthByLoginMessage message) throws ChangeValueException {
+<span class="nc" id="L214">        message.setAuthStatus(&quot;SUCCESS&quot;);</span>
+<span class="nc" id="L215">        message.setAuthMessage(&quot;&quot;);</span>
+<span class="nc" id="L216">    }</span>
+
+    private void setFailResponse(final IUserAuthByLoginMessage message, final String errorMessage) throws ChangeValueException {
+<span class="nc" id="L219">        message.setAuthStatus(&quot;FAIL&quot;);</span>
+<span class="nc" id="L220">        message.setAuthMessage(errorMessage);</span>
+<span class="nc" id="L221">    }</span>
+
+    private void checkParams(final IUserAuthByLoginParams params) throws InvalidArgumentException, ReadValueException {
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        if (isNullOrEmpty(params.getCollection())) {</span>
+<span class="nc" id="L225">            throw new InvalidArgumentException(&quot;Invalid collection name!&quot;);</span>
+        }
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        if (isNullOrEmpty(params.getAlgorithm())) {</span>
+<span class="nc" id="L228">            throw new InvalidArgumentException(&quot;Invalid algorithm for password encoding!&quot;);</span>
+        }
+<span class="nc" id="L230">    }</span>
+
+    private void checkMsg(final IUserAuthByLoginMessage msg) throws InvalidArgumentException, ReadValueException, ChangeValueException {
+<span class="nc bnc" id="L233" title="All 4 branches missed.">        if (isNullOrEmpty(msg.getLogin()) || isNullOrEmpty(msg.getPassword())) {</span>
+<span class="nc" id="L234">            setFailResponse(msg, AUTH_ERROR_RESPONSE_MSG);</span>
+<span class="nc" id="L235">            throw new InvalidArgumentException(&quot;Invalid message format!&quot;);</span>
+        }
+<span class="nc" id="L237">    }</span>
+
+    private boolean isNullOrEmpty(final String str) {
+<span class="nc bnc" id="L240" title="All 4 branches missed.">        return str == null || str.isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

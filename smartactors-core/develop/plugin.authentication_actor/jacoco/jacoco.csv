@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-plugin.authentication_actor,info.smart_tools.smartactors.plugin.authentication,AuthenticationActorPlugin,75,0,0,0,26,0,4,0,4,0
+plugin.authentication_actor,info.smart_tools.smartactors.plugin.authentication,AuthenticationActorPlugin,73,0,0,0,25,0,4,0,4,0

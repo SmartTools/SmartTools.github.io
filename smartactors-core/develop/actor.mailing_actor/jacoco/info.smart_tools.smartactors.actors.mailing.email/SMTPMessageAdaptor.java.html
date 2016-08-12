@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SMTPMessageAdaptor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.mailing_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.mailing.email</a> &gt; <span class="el_source">SMTPMessageAdaptor.java</span></div><h1>SMTPMessageAdaptor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.mailing.email;
+
+import me.normanmaurer.niosmtp.SMTPMessage;
+
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class SMTPMessageAdaptor implements SMTPMessage {
+    private MimeMessage mimeMessage;
+    private MimeMultipart mimeMessageContent;
+
+<span class="fc" id="L20">    private static Properties sessionProperties = new Properties();</span>
+
+    // Constructor
+
+    public SMTPMessageAdaptor(MimeMessage message)
+<span class="fc" id="L25">        throws MessagingException {</span>
+<span class="fc" id="L26">        mimeMessage = message;</span>
+<span class="fc" id="L27">        mimeMessageContent = new MimeMultipart();</span>
+<span class="fc" id="L28">        mimeMessage.setContent(mimeMessageContent);</span>
+<span class="fc" id="L29">    }</span>
+
+    public static MimeMessage createMimeMessage() {
+<span class="fc" id="L32">        return new MimeMessage(Session.getDefaultInstance(sessionProperties, null));</span>
+    }
+
+    // Methods of niosmtp.SMTPMessage
+
+    @Override
+    public InputStream get7bit() {
+<span class="fc" id="L39">        return getContentStream();</span>
+    }
+
+    @Override
+    public InputStream get8Bit() {
+<span class="fc" id="L44">        return getContentStream();</span>
+    }
+
+    // Own methods
+
+    public void addPart(MimeBodyPart part)
+            throws MessagingException {
+<span class="nc" id="L51">        mimeMessageContent.addBodyPart(part);</span>
+<span class="nc" id="L52">    }</span>
+
+    public MimeMessage getMimeMessage() {
+<span class="nc" id="L55">        return mimeMessage;</span>
+    }
+
+    // Private area
+
+    private InputStream getContentStream() {
+        try {
+<span class="fc" id="L62">            ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L63">            mimeMessage.writeTo(os);</span>
+<span class="fc" id="L64">            return new ByteArrayInputStream(os.toByteArray());</span>
+<span class="nc" id="L65">        } catch (IOException | MessagingException e) {</span>
+<span class="nc" id="L66">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

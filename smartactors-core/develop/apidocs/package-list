@@ -1,3 +1,6 @@
+info.smart_tools.smartactors.actor.change_password
+info.smart_tools.smartactors.actor.change_password.exception
+info.smart_tools.smartactors.actor.change_password.wrapper
 info.smart_tools.smartactors.actor.exception_handler_actor
 info.smart_tools.smartactors.actor.exception_handler_actor.wrapper
 info.smart_tools.smartactors.actor.response_sender_actor
@@ -6,6 +9,9 @@ info.smart_tools.smartactors.actor.response_sender_actor.wrapper
 info.smart_tools.smartactors.actors
 info.smart_tools.smartactors.actors.authentication
 info.smart_tools.smartactors.actors.authentication.exception
+info.smart_tools.smartactors.actors.authentication.users
+info.smart_tools.smartactors.actors.authentication.users.exceptions
+info.smart_tools.smartactors.actors.authentication.users.wrappers
 info.smart_tools.smartactors.actors.authentication.wrapper
 info.smart_tools.smartactors.actors.check_user_by_email
 info.smart_tools.smartactors.actors.check_user_by_email.exception
@@ -17,6 +23,9 @@ info.smart_tools.smartactors.actors.close_async_operation.wrapper
 info.smart_tools.smartactors.actors.create_async_operation
 info.smart_tools.smartactors.actors.create_async_operation.exception
 info.smart_tools.smartactors.actors.create_async_operation.wrapper
+info.smart_tools.smartactors.actors.create_session
+info.smart_tools.smartactors.actors.create_session.exception
+info.smart_tools.smartactors.actors.create_session.wrapper
 info.smart_tools.smartactors.actors.create_user
 info.smart_tools.smartactors.actors.create_user.wrapper
 info.smart_tools.smartactors.actors.exception
@@ -27,6 +36,10 @@ info.smart_tools.smartactors.actors.get_form
 info.smart_tools.smartactors.actors.get_form.exception
 info.smart_tools.smartactors.actors.get_form.strategy
 info.smart_tools.smartactors.actors.get_form.wrapper
+info.smart_tools.smartactors.actors.mailing
+info.smart_tools.smartactors.actors.mailing.email
+info.smart_tools.smartactors.actors.mailing.exception
+info.smart_tools.smartactors.actors.mailing.wrapper
 info.smart_tools.smartactors.actors.sample_other_actor
 info.smart_tools.smartactors.actors.sample_other_actor.exception
 info.smart_tools.smartactors.actors.sample_other_actor.wrapper
@@ -72,8 +85,10 @@ info.smart_tools.smartactors.core.db_storage.exceptions
 info.smart_tools.smartactors.core.db_storage.interfaces
 info.smart_tools.smartactors.core.db_storage.interfaces.wrapper
 info.smart_tools.smartactors.core.db_storage.utils
+info.smart_tools.smartactors.core.dependency_resolving_feature_manager
 info.smart_tools.smartactors.core.deserialize_strategy_post_json
 info.smart_tools.smartactors.core.ds_object
+info.smart_tools.smartactors.core.encoding.codec
 info.smart_tools.smartactors.core.endpoint_handler
 info.smart_tools.smartactors.core.environment_handler
 info.smart_tools.smartactors.core.examples
@@ -236,6 +251,10 @@ info.smart_tools.smartactors.core.scope_guard
 info.smart_tools.smartactors.core.scope_guard.exception
 info.smart_tools.smartactors.core.scope_provider
 info.smart_tools.smartactors.core.scope_provider_container
+info.smart_tools.smartactors.core.security.encoding
+info.smart_tools.smartactors.core.security.encoding.codecs
+info.smart_tools.smartactors.core.security.encoding.decoders
+info.smart_tools.smartactors.core.security.encoding.encoders
 info.smart_tools.smartactors.core.server_with_iobject
 info.smart_tools.smartactors.core.server_with_ioc
 info.smart_tools.smartactors.core.server_with_plugin_loader
@@ -259,6 +278,7 @@ info.smart_tools.smartactors.plugin.authentication
 info.smart_tools.smartactors.plugin.cached_collection
 info.smart_tools.smartactors.plugin.chain_call_receiver
 info.smart_tools.smartactors.plugin.chain_choice_strategy
+info.smart_tools.smartactors.plugin.change_password_actor
 info.smart_tools.smartactors.plugin.check_user_by_email_actor
 info.smart_tools.smartactors.plugin.check_user_is_new_actor
 info.smart_tools.smartactors.plugin.check_validity_async_operation_actor
@@ -267,15 +287,19 @@ info.smart_tools.smartactors.plugin.collection_name
 info.smart_tools.smartactors.plugin.compile_query
 info.smart_tools.smartactors.plugin.configuration_manager
 info.smart_tools.smartactors.plugin.configuration_object
+info.smart_tools.smartactors.plugin.connection_options
 info.smart_tools.smartactors.plugin.create_async_operation
+info.smart_tools.smartactors.plugin.create_session
 info.smart_tools.smartactors.plugin.create_user
 info.smart_tools.smartactors.plugin.dsobject
+info.smart_tools.smartactors.plugin.encoder
 info.smart_tools.smartactors.plugin.exception_handler_actor
 info.smart_tools.smartactors.plugin.fieldname
 info.smart_tools.smartactors.plugin.get_async_operation
 info.smart_tools.smartactors.plugin.get_cookie_rule
 info.smart_tools.smartactors.plugin.get_form_actor
 info.smart_tools.smartactors.plugin.get_header_from_request_rule
+info.smart_tools.smartactors.plugin.get_query_parameter_rule
 info.smart_tools.smartactors.plugin.handler_routing_receiver_creator
 info.smart_tools.smartactors.plugin.http_endpoint
 info.smart_tools.smartactors.plugin.https_endpoint
@@ -286,6 +310,7 @@ info.smart_tools.smartactors.plugin.iobject_simple_impl
 info.smart_tools.smartactors.plugin.ioc_keys
 info.smart_tools.smartactors.plugin.ioc_simple_container
 info.smart_tools.smartactors.plugin.load_scope_povider
+info.smart_tools.smartactors.plugin.mailing_actor
 info.smart_tools.smartactors.plugin.map_router
 info.smart_tools.smartactors.plugin.messaging_identifiers
 info.smart_tools.smartactors.plugin.postges_connection_pool
@@ -306,6 +331,8 @@ info.smart_tools.smartactors.plugin.standard_object_creators
 info.smart_tools.smartactors.plugin.starter
 info.smart_tools.smartactors.plugin.subscribe_scope_provider_on_scope_creation
 info.smart_tools.smartactors.plugin.test_jar
+info.smart_tools.smartactors.plugin.user_auth_by_login_actor
+info.smart_tools.smartactors.plugin.validation_form_actor
 info.smart_tools.smartactors.plugin.wds_object
 info.smart_tools.smartactors.plugin.wrapper_generator
 info.smart_tools.smartactors.plugins.message_processor_and_sequence
@@ -317,3 +344,4 @@ info.smart_tools.smartactors.strategy.respons_status_extractor
 info.smart_tools.smartactors.strategy.to_wrapper_converter_strategy
 info.smart_tools.smartactors.transformation_rules.get_cookie_from_request
 info.smart_tools.smartactors.transformation_rules.get_header_from_request
+info.smart_tools.smartactors.transformation_rules.get_query_parameter

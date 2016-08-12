@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetAsyncOperationPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.get_async_operation</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.get_async_operation</a> &gt; <span class="el_source">GetAsyncOperationPlugin.java</span></div><h1>GetAsyncOperationPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.get_async_operation;
 
 import info.smart_tools.smartactors.actors.get_async_operation.GetAsyncOperationActor;
+import info.smart_tools.smartactors.actors.get_async_operation.exception.GetAsyncOperationActorException;
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
@@ -16,6 +17,8 @@ import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
+import java.util.Arrays;
+
 /**
  * Plugin for {@link GetAsyncOperationActor}
  */
@@ -27,36 +30,43 @@ public class GetAsyncOperationPlugin implements IPlugin {
      * Constructor for GetAsyncOperationPlugin
      * @param bootstrap the bootstrap
      */
-<span class="nc" id="L30">    public GetAsyncOperationPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L31">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L33">    public GetAsyncOperationPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L34">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L35">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L37">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateGetAsyncOperationActor&quot;);</span>
+<span class="nc" id="L40">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;CreateGetAsyncOperationActor&quot;);</span>
 
-<span class="nc" id="L39">            item</span>
-<span class="nc" id="L40">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L41">                    .process(() -&gt; {</span>
+<span class="nc" id="L42">            item</span>
+<span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L44">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L45">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L43">                            IKey actorKey = Keys.getOrAdd(GetAsyncOperationActor.class.getCanonicalName());</span>
-<span class="nc" id="L44">                            IOC.register(actorKey, new ApplyFunctionToArgumentsStrategy(</span>
-<span class="nc" id="L45">                                    (args) -&gt; new GetAsyncOperationActor((IObject) args[0])</span>
+<span class="nc" id="L47">                            IKey actorKey = Keys.getOrAdd(GetAsyncOperationActor.class.getCanonicalName());</span>
+<span class="nc" id="L48">                            IOC.register(actorKey, new ApplyFunctionToArgumentsStrategy(</span>
+                                    (args) -&gt; {
+                                        try {
+<span class="nc" id="L51">                                            return new GetAsyncOperationActor((IObject) args[0]);</span>
+<span class="nc" id="L52">                                        } catch (GetAsyncOperationActorException e) {</span>
+<span class="nc" id="L53">                                            throw new RuntimeException(&quot;Can't create GetAsyncOperationActor with params: &quot; + Arrays.toString(args), e);</span>
+                                        }
+                                    }
                             ));
-<span class="nc" id="L47">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L48">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't get GetAsyncOperationActor key&quot;, e);</span>
-<span class="nc" id="L49">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L50">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L51">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L52">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L53">                        }</span>
-<span class="nc" id="L54">                    });</span>
-<span class="nc" id="L55">            bootstrap.add(item);</span>
-<span class="nc" id="L56">        } catch (Exception e) {</span>
-<span class="nc" id="L57">            throw new PluginException(&quot;Can't load GetAsyncOperationPlugin&quot;, e);</span>
-<span class="nc" id="L58">        }</span>
+<span class="nc" id="L57">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L58">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't get GetAsyncOperationActor key&quot;, e);</span>
+<span class="nc" id="L59">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L60">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L61">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L62">                            throw new ActionExecuteException(&quot;GetAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L63">                        }</span>
+<span class="nc" id="L64">                    });</span>
+<span class="nc" id="L65">            bootstrap.add(item);</span>
+<span class="nc" id="L66">        } catch (Exception e) {</span>
+<span class="nc" id="L67">            throw new PluginException(&quot;Can't load GetAsyncOperationPlugin&quot;, e);</span>
+<span class="nc" id="L68">        }</span>
 
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

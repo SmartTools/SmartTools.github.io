@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-plugin.create_async_operation_plugin,info.smart_tools.smartactors.plugin.create_async_operation,CreateAsyncOpPlugin,77,0,0,0,25,0,4,0,4,0
+plugin.create_async_operation_plugin,info.smart_tools.smartactors.plugin.create_async_operation,CreateAsyncOpPlugin,79,0,0,0,26,0,4,0,4,0

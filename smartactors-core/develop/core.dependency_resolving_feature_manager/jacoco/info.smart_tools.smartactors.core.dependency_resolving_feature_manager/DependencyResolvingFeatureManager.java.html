@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DependencyResolvingFeatureManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.dependency_resolving_feature_manager</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.dependency_resolving_feature_manager</a> &gt; <span class="el_source">DependencyResolvingFeatureManager.java</span></div><h1>DependencyResolvingFeatureManager.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.dependency_resolving_feature_manager;
+
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager;
+import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
+import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ipath.IPath;
+import info.smart_tools.smartactors.core.path.Path;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.graph.DependencyFilter;
+import org.eclipse.aether.impl.DefaultServiceLocator;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
+import org.eclipse.aether.spi.connector.transport.TransporterFactory;
+import org.eclipse.aether.transport.file.FileTransporterFactory;
+import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
+import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.filter.DependencyFilterUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Implementation of feature manager that automatically resolves dependencies of required items (using Aether library).
+ */
+public class DependencyResolvingFeatureManager implements IFeatureManager {
+    private String localRepoPath;
+    private Map&lt;String, String&gt; remotes;
+    private RepositorySystem repositorySystem;
+    private RepositorySystemSession session;
+    private final Object lock;
+    private List&lt;RemoteRepository&gt; remoteRepositories;
+
+    /**
+     * The constructor.
+     *
+     * @param localRepoPath    path to local repository
+     * @param remotes          URL's of remote repositories (map from repository name to URL)
+     * @throws InvalidArgumentException if {@code localRepoPath} is {@code null}
+     * @throws InvalidArgumentException if {@code remotes} is {@code null}
+     */
+    public DependencyResolvingFeatureManager(final String localRepoPath, final Map&lt;String, String&gt; remotes)
+<span class="fc" id="L56">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (null == localRepoPath) {</span>
+<span class="fc" id="L58">            throw new InvalidArgumentException(&quot;Local repository path should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (null == remotes) {</span>
+<span class="fc" id="L62">            throw new InvalidArgumentException(&quot;List of remote repositories URLs should not be null.&quot;);</span>
+        }
+
+<span class="fc" id="L65">        this.localRepoPath = localRepoPath;</span>
+<span class="fc" id="L66">        this.remotes = remotes;</span>
+<span class="fc" id="L67">        this.lock = new Object();</span>
+
+<span class="fc" id="L69">        setupRemotes();</span>
+<span class="fc" id="L70">        newRepositorySystem();</span>
+<span class="fc" id="L71">        newSession();</span>
+<span class="fc" id="L72">    }</span>
+
+    @Override
+    public IFeature newFeature(final String name, final IFilesystemTracker filesystemTracker) throws FeatureManagementException {
+        try {
+<span class="fc" id="L77">            return new Feature(this, name);</span>
+<span class="fc" id="L78">        } catch (InvalidArgumentException e) {</span>
+<span class="fc" id="L79">            throw new FeatureManagementException(&quot;Cold not create a feature.&quot;, e);</span>
+        }
+    }
+
+    private void newRepositorySystem() {
+<span class="fc" id="L84">        DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();</span>
+
+<span class="fc" id="L86">        locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);</span>
+<span class="fc" id="L87">        locator.addService(TransporterFactory.class, FileTransporterFactory.class);</span>
+<span class="fc" id="L88">        locator.addService(TransporterFactory.class, HttpTransporterFactory.class);</span>
+<span class="fc" id="L89">        locator.addService(TransporterFactory.class, WagonTransporterFactory.class);</span>
+
+<span class="fc" id="L91">        repositorySystem = locator.getService(RepositorySystem.class);</span>
+<span class="fc" id="L92">    }</span>
+
+    private void newSession() {
+<span class="fc" id="L95">        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();</span>
+
+<span class="fc" id="L97">        LocalRepository localRepo = new LocalRepository(localRepoPath);</span>
+<span class="fc" id="L98">        session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(session, localRepo));</span>
+
+<span class="fc" id="L100">        this.session = session;</span>
+<span class="fc" id="L101">    }</span>
+
+    private void setupRemotes() {
+<span class="fc" id="L104">        final List&lt;RemoteRepository&gt; remoteRepositories = new ArrayList&lt;&gt;(remotes.size());</span>
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; remote : remotes.entrySet()) {</span>
+<span class="fc" id="L107">            remoteRepositories.add(new RemoteRepository.Builder(remote.getKey(), &quot;default&quot;, remote.getValue()).build());</span>
+<span class="fc" id="L108">        }</span>
+
+<span class="fc" id="L110">        this.remoteRepositories = remoteRepositories;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Resolve artifacts and their dependencies by given identifiers.
+     *
+     * @param artifactIds    list of artifact identifiers in format &quot;group:id:version&quot;
+     * @return list of paths to resolved artifacts and their dependencies
+     * @throws FeatureManagementException if any error occurs
+     */
+    List&lt;IPath&gt; resolveArtifacts(final List&lt;String&gt; artifactIds) throws FeatureManagementException {
+<span class="nc" id="L121">        synchronized (lock) {</span>
+            try {
+<span class="nc" id="L123">                return resolveArtifactsInner(artifactIds);</span>
+<span class="nc" id="L124">            } catch (Exception e) {</span>
+<span class="nc" id="L125">                throw new FeatureManagementException(&quot;Could not resolve artifacts.&quot;, e);</span>
+            }
+<span class="nc" id="L127">        }</span>
+    }
+
+    private List&lt;IPath&gt; resolveArtifactsInner(final List&lt;String&gt; artifactIds) throws Exception {
+<span class="nc" id="L131">        final String scope = JavaScopes.RUNTIME;</span>
+<span class="nc" id="L132">        CollectRequest collectRequest = new CollectRequest();</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        for (String artifactId : artifactIds) {</span>
+<span class="nc" id="L135">            collectRequest.addDependency(new Dependency(new DefaultArtifact(artifactId), scope));</span>
+<span class="nc" id="L136">        }</span>
+
+<span class="nc" id="L138">        collectRequest.setRepositories(remoteRepositories);</span>
+
+<span class="nc" id="L140">        DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(scope);</span>
+<span class="nc" id="L141">        DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);</span>
+
+<span class="nc" id="L143">        List&lt;ArtifactResult&gt; artifactResults =</span>
+<span class="nc" id="L144">                repositorySystem.resolveDependencies(session, dependencyRequest).getArtifactResults();</span>
+
+<span class="nc" id="L146">        List&lt;IPath&gt; paths = new ArrayList&lt;&gt;(artifactResults.size());</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for (ArtifactResult result : artifactResults) {</span>
+<span class="nc" id="L149">            paths.add(new Path(result.getArtifact().getFile()));</span>
+<span class="nc" id="L150">        }</span>
+
+<span class="nc" id="L152">        return paths;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

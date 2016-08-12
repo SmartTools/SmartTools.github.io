@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>MessagePartCreators xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/info/smart_tools/smartactors/actors/mailing/email/MessagePartCreators.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.actors.mailing.email;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.actors.mailing.exception.PartCreatorException;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.field.Field;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ifield.IField;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.named_keys_storage.Keys;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> javax.activation.DataHandler;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> javax.activation.DataSource;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> javax.activation.FileDataSource;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> javax.mail.MessagingException;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> javax.mail.internet.MimeBodyPart;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../info/smart_tools/smartactors/actors/mailing/email/MessagePartCreators.html">MessagePartCreators</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String, MessagePartCreator&gt; creatorsMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/field/Field.html">Field</a> partType_Part_F;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/field/Field.html">Field</a> partText_TextPart_F;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/field/Field.html">Field</a> partMime_Part_F;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/field/Field.html">Field</a> sourcePath_FilePart_F;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../info/smart_tools/smartactors/core/field/Field.html">Field</a> attachmentName_FilePart_F;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addAllPartsTo(<strong class="jxr_keyword">final</strong> <a href="../../../../../../info/smart_tools/smartactors/actors/mailing/email/SMTPMessageAdaptor.html">SMTPMessageAdaptor</a> smtpMessage, <strong class="jxr_keyword">final</strong> <a href="../../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> context, <strong class="jxr_keyword">final</strong> List&lt;IObject&gt; parts) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">for</strong> (IObject part : parts) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>              <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>                  creatorsMap
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>                          .get(partType_Part_F.in(part))
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>                          .addPartTo(smtpMessage, context, part);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>              } <strong class="jxr_keyword">catch</strong> (NullPointerException e) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/actors/mailing/exception/PartCreatorException.html">PartCreatorException</a>(<span class="jxr_string">"Part type not found."</span>, e);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>              } <strong class="jxr_keyword">catch</strong> (ChangeValueException | ReadValueException | MessagingException e) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../info/smart_tools/smartactors/actors/mailing/exception/PartCreatorException.html">PartCreatorException</a>(<span class="jxr_string">"Failed to create message part."</span>, e);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>              } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"Failed to extract type"</span>, e);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>              }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> add(String name, <a href="../../../../../../info/smart_tools/smartactors/actors/mailing/email/MessagePartCreator.html">MessagePartCreator</a> creator) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          creatorsMap.put(name, creator);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              partType_Part_F = IOC.resolve(Keys.getOrAdd(IField.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"type"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              partText_TextPart_F = IOC.resolve(Keys.getOrAdd(IField.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"text"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>              partMime_Part_F = IOC.resolve(Keys.getOrAdd(IField.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"mime"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>              sourcePath_FilePart_F = IOC.resolve(Keys.getOrAdd(IField.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"sourceFile"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              attachmentName_FilePart_F = IOC.resolve(Keys.getOrAdd(IField.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"attachmentName"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Failed to initialize fields"</span>, e);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          add(<span class="jxr_string">"text"</span>, (smtpMessage, context, partDescription) -&gt; {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  MimeBodyPart part = <strong class="jxr_keyword">new</strong> MimeBodyPart();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  part.setContent(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                          partText_TextPart_F.in(partDescription),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                          partMime_Part_F.in(partDescription));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  smtpMessage.addPart(part);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Failed to set part of email."</span>, e);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          });
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          add(<span class="jxr_string">"file"</span>, (smtpMessage, context, partDescription) -&gt; {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                  MimeBodyPart part = <strong class="jxr_keyword">new</strong> MimeBodyPart();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  DataSource dataSource = <strong class="jxr_keyword">new</strong> FileDataSource(
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                          (String) sourcePath_FilePart_F.in(partDescription));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  part.setDataHandler(<strong class="jxr_keyword">new</strong> DataHandler(dataSource));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  part.setFileName(
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          attachmentName_FilePart_F.in(partDescription));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  smtpMessage.addPart(part);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Failed to set file to mail"</span>, e);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          });
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2016. All rights reserved.</div>
+</body>
+</html>

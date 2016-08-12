@@ -24,10 +24,6 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     private IDatabaseTask task;
     private IStorageConnection connection;
 
-    private IField asyncDataField;
-    private IField doneFlagField;
-    private IField tokenField;
-    private IField expiredTimeField;
     private IField documentField;
     private IField collectionNameField;
     /**
@@ -35,20 +31,16 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
      * @param connection
      * @throws CreateAsyncOperationTask Throw when task can't be created (for example, when can't resolve some of field)
      */
-<span class="nc" id="L38">    public CreateAsyncOperationTask(final IStorageConnection connection) throws CreateAsyncOperationException {</span>
-<span class="nc" id="L39">        this.connection = connection;</span>
+<span class="nc" id="L34">    public CreateAsyncOperationTask(final IStorageConnection connection) throws CreateAsyncOperationException {</span>
+<span class="nc" id="L35">        this.connection = connection;</span>
 
         try {
-<span class="nc" id="L42">            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;asyncData&quot;);</span>
-<span class="nc" id="L43">            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;done&quot;);</span>
-<span class="nc" id="L44">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;token&quot;);</span>
-<span class="nc" id="L45">            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;expiredTime&quot;);</span>
-<span class="nc" id="L46">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
-<span class="nc" id="L47">            collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L48">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L49">            throw new CreateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
-<span class="nc" id="L50">        }</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L38">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="nc" id="L39">            collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L40">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L41">            throw new CreateAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L42">        }</span>
+<span class="nc" id="L43">    }</span>
 
     /**
      * @param query query object
@@ -63,22 +55,22 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-<span class="nc" id="L66">            task = IOC.resolve(</span>
-<span class="nc" id="L67">                    Keys.getOrAdd(&quot;db.collection.insert&quot;),</span>
+<span class="nc" id="L58">            task = IOC.resolve(</span>
+<span class="nc" id="L59">                    Keys.getOrAdd(&quot;db.collection.upsert&quot;),</span>
                     connection,
-<span class="nc" id="L69">                    collectionNameField.in(query),</span>
-<span class="nc" id="L70">                    documentField.in(query)</span>
+<span class="nc" id="L61">                    collectionNameField.in(query),</span>
+<span class="nc" id="L62">                    documentField.in(query)</span>
             );
-<span class="nc" id="L72">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L73">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
-<span class="nc" id="L74">        } catch (ReadValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L75">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
-<span class="nc" id="L76">        }</span>
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L64">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L65">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
+<span class="nc" id="L66">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L67">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L81">        this.task.execute();</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L73">        this.task.execute();</span>
+<span class="nc" id="L74">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateSessionActor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.create_session</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.create_session</a> &gt; <span class="el_source">CreateSessionActor.java</span></div><h1>CreateSessionActor.java</h1><pre class="source lang-java linenums">/**
+ * Contains CreateSessionActor
+ */
+package info.smart_tools.smartactors.actors.create_session;
+
+import info.smart_tools.smartactors.actors.create_session.exception.CreateSessionException;
+import info.smart_tools.smartactors.actors.create_session.wrapper.CreateSessionConfig;
+import info.smart_tools.smartactors.actors.create_session.wrapper.CreateSessionMessage;
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.ipool.IPool;
+import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
+import info.smart_tools.smartactors.core.itask.ITask;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.pool_guard.IPoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.PoolGuard;
+import info.smart_tools.smartactors.core.pool_guard.exception.PoolGuardException;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Actor check current session, if she's null create new session
+ */
+public class CreateSessionActor {
+    private String collectionName;
+    private IPool connectionPool;
+
+    private IField collectionNameF;
+    private IField pageSizeF;
+    private IField pageNumberF;
+    private IField pageF;
+    private IField filterF;
+
+    private IField sessionIdF;
+    private IField equalsF;
+    private IField authInfoF;
+
+    /**
+     * Constructor for CreateSessionActor
+     * @param config is any configurations
+     * @throws CreateSessionException for any occurred error
+     */
+<span class="nc" id="L52">    public CreateSessionActor(final CreateSessionConfig config) throws CreateSessionException {</span>
+        try {
+<span class="nc" id="L54">            collectionNameF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L55">            pageSizeF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;size&quot;);</span>
+<span class="nc" id="L56">            pageNumberF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;number&quot;);</span>
+<span class="nc" id="L57">            pageF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;page&quot;);</span>
+<span class="nc" id="L58">            filterF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;filter&quot;);</span>
+
+<span class="nc" id="L60">            sessionIdF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;sessionId&quot;);</span>
+<span class="nc" id="L61">            equalsF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;$eq&quot;);</span>
+<span class="nc" id="L62">            authInfoF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;authInfo&quot;);</span>
+
+<span class="nc" id="L64">            this.collectionName = config.getCollectionName();</span>
+<span class="nc" id="L65">            this.connectionPool = config.getConnectionPool();</span>
+<span class="nc" id="L66">        } catch (Exception e) {</span>
+<span class="nc" id="L67">            throw new CreateSessionException(&quot;Can't create Actor&quot;);</span>
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">    }</span>
+
+    /**
+     * Check current session, if she's null create new session
+     * @param inputMessage message for checking
+     * @throws CreateSessionException Calling when throws any exception inside CreateSessionActor
+     */
+    public void resolveSession(final CreateSessionMessage inputMessage) throws CreateSessionException {
+        try {
+<span class="nc" id="L78">            String sessionId = inputMessage.getSessionId();</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">            if (sessionId == null || sessionId.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L80">                IObject authInfo = inputMessage.getAuthInfo();</span>
+<span class="nc" id="L81">                IObject newSession = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L82">                authInfoF.out(newSession, authInfo);</span>
+<span class="nc" id="L83">                inputMessage.setSession(newSession);</span>
+<span class="nc" id="L84">            } else {</span>
+<span class="nc" id="L85">                try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {</span>
+<span class="nc" id="L86">                    IObject searchQuery = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+                    //TODO:: resolve with IOC
+<span class="nc" id="L89">                    IStorageConnection connection = (IStorageConnection) poolGuard.getObject();</span>
+<span class="nc" id="L90">                    prepareSearchQuery(searchQuery, inputMessage);</span>
+
+<span class="nc" id="L92">                    List&lt;IObject&gt; items = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L93">                    ITask searchTask = IOC.resolve(</span>
+<span class="nc" id="L94">                        Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
+                        connection,
+                        collectionName,
+                        searchQuery,
+                        (IAction&lt;IObject[]&gt;) foundDocs -&gt; {
+                            try {
+<span class="nc" id="L100">                                items.addAll(Arrays.asList(foundDocs));</span>
+<span class="nc" id="L101">                            } catch (Exception e) {</span>
+<span class="nc" id="L102">                                throw new ActionExecuteException(e);</span>
+<span class="nc" id="L103">                            }</span>
+<span class="nc" id="L104">                        }</span>
+                    );
+<span class="nc" id="L106">                    searchTask.execute();</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                    if (items.isEmpty()) {</span>
+                        //TODO:: Should we create new session here?
+<span class="nc" id="L110">                        return;</span>
+                    }
+<span class="nc" id="L112">                    IObject result = items.get(0);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                    if (result == null) {</span>
+<span class="nc" id="L114">                        throw new CreateSessionException(&quot;Find session is null&quot;);</span>
+                    }
+<span class="nc" id="L116">                    inputMessage.setSession(result);</span>
+
+<span class="nc bnc" id="L118" title="All 12 branches missed.">                } catch (PoolGuardException e) {</span>
+<span class="nc" id="L119">                    throw new CreateSessionException(&quot;Cannot get connection from pool.&quot;, e);</span>
+<span class="nc" id="L120">                } catch (Exception e) {</span>
+<span class="nc" id="L121">                    throw new CreateSessionException(&quot;Error during find session by sessionId: &quot; + inputMessage.getSessionId(), e);</span>
+<span class="nc" id="L122">                }</span>
+            }
+<span class="nc" id="L124">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L125">            throw new CreateSessionException(&quot;Cannot create or find session by sessionId&quot;, e);</span>
+<span class="nc" id="L126">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L127">            throw new CreateSessionException(&quot;Resolution error&quot;, e);</span>
+<span class="nc" id="L128">        }</span>
+<span class="nc" id="L129">    }</span>
+
+    private void prepareSearchQuery(final IObject searchQuery, final CreateSessionMessage inputMessage)
+            throws ChangeValueException, InvalidArgumentException, ResolutionException, ReadValueException {
+<span class="nc" id="L133">        IObject filter = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L134">        IObject sessionIdObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L135">        IObject page = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="nc" id="L137">        equalsF.out(sessionIdObject, inputMessage.getSessionId());</span>
+<span class="nc" id="L138">        sessionIdF.out(filter, sessionIdObject);</span>
+
+<span class="nc" id="L140">        collectionNameF.out(searchQuery, this.collectionName);</span>
+<span class="nc" id="L141">        pageSizeF.out(page, 1);</span>
+<span class="nc" id="L142">        pageNumberF.out(page, 1);</span>
+<span class="nc" id="L143">        pageF.out(searchQuery, page);</span>
+
+<span class="nc" id="L145">        filterF.out(searchQuery, filter);</span>
+
+<span class="nc" id="L147">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

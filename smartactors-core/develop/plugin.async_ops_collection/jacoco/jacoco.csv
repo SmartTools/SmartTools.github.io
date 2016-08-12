@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+plugin.async_ops_collection,info.smart_tools.smartactors.plugin.async_ops_collection,AsyncOpsCollectionPlugin,86,0,0,0,25,0,4,0,4,0
+plugin.async_ops_collection,info.smart_tools.smartactors.plugin.async_ops_collection,AsyncOpsCollectionTasksPlugin,363,0,0,0,83,0,7,0,7,0

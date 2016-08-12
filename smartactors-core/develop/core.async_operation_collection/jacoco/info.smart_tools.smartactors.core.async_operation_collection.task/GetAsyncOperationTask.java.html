@@ -16,32 +16,41 @@ import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
+import java.time.LocalDateTime;
+
 /**
  * Task-facade for read task for async operations collection
  */
 public class GetAsyncOperationTask implements IDatabaseTask {
 
+
     private IDatabaseTask getItemTask;
     private IStorageConnection connection;
 
-    private IField tokenField;
     private IField collectionNameField;
+    private IField callbackField;
+    private IField equalsField;
+    private IField filterField;
+    private IField tokenField;
 
     /**
      * Constructor
      * @param connection connection
      * @throws GetAsyncOperationException Throw when task can't be created (for example, when can't resolve some of field)
      */
-<span class="nc" id="L35">    public GetAsyncOperationTask(final IStorageConnection connection) throws GetAsyncOperationException {</span>
-<span class="nc" id="L36">        this.connection = connection;</span>
+<span class="nc" id="L41">    public GetAsyncOperationTask(final IStorageConnection connection) throws GetAsyncOperationException {</span>
+<span class="nc" id="L42">        this.connection = connection;</span>
 
         try {
-<span class="nc" id="L39">            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;token&quot;);</span>
-<span class="nc" id="L40">            collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L41">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L42">            throw new GetAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
-<span class="nc" id="L43">        }</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L45">            this.callbackField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="nc" id="L46">            this.equalsField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;$eq&quot;);</span>
+<span class="nc" id="L47">            this.filterField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;filter&quot;);</span>
+<span class="nc" id="L48">            this.tokenField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;token&quot;);</span>
+<span class="nc" id="L49">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L50">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L51">            throw new GetAsyncOperationException(&quot;Can't resolve one of fields&quot;, e);</span>
+<span class="nc" id="L52">        }</span>
+<span class="nc" id="L53">    }</span>
 
     /**
      * @param query query object
@@ -54,22 +63,35 @@ public class GetAsyncOperationTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-<span class="nc" id="L57">            getItemTask = IOC.resolve(</span>
-<span class="nc" id="L58">                    Keys.getOrAdd(&quot;db.collection.getbyid&quot;),</span>
+<span class="nc" id="L66">            IObject queryForNestedTask  = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L67">            IObject filterObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="nc" id="L69">            String token = tokenField.in(query);</span>
+
+<span class="nc" id="L71">            IObject eqKeyObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L72">            equalsField.out(eqKeyObject, token);</span>
+<span class="nc" id="L73">            tokenField.out(filterObject, eqKeyObject);</span>
+
+<span class="nc" id="L75">            filterField.out(queryForNestedTask, filterObject);</span>
+
+
+<span class="nc" id="L78">            getItemTask = IOC.resolve(</span>
+<span class="nc" id="L79">                    Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
                     connection,
-<span class="nc" id="L60">                    collectionNameField.in(query),</span>
-<span class="nc" id="L61">                    tokenField.in(query)</span>
+<span class="nc" id="L81">                    collectionNameField.in(query),</span>
+                    queryForNestedTask,
+<span class="nc" id="L83">                    callbackField.in(query)</span>
             );
-<span class="nc" id="L63">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L64">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
-<span class="nc" id="L65">        } catch (ReadValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L66">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
-<span class="nc" id="L67">        }</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L85">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L86">            throw new TaskPrepareException(&quot;Can't create ISearchQuery from input query&quot;, e);</span>
+<span class="nc" id="L87">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L88">            throw new TaskPrepareException(&quot;Can't change value in one of IObjects&quot;, e);</span>
+<span class="nc" id="L89">        }</span>
+<span class="nc" id="L90">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L72">        getItemTask.execute();</span>
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L94">        getItemTask.execute();</span>
+<span class="nc" id="L95">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

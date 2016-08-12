@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">new</strong> ResolveByNameIocStrategy()
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          );
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          IKey keyIObjectByString = Keys.getOrAdd(<span class="jxr_string">"IObjectByString"</span>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          IKey keyIObject = Keys.getOrAdd(IObject.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          IKey keyIObject = Keys.getOrAdd(IObject.<strong class="jxr_keyword">class</strong>.getCanonicalName());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          IKey keyIMessageProcessingSequence = Keys.getOrAdd(IMessageProcessingSequence.<strong class="jxr_keyword">class</strong>.getCanonicalName());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          IKey keyIReceiverChain = Keys.getOrAdd(IReceiverChain.<strong class="jxr_keyword">class</strong>.toString());
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          IKey keyIFieldName = Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName());
@@ -140,7 +140,7 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>                 <strong class="jxr_keyword">new</strong> SingletonStrategy(messageProcessor)
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>         );
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         IObject iObject = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"IObjectByString"</span>), <span class="jxr_string">"{}"</span>);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         IKey keyIObject = Keys.getOrAdd(IObject.<strong class="jxr_keyword">class</strong>.toString());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         IKey keyIObject = Keys.getOrAdd(IObject.<strong class="jxr_keyword">class</strong>.getCanonicalName());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>         IOC.register(
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>                 keyIObject,
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>                 <strong class="jxr_keyword">new</strong> SingletonStrategy(iObject)

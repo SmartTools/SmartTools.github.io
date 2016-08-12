@@ -53,15 +53,15 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">int</strong> DIGIT = 21;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">int</strong> MORETHEN = 22;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">int</strong> MOREEQUALS = 22;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">int</strong> LESSTHEN = 23;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">int</strong> LESSEQUALS = 23;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">int</strong> EQUALS = 24;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">int</strong> MORETHEN = 24;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">int</strong> MOREEQUALS = 25;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">int</strong> LESSTHEN = 25;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>    <em class="jxr_javadoccomment">/** RegularExpression Id. */</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">int</strong> LESSEQUALS = 26;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">int</strong> EQUALS = 26;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>    <em class="jxr_javadoccomment">/** Lexical state. */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">int</strong> DEFAULT = 0;
@@ -80,21 +80,21 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0434&#92;&#92;u043e&#92;&#92;u043c\&quot;"</span>,
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      <span class="jxr_string">"\&quot;email\&quot;"</span>,
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <span class="jxr_string">"\&quot;password\&quot;"</span>,
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0438&#92;&#92;u0437 &#92;&#92;u0446&#92;&#92;u0438&#92;&#92;u0444&#92;&#92;u0440\&quot;"</span>,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0438&#92;&#92;u0437&#92;&#92;u0426&#92;&#92;u0438&#92;&#92;u0444&#92;&#92;u0440\&quot;"</span>,
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0448&#92;&#92;u0442&#92;&#92;u0440&#92;&#92;u0438&#92;&#92;u0445&#92;&#92;u043a&#92;&#92;u043e&#92;&#92;u0434\&quot;"</span>,
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0430&#92;&#92;u0440&#92;&#92;u0442&#92;&#92;u0438&#92;&#92;u043a&#92;&#92;u0443&#92;&#92;u043b\&quot;"</span>,
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0442&#92;&#92;u0435&#92;&#92;u043b&#92;&#92;u0435&#92;&#92;u0444&#92;&#92;u043e&#92;&#92;u043d\&quot;"</span>,
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0447&#92;&#92;u0438&#92;&#92;u0441&#92;&#92;u043b&#92;&#92;u043e\&quot;"</span>,
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0434&#92;&#92;u043b&#92;&#92;u0438&#92;&#92;u043d&#92;&#92;u0430\&quot;"</span>,
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0437&#92;&#92;u043d&#92;&#92;u0430&#92;&#92;u0447&#92;&#92;u0435&#92;&#92;u043d&#92;&#92;u0438&#92;&#92;u0435\&quot;"</span>,
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0441&#92;&#92;u0443&#92;&#92;u043c&#92;&#92;u043c&#92;&#92;u0430\&quot;"</span>,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <span class="jxr_string">"\&quot;&#92;&#92;u0421&#92;&#92;u0443&#92;&#92;u043c&#92;&#92;u043c&#92;&#92;u0430\&quot;"</span>,
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      <span class="jxr_string">"&lt;NUM_VALUE&gt;"</span>,
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <span class="jxr_string">"&lt;DIGIT&gt;"</span>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <span class="jxr_string">"\&quot;&gt;\&quot;"</span>,
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <span class="jxr_string">"\&quot;&lt;\&quot;"</span>,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <span class="jxr_string">"\&quot;=\&quot;"</span>,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <span class="jxr_string">"\&quot;=&gt;\&quot;"</span>,
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <span class="jxr_string">"\&quot;=&lt;\&quot;"</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <span class="jxr_string">"\&quot;=&gt;\&quot;"</span>,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <span class="jxr_string">"\&quot;&lt;=\&quot;"</span>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <span class="jxr_string">"\&quot;&gt;\&quot;"</span>,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <span class="jxr_string">"\&quot;&lt;\&quot;"</span>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <span class="jxr_string">"\&quot;==\&quot;"</span>,
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>    };
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  }

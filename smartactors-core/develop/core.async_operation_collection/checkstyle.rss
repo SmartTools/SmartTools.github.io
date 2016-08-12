@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 26,
              Errors: 0,
-             Warnings: 32,
+             Warnings: 15,
              Infos: 0
       </title>
             <link>core.async_operation_collection/core.async_operation_collection//checkstyle.html</link>
@@ -304,7 +304,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  18
+                  1
                 </td>
                 <td>
                   0

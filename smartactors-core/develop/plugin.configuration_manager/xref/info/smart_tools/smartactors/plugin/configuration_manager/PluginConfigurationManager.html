@@ -69,14 +69,21 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>              configureItem
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                      .after(<span class="jxr_string">"configuration_manager"</span>)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>                      .process(() -&gt; {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>                      });
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>              bootstrap.add(configureItem);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PluginException(e);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                              IConfigurationManager configurationManager = IOC.resolve(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                                      Keys.getOrAdd(IConfigurationManager.<strong class="jxr_keyword">class</strong>.getCanonicalName()));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                                      configurationManager.configure();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                              } <strong class="jxr_keyword">catch</strong> (ResolutionException | InvalidStateException | ConfigurationProcessingException e) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                                    <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"ConfigurationManager plugin can't load"</span>, e);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                              }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                      });
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>              bootstrap.add(configureItem);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PluginException(e);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

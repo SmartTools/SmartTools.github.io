@@ -4,7 +4,7 @@ core.cached_collection,info.smart_tools.smartactors.core.cached_collection.excep
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,CreateCachedCollectionTaskException,5,0,0,0,2,0,1,0,1,0
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,UpsertCacheItemException,11,5,0,0,6,2,3,1,3,1
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.exception,GetCacheItemException,11,5,0,0,6,2,3,1,3,1
-core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,GetItemFromCachedCollectionTask,14,201,0,0,4,29,0,4,0,4
+core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,GetItemFromCachedCollectionTask,18,269,0,0,6,36,1,3,1,3
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,UpsertIntoCachedCollectionTask,11,98,1,1,4,18,2,3,1,3
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,CreateCachedCollectionTask,7,77,0,0,2,18,0,3,0,3
 core.cached_collection,info.smart_tools.smartactors.core.cached_collection.task,DeleteFromCachedCollectionTask,11,88,0,0,4,16,1,2,1,2

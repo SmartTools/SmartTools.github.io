@@ -30,7 +30,7 @@ public class CheckUserByEmailActor {
 <span class="fc" id="L30">    public CheckUserByEmailActor(final ActorParams params) throws InvalidArgumentException {</span>
         try {
 <span class="fc" id="L32">            collection = IOC.resolve(</span>
-<span class="fc" id="L33">                    Keys.getOrAdd(ICachedCollection.class.toString()),</span>
+<span class="fc" id="L33">                    Keys.getOrAdd(ICachedCollection.class.getCanonicalName()),</span>
 <span class="fc" id="L34">                    params.getCollectionName(),</span>
 <span class="fc" id="L35">                    params.getCollectionKey());</span>
 <span class="nc" id="L36">        } catch (ReadValueException e) {</span>

@@ -61,18 +61,18 @@ public class CachedCollection implements ICachedCollection {
 <span class="nc" id="L61">    public CachedCollection(final IObject config) throws InvalidArgumentException {</span>
         try {
 <span class="nc" id="L63">            this.map = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="nc" id="L64">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L65">            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;connectionPool&quot;);</span>
-<span class="nc" id="L66">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyName&quot;);</span>
-<span class="nc" id="L67">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;keyValue&quot;);</span>
-<span class="nc" id="L68">            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;document&quot;);</span>
-<span class="nc" id="L69">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;id&quot;);</span>
-<span class="nc" id="L70">            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;isActive&quot;);</span>
-<span class="nc" id="L71">            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;searchResult&quot;);</span>
+<span class="nc" id="L64">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L65">            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;connectionPool&quot;);</span>
+<span class="nc" id="L66">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyName&quot;);</span>
+<span class="nc" id="L67">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyValue&quot;);</span>
+<span class="nc" id="L68">            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="nc" id="L69">            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;id&quot;);</span>
+<span class="nc" id="L70">            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;isActive&quot;);</span>
+<span class="nc" id="L71">            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;searchResult&quot;);</span>
 <span class="nc" id="L72">            this.collectionName = collectionNameField.in(config);</span>
 <span class="nc" id="L73">            this.connectionPool = connectionPoolField.in(config);</span>
 <span class="nc" id="L74">            this.keyName = keyNameField.in(config);</span>
-<span class="nc" id="L75">            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName);</span>
+<span class="nc" id="L75">            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), keyName);</span>
 <span class="nc" id="L76">        } catch (ResolutionException | ReadValueException e) {</span>
 <span class="nc" id="L77">            throw new InvalidArgumentException(&quot;Can't create cached collection.&quot;, e);</span>
 <span class="nc" id="L78">        }</span>

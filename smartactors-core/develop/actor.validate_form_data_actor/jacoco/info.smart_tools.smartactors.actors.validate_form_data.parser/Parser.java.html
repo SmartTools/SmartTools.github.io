@@ -128,51 +128,55 @@ public class Parser implements ParserConstants {
 <span class="nc" id="L128">      throw new ParseException();</span>
     }
 <span class="pc bpc" id="L130" title="6 of 8 branches missed.">    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {</span>
-    case LESSTHEN:
-<span class="nc" id="L132">      tComparator = jj_consume_token(LESSTHEN);</span>
-<span class="nc" id="L133">                                  sComparator = tComparator.image;</span>
-<span class="nc" id="L134">      break;</span>
-    case MORETHEN:
-<span class="fc" id="L136">      tComparator = jj_consume_token(MORETHEN);</span>
-<span class="fc" id="L137">                                  sComparator = tComparator.image;</span>
-<span class="fc" id="L138">      break;</span>
-    case EQUALS:
-<span class="nc" id="L140">      tComparator = jj_consume_token(EQUALS);</span>
-<span class="nc" id="L141">                                sComparator = tComparator.image;</span>
-<span class="nc" id="L142">      break;</span>
     case MOREEQUALS:
-<span class="nc" id="L144">      tComparator = jj_consume_token(MOREEQUALS);</span>
-<span class="nc" id="L145">                                    sComparator = tComparator.image;</span>
-<span class="nc" id="L146">      break;</span>
+<span class="nc" id="L132">      tComparator = jj_consume_token(MOREEQUALS);</span>
+<span class="nc" id="L133">                                    sComparator = tComparator.image;</span>
+<span class="nc" id="L134">      break;</span>
     case LESSEQUALS:
-<span class="nc" id="L148">      tComparator = jj_consume_token(LESSEQUALS);</span>
-<span class="nc" id="L149">                                    sComparator = tComparator.image;</span>
+<span class="nc" id="L136">      tComparator = jj_consume_token(LESSEQUALS);</span>
+<span class="nc" id="L137">                                    sComparator = tComparator.image;</span>
+<span class="nc" id="L138">      break;</span>
+    case LESSTHEN:
+<span class="nc" id="L140">      tComparator = jj_consume_token(LESSTHEN);</span>
+<span class="nc" id="L141">                                  sComparator = tComparator.image;</span>
+<span class="nc" id="L142">      break;</span>
+    case MORETHEN:
+<span class="fc" id="L144">      tComparator = jj_consume_token(MORETHEN);</span>
+<span class="fc" id="L145">                                  sComparator = tComparator.image;</span>
+<span class="fc" id="L146">      break;</span>
+    case EQUALS:
+<span class="nc" id="L148">      tComparator = jj_consume_token(EQUALS);</span>
+<span class="nc" id="L149">                                sComparator = tComparator.image;</span>
 <span class="nc" id="L150">      break;</span>
     default:
 <span class="nc" id="L152">      jj_la1[3] = jj_gen;</span>
 <span class="nc" id="L153">      jj_consume_token(-1);</span>
 <span class="nc" id="L154">      throw new ParseException();</span>
     }
-<span class="pc bpc" id="L156" title="3 of 5 branches missed.">    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {</span>
+<span class="pc bpc" id="L156" title="4 of 6 branches missed.">    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {</span>
     case VALUE:
 <span class="nc" id="L158">      tComparand2 = jj_consume_token(VALUE);</span>
 <span class="nc" id="L159">                                sComparand2 = Double.parseDouble(field);</span>
 <span class="nc" id="L160">      break;</span>
+    case SUM:
+<span class="nc" id="L162">      tComparand2 = jj_consume_token(SUM);</span>
+<span class="nc" id="L163">                              sComparand2 = Double.parseDouble(field);</span>
+<span class="nc" id="L164">      break;</span>
     case NUM_VALUE:
-<span class="fc" id="L162">      tComparand2 = jj_consume_token(NUM_VALUE);</span>
-<span class="fc" id="L163">                                    sComparand2 = Double.parseDouble(tComparand2.toString());</span>
-<span class="fc" id="L164">      break;</span>
+<span class="fc" id="L166">      tComparand2 = jj_consume_token(NUM_VALUE);</span>
+<span class="fc" id="L167">                                    sComparand2 = Double.parseDouble(tComparand2.toString());</span>
+<span class="fc" id="L168">      break;</span>
     default:
-<span class="nc" id="L166">      jj_la1[4] = jj_gen;</span>
-<span class="nc" id="L167">      jj_consume_token(-1);</span>
-<span class="nc" id="L168">      throw new ParseException();</span>
+<span class="nc" id="L170">      jj_la1[4] = jj_gen;</span>
+<span class="nc" id="L171">      jj_consume_token(-1);</span>
+<span class="nc" id="L172">      throw new ParseException();</span>
     }
-<span class="pc bpc" id="L170" title="1 of 4 branches missed.">            if (sComparator.equals(&quot;&gt;&quot;)) {{if (true) return (sComparand1 &gt; sComparand2);}}</span>
-<span class="nc bnc" id="L171" title="All 4 branches missed.">            if (sComparator.equals(&quot;&lt;&quot;)) {{if (true) return (sComparand1 &lt; sComparand2);}}</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">            if (sComparator.equals(&quot;&lt;=&quot;)) {{if (true) return (sComparand1 &lt;= sComparand2);}}</span>
-<span class="nc bnc" id="L173" title="All 4 branches missed.">            if (sComparator.equals(&quot;&gt;=&quot;)) {{if (true) return (sComparand1 &gt;= sComparand2);}}</span>
-<span class="nc bnc" id="L174" title="All 4 branches missed.">            if (sComparator.equals(&quot;=&quot;)) {{if (true) return (sComparand1 == sComparand2);}}</span>
-<span class="nc" id="L175">    throw new Error(&quot;Missing return statement in function&quot;);</span>
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">            if (sComparator.equals(&quot;&gt;&quot;)) {{if (true) return (sComparand1 &gt; sComparand2);}}</span>
+<span class="nc bnc" id="L175" title="All 4 branches missed.">            if (sComparator.equals(&quot;&lt;&quot;)) {{if (true) return (sComparand1 &lt; sComparand2);}}</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">            if (sComparator.equals(&quot;&lt;=&quot;)) {{if (true) return (sComparand1 &lt;= sComparand2);}}</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">            if (sComparator.equals(&quot;=&gt;&quot;)) {{if (true) return (sComparand1 &gt;= sComparand2);}}</span>
+<span class="nc bnc" id="L178" title="All 4 branches missed.">            if (sComparator.equals(&quot;==&quot;)) {{if (true) return (sComparand1 == sComparand2);}}</span>
+<span class="nc" id="L179">    throw new Error(&quot;Missing return statement in function&quot;);</span>
   }
 
   /** Generated Token Manager. */
@@ -184,164 +188,164 @@ public class Parser implements ParserConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-<span class="pc" id="L187">  final private int[] jj_la1 = new int[5];</span>
+<span class="pc" id="L191">  final private int[] jj_la1 = new int[5];</span>
   static private int[] jj_la1_0;
   static {
-<span class="fc" id="L190">      jj_la1_init_0();</span>
-<span class="fc" id="L191">   }</span>
+<span class="fc" id="L194">      jj_la1_init_0();</span>
+<span class="fc" id="L195">   }</span>
    private static void jj_la1_init_0() {
-<span class="fc" id="L193">      jj_la1_0 = new int[] {0x20,0x1ffc0,0x1e0000,0x7c00000,0x140000,};</span>
-<span class="fc" id="L194">   }</span>
+<span class="fc" id="L197">      jj_la1_0 = new int[] {0x20,0x1ffc0,0x1e0000,0x7c00000,0x1c0000,};</span>
+<span class="fc" id="L198">   }</span>
 
   /** Constructor with InputStream. */
   public Parser(java.io.InputStream stream) {
-<span class="nc" id="L198">     this(stream, null);</span>
-<span class="nc" id="L199">  }</span>
+<span class="nc" id="L202">     this(stream, null);</span>
+<span class="nc" id="L203">  }</span>
   /** Constructor with InputStream and supplied encoding */
-<span class="nc" id="L201">  public Parser(java.io.InputStream stream, String encoding) {</span>
-<span class="nc" id="L202">    try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }</span>
-<span class="nc" id="L203">    token_source = new ParserTokenManager(jj_input_stream);</span>
-<span class="nc" id="L204">    token = new Token();</span>
-<span class="nc" id="L205">    jj_ntk = -1;</span>
-<span class="nc" id="L206">    jj_gen = 0;</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="nc" id="L208">  }</span>
+<span class="nc" id="L205">  public Parser(java.io.InputStream stream, String encoding) {</span>
+<span class="nc" id="L206">    try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }</span>
+<span class="nc" id="L207">    token_source = new ParserTokenManager(jj_input_stream);</span>
+<span class="nc" id="L208">    token = new Token();</span>
+<span class="nc" id="L209">    jj_ntk = -1;</span>
+<span class="nc" id="L210">    jj_gen = 0;</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="nc" id="L212">  }</span>
 
   /** Reinitialise. */
   public void ReInit(java.io.InputStream stream) {
-<span class="nc" id="L212">     ReInit(stream, null);</span>
-<span class="nc" id="L213">  }</span>
+<span class="nc" id="L216">     ReInit(stream, null);</span>
+<span class="nc" id="L217">  }</span>
   /** Reinitialise. */
   public void ReInit(java.io.InputStream stream, String encoding) {
-<span class="nc" id="L216">    try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }</span>
-<span class="nc" id="L217">    token_source.ReInit(jj_input_stream);</span>
-<span class="nc" id="L218">    token = new Token();</span>
-<span class="nc" id="L219">    jj_ntk = -1;</span>
-<span class="nc" id="L220">    jj_gen = 0;</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="nc" id="L222">  }</span>
+<span class="nc" id="L220">    try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }</span>
+<span class="nc" id="L221">    token_source.ReInit(jj_input_stream);</span>
+<span class="nc" id="L222">    token = new Token();</span>
+<span class="nc" id="L223">    jj_ntk = -1;</span>
+<span class="nc" id="L224">    jj_gen = 0;</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="nc" id="L226">  }</span>
 
   /** Constructor. */
-<span class="fc" id="L225">  public Parser(java.io.Reader stream) {</span>
-<span class="fc" id="L226">    jj_input_stream = new SimpleCharStream(stream, 1, 1);</span>
-<span class="fc" id="L227">    token_source = new ParserTokenManager(jj_input_stream);</span>
-<span class="fc" id="L228">    token = new Token();</span>
-<span class="fc" id="L229">    jj_ntk = -1;</span>
-<span class="fc" id="L230">    jj_gen = 0;</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="fc" id="L232">  }</span>
+<span class="fc" id="L229">  public Parser(java.io.Reader stream) {</span>
+<span class="fc" id="L230">    jj_input_stream = new SimpleCharStream(stream, 1, 1);</span>
+<span class="fc" id="L231">    token_source = new ParserTokenManager(jj_input_stream);</span>
+<span class="fc" id="L232">    token = new Token();</span>
+<span class="fc" id="L233">    jj_ntk = -1;</span>
+<span class="fc" id="L234">    jj_gen = 0;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="fc" id="L236">  }</span>
 
   /** Reinitialise. */
   public void ReInit(java.io.Reader stream) {
-<span class="nc" id="L236">    jj_input_stream.ReInit(stream, 1, 1);</span>
-<span class="nc" id="L237">    token_source.ReInit(jj_input_stream);</span>
-<span class="nc" id="L238">    token = new Token();</span>
-<span class="nc" id="L239">    jj_ntk = -1;</span>
-<span class="nc" id="L240">    jj_gen = 0;</span>
-<span class="nc bnc" id="L241" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="nc" id="L242">  }</span>
+<span class="nc" id="L240">    jj_input_stream.ReInit(stream, 1, 1);</span>
+<span class="nc" id="L241">    token_source.ReInit(jj_input_stream);</span>
+<span class="nc" id="L242">    token = new Token();</span>
+<span class="nc" id="L243">    jj_ntk = -1;</span>
+<span class="nc" id="L244">    jj_gen = 0;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="nc" id="L246">  }</span>
 
   /** Constructor with generated Token Manager. */
-<span class="nc" id="L245">  public Parser(ParserTokenManager tm) {</span>
-<span class="nc" id="L246">    token_source = tm;</span>
-<span class="nc" id="L247">    token = new Token();</span>
-<span class="nc" id="L248">    jj_ntk = -1;</span>
-<span class="nc" id="L249">    jj_gen = 0;</span>
-<span class="nc bnc" id="L250" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="nc" id="L251">  }</span>
+<span class="nc" id="L249">  public Parser(ParserTokenManager tm) {</span>
+<span class="nc" id="L250">    token_source = tm;</span>
+<span class="nc" id="L251">    token = new Token();</span>
+<span class="nc" id="L252">    jj_ntk = -1;</span>
+<span class="nc" id="L253">    jj_gen = 0;</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="nc" id="L255">  }</span>
 
   /** Reinitialise. */
   public void ReInit(ParserTokenManager tm) {
-<span class="nc" id="L255">    token_source = tm;</span>
-<span class="nc" id="L256">    token = new Token();</span>
-<span class="nc" id="L257">    jj_ntk = -1;</span>
-<span class="nc" id="L258">    jj_gen = 0;</span>
-<span class="nc bnc" id="L259" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
-<span class="nc" id="L260">  }</span>
+<span class="nc" id="L259">    token_source = tm;</span>
+<span class="nc" id="L260">    token = new Token();</span>
+<span class="nc" id="L261">    jj_ntk = -1;</span>
+<span class="nc" id="L262">    jj_gen = 0;</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) jj_la1[i] = -1;</span>
+<span class="nc" id="L264">  }</span>
 
   private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">    if ((oldToken = token).next != null) token = token.next;</span>
-<span class="nc" id="L265">    else token = token.next = token_source.getNextToken();</span>
-<span class="fc" id="L266">    jj_ntk = -1;</span>
-<span class="pc bpc" id="L267" title="1 of 2 branches missed.">    if (token.kind == kind) {</span>
-<span class="fc" id="L268">      jj_gen++;</span>
-<span class="fc" id="L269">      return token;</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">    if ((oldToken = token).next != null) token = token.next;</span>
+<span class="nc" id="L269">    else token = token.next = token_source.getNextToken();</span>
+<span class="fc" id="L270">    jj_ntk = -1;</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">    if (token.kind == kind) {</span>
+<span class="fc" id="L272">      jj_gen++;</span>
+<span class="fc" id="L273">      return token;</span>
     }
-<span class="nc" id="L271">    token = oldToken;</span>
-<span class="nc" id="L272">    jj_kind = kind;</span>
-<span class="nc" id="L273">    throw generateParseException();</span>
+<span class="nc" id="L275">    token = oldToken;</span>
+<span class="nc" id="L276">    jj_kind = kind;</span>
+<span class="nc" id="L277">    throw generateParseException();</span>
   }
 
 
 /** Get the next Token. */
   final public Token getNextToken() {
-<span class="nc bnc" id="L279" title="All 2 branches missed.">    if (token.next != null) token = token.next;</span>
-<span class="nc" id="L280">    else token = token.next = token_source.getNextToken();</span>
-<span class="nc" id="L281">    jj_ntk = -1;</span>
-<span class="nc" id="L282">    jj_gen++;</span>
-<span class="nc" id="L283">    return token;</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">    if (token.next != null) token = token.next;</span>
+<span class="nc" id="L284">    else token = token.next = token_source.getNextToken();</span>
+<span class="nc" id="L285">    jj_ntk = -1;</span>
+<span class="nc" id="L286">    jj_gen++;</span>
+<span class="nc" id="L287">    return token;</span>
   }
 
 /** Get the specific Token. */
   final public Token getToken(int index) {
-<span class="nc" id="L288">    Token t = token;</span>
-<span class="nc bnc" id="L289" title="All 2 branches missed.">    for (int i = 0; i &lt; index; i++) {</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">      if (t.next != null) t = t.next;</span>
-<span class="nc" id="L291">      else t = t.next = token_source.getNextToken();</span>
+<span class="nc" id="L292">    Token t = token;</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">    for (int i = 0; i &lt; index; i++) {</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">      if (t.next != null) t = t.next;</span>
+<span class="nc" id="L295">      else t = t.next = token_source.getNextToken();</span>
     }
-<span class="nc" id="L293">    return t;</span>
+<span class="nc" id="L297">    return t;</span>
   }
 
   private int jj_ntk() {
-<span class="pc bpc" id="L297" title="1 of 2 branches missed.">    if ((jj_nt=token.next) == null)</span>
-<span class="fc" id="L298">      return (jj_ntk = (token.next=token_source.getNextToken()).kind);</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">    if ((jj_nt=token.next) == null)</span>
+<span class="fc" id="L302">      return (jj_ntk = (token.next=token_source.getNextToken()).kind);</span>
     else
-<span class="nc" id="L300">      return (jj_ntk = jj_nt.kind);</span>
+<span class="nc" id="L304">      return (jj_ntk = jj_nt.kind);</span>
   }
 
-<span class="pc" id="L303">  private java.util.List&lt;int[]&gt; jj_expentries = new java.util.ArrayList&lt;int[]&gt;();</span>
+<span class="pc" id="L307">  private java.util.List&lt;int[]&gt; jj_expentries = new java.util.ArrayList&lt;int[]&gt;();</span>
   private int[] jj_expentry;
-<span class="pc" id="L305">  private int jj_kind = -1;</span>
+<span class="pc" id="L309">  private int jj_kind = -1;</span>
 
   /** Generate ParseException. */
   public ParseException generateParseException() {
-<span class="nc" id="L309">    jj_expentries.clear();</span>
-<span class="nc" id="L310">    boolean[] la1tokens = new boolean[27];</span>
-<span class="nc bnc" id="L311" title="All 2 branches missed.">    if (jj_kind &gt;= 0) {</span>
-<span class="nc" id="L312">      la1tokens[jj_kind] = true;</span>
-<span class="nc" id="L313">      jj_kind = -1;</span>
+<span class="nc" id="L313">    jj_expentries.clear();</span>
+<span class="nc" id="L314">    boolean[] la1tokens = new boolean[27];</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">    if (jj_kind &gt;= 0) {</span>
+<span class="nc" id="L316">      la1tokens[jj_kind] = true;</span>
+<span class="nc" id="L317">      jj_kind = -1;</span>
     }
-<span class="nc bnc" id="L315" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) {</span>
-<span class="nc bnc" id="L316" title="All 2 branches missed.">      if (jj_la1[i] == jj_gen) {</span>
-<span class="nc bnc" id="L317" title="All 2 branches missed.">        for (int j = 0; j &lt; 32; j++) {</span>
-<span class="nc bnc" id="L318" title="All 2 branches missed.">          if ((jj_la1_0[i] &amp; (1&lt;&lt;j)) != 0) {</span>
-<span class="nc" id="L319">            la1tokens[j] = true;</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">    for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">      if (jj_la1[i] == jj_gen) {</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">        for (int j = 0; j &lt; 32; j++) {</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">          if ((jj_la1_0[i] &amp; (1&lt;&lt;j)) != 0) {</span>
+<span class="nc" id="L323">            la1tokens[j] = true;</span>
           }
         }
       }
     }
-<span class="nc bnc" id="L324" title="All 2 branches missed.">    for (int i = 0; i &lt; 27; i++) {</span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">      if (la1tokens[i]) {</span>
-<span class="nc" id="L326">        jj_expentry = new int[1];</span>
-<span class="nc" id="L327">        jj_expentry[0] = i;</span>
-<span class="nc" id="L328">        jj_expentries.add(jj_expentry);</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">    for (int i = 0; i &lt; 27; i++) {</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">      if (la1tokens[i]) {</span>
+<span class="nc" id="L330">        jj_expentry = new int[1];</span>
+<span class="nc" id="L331">        jj_expentry[0] = i;</span>
+<span class="nc" id="L332">        jj_expentries.add(jj_expentry);</span>
       }
     }
-<span class="nc" id="L331">    int[][] exptokseq = new int[jj_expentries.size()][];</span>
-<span class="nc bnc" id="L332" title="All 2 branches missed.">    for (int i = 0; i &lt; jj_expentries.size(); i++) {</span>
-<span class="nc" id="L333">      exptokseq[i] = jj_expentries.get(i);</span>
+<span class="nc" id="L335">    int[][] exptokseq = new int[jj_expentries.size()][];</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">    for (int i = 0; i &lt; jj_expentries.size(); i++) {</span>
+<span class="nc" id="L337">      exptokseq[i] = jj_expentries.get(i);</span>
     }
-<span class="nc" id="L335">    return new ParseException(token, exptokseq, tokenImage);</span>
+<span class="nc" id="L339">    return new ParseException(token, exptokseq, tokenImage);</span>
   }
 
   /** Enable tracing. */
   final public void enable_tracing() {
-<span class="nc" id="L340">  }</span>
+<span class="nc" id="L344">  }</span>
 
   /** Disable tracing. */
   final public void disable_tracing() {
-<span class="nc" id="L344">  }</span>
+<span class="nc" id="L348">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

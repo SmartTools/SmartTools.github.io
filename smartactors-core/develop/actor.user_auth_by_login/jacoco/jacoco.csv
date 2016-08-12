@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+actor.user_auth_by_login,info.smart_tools.smartactors.actors.authentication.users,UserAuthByLoginActor,574,0,30,0,100,0,27,0,12,0
+actor.user_auth_by_login,info.smart_tools.smartactors.actors.authentication.users.exceptions,AuthenticateUserException,0,9,0,0,0,4,0,2,0,2

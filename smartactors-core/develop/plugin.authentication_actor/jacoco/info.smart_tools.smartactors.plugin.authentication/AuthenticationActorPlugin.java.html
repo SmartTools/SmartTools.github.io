@@ -7,7 +7,6 @@ import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
@@ -26,9 +25,9 @@ public class AuthenticationActorPlugin implements IPlugin {
      * Constructor
      * @param bootstrap bootstrap element
      */
-<span class="nc" id="L29">    public AuthenticationActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L30">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L28">    public AuthenticationActorPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L29">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L30">    }</span>
 
     /**
      * Load the plugin for Authentication actor
@@ -38,34 +37,33 @@ public class AuthenticationActorPlugin implements IPlugin {
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L41">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;AuthenticationActorPlugin&quot;);</span>
+<span class="nc" id="L40">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;AuthenticationActorPlugin&quot;);</span>
 
-<span class="nc" id="L43">            item</span>
-<span class="nc" id="L44">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L45">                    .before(&quot;configure&quot;)</span>
-<span class="nc" id="L46">                    .process(() -&gt; {</span>
+<span class="nc" id="L42">            item</span>
+<span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L44">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L45">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L48">                            IKey cachedCollectionKey = Keys.getOrAdd(AuthenticationActor.class.getCanonicalName());</span>
-<span class="nc" id="L49">                            IOC.register(cachedCollectionKey, new ApplyFunctionToArgumentsStrategy(</span>
+<span class="nc" id="L47">                            IOC.register(Keys.getOrAdd(AuthenticationActor.class.getCanonicalName()), new ApplyFunctionToArgumentsStrategy(</span>
                                     (args) -&gt; {
                                         try {
-<span class="nc" id="L52">                                            return new AuthenticationActor();</span>
-<span class="nc" id="L53">                                        } catch (Exception e) {</span>
-<span class="nc" id="L54">                                            throw new RuntimeException(e);</span>
+<span class="nc" id="L50">                                            return new AuthenticationActor();</span>
+<span class="nc" id="L51">                                        } catch (Exception e) {</span>
+<span class="nc" id="L52">                                            throw new RuntimeException(e);</span>
                                         }
                                     }));
-<span class="nc" id="L57">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L58">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't get AuthenticationActor key&quot;, e);</span>
-<span class="nc" id="L59">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L60">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L61">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L62">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L63">                        }</span>
-<span class="nc" id="L64">                    });</span>
-<span class="nc" id="L65">            bootstrap.add(item);</span>
-<span class="nc" id="L66">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L67">            throw new PluginException(&quot;Can't load AuthenticationActor plugin&quot;, e);</span>
-<span class="nc" id="L68">        }</span>
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L55">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L56">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't get AuthenticationActor key&quot;, e);</span>
+<span class="nc" id="L57">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L58">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L59">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L60">                            throw new ActionExecuteException(&quot;AuthenticationActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L61">                        }</span>
+<span class="nc" id="L62">                    });</span>
+<span class="nc" id="L63">            bootstrap.add(item);</span>
+<span class="nc" id="L64">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L65">            throw new PluginException(&quot;Can't load AuthenticationActor plugin&quot;, e);</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

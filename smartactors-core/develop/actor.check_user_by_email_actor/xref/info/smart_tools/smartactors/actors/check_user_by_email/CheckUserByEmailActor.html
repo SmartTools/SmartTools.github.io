@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../info/smart_tools/smartactors/actors/check_user_by_email/CheckUserByEmailActor.html">CheckUserByEmailActor</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/actors/check_user_by_email/wrapper/ActorParams.html">ActorParams</a> params) <strong class="jxr_keyword">throws</strong> InvalidArgumentException {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>              collection = IOC.resolve(
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>                      Keys.getOrAdd(ICachedCollection.<strong class="jxr_keyword">class</strong>.toString()),
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>                      Keys.getOrAdd(ICachedCollection.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>                      params.getCollectionName(),
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>                      params.getCollectionKey());
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          } <strong class="jxr_keyword">catch</strong> (ReadValueException e) {

@@ -1,0 +1,4 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.security.encoding.codecs,info.smart_tools.smartactors.core.encoding.codec,Hex,30,22,0,0,4,6,0,4,0,4
+core.security.encoding.codecs,info.smart_tools.smartactors.core.encoding.codec,Base64,30,23,0,0,4,7,0,4,0,4
+core.security.encoding.codecs,info.smart_tools.smartactors.core.encoding.codec,CharSequenceCodec,42,49,1,1,7,13,1,4,0,4

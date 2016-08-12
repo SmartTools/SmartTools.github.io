@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Feature.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.dependency_resolving_feature_manager</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.dependency_resolving_feature_manager</a> &gt; <span class="el_source">Feature.java</span></div><h1>Feature.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.dependency_resolving_feature_manager;
+
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ipath.IPath;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Implementation of {@link IFeature} used by {@link DependencyResolvingFeatureManager}.
+ */
+class Feature implements IFeature {
+    private final DependencyResolvingFeatureManager manager;
+    private final String name;
+    private final Object lock;
+    private final List&lt;IAction&lt;Collection&lt;IPath&gt;&gt;&gt; listeners;
+    private final List&lt;String&gt; required;
+    private List&lt;IPath&gt; paths;
+
+    /**
+     * The constructor.
+     *
+     * @param manager    feature manager that created this feature
+     * @param name       name of the feature
+     * @throws InvalidArgumentException if {@code manager} is {@code null}
+     * @throws InvalidArgumentException if {@code name} is {@code null}
+     */
+    Feature(final DependencyResolvingFeatureManager manager, final String name)
+<span class="fc" id="L34">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (null == manager) {</span>
+<span class="fc" id="L36">            throw new InvalidArgumentException(&quot;Manager should not be null.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (null == name) {</span>
+<span class="fc" id="L40">            throw new InvalidArgumentException(&quot;Name should not be null.&quot;);</span>
+        }
+
+<span class="fc" id="L43">        this.manager = manager;</span>
+<span class="fc" id="L44">        this.name = name;</span>
+
+<span class="fc" id="L46">        lock = new Object();</span>
+<span class="fc" id="L47">        listeners = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L48">        required = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L49">        paths = null;</span>
+<span class="fc" id="L50">    }</span>
+
+    @Override
+    public void requireFile(final String fileName) throws FeatureManagementException {
+<span class="fc" id="L54">        synchronized (lock) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (null != paths) {</span>
+<span class="fc" id="L56">                throw new FeatureManagementException(&quot;requireFile() called after listening started.&quot;);</span>
+            }
+
+<span class="fc" id="L59">            required.add(fileName);</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
+
+    @Override
+    public void whenPresent(final IAction&lt;Collection&lt;IPath&gt;&gt; action) throws FeatureManagementException {
+<span class="fc" id="L65">        synchronized (lock) {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (null == paths) {</span>
+<span class="fc" id="L67">                listeners.add(action);</span>
+            } else {
+                try {
+<span class="fc" id="L70">                    action.execute(paths);</span>
+<span class="fc" id="L71">                } catch (ActionExecuteException | InvalidArgumentException e) {</span>
+<span class="fc" id="L72">                    throw new FeatureManagementException(&quot;Error occurred executing action for a feature that already is present:&quot;, e);</span>
+<span class="fc" id="L73">                }</span>
+            }
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">    }</span>
+
+    @Override
+    public void listen() throws FeatureManagementException {
+<span class="fc" id="L80">        synchronized (lock) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (0 == required.size()) {</span>
+<span class="fc" id="L82">                throw new FeatureManagementException(&quot;No items defined for this feature.&quot;);</span>
+            }
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            if (null != paths) {</span>
+<span class="fc" id="L86">                throw new FeatureManagementException(&quot;Items for this feature are already resolved (#listen called twice).&quot;);</span>
+            }
+
+<span class="fc" id="L89">            this.paths = manager.resolveArtifacts(this.required);</span>
+
+<span class="fc" id="L91">            List&lt;Throwable&gt; exceptions = new LinkedList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for (IAction&lt;Collection&lt;IPath&gt;&gt; action : listeners) {</span>
+                try {
+<span class="fc" id="L95">                    action.execute(paths);</span>
+<span class="fc" id="L96">                } catch (Exception e) {</span>
+<span class="fc" id="L97">                    exceptions.add(e);</span>
+<span class="fc" id="L98">                }</span>
+<span class="fc" id="L99">            }</span>
+
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (exceptions.size() != 0) {</span>
+<span class="fc" id="L102">                Throwable e = exceptions.remove(0);</span>
+
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                for (Throwable ee : exceptions) {</span>
+<span class="fc" id="L105">                    e.addSuppressed(ee);</span>
+<span class="fc" id="L106">                }</span>
+
+<span class="fc" id="L108">                throw new FeatureManagementException(&quot;Error(s) occurred notifying feature listeners.&quot;, e);</span>
+            }
+<span class="fc" id="L110">        }</span>
+<span class="fc" id="L111">    }</span>
+
+    @Override
+    public String getName() {
+<span class="fc" id="L115">        return name;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

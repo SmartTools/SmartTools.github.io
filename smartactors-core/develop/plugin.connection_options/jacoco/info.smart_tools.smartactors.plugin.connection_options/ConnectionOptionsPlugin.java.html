@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConnectionOptionsPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.connection_options</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.connection_options</a> &gt; <span class="el_source">ConnectionOptionsPlugin.java</span></div><h1>ConnectionOptionsPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.connection_options;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ * Plugin for resolving connection options from properties
+ */
+public class ConnectionOptionsPlugin implements IPlugin {
+
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor
+     * @param bootstrap the bootstrap
+     */
+<span class="nc" id="L33">    public ConnectionOptionsPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L34">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L35">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+
+        try {
+<span class="nc" id="L41">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;ConnectionOptionsPlugin&quot;);</span>
+
+<span class="nc" id="L43">            item</span>
+<span class="nc" id="L44">                .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L45">                .before(&quot;configure&quot;)</span>
+<span class="nc" id="L46">                .process(() -&gt; {</span>
+                    try {
+<span class="nc" id="L48">                        IOC.register(Keys.getOrAdd(&quot;PostgresConnectionOptions&quot;), new ApplyFunctionToArgumentsStrategy(</span>
+                            (args) -&gt; {
+<span class="nc" id="L50">                                Properties connectionProperties = new Properties();</span>
+<span class="nc" id="L51">                                ClassLoader loader = ConnectionOptionsPlugin.class.getClassLoader();</span>
+<span class="nc" id="L52">                                try (InputStream resourceStream = loader.getResourceAsStream(&quot;db_connection.properties&quot;)) {</span>
+<span class="nc" id="L53">                                    connectionProperties.load(resourceStream);</span>
+<span class="pc" id="L54">                                    return new ConnectionOptions() {</span>
+                                        @Override
+                                        public String getUrl() throws ReadValueException {
+<span class="nc" id="L57">                                            return connectionProperties.getProperty(&quot;url&quot;);</span>
+                                        }
+                                        @Override
+                                        public String getUsername() throws ReadValueException {
+<span class="nc" id="L61">                                            return connectionProperties.getProperty(&quot;username&quot;);</span>
+                                        }
+                                        @Override
+                                        public String getPassword() throws ReadValueException {
+<span class="nc" id="L65">                                            return connectionProperties.getProperty(&quot;password&quot;);</span>
+                                        }
+                                        @Override
+                                        public Integer getMaxConnections() throws ReadValueException {
+<span class="nc" id="L69">                                            return Integer.parseInt(connectionProperties.getProperty(&quot;maxConnections&quot;, &quot;1&quot;));</span>
+                                        }
+                                        @Override
+                                        public void setUrl(final String url) throws ChangeValueException {
+<span class="nc" id="L73">                                        }</span>
+                                        @Override
+                                        public void setUsername(final String username) throws ChangeValueException {
+<span class="nc" id="L76">                                        }</span>
+                                        @Override
+                                        public void setPassword(final String password) throws ChangeValueException {
+<span class="nc" id="L79">                                        }</span>
+                                        @Override
+                                        public void setMaxConnections(final Integer maxConnections) throws ChangeValueException {
+<span class="nc" id="L82">                                        }</span>
+                                    };
+<span class="nc bnc" id="L84" title="All 8 branches missed.">                                } catch (Exception e) {</span>
+<span class="nc" id="L85">                                    throw new RuntimeException(e);</span>
+                                }
+                            }
+                        ));
+<span class="nc" id="L89">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L90">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't get CreateSessionActor key&quot;, e);</span>
+<span class="nc" id="L91">                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L92">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L93">                    } catch (RegistrationException e) {</span>
+<span class="nc" id="L94">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L95">                    }</span>
+<span class="nc" id="L96">                });</span>
+<span class="nc" id="L97">            bootstrap.add(item);</span>
+<span class="nc" id="L98">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L99">            throw new PluginException(&quot;Can't load ConnectionOptionsPlugin&quot;, e);</span>
+<span class="nc" id="L100">        }</span>
+<span class="nc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

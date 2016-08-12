@@ -2,7 +2,6 @@
 
 
 import info.smart_tools.smartactors.actors.check_user_is_new.CheckUserIsNewActor;
-import info.smart_tools.smartactors.actors.check_user_is_new.wrapper.ActorParams;
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
@@ -12,6 +11,7 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationExc
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
@@ -41,48 +41,41 @@ public class CheckUserIsNewActorPlugin implements IPlugin {
 
 <span class="nc" id="L42">            item</span>
 <span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L44">                    .process(() -&gt; {</span>
+<span class="nc" id="L44">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L45">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L46">                            IKey checkUserIsNewActorKey = Keys.getOrAdd(CheckUserIsNewActor.class.getCanonicalName());</span>
-<span class="nc" id="L47">                            IOC.register(checkUserIsNewActorKey,</span>
+<span class="nc" id="L47">                            IKey checkUserIsNewActorKey = Keys.getOrAdd(CheckUserIsNewActor.class.getCanonicalName());</span>
+<span class="nc" id="L48">                            IOC.register(checkUserIsNewActorKey,</span>
                                     new CreateNewInstanceStrategy(
                                             (args) -&gt; {
                                                 try {
-<span class="nc" id="L51">                                                    ActorParams actorParams =</span>
-<span class="nc" id="L52">                                                            IOC.resolve(</span>
-<span class="nc" id="L53">                                                                    Keys.getOrAdd(ActorParams.class.getCanonicalName()),</span>
-                                                                    args[0]);
-<span class="nc" id="L55">                                                    return new CheckUserIsNewActor(actorParams);</span>
-<span class="nc" id="L56">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
-<span class="nc" id="L57">                                                    throw new RuntimeException(</span>
+<span class="nc" id="L52">                                                    return new CheckUserIsNewActor((IObject) args[0]);</span>
+<span class="nc" id="L53">                                                } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L54">                                                    throw new RuntimeException(</span>
                                                             &quot;Can't get args: args must contain one or more elements &quot; +
                                                                     &quot;and first element must be IObject&quot;,
                                                             e);
-<span class="nc" id="L61">                                                } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L62">                                                    throw new RuntimeException(</span>
+<span class="nc" id="L58">                                                } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L59">                                                    throw new RuntimeException(</span>
                                                             &quot;Can't create actor with this args: &quot;
-<span class="nc" id="L64">                                                                    + Arrays.toString(args),</span>
-                                                            e);
-<span class="nc" id="L66">                                                } catch (ResolutionException e) {</span>
-<span class="nc" id="L67">                                                    throw new RuntimeException(</span>
-                                                            &quot;Can't get ActorParams wrapper or Key for ActorParams&quot;,
+<span class="nc" id="L61">                                                                    + Arrays.toString(args),</span>
                                                             e);
                                                 }
                                             }
                                     )
                             );
-<span class="nc" id="L74">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L75">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't get CheckUserIsNewActor key&quot;, e);</span>
-<span class="nc" id="L76">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L77">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L78">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L79">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L80">                        }</span>
-<span class="nc" id="L81">                    });</span>
-<span class="nc" id="L82">            bootstrap.add(item);</span>
-<span class="nc" id="L83">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L84">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
-<span class="nc" id="L85">        }</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L67">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L68">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't get CheckUserIsNewActor key&quot;, e);</span>
+<span class="nc" id="L69">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L70">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L71">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L72">                            throw new ActionExecuteException(&quot;CheckUserIsNewActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L73">                        }</span>
+<span class="nc" id="L74">                    });</span>
+<span class="nc" id="L75">            bootstrap.add(item);</span>
+<span class="nc" id="L76">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L77">            throw new PluginException(&quot;Can't get BootstrapItem from one of reason&quot;, e);</span>
+<span class="nc" id="L78">        }</span>
+<span class="nc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

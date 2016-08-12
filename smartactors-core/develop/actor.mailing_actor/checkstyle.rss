@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>actor.mailing_actor - Checkstyle report</title>
+    <link>actor.mailing_actor/actor.mailing_actor/</link>
+    <description>actor.mailing_actor - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2016</copyright>
+    <item>
+      <title>File: 14,
+             Errors: 0,
+             Warnings: 40,
+             Infos: 0
+      </title>
+            <link>actor.mailing_actor/actor.mailing_actor//checkstyle.html</link>
+      <description>
+        <p>Click <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.MailingActor.java">info/smart_tools/smartactors/actors/mailing/MailingActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.exception.MailingActorException.java">info/smart_tools/smartactors/actors/mailing/exception/MailingActorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.wrapper.package-info.java">info/smart_tools/smartactors/actors/mailing/wrapper/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.exception.AttributeSetterException.java">info/smart_tools/smartactors/actors/mailing/exception/AttributeSetterException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.SMTPMessageAdaptor.java">info/smart_tools/smartactors/actors/mailing/email/SMTPMessageAdaptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.MessageAttributeSetter.java">info/smart_tools/smartactors/actors/mailing/email/MessageAttributeSetter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.exception.package-info.java">info/smart_tools/smartactors/actors/mailing/exception/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.exception.PartCreatorException.java">info/smart_tools/smartactors/actors/mailing/exception/PartCreatorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.wrapper.MailingMessage.java">info/smart_tools/smartactors/actors/mailing/wrapper/MailingMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.package-info.java">info/smart_tools/smartactors/actors/mailing/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.MessagePartCreator.java">info/smart_tools/smartactors/actors/mailing/email/MessagePartCreator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.MessageAttributeSetters.java">info/smart_tools/smartactors/actors/mailing/email/MessageAttributeSetters.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.MessagePartCreators.java">info/smart_tools/smartactors/actors/mailing/email/MessagePartCreators.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="actor.mailing_actor/actor.mailing_actor//checkstyle.html#info.smart_tools.smartactors.actors.mailing.email.package-info.java">info/smart_tools/smartactors/actors/mailing/email/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

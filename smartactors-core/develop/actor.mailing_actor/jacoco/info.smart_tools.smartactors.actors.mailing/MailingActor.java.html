@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MailingActor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.mailing_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.mailing</a> &gt; <span class="el_source">MailingActor.java</span></div><h1>MailingActor.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.mailing;
+
+
+import info.smart_tools.smartactors.actors.mailing.email.MessageAttributeSetters;
+import info.smart_tools.smartactors.actors.mailing.email.MessagePartCreators;
+import info.smart_tools.smartactors.actors.mailing.email.SMTPMessageAdaptor;
+import info.smart_tools.smartactors.actors.mailing.exception.AttributeSetterException;
+import info.smart_tools.smartactors.actors.mailing.exception.MailingActorException;
+import info.smart_tools.smartactors.actors.mailing.wrapper.MailingMessage;
+import info.smart_tools.smartactors.core.field.Field;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import me.normanmaurer.niosmtp.delivery.Authentication;
+import me.normanmaurer.niosmtp.delivery.SMTPDeliveryAgent;
+import me.normanmaurer.niosmtp.delivery.SMTPDeliveryEnvelope;
+import me.normanmaurer.niosmtp.delivery.impl.AuthenticationImpl;
+import me.normanmaurer.niosmtp.delivery.impl.SMTPDeliveryAgentConfigImpl;
+import me.normanmaurer.niosmtp.delivery.impl.SMTPDeliveryEnvelopeImpl;
+import me.normanmaurer.niosmtp.transport.SMTPClientTransport;
+import me.normanmaurer.niosmtp.transport.netty.NettyLMTPClientTransportFactory;
+import me.normanmaurer.niosmtp.transport.netty.NettySMTPClientTransportFactory;
+
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.net.ssl.SSLContext;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+/**
+ * Actor for sending emails
+ */
+public class MailingActor {
+    private SMTPDeliveryAgent deliveryAgent;
+<span class="nc" id="L47">    private SMTPDeliveryAgentConfigImpl deliveryAgentConfig = new SMTPDeliveryAgentConfigImpl();</span>
+    private InetSocketAddress serverHost;
+    private URI serverUri;
+    private IObject mailingContext;
+
+    private static Field serverURI_ActorParams_F;
+    private static Field senderAddress_ActorParams_F;
+    private static Field userName_ActorParams_F;
+    private static Field password_ActorParams_F;
+    private static Field authenticationMode_ActorParams_F;
+    private static Field SSLProtocol_ActorParams_F;
+    private static Field senderAddress_Context_F;
+
+
+    // Functions creating client transport, depending on server URI scheme
+<span class="nc" id="L62">    private static Map&lt;String, Function&lt;IObject, SMTPClientTransport&gt;&gt; transportCreators</span>
+<span class="nc" id="L63">            = new HashMap&lt;String, Function&lt;IObject, SMTPClientTransport&gt;&gt;() {{</span>
+<span class="nc" id="L64">        put(&quot;smtp&quot;, params -&gt; NettySMTPClientTransportFactory.createNio().createPlain());</span>
+<span class="nc" id="L65">        put(&quot;smtps&quot;, params -&gt; NettySMTPClientTransportFactory.createNio().createSMTPS(createSSLContext(params)));</span>
+<span class="nc" id="L66">        put(&quot;lmtp&quot;, params -&gt; NettyLMTPClientTransportFactory.createNio().createPlain());</span>
+<span class="nc" id="L67">    }};</span>
+
+    /**
+     * Constructor.
+     *
+     * @param params actor parameters. Expected following fields:
+     *      &lt;ul&gt;
+     *               &lt;li&gt;&quot;username&quot; - username used for authentication on SMTP server.&lt;/li&gt;
+     *               &lt;li&gt;&quot;password&quot; - password used for authentication on SMTP server.&lt;/li&gt;
+     *               &lt;li&gt;&quot;authenticationMode&quot; - use &quot;Login&quot; for login/password authentication.&lt;/li&gt;
+     *               &lt;li&gt;&quot;server&quot; - URI of SMTP/LMTP server. Supported schemes are: &quot;smtp&quot;, &quot;smtps&quot; and &quot;lmtp&quot;.&lt;/li&gt;
+     *               &lt;li&gt;&quot;sslProtocol&quot; - name of SSL protocol for SMTPS transport.&lt;/li&gt;
+     *               &lt;li&gt;&quot;senderAddress&quot; - e-mail address used to send mail from.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */
+<span class="nc" id="L82">    public MailingActor(final IObject params) throws MailingActorException {</span>
+        try {
+            //Fields initialize
+<span class="nc" id="L85">            serverURI_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;server&quot;);</span>
+<span class="nc" id="L86">            senderAddress_Context_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;senderAddress&quot;);</span>
+<span class="nc" id="L87">            senderAddress_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;senderAddress&quot;);</span>
+<span class="nc" id="L88">            userName_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;username&quot;);</span>
+<span class="nc" id="L89">            password_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;password&quot;);</span>
+<span class="nc" id="L90">            authenticationMode_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;authenticationMode&quot;);</span>
+<span class="nc" id="L91">            SSLProtocol_ActorParams_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;sslProtocol&quot;);</span>
+<span class="nc" id="L92">            senderAddress_Context_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;senderAddress&quot;);</span>
+
+<span class="nc" id="L94">            mailingContext = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="nc" id="L96">            serverUri = new URI(serverURI_ActorParams_F.in(params, String.class));</span>
+<span class="nc" id="L97">            serverHost = new InetSocketAddress(serverUri.getHost(), serverUri.getPort());</span>
+
+<span class="nc" id="L99">            senderAddress_Context_F.out(</span>
+                    mailingContext,
+<span class="nc" id="L101">                    senderAddress_ActorParams_F.in(params, String.class));</span>
+
+<span class="nc" id="L103">            deliveryAgent = createAgent(params);</span>
+
+<span class="nc" id="L105">            Authentication authentication = new AuthenticationImpl(</span>
+<span class="nc" id="L106">                    userName_ActorParams_F.in(params, String.class),</span>
+<span class="nc" id="L107">                    password_ActorParams_F.in(params, String.class),</span>
+<span class="nc" id="L108">                    Authentication.AuthMode.valueOf(authenticationMode_ActorParams_F.in(params, String.class)));</span>
+<span class="nc" id="L109">            deliveryAgentConfig.setAuthentication(authentication);</span>
+<span class="nc" id="L110">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L111">            throw new MailingActorException(&quot;Params object is not correct&quot;, e);</span>
+<span class="nc" id="L112">        } catch (URISyntaxException e) {</span>
+<span class="nc" id="L113">            throw new MailingActorException(&quot;Failed to create URI&quot;, e);</span>
+<span class="nc" id="L114">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L115">            throw new MailingActorException(&quot;Failed to resolve fields&quot;, e);</span>
+<span class="nc" id="L116">        }</span>
+<span class="nc" id="L117">    }</span>
+
+    /**
+     * Creates SSL context for encrypted client transport
+     *
+     * @param actorParams parameters of mailing actor. Expected all fields of actor's constructor parameters related to
+     *                    creation of SSL context (for now only &quot;sslProtocol&quot;).
+     * @return created SSL context
+     */
+    private static SSLContext createSSLContext(final IObject actorParams) {
+        try {
+<span class="nc" id="L128">            SSLContext sslContext = SSLContext.getInstance(SSLProtocol_ActorParams_F.in(actorParams, String.class));</span>
+<span class="nc" id="L129">            sslContext.init(null, null, null);</span>
+<span class="nc" id="L130">            return sslContext;</span>
+<span class="nc" id="L131">        } catch (ReadValueException | NoSuchAlgorithmException | KeyManagementException | InvalidArgumentException e) {</span>
+<span class="nc" id="L132">            throw new RuntimeException(e);</span>
+        }
+    }
+
+    /**
+     * Creates delivery agent with transport type specified by server URI scheme.
+     *
+     * @param actorParams parameters of mailing actor
+     * @return created delivery agent
+     */
+    private SMTPDeliveryAgent createAgent(final IObject actorParams) {
+<span class="nc" id="L143">        return new SMTPDeliveryAgent(transportCreators.get(serverUri.getScheme()).apply(actorParams));</span>
+    }
+
+    /**
+     * Handler for sending emails
+     * @param message the wrapper for message
+     */
+    public void sendMailHandler(final MailingMessage message) {
+        try {
+<span class="nc" id="L152">            List&lt;String&gt; recipients = message.getSendToMessage();</span>
+<span class="nc" id="L153">            SMTPMessageAdaptor smtpMessage = new SMTPMessageAdaptor(SMTPMessageAdaptor.createMimeMessage());</span>
+
+<span class="nc" id="L155">            setMessageAttributes(</span>
+                    smtpMessage,
+<span class="nc" id="L157">                    message.getMessageAttributesMessage(),</span>
+                    recipients);
+
+<span class="nc" id="L160">            MessagePartCreators.addAllPartsTo(</span>
+                    smtpMessage,
+                    mailingContext,
+<span class="nc" id="L163">                    message.getMessagePartsMessage()</span>
+            );
+
+<span class="nc" id="L166">            SMTPDeliveryEnvelope deliveryEnvelope = new SMTPDeliveryEnvelopeImpl(</span>
+<span class="nc" id="L167">                    senderAddress_Context_F.in(mailingContext, String.class), recipients, smtpMessage);</span>
+
+<span class="nc" id="L169">            deliveryAgent.deliver(serverHost, deliveryAgentConfig, deliveryEnvelope);</span>
+<span class="nc" id="L170">        } catch (Exception e) {</span>
+<span class="nc" id="L171">            throw new RuntimeException(e);</span>
+<span class="nc" id="L172">        }</span>
+<span class="nc" id="L173">    }</span>
+
+    private void setMessageAttributes(final SMTPMessageAdaptor smtpMessage, final IObject attributes, final List&lt;String&gt; recipients)
+            throws Exception {
+<span class="nc" id="L177">        smtpMessage.getMimeMessage().setFrom(</span>
+<span class="nc" id="L178">                new InternetAddress(senderAddress_Context_F.in(mailingContext, String.class)));</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        for (String recipient : recipients) {</span>
+<span class="nc" id="L180">            smtpMessage.getMimeMessage().addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));</span>
+<span class="nc" id="L181">        }</span>
+
+<span class="nc" id="L183">        MessageAttributeSetters.applyAll(</span>
+                attributes,
+                mailingContext, smtpMessage);
+<span class="nc" id="L186">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

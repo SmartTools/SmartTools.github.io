@@ -44,29 +44,28 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>              creatorsItem
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>                      .after(<span class="jxr_string">"IOC"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>                      .after(<span class="jxr_string">"FieldNamePlugin"</span>)
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>                      .after(<span class="jxr_string">"IFieldNamePlugin"</span>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>                      .before(<span class="jxr_string">"configure"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>                      .process(() -&gt; {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>                          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>                              IOC.register(
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>                                      Keys.getOrAdd(IRoutedObjectCreator.<strong class="jxr_keyword">class</strong>.getCanonicalName() + <span class="jxr_string">"#raw"</span>),
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                                      <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html">SingletonStrategy</a>(<strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/plugin/standard_object_creators/RawObjectCreator.html">RawObjectCreator</a>()));
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                          } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't get StandardObjectCreators key"</span>, e);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't create strategy"</span>, e);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                          } <strong class="jxr_keyword">catch</strong> (RegistrationException e) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't register new strategy"</span>, e);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                          }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                      });
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>              bootstrap.add(creatorsItem);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iplugin/exception/PluginException.html">PluginException</a>(e);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  }
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>                      .after(<span class="jxr_string">"IFieldNamePlugin"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                      .before(<span class="jxr_string">"configure"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>                      .process(() -&gt; {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>                          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>                              IOC.register(
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>                                      Keys.getOrAdd(IRoutedObjectCreator.<strong class="jxr_keyword">class</strong>.getCanonicalName() + <span class="jxr_string">"#raw"</span>),
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>                                      <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html">SingletonStrategy</a>(<strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/plugin/standard_object_creators/RawObjectCreator.html">RawObjectCreator</a>()));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                          } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't get StandardObjectCreators key"</span>, e);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't create strategy"</span>, e);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                          } <strong class="jxr_keyword">catch</strong> (RegistrationException e) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iaction/exception/ActionExecuteException.html">ActionExecuteException</a>(<span class="jxr_string">"StandardObjectCreators plugin can't load: can't register new strategy"</span>, e);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                          }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                      });
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>              bootstrap.add(creatorsItem);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/iplugin/exception/PluginException.html">PluginException</a>(e);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

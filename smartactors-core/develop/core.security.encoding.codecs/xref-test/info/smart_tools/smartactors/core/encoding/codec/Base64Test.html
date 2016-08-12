@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Base64Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/info/smart_tools/smartactors/core/encoding/codec/Base64Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.encoding.codec;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.security.encoding.codecs.ICodec;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.security.encoding.decoders.DecodingException;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.security.encoding.encoders.EncodingException;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../info/smart_tools/smartactors/core/encoding/codec/Base64Test.html">Base64Test</a> {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ICodec base64 = Base64.create();
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> byte[] SOURCE_MSG = (<span class="jxr_string">"Hello my young friend. "</span> +
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>              <span class="jxr_string">"You can see how it's is a nice text will converted to some shit, "</span> +
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>              <span class="jxr_string">"but to see it, you should debug this text. Here are the things here."</span>).getBytes();
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> byte[] BASE64_MSG = (<span class="jxr_string">"SGVsbG8gbXkgeW91bmcgZnJpZW5kLi"</span> +
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>              <span class="jxr_string">"BZb3UgY2FuIHNlZSBob3cgaXQncyBpcyBhIG5pY2UgdGV4"</span> +
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>              <span class="jxr_string">"dCB3aWxsIGNvbnZlcnRlZCB0byBzb21lIHNoaXQsIGJ1dC"</span> +
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>              <span class="jxr_string">"B0byBzZWUgaXQsIHlvdSBzaG91bGQgZGVidWcgdGhpcyB0"</span> +
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>              <span class="jxr_string">"ZXh0LiBIZXJlIGFyZSB0aGUgdGhpbmdzIGhlcmUu"</span>).getBytes();
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      @Test
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> encodeBase64Test() <strong class="jxr_keyword">throws</strong> EncodingException {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>          byte[] base64EncodeResult = base64.encode(SOURCE_MSG);
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>          assertTrue(Arrays.equals(base64EncodeResult, BASE64_MSG));
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      }
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      @Test
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> decodeBase64Test() <strong class="jxr_keyword">throws</strong> DecodingException {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>          byte[] base64DecodeResult = base64.decode(BASE64_MSG);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>          assertTrue(Arrays.equals(base64DecodeResult, SOURCE_MSG));
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      }
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2016. All rights reserved.</div>
+</body>
+</html>

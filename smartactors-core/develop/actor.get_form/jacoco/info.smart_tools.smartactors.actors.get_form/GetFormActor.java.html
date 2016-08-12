@@ -27,8 +27,8 @@ public class GetFormActor {
      */
 <span class="fc" id="L28">    public GetFormActor(final IObject params) throws GetFormActorException {</span>
         try {
-<span class="fc" id="L30">            IField field = IOC.resolve(Keys.getOrAdd(IField.class.toString()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L31">            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), field.in(params), KEY_NAME);</span>
+<span class="fc" id="L30">            IField field = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L31">            collection = IOC.resolve(Keys.getOrAdd(ICachedCollection.class.getCanonicalName()), field.in(params), KEY_NAME);</span>
 <span class="fc" id="L32">        } catch (Exception e) {</span>
 <span class="fc" id="L33">            throw new GetFormActorException(&quot;Can't create GetFormActor&quot;, e);</span>
 <span class="fc" id="L34">        }</span>
@@ -42,7 +42,7 @@ public class GetFormActor {
     public void getForm(final GetFormMessage message) throws  GetFormActorException {
         try {
 <span class="fc" id="L44">            List&lt;IObject&gt; forms = collection.getItems(message.getFormKey());</span>
-<span class="fc" id="L45">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());</span>
+<span class="fc" id="L45">            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.getCanonicalName()), message.getFormKey());</span>
 <span class="fc" id="L46">            message.setForm(strategy.getForm(forms));</span>
 
 <span class="nc" id="L48">        } catch (Exception e) {</span>

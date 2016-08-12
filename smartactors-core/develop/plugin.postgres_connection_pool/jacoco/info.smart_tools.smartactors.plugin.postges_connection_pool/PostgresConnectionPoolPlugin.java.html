@@ -48,41 +48,42 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
 <span class="nc" id="L48">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;PostgresConnectionPoolPlugin&quot;);</span>
 <span class="nc" id="L49">            item</span>
 <span class="nc" id="L50">                .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L51">                .process(() -&gt; {</span>
+<span class="nc" id="L51">                .before(&quot;CreateCachedCollectionPlugin&quot;)</span>
+<span class="nc" id="L52">                .process(() -&gt; {</span>
                     try {
-<span class="nc" id="L53">                        IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
-<span class="nc" id="L54">                        IOC.register(postgresConnectionPoolKey, new ApplyFunctionToArgumentsStrategy(</span>
+<span class="nc" id="L54">                        IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
+<span class="nc" id="L55">                        IOC.register(postgresConnectionPoolKey, new ApplyFunctionToArgumentsStrategy(</span>
                             (args) -&gt; {
-<span class="nc" id="L56">                                ConnectionOptions connectionOptions = (ConnectionOptions) args[0];</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">                                if (connectionOptions == null) {</span>
-<span class="nc" id="L58">                                    throw new RuntimeException(&quot;Can't resolve connection pool: connectionOptions is null&quot;);</span>
+<span class="nc" id="L57">                                ConnectionOptions connectionOptions = (ConnectionOptions) args[0];</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                                if (connectionOptions == null) {</span>
+<span class="nc" id="L59">                                    throw new RuntimeException(&quot;Can't resolve connection pool: connectionOptions is null&quot;);</span>
                                 }
 
                                 try {
-<span class="nc" id="L62">                                    return new Pool(connectionOptions.getMaxConnections(), () -&gt; {</span>
+<span class="nc" id="L63">                                    return new Pool(connectionOptions.getMaxConnections(), () -&gt; {</span>
                                         try {
-<span class="nc" id="L64">                                            return new PostgresConnection(connectionOptions);</span>
-<span class="nc" id="L65">                                        } catch (StorageException e) {</span>
-<span class="nc" id="L66">                                            throw new RuntimeException(e);</span>
+<span class="nc" id="L65">                                            return new PostgresConnection(connectionOptions);</span>
+<span class="nc" id="L66">                                        } catch (StorageException e) {</span>
+<span class="nc" id="L67">                                            throw new RuntimeException(e);</span>
                                         }
                                     });
-<span class="nc" id="L69">                                } catch (ReadValueException e) {</span>
-<span class="nc" id="L70">                                    throw new RuntimeException(&quot;Can't create PostgresConnectionPool&quot;, e);</span>
+<span class="nc" id="L70">                                } catch (ReadValueException e) {</span>
+<span class="nc" id="L71">                                    throw new RuntimeException(&quot;Can't create PostgresConnectionPool&quot;, e);</span>
                                 }
 
                             }));
-<span class="nc" id="L74">                    } catch (ResolutionException e) {</span>
-<span class="nc" id="L75">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't get PostgresConnectionPool key&quot;, e);</span>
-<span class="nc" id="L76">                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L77">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L78">                    } catch (RegistrationException e) {</span>
-<span class="nc" id="L79">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L80">                    }</span>
-<span class="nc" id="L81">            });</span>
-<span class="nc" id="L82">            bootstrap.add(item);</span>
-<span class="nc" id="L83">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L84">            throw new PluginException(&quot;Can't load postgres connection pool plugin&quot;, e);</span>
-<span class="nc" id="L85">        }</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L75">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L76">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't get PostgresConnectionPool key&quot;, e);</span>
+<span class="nc" id="L77">                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L78">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L79">                    } catch (RegistrationException e) {</span>
+<span class="nc" id="L80">                        throw new ActionExecuteException(&quot;PostgresConnectionPool plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L81">                    }</span>
+<span class="nc" id="L82">            });</span>
+<span class="nc" id="L83">            bootstrap.add(item);</span>
+<span class="nc" id="L84">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L85">            throw new PluginException(&quot;Can't load postgres connection pool plugin&quot;, e);</span>
+<span class="nc" id="L86">        }</span>
+<span class="nc" id="L87">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

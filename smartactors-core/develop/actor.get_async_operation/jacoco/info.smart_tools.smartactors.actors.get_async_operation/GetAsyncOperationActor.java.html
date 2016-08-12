@@ -4,7 +4,9 @@ import info.smart_tools.smartactors.actors.get_async_operation.exception.GetAsyn
 import info.smart_tools.smartactors.actors.get_async_operation.wrapper.GetAsyncOperationMessage;
 import info.smart_tools.smartactors.core.async_operation_collection.IAsyncOperationCollection;
 import info.smart_tools.smartactors.core.async_operation_collection.exception.GetAsyncOperationException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -16,12 +18,25 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
  */
 public class GetAsyncOperationActor {
 
+    private IAsyncOperationCollection collection;
+
     /**
      * Constructor needed for registry actor
      * @param params iobject
+     * @throws GetAsyncOperationActorException if any error is occurred
      */
-<span class="fc" id="L23">    public GetAsyncOperationActor(final IObject params) {</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L28">    public GetAsyncOperationActor(final IObject params) throws GetAsyncOperationActorException {</span>
+        try {
+<span class="fc" id="L30">            IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L31">            collection = IOC.resolve(</span>
+<span class="fc" id="L32">                Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()), (String) collectionNameField.in(params)</span>
+            );
+<span class="nc" id="L34">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L35">            throw new GetAsyncOperationActorException(&quot;Can't read collection name from message&quot;, e);</span>
+<span class="nc" id="L36">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L37">            throw new GetAsyncOperationActorException(&quot;Can't get key or resolve dependency&quot;, e);</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Gets operation from collection of asynchronous operations.
@@ -34,16 +49,15 @@ public class GetAsyncOperationActor {
     public void getOperation(final GetAsyncOperationMessage message) throws GetAsyncOperationActorException {
 
         try {
-<span class="fc" id="L37">            IAsyncOperationCollection collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()));</span>
-<span class="fc" id="L38">            String token = message.getToken();</span>
-<span class="fc" id="L39">            IObject asyncOperation = collection.getAsyncOperation(token);</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (asyncOperation == null) {</span>
-<span class="fc" id="L41">                throw new GetAsyncOperationActorException(&quot;Asynchronous operation by token &quot; + token + &quot; is null&quot;);</span>
+<span class="fc" id="L52">            String token = message.getToken();</span>
+<span class="fc" id="L53">            IObject asyncOperation = collection.getAsyncOperation(token);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (asyncOperation == null) {</span>
+<span class="fc" id="L55">                throw new GetAsyncOperationActorException(&quot;Asynchronous operation by token &quot; + token + &quot; is null&quot;);</span>
             }
-<span class="fc" id="L43">            message.setAsyncOperation(asyncOperation);</span>
-<span class="nc" id="L44">        } catch (ResolutionException | ChangeValueException | GetAsyncOperationException | ReadValueException e) {</span>
-<span class="nc" id="L45">            throw new GetAsyncOperationActorException(&quot;Can't get async operation by token.&quot;, e);</span>
-<span class="fc" id="L46">        }</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L57">            message.setAsyncOperation(asyncOperation);</span>
+<span class="nc" id="L58">        } catch (ChangeValueException | GetAsyncOperationException | ReadValueException e) {</span>
+<span class="nc" id="L59">            throw new GetAsyncOperationActorException(&quot;Can't get async operation by token.&quot;, e);</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

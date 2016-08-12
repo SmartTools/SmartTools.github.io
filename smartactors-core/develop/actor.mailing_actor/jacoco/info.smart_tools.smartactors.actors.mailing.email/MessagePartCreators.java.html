@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MessagePartCreators.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">actor.mailing_actor</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.actors.mailing.email</a> &gt; <span class="el_source">MessagePartCreators.java</span></div><h1>MessagePartCreators.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.actors.mailing.email;
+
+import info.smart_tools.smartactors.actors.mailing.exception.PartCreatorException;
+import info.smart_tools.smartactors.core.field.Field;
+import info.smart_tools.smartactors.core.ifield.IField;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L23">public class MessagePartCreators {</span>
+<span class="fc" id="L24">    private static Map&lt;String, MessagePartCreator&gt; creatorsMap = new HashMap&lt;&gt;();</span>
+    private static Field partType_Part_F;
+    private static Field partText_TextPart_F;
+    private static Field partMime_Part_F;
+    private static Field sourcePath_FilePart_F;
+    private static Field attachmentName_FilePart_F;
+
+    public static void addAllPartsTo(final SMTPMessageAdaptor smtpMessage, final IObject context, final List&lt;IObject&gt; parts) throws Exception {
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        for (IObject part : parts) {</span>
+            try {
+<span class="fc" id="L34">                creatorsMap</span>
+<span class="fc" id="L35">                        .get(partType_Part_F.in(part))</span>
+<span class="fc" id="L36">                        .addPartTo(smtpMessage, context, part);</span>
+<span class="nc" id="L37">            } catch (NullPointerException e) {</span>
+<span class="nc" id="L38">                throw new PartCreatorException(&quot;Part type not found.&quot;, e);</span>
+<span class="nc" id="L39">            } catch (ChangeValueException | ReadValueException | MessagingException e) {</span>
+<span class="nc" id="L40">                throw new PartCreatorException(&quot;Failed to create message part.&quot;, e);</span>
+<span class="nc" id="L41">            } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L42">                throw new Exception(&quot;Failed to extract type&quot;, e);</span>
+<span class="fc" id="L43">            }</span>
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">    }</span>
+
+    public static void add(String name, MessagePartCreator creator) {
+<span class="fc" id="L48">        creatorsMap.put(name, creator);</span>
+<span class="fc" id="L49">    }</span>
+
+    static {
+        try {
+<span class="fc" id="L53">            partType_Part_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;type&quot;);</span>
+<span class="fc" id="L54">            partText_TextPart_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;text&quot;);</span>
+<span class="fc" id="L55">            partMime_Part_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;mime&quot;);</span>
+<span class="fc" id="L56">            sourcePath_FilePart_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;sourceFile&quot;);</span>
+<span class="fc" id="L57">            attachmentName_FilePart_F = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;attachmentName&quot;);</span>
+<span class="nc" id="L58">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L59">            throw new RuntimeException(&quot;Failed to initialize fields&quot;, e);</span>
+<span class="fc" id="L60">        }</span>
+
+<span class="fc" id="L62">        add(&quot;text&quot;, (smtpMessage, context, partDescription) -&gt; {</span>
+            try {
+<span class="fc" id="L64">                MimeBodyPart part = new MimeBodyPart();</span>
+<span class="fc" id="L65">                part.setContent(</span>
+<span class="fc" id="L66">                        partText_TextPart_F.in(partDescription),</span>
+<span class="fc" id="L67">                        partMime_Part_F.in(partDescription));</span>
+<span class="fc" id="L68">                smtpMessage.addPart(part);</span>
+<span class="nc" id="L69">            } catch (Exception e) {</span>
+<span class="nc" id="L70">                throw new RuntimeException(&quot;Failed to set part of email.&quot;, e);</span>
+<span class="fc" id="L71">            }</span>
+<span class="fc" id="L72">        });</span>
+<span class="fc" id="L73">        add(&quot;file&quot;, (smtpMessage, context, partDescription) -&gt; {</span>
+            try {
+<span class="nc" id="L75">                MimeBodyPart part = new MimeBodyPart();</span>
+
+<span class="nc" id="L77">                DataSource dataSource = new FileDataSource(</span>
+<span class="nc" id="L78">                        (String) sourcePath_FilePart_F.in(partDescription));</span>
+
+<span class="nc" id="L80">                part.setDataHandler(new DataHandler(dataSource));</span>
+<span class="nc" id="L81">                part.setFileName(</span>
+<span class="nc" id="L82">                        attachmentName_FilePart_F.in(partDescription));</span>
+<span class="nc" id="L83">                smtpMessage.addPart(part);</span>
+<span class="nc" id="L84">            } catch (Exception e) {</span>
+<span class="nc" id="L85">                throw new RuntimeException(&quot;Failed to set file to mail&quot;, e);</span>
+<span class="nc" id="L86">            }</span>
+<span class="nc" id="L87">        });</span>
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -88,7 +88,7 @@ public class PluginLoader implements IPluginLoader&lt;Collection&lt;IPath&gt;&gt
                     Class clazz;
                     try {
 <span class="fc" id="L90">                        clazz = classLoader.loadClass(className);</span>
-<span class="nc" id="L91">                    } catch (ClassNotFoundException | NoClassDefFoundError e) {</span>
+<span class="nc" id="L91">                    } catch (Throwable e) {</span>
 <span class="nc" id="L92">                        System.err.println(&quot;\n\n\nError loading class &quot; + className + &quot;:&quot;);</span>
 <span class="nc" id="L93">                        e.printStackTrace();</span>
 <span class="nc" id="L94">                        continue;</span>
@@ -102,13 +102,13 @@ public class PluginLoader implements IPluginLoader&lt;Collection&lt;IPath&gt;&gt
 <span class="fc" id="L102">                visitor.pluginLoadingFail(pathToJar, e);</span>
 <span class="fc" id="L103">                throw new PluginLoaderException(&quot;Plugin loading failed: &quot; + pathToJar, e);</span>
             } finally {
-<span class="pc bpc" id="L105" title="1 of 4 branches missed.">                if (null != jarFile) {</span>
+<span class="pc bpc" id="L105" title="2 of 4 branches missed.">                if (null != jarFile) {</span>
                     try {
-<span class="fc" id="L107">                        jarFile.close();</span>
+<span class="pc" id="L107">                        jarFile.close();</span>
 <span class="nc" id="L108">                    } catch (IOException e) {</span>
                         //TODO: replace throw by other logic
 <span class="pc" id="L110">                        throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
-<span class="fc" id="L111">                    }</span>
+<span class="pc" id="L111">                    }</span>
                 }
             }
 <span class="fc" id="L114">        }</span>

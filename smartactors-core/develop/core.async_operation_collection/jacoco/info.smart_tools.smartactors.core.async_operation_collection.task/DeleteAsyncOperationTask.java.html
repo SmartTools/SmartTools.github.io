@@ -28,33 +28,33 @@ public class DeleteAsyncOperationTask implements IDatabaseTask {
      * @param connection the storage connection
      * @throws Exception
      */
-<span class="nc" id="L31">    public DeleteAsyncOperationTask(final IStorageConnection connection) throws Exception {</span>
-<span class="nc" id="L32">        this.connection = connection;</span>
+<span class="fc" id="L31">    public DeleteAsyncOperationTask(final IStorageConnection connection) throws Exception {</span>
+<span class="fc" id="L32">        this.connection = connection;</span>
         try {
-<span class="nc" id="L34">            collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L35">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="fc" id="L34">            collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L35">            documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
 <span class="nc" id="L36">        } catch (Exception e) {</span>
 <span class="nc" id="L37">            throw new DeleteAsyncOperationException(&quot;Failed to create task&quot;, e);</span>
-<span class="nc" id="L38">        }</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
 
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-<span class="nc" id="L44">            deleteTask = IOC.resolve(</span>
-<span class="nc" id="L45">                    Keys.getOrAdd(&quot;db.collection.delete&quot;),</span>
+<span class="fc" id="L44">            deleteTask = IOC.resolve(</span>
+<span class="fc" id="L45">                    Keys.getOrAdd(&quot;db.collection.delete&quot;),</span>
                     connection,
-<span class="nc" id="L47">                    collectionNameField.in(query),</span>
-<span class="nc" id="L48">                    documentField.in(query)</span>
+<span class="fc" id="L47">                    collectionNameField.in(query),</span>
+<span class="fc" id="L48">                    documentField.in(query)</span>
                     );
-<span class="nc" id="L50">        } catch (Exception e) {</span>
-<span class="nc" id="L51">            throw new TaskPrepareException(&quot;Failed to delete async operation&quot;, e);</span>
-<span class="nc" id="L52">        }</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L50">        } catch (Exception e) {</span>
+<span class="fc" id="L51">            throw new TaskPrepareException(&quot;Failed to delete async operation&quot;, e);</span>
+<span class="fc" id="L52">        }</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public void execute() throws TaskExecutionException {
-<span class="nc" id="L57">        deleteTask.execute();</span>
-<span class="nc" id="L58">    }</span>
+<span class="fc" id="L57">        deleteTask.execute();</span>
+<span class="fc" id="L58">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

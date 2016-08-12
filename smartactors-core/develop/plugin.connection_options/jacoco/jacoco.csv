@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+plugin.connection_options,info.smart_tools.smartactors.plugin.connection_options,ConnectionOptionsPlugin,130,0,8,0,29,0,8,0,4,0
+plugin.connection_options,info.smart_tools.smartactors.plugin.connection_options,ConnectionOptionsPlugin.new ConnectionOptions() {...},27,9,0,0,8,1,8,1,8,1

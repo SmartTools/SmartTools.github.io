@@ -1,0 +1,2 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+transformation_rule.get_query_parameter,info.smart_tools.smartactors.transformation_rules.get_query_parameter,GetQueryParameterRule,7,51,0,0,2,8,0,4,0,4

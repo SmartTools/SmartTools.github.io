@@ -12,6 +12,7 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.field.Field;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,19 +20,22 @@ import java.util.Map;
  */
 public class ValidateFormDataActor {
     private Field validationRulesF;
+    private Field ruleF;
 
     /**
      * Constructor
      * @param params the empty IObject
      * @exception InvalidArgumentException Calling when throw any exception
      */
-<span class="fc" id="L28">    public ValidateFormDataActor(final IObject params) throws InvalidArgumentException {</span>
+<span class="fc" id="L30">    public ValidateFormDataActor(final IObject params) throws InvalidArgumentException {</span>
         try {
-<span class="fc" id="L30">            validationRulesF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;validationRules&quot;);</span>
-<span class="nc" id="L31">        } catch (Exception e) {</span>
-<span class="nc" id="L32">            throw new InvalidArgumentException(e);</span>
-<span class="fc" id="L33">        }</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L32">            validationRulesF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;validationRules&quot;);</span>
+<span class="fc" id="L33">            ruleF = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;rule&quot;);</span>
+
+<span class="nc" id="L35">        } catch (Exception e) {</span>
+<span class="nc" id="L36">            throw new InvalidArgumentException(e);</span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">    }</span>
 
     /**
      * Validate form data from client
@@ -40,34 +44,36 @@ public class ValidateFormDataActor {
      */
     public void validate(final ValidateFormDataMessage message) throws ValidateFormException {
         try {
-<span class="fc" id="L43">            IObject formFields = message.getForm();</span>
-<span class="fc" id="L44">            IObject clientData = message.getFormFromRequest();</span>
+<span class="fc" id="L47">            IObject formFields = message.getForm();</span>
+<span class="fc" id="L48">            IObject clientData = message.getFormFromRequest();</span>
 
-<span class="fc" id="L46">            IObject resultObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L50">            IObject resultObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L48">            Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; fieldsIterator = formFields.iterator();</span>
-<span class="fc" id="L49">            Map.Entry&lt;IFieldName, Object&gt; entry = fieldsIterator.next();</span>
+<span class="fc" id="L52">            Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; fieldsIterator = formFields.iterator();</span>
+<span class="fc" id="L53">            Map.Entry&lt;IFieldName, Object&gt; entry = fieldsIterator.next();</span>
 
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            while (entry != null) {</span>
-<span class="fc" id="L52">                IFieldName key = entry.getKey();</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            while (entry != null) {</span>
+<span class="fc" id="L56">                IFieldName key = entry.getKey();</span>
 
-<span class="fc" id="L54">                String rules = validationRulesF.in((IObject) formFields.getValue(key));</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                if (rules != null) {</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">                    if (!new Parser(rules, (String) clientData.getValue(key)).validate()) {</span>
-<span class="fc" id="L57">                        throw new ValidateFormException(&quot;Fields is not correct&quot;);</span>
-                    }
+<span class="fc" id="L58">                List&lt;IObject&gt; rules = validationRulesF.in((IObject) formFields.getValue(key));</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">                if (rules != null) {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                    for (IObject ruleObject : rules) {</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                        if (!new Parser((String) ruleF.in(ruleObject), (String) clientData.getValue(key)).validate()) {</span>
+<span class="nc" id="L62">                            throw new ValidateFormException(&quot;Fields is not correct&quot;);</span>
+                        }
+<span class="fc" id="L64">                    }</span>
                 }
-<span class="fc" id="L60">                resultObject.setValue(key, clientData.getValue(key));</span>
+<span class="fc" id="L66">                resultObject.setValue(key, clientData.getValue(key));</span>
 
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">                if (!fieldsIterator.hasNext()) {</span>
-<span class="fc" id="L63">                    break;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">                if (!fieldsIterator.hasNext()) {</span>
+<span class="fc" id="L69">                    break;</span>
                 }
-<span class="nc" id="L65">                entry = fieldsIterator.next();</span>
-<span class="nc" id="L66">            }</span>
-<span class="fc" id="L67">            message.setFormData(resultObject);</span>
-<span class="fc" id="L68">        } catch (Exception e) {</span>
-<span class="fc" id="L69">            throw new ValidateFormException(e);</span>
-<span class="fc" id="L70">        }</span>
-<span class="fc" id="L71">    }</span>
+<span class="nc" id="L71">                entry = fieldsIterator.next();</span>
+<span class="nc" id="L72">            }</span>
+<span class="fc" id="L73">            message.setFormData(resultObject);</span>
+<span class="fc" id="L74">        } catch (Exception e) {</span>
+<span class="fc" id="L75">            throw new ValidateFormException(e);</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
