@@ -71,9 +71,17 @@
                       <li class="dropdown-submenu">
                                       <a href="project-reports.html"  title="Project Reports">Project Reports</a>
               <ul class="dropdown-menu">
+                                  <li>      <a href="xref/index.html"  title="Source Xref">Source Xref</a>
+</li>
+                                  <li>      <a href="xref-test/index.html"  title="Test Source Xref">Test Source Xref</a>
+</li>
+                                  <li>      <a href="jacoco/index.html"  title="JaCoCo Test">JaCoCo Test</a>
+</li>
                                   <li>      <a href="surefire-report.html"  title="Surefire Report">Surefire Report</a>
 </li>
                                   <li>      <a href="checkstyle.html"  title="Checkstyle">Checkstyle</a>
+</li>
+                                  <li>      <a href="apidocs/index.html"  title="JavaDocs">JavaDocs</a>
 </li>
                               </ul>
             </li>
@@ -154,13 +162,34 @@
           <span class="icon-chevron-right"></span>
         Project Information</a>
                   </li>
-                                                                                              
+                                                                                                                                                                      
       <li>
   
                           <a href="project-reports.html" title="Project Reports">
           <span class="icon-chevron-down"></span>
         Project Reports</a>
                     <ul class="nav nav-list">
+                    
+      <li>
+  
+                          <a href="xref/index.html" title="Source Xref">
+          <span class="none"></span>
+        Source Xref</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="xref-test/index.html" title="Test Source Xref">
+          <span class="none"></span>
+        Test Source Xref</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="jacoco/index.html" title="JaCoCo Test">
+          <span class="none"></span>
+        JaCoCo Test</a>
+            </li>
                     
       <li class="active">
   
@@ -172,6 +201,13 @@
                           <a href="checkstyle.html" title="Checkstyle">
           <span class="none"></span>
         Checkstyle</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="apidocs/index.html" title="JavaDocs">
+          <span class="none"></span>
+        JavaDocs</a>
             </li>
               </ul>
         </li>
@@ -223,7 +259,8 @@ function toggleDisplay(elementId) {
 <div class="section">
 <h2><a name="Surefire_Report"></a>Surefire Report</h2></div>
 <div class="section">
-<h2><a name="Summary"></a>Summary</h2><a name="Summary"></a><br />
+<h2><a name="Summary"></a>Summary</h2><a name="Summary"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
 <table border="1" class="table table-striped">
 <tr class="a">
 <th>Tests</th>
@@ -233,13 +270,80 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
+<td>1</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>0</td>
+<td>1</td>
 <td>0%</td>
-<td>0</td></tr></table><br />
+<td>0.2</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
+<div class="section">
+<h2><a name="Package_List"></a>Package List</h2><a name="Package_List"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="table table-striped">
+<tr class="a">
+<th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#info.smart_tools.smartactors.sandbox.server_with_configuration">info.smart_tools.smartactors.sandbox.server_with_configuration</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0%</td>
+<td>0.2</td></tr></table><br />
+<p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
+<div class="section">
+<h3><a name="info.smart_tools.smartactors.sandbox.server_with_configuration"></a>info.smart_tools.smartactors.sandbox.server_with_configuration</h3><a name="info.smart_tools.smartactors.sandbox.server_with_configuration"></a>
+<table border="1" class="table table-striped">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#info.smart_tools.smartactors.sandbox.server_with_configurationServerWithConfigurationTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#info.smart_tools.smartactors.sandbox.server_with_configurationServerWithConfigurationTest">ServerWithConfigurationTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0%</td>
+<td>0.2</td></tr></table></div><br /></div>
+<div class="section">
+<h2><a name="Test_Cases"></a>Test Cases</h2><a name="Test_Cases"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
+<div class="section">
+<h3><a name="ServerWithConfigurationTest"></a>ServerWithConfigurationTest</h3><a name="info.smart_tools.smartactors.sandbox.server_with_configurationServerWithConfigurationTest"></a>
+<table border="1" class="table table-striped">
+<tr class="a">
+<td><a href="#info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServer"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a name="TC_info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServer"></a><a href="#info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServer">checkServer</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServer&apos;);"><span style="display:inline;" id="info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServeroff"> + </span><span style="display:none;" id="info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServeron"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr></table></div><br /></div>
+<div class="section">
+<h2><a name="Failure_Details"></a>Failure Details</h2><a name="Failure_Details"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="table table-striped">
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="info.smart_tools.smartactors.sandbox.server_with_configuration.ServerWithConfigurationTest.checkServer"></a>checkServer</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr></table><br /></div>
                   </div>
             </div>
           </div>

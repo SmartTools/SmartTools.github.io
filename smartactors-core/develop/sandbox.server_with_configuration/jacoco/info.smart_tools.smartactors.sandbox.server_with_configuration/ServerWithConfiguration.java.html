@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ServerWithConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sandbox.server_with_configuration</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.sandbox.server_with_configuration</a> &gt; <span class="el_source">ServerWithConfiguration.java</span></div><h1>ServerWithConfiguration.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.sandbox.server_with_configuration;
+
+import info.smart_tools.smartactors.core.bootstrap.Bootstrap;
+import info.smart_tools.smartactors.core.dependency_resolving_feature_manager.DependencyResolvingFeatureManager;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
+import info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager;
+import info.smart_tools.smartactors.core.ipath.IPath;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin_creator.IPluginCreator;
+import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
+import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
+import info.smart_tools.smartactors.core.iserver.IServer;
+import info.smart_tools.smartactors.core.iserver.exception.ServerExecutionException;
+import info.smart_tools.smartactors.core.iserver.exception.ServerInitializeException;
+import info.smart_tools.smartactors.core.plugin_creator.PluginCreator;
+import info.smart_tools.smartactors.core.plugin_loader_from_jar.ExpansibleURLClassLoader;
+import info.smart_tools.smartactors.core.plugin_loader_from_jar.PluginLoader;
+import info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementation.PluginLoaderVisitor;
+
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+
+/**
+ *
+ */
+<span class="nc" id="L28">public class ServerWithConfiguration implements IServer {</span>
+
+    public static void main(final String[] args) throws Exception {
+<span class="nc" id="L31">        ServerWithConfiguration server = new ServerWithConfiguration();</span>
+<span class="nc" id="L32">        server.initialize();</span>
+<span class="nc" id="L33">        server.start();</span>
+<span class="nc" id="L34">    }</span>
+
+    @Override
+    public void initialize() throws ServerInitializeException {
+        try {
+<span class="nc" id="L39">            IBootstrap bootstrap = new Bootstrap();</span>
+<span class="nc" id="L40">            IPluginCreator creator = new PluginCreator();</span>
+<span class="nc" id="L41">            IPluginLoaderVisitor&lt;String&gt; visitor = new PluginLoaderVisitor&lt;&gt;();</span>
+<span class="nc" id="L42">            ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());</span>
+<span class="nc" id="L43">            IPluginLoader&lt;Collection&lt;IPath&gt;&gt; pluginLoader = new PluginLoader(</span>
+                    urlClassLoader,
+                    (t) -&gt; {
+                        try {
+<span class="nc" id="L47">                            IPlugin plugin = creator.create(t, bootstrap);</span>
+<span class="nc" id="L48">                            plugin.load();</span>
+<span class="nc" id="L49">                        } catch (Exception e) {</span>
+<span class="nc" id="L50">                            throw new RuntimeException(&quot;Could not create instance of IPlugin&quot;);</span>
+<span class="nc" id="L51">                        }</span>
+<span class="nc" id="L52">                    },</span>
+                    visitor
+            );
+
+            // FeatureManager &amp; Feature creation
+<span class="nc" id="L57">            IFeatureManager featureManager = new DependencyResolvingFeatureManager(</span>
+<span class="nc" id="L58">                    System.getProperty(&quot;user.home&quot;) + &quot;/smartactors-plugins-repo&quot;,</span>
+<span class="nc" id="L59">                    new HashMap&lt;String, String&gt;() {{</span>
+<span class="nc" id="L60">                        put(&quot;local_repo&quot;, &quot;file://&quot; + System.getProperty(&quot;user.home&quot;) + &quot;/.m2/repository/&quot;);</span>
+<span class="nc" id="L61">                    }}</span>
+            );
+
+<span class="nc" id="L64">            IFeature coreFeature = featureManager.newFeature(&quot;smartactors.core&quot;, null);</span>
+<span class="nc" id="L65">            coreFeature.whenPresent(files -&gt; {</span>
+                try {
+<span class="nc" id="L67">                    pluginLoader.loadPlugin(files);</span>
+<span class="nc" id="L68">                    bootstrap.start();</span>
+<span class="nc" id="L69">                } catch (Throwable e) {</span>
+<span class="nc" id="L70">                    throw new RuntimeException(&quot;Plugin loading failed.&quot;, e);</span>
+<span class="nc" id="L71">                }</span>
+<span class="nc" id="L72">            });</span>
+
+<span class="nc" id="L74">            String[] coreArtifacts = {</span>
+                    &quot;info.smart_tools.smartactors:core.standard_config_sections:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.actor_receiver_creator:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.configuration_manager:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.dsobject:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.configuration_object:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.field:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.fieldname:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.handler_routing_receiver_creator:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.http_endpoint:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.ifieldname:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.fieldname:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.immutable_receiver_chain:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.ioc_keys:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.load_scope_provider:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.map_router:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.message_processor_and_sequence:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.messaging_identifiers:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.read_config_file:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.receiver_chains_storage:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.receiver_generator:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.response:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.response_content_json_strategy:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.response_sender_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.sample_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.scoped_ioc:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.scope_provider:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.standard_object_creators:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.http_endpoint:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.wds_object:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.wrapper_generator:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.chain_call_receiver:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.chain_choice_strategy:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.resolve_standard_types_strategies:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.resolve_iobject_strategies:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.get_form_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.postgres_db_tasks:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.postgres_connection_pool:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.cached_collection:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.collection_name:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.create_async_operation_plugin:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.get_async_operation:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.close_async_operation_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.async_ops_collection:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.validation_form_actor:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.create_session_plugin:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.authentication_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.get_header_from_request_rule:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.get_query_parameter_rule:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.password_encoder:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.user_auth_by_login_actor:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.change_password_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.mailing_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.check_user_is_new_actor:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.change_password_actor:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.connection_options:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.create_user:0.2.0-SNAPSHOT&quot;
+            };
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            for (String artifact : coreArtifacts) {</span>
+<span class="nc" id="L143">                coreFeature.requireFile(artifact);</span>
+            }
+
+<span class="nc" id="L146">            coreFeature.listen();</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
+<span class="nc" id="L149">                Thread.sleep(1L);</span>
+            }
+<span class="nc" id="L151">        } catch (Throwable e) {</span>
+<span class="nc" id="L152">            e.printStackTrace();</span>
+<span class="nc" id="L153">            throw new ServerInitializeException(e);</span>
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">    }</span>
+
+    @Override
+    public void start() throws ServerExecutionException {
+
+<span class="nc" id="L160">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shouldExtractRightCookie() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>          GetQueryParameterRule rule = <strong class="jxr_keyword">new</strong> GetQueryParameterRule();
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>          FullHttpRequest request = mock(FullHttpRequest.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>          String uri = <span class="jxr_string">"http:/?key1=val1&amp;key2=val2"</span>;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>          String uri = <span class="jxr_string">"/?key1=val1&amp;key2=val2"</span>;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>          when(request.getUri()).thenReturn(uri);
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>          assertEquals(<span class="jxr_string">"val2"</span>, rule.resolve(request, <span class="jxr_string">"key2"</span>));
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>      }
