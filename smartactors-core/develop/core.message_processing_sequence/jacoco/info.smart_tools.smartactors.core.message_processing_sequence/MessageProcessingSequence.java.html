@@ -154,17 +154,14 @@ public class MessageProcessingSequence implements IMessageProcessingSequence {
 <span class="fc" id="L154">                context.setValue(catchStepFieldName, caughtStep);</span>
 <span class="fc" id="L155">                context.setValue(exceptionFieldName, exception);</span>
 
-                // By-default start from the next receiver after the failed one
-<span class="fc" id="L158">                ++stepStack[causedLevel];</span>
-
-<span class="fc" id="L160">                callChain(exceptionalChain);</span>
-<span class="fc" id="L161">                return;</span>
+<span class="fc" id="L157">                callChain(exceptionalChain);</span>
+<span class="fc" id="L158">                return;</span>
             }
         }
 
-<span class="fc" id="L165">        throw new NoExceptionHandleChainException(exception,</span>
-<span class="fc" id="L166">                Arrays.copyOf(chainStack, stackIndex + 1),</span>
-<span class="fc" id="L167">                Arrays.copyOf(stepStack, stackIndex + 1));</span>
+<span class="fc" id="L162">        throw new NoExceptionHandleChainException(exception,</span>
+<span class="fc" id="L163">                Arrays.copyOf(chainStack, stackIndex + 1),</span>
+<span class="fc" id="L164">                Arrays.copyOf(stepStack, stackIndex + 1));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
