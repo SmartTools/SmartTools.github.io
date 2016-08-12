@@ -10,19 +10,19 @@
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.actors.check_validity_async_operation.CheckValidityAsyncOperationActor;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.create_<strong class="jxr_keyword">new</strong>_instance_strategy.CreateNewInstanceStrategy;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.exception.PluginException;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.named_keys_storage.Keys;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ikey.IKey;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ioc.IOC;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.IPlugin;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.named_keys_storage.Keys;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * Plugin for load IOC-strategy for check validity asynchronous operation actor</em>
@@ -44,28 +44,31 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>              IBootstrapItem&lt;String&gt; item = <strong class="jxr_keyword">new</strong> BootstrapItem(<span class="jxr_string">"CreateCheckValidityAsyncOperationActor"</span>);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>              item.process(() -&gt; {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>                  <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>                      IKey operationKey = Keys.getOrAdd(CheckValidityAsyncOperationActor.<strong class="jxr_keyword">class</strong>.getCanonicalName());
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>                      IOC.register(operationKey, <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>                              (args) -&gt; {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>                                  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CheckValidityAsyncOperationActor((IObject) args[0]);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>                          }
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                      ));
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't get CheckValidityAsyncOperationActor key"</span>, e);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't create strategy"</span>, e);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  } <strong class="jxr_keyword">catch</strong> (RegistrationException e) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't register new strategy"</span>, e);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>              });
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              bootstrap.add(item);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PluginException(<span class="jxr_string">"Can't load CheckValidityAsyncOperation plugin"</span>, e);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          }
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>              item
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                      .after(<span class="jxr_string">"IOC"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>                      .before(<span class="jxr_string">"configure"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>                      .process(() -&gt; {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>                  <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>                      IKey operationKey = Keys.getOrAdd(CheckValidityAsyncOperationActor.<strong class="jxr_keyword">class</strong>.getCanonicalName());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>                      IOC.register(operationKey, <strong class="jxr_keyword">new</strong> ApplyFunctionToArgumentsStrategy(
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                              (args) -&gt; {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                                  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CheckValidityAsyncOperationActor((IObject) args[0]);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                          }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      ));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't get CheckValidityAsyncOperationActor key"</span>, e);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                  } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't create strategy"</span>, e);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  } <strong class="jxr_keyword">catch</strong> (RegistrationException e) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActionExecuteException(<span class="jxr_string">"CheckValidityAsyncOperationActor plugin can't load: can't register new strategy"</span>, e);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                  }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              });
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              bootstrap.add(item);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          } <strong class="jxr_keyword">catch</strong> (InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PluginException(<span class="jxr_string">"Can't load CheckValidityAsyncOperation plugin"</span>, e);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

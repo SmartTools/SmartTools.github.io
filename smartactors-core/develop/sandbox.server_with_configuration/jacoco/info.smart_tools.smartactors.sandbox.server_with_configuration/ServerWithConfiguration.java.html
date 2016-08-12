@@ -129,6 +129,9 @@ import java.util.HashMap;
                     &quot;info.smart_tools.smartactors:plugin.password_encoder:0.2.0-SNAPSHOT&quot;,
                     &quot;info.smart_tools.smartactors:plugin.user_auth_by_login_actor:0.2.0-SNAPSHOT&quot;,
 
+                    &quot;info.smart_tools.smartactors:plugin.check_validity_async_operation_plugin:0.2.0-SNAPSHOT&quot;,
+
+                    &quot;info.smart_tools.smartactors:plugin.user_auth_by_login_actor:0.2.0-SNAPSHOT&quot;,
                     &quot;info.smart_tools.smartactors:plugin.change_password_actor:0.2.0-SNAPSHOT&quot;,
                     &quot;info.smart_tools.smartactors:plugin.mailing_actor:0.2.0-SNAPSHOT&quot;,
                     &quot;info.smart_tools.smartactors:plugin.check_user_is_new_actor:0.2.0-SNAPSHOT&quot;,
@@ -139,24 +142,24 @@ import java.util.HashMap;
                     &quot;info.smart_tools.smartactors:plugin.create_user:0.2.0-SNAPSHOT&quot;
             };
 
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            for (String artifact : coreArtifacts) {</span>
-<span class="nc" id="L143">                coreFeature.requireFile(artifact);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            for (String artifact : coreArtifacts) {</span>
+<span class="nc" id="L146">                coreFeature.requireFile(artifact);</span>
             }
 
-<span class="nc" id="L146">            coreFeature.listen();</span>
+<span class="nc" id="L149">            coreFeature.listen();</span>
 
-<span class="nc bnc" id="L148" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
-<span class="nc" id="L149">                Thread.sleep(1L);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
+<span class="nc" id="L152">                Thread.sleep(1L);</span>
             }
-<span class="nc" id="L151">        } catch (Throwable e) {</span>
-<span class="nc" id="L152">            e.printStackTrace();</span>
-<span class="nc" id="L153">            throw new ServerInitializeException(e);</span>
-<span class="nc" id="L154">        }</span>
-<span class="nc" id="L155">    }</span>
+<span class="nc" id="L154">        } catch (Throwable e) {</span>
+<span class="nc" id="L155">            e.printStackTrace();</span>
+<span class="nc" id="L156">            throw new ServerInitializeException(e);</span>
+<span class="nc" id="L157">        }</span>
+<span class="nc" id="L158">    }</span>
 
     @Override
     public void start() throws ServerExecutionException {
 
-<span class="nc" id="L160">    }</span>
+<span class="nc" id="L163">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -52,52 +52,53 @@ public class ConnectionOptionsPlugin implements IPlugin {
 <span class="nc" id="L52">                                try (InputStream resourceStream = loader.getResourceAsStream(&quot;db_connection.properties&quot;)) {</span>
 <span class="nc" id="L53">                                    connectionProperties.load(resourceStream);</span>
 <span class="pc" id="L54">                                    return new ConnectionOptions() {</span>
+
                                         @Override
                                         public String getUrl() throws ReadValueException {
-<span class="nc" id="L57">                                            return connectionProperties.getProperty(&quot;url&quot;);</span>
+<span class="nc" id="L58">                                            return connectionProperties.getProperty(&quot;url&quot;);</span>
                                         }
                                         @Override
                                         public String getUsername() throws ReadValueException {
-<span class="nc" id="L61">                                            return connectionProperties.getProperty(&quot;username&quot;);</span>
+<span class="nc" id="L62">                                            return connectionProperties.getProperty(&quot;username&quot;);</span>
                                         }
                                         @Override
                                         public String getPassword() throws ReadValueException {
-<span class="nc" id="L65">                                            return connectionProperties.getProperty(&quot;password&quot;);</span>
+<span class="nc" id="L66">                                            return connectionProperties.getProperty(&quot;password&quot;);</span>
                                         }
                                         @Override
                                         public Integer getMaxConnections() throws ReadValueException {
-<span class="nc" id="L69">                                            return Integer.parseInt(connectionProperties.getProperty(&quot;maxConnections&quot;, &quot;1&quot;));</span>
+<span class="nc" id="L70">                                            return Integer.parseInt(connectionProperties.getProperty(&quot;maxConnections&quot;, &quot;1&quot;));</span>
                                         }
                                         @Override
                                         public void setUrl(final String url) throws ChangeValueException {
-<span class="nc" id="L73">                                        }</span>
+<span class="nc" id="L74">                                        }</span>
                                         @Override
                                         public void setUsername(final String username) throws ChangeValueException {
-<span class="nc" id="L76">                                        }</span>
+<span class="nc" id="L77">                                        }</span>
                                         @Override
                                         public void setPassword(final String password) throws ChangeValueException {
-<span class="nc" id="L79">                                        }</span>
+<span class="nc" id="L80">                                        }</span>
                                         @Override
                                         public void setMaxConnections(final Integer maxConnections) throws ChangeValueException {
-<span class="nc" id="L82">                                        }</span>
+<span class="nc" id="L83">                                        }</span>
                                     };
-<span class="nc bnc" id="L84" title="All 8 branches missed.">                                } catch (Exception e) {</span>
-<span class="nc" id="L85">                                    throw new RuntimeException(e);</span>
+<span class="nc bnc" id="L85" title="All 8 branches missed.">                                } catch (Exception e) {</span>
+<span class="nc" id="L86">                                    throw new RuntimeException(e);</span>
                                 }
                             }
                         ));
-<span class="nc" id="L89">                    } catch (ResolutionException e) {</span>
-<span class="nc" id="L90">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't get CreateSessionActor key&quot;, e);</span>
-<span class="nc" id="L91">                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L92">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L93">                    } catch (RegistrationException e) {</span>
-<span class="nc" id="L94">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L95">                    }</span>
-<span class="nc" id="L96">                });</span>
-<span class="nc" id="L97">            bootstrap.add(item);</span>
-<span class="nc" id="L98">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L99">            throw new PluginException(&quot;Can't load ConnectionOptionsPlugin&quot;, e);</span>
-<span class="nc" id="L100">        }</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L90">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L91">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't get CreateSessionActor key&quot;, e);</span>
+<span class="nc" id="L92">                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L93">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L94">                    } catch (RegistrationException e) {</span>
+<span class="nc" id="L95">                        throw new ActionExecuteException(&quot;ConnectionOptions plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L96">                    }</span>
+<span class="nc" id="L97">                });</span>
+<span class="nc" id="L98">            bootstrap.add(item);</span>
+<span class="nc" id="L99">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L100">            throw new PluginException(&quot;Can't load ConnectionOptionsPlugin&quot;, e);</span>
+<span class="nc" id="L101">        }</span>
+<span class="nc" id="L102">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
