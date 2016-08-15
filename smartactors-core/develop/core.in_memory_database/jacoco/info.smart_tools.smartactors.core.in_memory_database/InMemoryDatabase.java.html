@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InMemoryDatabase.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.in_memory_database</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.in_memory_database</a> &gt; <span class="el_source">InMemoryDatabase.java</span></div><h1>InMemoryDatabase.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.in_memory_database;
+
+import info.smart_tools.smartactors.core.idatabase.IDatabase;
+import info.smart_tools.smartactors.core.idatabase.exception.IDatabaseException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Implementation of data base on list
+ */
+public class InMemoryDatabase implements IDatabase {
+<span class="fc" id="L24">    private Map&lt;String, List&lt;DataBaseItem&gt;&gt; dataBase = new HashMap&lt;&gt;();</span>
+    private IFieldName filterFieldName;
+
+    /**
+     * Creates the database.
+     * @throws IDatabaseException if not possible to resolve IFieldName
+     */
+<span class="fc" id="L31">    public InMemoryDatabase() throws IDatabaseException {</span>
+        try {
+<span class="fc" id="L33">            filterFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;filter&quot;);</span>
+<span class="nc" id="L34">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L35">            throw new IDatabaseException(&quot;Failed to resolve IFieldName&quot;, e);</span>
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">    }</span>
+
+    @Override
+    public void upsert(final IObject document, final String collectionName) throws IDatabaseException {
+        try {
+<span class="fc" id="L42">            DataBaseItem item = IOC.resolve(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), document, collectionName);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            if (null == item.getId()) {</span>
+<span class="fc" id="L44">                insert(item);</span>
+            } else {
+<span class="fc" id="L46">                update(item);</span>
+            }
+<span class="nc" id="L48">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L49">            throw new IDatabaseException(&quot;Failed to create DataBaseItem&quot;, e);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void createCollection(final String collectionName) {
+<span class="fc" id="L55">        dataBase.put(collectionName, new LinkedList&lt;&gt;());</span>
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public void insert(final IObject document, final String collectionName) throws IDatabaseException {
+<span class="fc" id="L60">        synchronized (this) {</span>
+            try {
+<span class="fc" id="L62">                DataBaseItem item = IOC.resolve(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), document, collectionName);</span>
+<span class="fc" id="L63">                insert(item);</span>
+<span class="nc" id="L64">            } catch (ResolutionException e) {</span>
+<span class="nc" id="L65">                throw new IDatabaseException(&quot;Failed to create DataBaseItem&quot;, e);</span>
+<span class="fc" id="L66">            }</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">    }</span>
+
+    @Override
+    public void update(final IObject document, final String collectionName) throws IDatabaseException {
+        try {
+<span class="fc" id="L73">            DataBaseItem item = IOC.resolve(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), document, collectionName);</span>
+<span class="fc" id="L74">            update(item);</span>
+<span class="nc" id="L75">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L76">            throw new IDatabaseException(&quot;Failed to create DataBaseItem&quot;, e);</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
+
+    private void update(final DataBaseItem item) throws IDatabaseException {
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!dataBase.containsKey(item.getCollectionName())) {</span>
+<span class="nc" id="L82">            throw new IDatabaseException(&quot;Collection with name &quot; + item.getCollectionName() + &quot; does not exist&quot;);</span>
+        }
+<span class="fc" id="L84">        List&lt;DataBaseItem&gt; list = dataBase.get(item.getCollectionName());</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="fc" id="L86">            DataBaseItem inBaseElem = list.get(i);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (inBaseElem.getId().equals(item.getId())) {</span>
+<span class="fc" id="L88">                list.remove(i);</span>
+<span class="fc" id="L89">                list.add(i, item);</span>
+            }
+        }
+<span class="fc" id="L92">    }</span>
+
+    private void insert(final DataBaseItem item) throws IDatabaseException {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (!dataBase.containsKey(item.getCollectionName())) {</span>
+<span class="fc" id="L96">            throw new IDatabaseException(&quot;Collection with name &quot; + item.getCollectionName() + &quot; does not exist&quot;);</span>
+        }
+        try {
+<span class="fc" id="L99">            List&lt;DataBaseItem&gt; list = dataBase.get(item.getCollectionName());</span>
+<span class="fc" id="L100">            item.setId(nextId(item.getCollectionName()));</span>
+<span class="fc" id="L101">            list.add(item);</span>
+<span class="nc" id="L102">        } catch (Exception e) {</span>
+<span class="nc" id="L103">            throw new IDatabaseException(&quot;Failed to insert to DataBaseItem&quot;, e);</span>
+<span class="fc" id="L104">        }</span>
+<span class="fc" id="L105">    }</span>
+
+    @Override
+    public IObject getById(final Object id, final String collectionName) throws IDatabaseException {
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (!dataBase.containsKey(collectionName)) {</span>
+<span class="nc" id="L110">            throw new IDatabaseException(&quot;Collection with name &quot; + collectionName + &quot; does not exist&quot;);</span>
+        }
+<span class="fc" id="L112">        List&lt;DataBaseItem&gt; list = dataBase.get(collectionName);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (DataBaseItem item : list) {</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if (item.getId().equals(id)) {</span>
+<span class="fc" id="L115">                return item.getDocument();</span>
+            }
+<span class="nc" id="L117">        }</span>
+<span class="fc" id="L118">        throw new IDatabaseException(&quot;There is no element with this id&quot;);</span>
+    }
+
+    private Object nextId(final String collectionName) throws ResolutionException {
+<span class="fc" id="L122">        return IOC.resolve(Keys.getOrAdd(&quot;db.collection.nextid&quot;));</span>
+    }
+
+    @Override
+    public List&lt;IObject&gt; select(final IObject condition, final String collectionName) throws IDatabaseException {
+        try {
+<span class="fc" id="L128">            List&lt;DataBaseItem&gt; list = dataBase.get(collectionName);</span>
+<span class="fc" id="L129">            IObject filter = (IObject) condition.getValue(filterFieldName);</span>
+<span class="fc" id="L130">            List&lt;IObject&gt; outputList = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            for (DataBaseItem item : list) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                if (generalConditionParser(filter, item.getDocument())) {</span>
+<span class="fc" id="L133">                    outputList.add(clone(item.getDocument()));</span>
+                }
+<span class="fc" id="L135">            }</span>
+<span class="fc" id="L136">            outputList = IOC.resolve(Keys.getOrAdd(&quot;PagingForDatabaseCollection&quot;), condition, outputList);</span>
+<span class="fc" id="L137">            outputList = IOC.resolve(Keys.getOrAdd(&quot;SortIObjects&quot;), condition, outputList);</span>
+<span class="fc" id="L138">            return outputList;</span>
+<span class="nc" id="L139">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L140">            throw new IDatabaseException(&quot;Failed to resolve IFieldName or PagingForDatabaseCollection or SortIObjects&quot;, e);</span>
+<span class="nc" id="L141">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L142">            throw new IDatabaseException(&quot;Failed to get filter from select condition&quot;, e);</span>
+        }
+    }
+
+    private boolean generalConditionParser(final IObject condition, final IObject document) throws IDatabaseException {
+        try {
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (condition == null) {</span>
+<span class="fc" id="L149">                return true;</span>
+            }
+<span class="fc" id="L151">            return IOC.resolve(Keys.getOrAdd(&quot;ResolveDataBaseCondition&quot;), &quot;$general_resolver&quot;, condition, document);</span>
+<span class="nc" id="L152">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L153">            throw new IDatabaseException(&quot;Failed to resolve \&quot;ResolveDataBaseCondition\&quot;&quot;, e);</span>
+        }
+    }
+
+    private IObject clone(final IObject iObject) throws IDatabaseException {
+        try {
+<span class="fc" id="L159">            String serializedIObject = iObject.serialize();</span>
+<span class="fc" id="L160">            return IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()), serializedIObject);</span>
+<span class="nc" id="L161">        } catch (ResolutionException | SerializeException e) {</span>
+<span class="nc" id="L162">            throw new IDatabaseException(&quot;Failed to clone IObject&quot;, e);</span>
+        }
+    }
+
+    @Override
+    public void delete(final IObject document, final String collectionName) throws IDatabaseException {
+        try {
+<span class="fc" id="L169">            List&lt;DataBaseItem&gt; list = dataBase.get(collectionName);</span>
+<span class="fc" id="L170">            DataBaseItem item = IOC.resolve(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), document, collectionName);</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">            for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="fc" id="L172">                DataBaseItem inDbItem = list.get(i);</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                if (inDbItem.getId().equals(item.getId())) {</span>
+<span class="fc" id="L174">                    list.remove(inDbItem);</span>
+                    try {
+<span class="fc" id="L176">                        document.deleteField(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), collectionName + &quot;ID&quot;));</span>
+<span class="nc" id="L177">                    } catch (DeleteValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L178">                        throw new IDatabaseException(&quot;Failed to resolve IFieldName&quot;, e);</span>
+<span class="nc" id="L179">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L180">                        throw new IDatabaseException(&quot;Failed to delete field from IObject&quot;, e);</span>
+<span class="fc" id="L181">                    }</span>
+<span class="fc" id="L182">                    return;</span>
+                }
+            }
+<span class="nc" id="L185">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L186">            throw new IDatabaseException(&quot;Failed to create DataBaseItem&quot;, e);</span>
+<span class="nc" id="L187">        }</span>
+<span class="nc" id="L188">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

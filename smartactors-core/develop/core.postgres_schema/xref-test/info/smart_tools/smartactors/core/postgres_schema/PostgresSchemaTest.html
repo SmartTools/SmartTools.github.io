@@ -176,7 +176,14 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>                 body.toString());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>     }
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     @Test
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDelete() <strong class="jxr_keyword">throws</strong> QueryBuildException {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         PostgresSchema.delete(statement, collection);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         assertEquals(<span class="jxr_string">"DELETE FROM test_collection "</span> +
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>                 <span class="jxr_string">"WHERE (document#&gt;'{test_collectionID}') = to_json(?)::jsonb"</span>, body.toString());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>     }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

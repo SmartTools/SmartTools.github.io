@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-plugin.get_cookie_from_request,info.smart_tools.smartactors.plugin.get_cookie_rule,GetCookieFromRequestRulePlugin,67,0,0,0,23,0,4,0,4,0
+plugin.get_cookie_from_request,info.smart_tools.smartactors.plugin.get_cookie_rule,GetCookieFromRequestRulePlugin,60,0,0,0,20,0,3,0,3,0

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InMemoryDBSectionProcessingStrategy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.in_memory_db_section_processing_strategy</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.in_memory_db_section_processing_strategy</a> &gt; <span class="el_source">InMemoryDBSectionProcessingStrategy.java</span></div><h1>InMemoryDBSectionProcessingStrategy.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.in_memory_db_section_processing_strategy;
+
+import info.smart_tools.smartactors.core.ds_object.DSObject;
+import info.smart_tools.smartactors.core.iconfiguration_manager.ISectionStrategy;
+import info.smart_tools.smartactors.core.iconfiguration_manager.exceptions.ConfigurationProcessingException;
+import info.smart_tools.smartactors.core.idatabase.IDatabase;
+import info.smart_tools.smartactors.core.idatabase.exception.IDatabaseException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.in_memory_database.InMemoryDatabase;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+import java.util.List;
+
+/**
+ * Processing strategy for create and fill {@link InMemoryDatabase}
+ * &lt;p&gt;
+ * &lt;pre&gt;
+ *   {
+ *       &quot;inMemoryDb&quot;: [
+ *             {
+ *                 &quot;name&quot;: &quot;my_collection_name&quot;,
+ *                 &quot;documents&quot;: [
+ *                      &quot;{\&quot;foo\&quot;: \&quot;bar\&quot;}&quot;,
+ *                      &quot;{\&quot;foo1\&quot;: \&quot;bar1\&quot;}&quot;
+ *                 ]
+ *             },
+ *             {
+ *                 // . . .
+ *             }
+ *         ]
+ *     }
+ * &lt;/pre&gt;
+ */
+public class InMemoryDBSectionProcessingStrategy implements ISectionStrategy {
+
+    private final IFieldName name;
+    private final IFieldName nameFieldName;
+    private final IFieldName documentsFieldName;
+
+    /**
+     * Constructor
+     * @throws ResolutionException if fails to resolve any dependencies
+     */
+<span class="fc" id="L49">    InMemoryDBSectionProcessingStrategy() throws ResolutionException {</span>
+<span class="fc" id="L50">        this.name = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), &quot;inMemoryDb&quot;);</span>
+<span class="fc" id="L51">        this.nameFieldName = IOC.resolve(</span>
+<span class="fc" id="L52">                IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                &quot;name&quot;
+        );
+<span class="fc" id="L55">        this.documentsFieldName = IOC.resolve(</span>
+<span class="fc" id="L56">                IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),</span>
+                &quot;documents&quot;
+        );
+<span class="fc" id="L59">    }</span>
+
+    @Override
+    public void onLoadConfig(final IObject config) throws ConfigurationProcessingException {
+        try {
+<span class="fc" id="L64">            List&lt;IObject&gt; databaseObject = (List&lt;IObject&gt;) config.getValue(name);</span>
+<span class="fc" id="L65">            IDatabase dataBase = IOC.resolve(Keys.getOrAdd(InMemoryDatabase.class.getCanonicalName()));</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            for (IObject collection : databaseObject) {</span>
+<span class="fc" id="L67">                String collectionName = (String) collection.getValue(nameFieldName);</span>
+<span class="fc" id="L68">                dataBase.createCollection(collectionName);</span>
+<span class="fc" id="L69">                List&lt;String&gt; documents = (List&lt;String&gt;) collection.getValue(documentsFieldName);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">                for (String document : documents) {</span>
+<span class="fc" id="L71">                    dataBase.insert(IOC.resolve(Keys.getOrAdd(DSObject.class.getCanonicalName()), document), collectionName);</span>
+<span class="fc" id="L72">                }</span>
+<span class="fc" id="L73">            }</span>
+<span class="nc" id="L74">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L75">            throw new ConfigurationProcessingException(&quot;Error occurred loading \&quot;inMemoryDb\&quot; configuration section.&quot;, e);</span>
+<span class="nc" id="L76">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L77">            throw new ConfigurationProcessingException(&quot;Error occurred resolving \&quot;InMemoryDatabase\&quot;.&quot;, e);</span>
+<span class="nc" id="L78">        } catch (IDatabaseException e) {</span>
+<span class="nc" id="L79">            throw new ConfigurationProcessingException(e);</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">    }</span>
+
+    @Override
+    public IFieldName getSectionName() {
+<span class="nc" id="L85">        return name;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

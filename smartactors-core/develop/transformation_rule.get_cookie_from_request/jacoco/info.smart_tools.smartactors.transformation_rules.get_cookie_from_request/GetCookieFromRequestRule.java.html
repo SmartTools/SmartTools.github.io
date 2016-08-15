@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 <span class="fc" id="L24">        String cookie = Stream.of(cookieString.split(&quot;;&quot;))</span>
 <span class="fc" id="L25">                .map(x -&gt; x.split(&quot;=&quot;))</span>
-<span class="fc" id="L26">                .filter(x -&gt; x[0].equals((String) args[1]))</span>
+<span class="fc" id="L26">                .filter(x -&gt; x[0].trim().equals(((String) args[1])))</span>
 <span class="fc" id="L27">                .findFirst().get()[1];</span>
 
 <span class="fc" id="L29">        return (T) cookie;</span>

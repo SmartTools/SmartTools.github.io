@@ -1,6 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin.new DeleteMessage() {...},12,29,0,0,4,3,0,3,0,3
 plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin.new SearchMessage() {...},18,39,0,0,6,4,0,4,0,4
 plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin.new GetByIdMessage() {...},18,38,0,0,6,4,0,4,0,4
 plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin.new UpsertMessage() {...},12,29,0,0,4,3,0,3,0,3
 plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin.new CreateCollectionMessage() {...},12,29,0,0,4,3,0,3,0,3
-plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin,56,497,0,2,16,110,0,16,0,15
+plugin.postgres_db_tasks,info.smart_tools.smartactors.plugin.postgres_db_tasks,PostgresDBTasksPlugin,63,599,0,2,18,131,0,19,0,18

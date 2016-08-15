@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 23,
+      <title>File: 24,
              Errors: 0,
-             Warnings: 6,
+             Warnings: 2,
              Infos: 0
       </title>
             <link>core.examples/core.examples//checkstyle.html</link>
@@ -117,6 +117,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.package-info.java">info/smart_tools/smartactors/core/examples/db_collection/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.PostgresDBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/PostgresDBCollectionServer.java</a>
                 </td>
                 <td>
                   0
@@ -220,7 +234,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  0
                 </td>
                 <td>
                   0
@@ -228,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.DBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/DBCollectionServer.java</a>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.InMemoryDBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/InMemoryDBCollectionServer.java</a>
                 </td>
                 <td>
                   0

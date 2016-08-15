@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>NullConnectionPoolPlugin.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">plugin.null_connection_pool</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.plugin.null_connection_pool</a> &gt; <span class="el_source">NullConnectionPoolPlugin.java</span></div><h1>NullConnectionPoolPlugin.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.plugin.null_connection_pool;
+
+import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
+import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.iplugin.IPlugin;
+import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.pool.Pool;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+
+/**
+ * Plugin.
+ * Implements {@link IPlugin}
+ * Load connection pool of null objects.
+ */
+public class NullConnectionPoolPlugin implements IPlugin {
+
+    /** Local storage for instance of {@link IBootstrap}*/
+    private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
+
+    /**
+     * Constructor with single argument
+     * @param bootstrap instance of {@link IBootstrap}
+     * @throws InvalidArgumentException if any errors occurred
+     */
+    public NullConnectionPoolPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap)
+<span class="fc" id="L35">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (null == bootstrap) {</span>
+<span class="nc" id="L37">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+        }
+<span class="fc" id="L39">        this.bootstrap = bootstrap;</span>
+<span class="fc" id="L40">    }</span>
+
+    @Override
+    public void load() throws PluginException {
+        try {
+<span class="fc" id="L45">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;PostgresConnectionPoolPlugin&quot;);</span>
+<span class="fc" id="L46">            item</span>
+<span class="fc" id="L47">                .after(&quot;IOC&quot;)</span>
+<span class="fc" id="L48">                .process(() -&gt; {</span>
+                    try {
+<span class="fc" id="L50">                        IResolveDependencyStrategy poolStrategy = new ApplyFunctionToArgumentsStrategy(</span>
+<span class="fc" id="L51">                                (args) -&gt; new Pool(1, NullConnection::new));</span>
+<span class="fc" id="L52">                        IKey databaseConnectionPoolKey = Keys.getOrAdd(&quot;DatabaseConnectionPool&quot;);</span>
+<span class="fc" id="L53">                        IOC.register(databaseConnectionPoolKey, poolStrategy);</span>
+<span class="nc" id="L54">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L55">                        throw new ActionExecuteException(&quot;NullConnectionPool plugin can't load: can't get DatabaseConnectionPool key&quot;, e);</span>
+<span class="nc" id="L56">                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L57">                        throw new ActionExecuteException(&quot;NullConnectionPool plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L58">                    } catch (RegistrationException e) {</span>
+<span class="nc" id="L59">                        throw new ActionExecuteException(&quot;NullConnectionPool plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="fc" id="L60">                    }</span>
+<span class="fc" id="L61">            });</span>
+<span class="fc" id="L62">            bootstrap.add(item);</span>
+<span class="nc" id="L63">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L64">            throw new PluginException(&quot;Can't load null connection pool plugin&quot;, e);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

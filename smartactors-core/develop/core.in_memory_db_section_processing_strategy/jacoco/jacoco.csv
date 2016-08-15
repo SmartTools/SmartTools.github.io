@@ -1,0 +1,2 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+core.in_memory_db_section_processing_strategy,info.smart_tools.smartactors.core.in_memory_db_section_processing_strategy,InMemoryDBSectionProcessingStrategy,23,130,0,4,7,19,1,4,1,2

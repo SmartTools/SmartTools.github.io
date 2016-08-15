@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 4,
+      <title>File: 3,
              Errors: 0,
-             Warnings: 3,
+             Warnings: 2,
              Infos: 0
       </title>
             <link>core.postgres_upsert_task/core.postgres_upsert_task//checkstyle.html</link>
@@ -44,20 +44,6 @@ under the License.
             </tr>
           </thead>
           <tbody>
-                          <tr>
-                <td>
-                  <a href="core.postgres_upsert_task/core.postgres_upsert_task//checkstyle.html#info.smart_tools.smartactors.core.postgres_upsert_task.UuidNextIdStrategy.java">info/smart_tools/smartactors/core/postgres_upsert_task/UuidNextIdStrategy.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
                           <tr>
                 <td>
                   <a href="core.postgres_upsert_task/core.postgres_upsert_task//checkstyle.html#info.smart_tools.smartactors.core.postgres_upsert_task.package-info.java">info/smart_tools/smartactors/core/postgres_upsert_task/package-info.java</a>

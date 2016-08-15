@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 7,
+      <title>File: 6,
              Errors: 0,
-             Warnings: 0,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>actor.create_session/actor.create_session//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -117,20 +117,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="actor.create_session/actor.create_session//checkstyle.html#info.smart_tools.smartactors.actors.create_session.package-info.java">info/smart_tools/smartactors/actors/create_session/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="actor.create_session/actor.create_session//checkstyle.html#info.smart_tools.smartactors.actors.create_session.wrapper.CreateSessionConfig.java">info/smart_tools/smartactors/actors/create_session/wrapper/CreateSessionConfig.java</a>
                 </td>
                 <td>
                   0

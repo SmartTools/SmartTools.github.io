@@ -128,6 +128,8 @@ info.smart_tools.smartactors.core.iconfiguration_manager
 info.smart_tools.smartactors.core.iconfiguration_manager.exceptions
 info.smart_tools.smartactors.core.icookies_extractor
 info.smart_tools.smartactors.core.icookies_extractor.exceptions
+info.smart_tools.smartactors.core.idatabase
+info.smart_tools.smartactors.core.idatabase.exception
 info.smart_tools.smartactors.core.idatabase_task
 info.smart_tools.smartactors.core.idatabase_task.exception
 info.smart_tools.smartactors.core.ienvironment_handler
@@ -150,6 +152,13 @@ info.smart_tools.smartactors.core.imessage_bus_handler.exception
 info.smart_tools.smartactors.core.imessage_mapper
 info.smart_tools.smartactors.core.imulti_action_strategy
 info.smart_tools.smartactors.core.imulti_action_strategy.exception
+info.smart_tools.smartactors.core.in_memory_database
+info.smart_tools.smartactors.core.in_memory_db_create_collection_task
+info.smart_tools.smartactors.core.in_memory_db_delete_task
+info.smart_tools.smartactors.core.in_memory_db_get_by_id_task
+info.smart_tools.smartactors.core.in_memory_db_section_processing_strategy
+info.smart_tools.smartactors.core.in_memory_db_select_task
+info.smart_tools.smartactors.core.in_memory_db_upsert_task
 info.smart_tools.smartactors.core.invalid_argument_exception
 info.smart_tools.smartactors.core.invalid_state_exception
 info.smart_tools.smartactors.core.iobject
@@ -225,6 +234,7 @@ info.smart_tools.smartactors.core.pool_guard.exception
 info.smart_tools.smartactors.core.postgres_connection
 info.smart_tools.smartactors.core.postgres_connection.wrapper
 info.smart_tools.smartactors.core.postgres_create_task
+info.smart_tools.smartactors.core.postgres_delete_task
 info.smart_tools.smartactors.core.postgres_getbyid_task
 info.smart_tools.smartactors.core.postgres_schema
 info.smart_tools.smartactors.core.postgres_schema.indexes
@@ -306,6 +316,8 @@ info.smart_tools.smartactors.plugin.https_endpoint
 info.smart_tools.smartactors.plugin.ifield
 info.smart_tools.smartactors.plugin.ifieldname
 info.smart_tools.smartactors.plugin.immutable_receiver_chain
+info.smart_tools.smartactors.plugin.in_memory_database
+info.smart_tools.smartactors.plugin.in_memory_db_tasks
 info.smart_tools.smartactors.plugin.iobject_simple_impl
 info.smart_tools.smartactors.plugin.ioc_keys
 info.smart_tools.smartactors.plugin.ioc_simple_container
@@ -313,7 +325,8 @@ info.smart_tools.smartactors.plugin.load_scope_povider
 info.smart_tools.smartactors.plugin.mailing_actor
 info.smart_tools.smartactors.plugin.map_router
 info.smart_tools.smartactors.plugin.messaging_identifiers
-info.smart_tools.smartactors.plugin.postges_connection_pool
+info.smart_tools.smartactors.plugin.null_connection_pool
+info.smart_tools.smartactors.plugin.postgres_connection_pool
 info.smart_tools.smartactors.plugin.postgres_db_tasks
 info.smart_tools.smartactors.plugin.read_config_file
 info.smart_tools.smartactors.plugin.receiver_chains_storage
@@ -343,6 +356,7 @@ info.smart_tools.smartactors.strategy.cookies_setter
 info.smart_tools.smartactors.strategy.http_headers_setter
 info.smart_tools.smartactors.strategy.respons_status_extractor
 info.smart_tools.smartactors.strategy.to_wrapper_converter_strategy
+info.smart_tools.smartactors.strategy.uuid_nextid_strategy
 info.smart_tools.smartactors.transformation_rules.get_cookie_from_request
 info.smart_tools.smartactors.transformation_rules.get_header_from_request
 info.smart_tools.smartactors.transformation_rules.get_query_parameter

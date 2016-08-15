@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-transformation_rule.get_cookie_from_request,info.smart_tools.smartactors.transformation_rules.get_cookie_from_request,GetCookieFromRequestRule,0,41,0,0,0,7,0,4,0,4
+transformation_rule.get_cookie_from_request,info.smart_tools.smartactors.transformation_rules.get_cookie_from_request,GetCookieFromRequestRule,0,42,0,0,0,7,0,4,0,4

@@ -1,3 +1,3 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 sandbox.server_with_configuration,info.smart_tools.smartactors.sandbox.server_with_configuration,ServerWithConfiguration.new HashMap() {...},21,0,0,0,3,0,1,0,1,0
-sandbox.server_with_configuration,info.smart_tools.smartactors.sandbox.server_with_configuration,ServerWithConfiguration,369,0,4,0,38,0,8,0,6,0
+sandbox.server_with_configuration,info.smart_tools.smartactors.sandbox.server_with_configuration,ServerWithConfiguration,373,0,4,0,38,0,8,0,6,0

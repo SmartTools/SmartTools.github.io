@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InMemoryDatabaseIOCInitializer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.in_memory_database</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.in_memory_database</a> &gt; <span class="el_source">InMemoryDatabaseIOCInitializer.java</span></div><h1>InMemoryDatabaseIOCInitializer.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.in_memory_database;
+
+import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
+import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.idatabase.exception.IDatabaseException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+import info.smart_tools.smartactors.strategy.uuid_nextid_strategy.UuidNextIdStrategy;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * A class to put all necessary dependencies into IOC for InMemoryDatabase to work correctly.
+ */
+public final class InMemoryDatabaseIOCInitializer {
+
+    private static final int DEFAULT_PAGE_SIZE = 100;
+
+    /**
+     * Private constructor to avoid instantiation.
+     */
+<span class="nc" id="L36">    private InMemoryDatabaseIOCInitializer() {</span>
+<span class="nc" id="L37">    }</span>
+
+    /**
+     * Initializes IOC strategies.
+     * @throws Exception if anything goes wrong
+     */
+    public static void init() throws Exception {
+<span class="fc" id="L44">        Map&lt;String, IConditionVerifier&gt; verifierMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L45">        registerNextIdStrategy();</span>
+<span class="fc" id="L46">        registerCompareSimpleObjects();</span>
+<span class="fc" id="L47">        registerNestedFieldName();</span>
+<span class="fc" id="L48">        initVerifierMap(verifierMap);</span>
+<span class="fc" id="L49">        registerVerifierMapCalls(verifierMap);</span>
+<span class="fc" id="L50">        registerPagingForDatabaseCollection();</span>
+<span class="fc" id="L51">        registerSortIObjects();</span>
+<span class="fc" id="L52">        registerDataBaseItem();</span>
+<span class="fc" id="L53">        registerInMemoryDatabase();</span>
+<span class="fc" id="L54">    }</span>
+
+    private static void registerNextIdStrategy() throws ResolutionException, RegistrationException {
+<span class="fc" id="L57">        IOC.register(Keys.getOrAdd(&quot;db.collection.nextid&quot;), new UuidNextIdStrategy());</span>
+<span class="fc" id="L58">    }</span>
+
+    private static void registerCompareSimpleObjects() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L61">        IOC.register(Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), new ApplyFunctionToArgumentsStrategy(</span>
+                        (args) -&gt; {
+<span class="fc" id="L63">                            Object entry = args[0];</span>
+<span class="fc" id="L64">                            Object reference = args[1];</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                            if (null == entry) {</span>
+<span class="fc" id="L66">                                return -1;</span>
+                            }
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                            if (null == reference) {</span>
+<span class="fc" id="L69">                                return 1;</span>
+                            }
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">                            if (reference instanceof Long || reference instanceof Integer) {</span>
+<span class="fc" id="L72">                                Long longEntry = Long.parseLong(String.valueOf(entry));</span>
+<span class="fc" id="L73">                                Long longReference = Long.parseLong(String.valueOf(reference));</span>
+<span class="fc" id="L74">                                return -longReference.compareTo(longEntry);</span>
+                            }
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                            if (reference instanceof Double) {</span>
+<span class="fc" id="L77">                                Double doubleReference = (Double) reference;</span>
+<span class="fc" id="L78">                                Double doubleEntry = Double.parseDouble(entry.toString());</span>
+<span class="fc" id="L79">                                return -doubleReference.compareTo(doubleEntry);</span>
+                            }
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                            if (reference instanceof String) {</span>
+<span class="nc" id="L82">                                String doubleEntry = (String) entry;</span>
+<span class="nc" id="L83">                                String doubleReference = (String) reference;</span>
+<span class="nc" id="L84">                                return -doubleReference.compareTo(doubleEntry);</span>
+                            }
+<span class="nc" id="L86">                            return 0;</span>
+                        }
+                )
+        );
+<span class="fc" id="L90">    }</span>
+
+    private static void registerNestedFieldName() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L93">        IOC.register(Keys.getOrAdd(&quot;NestedFieldName&quot;), new ApplyFunctionToArgumentsStrategy(</span>
+                        (args) -&gt; {
+<span class="fc" id="L95">                            IFieldName fieldName = (IFieldName) args[0];</span>
+<span class="fc" id="L96">                            IObject iObject = (IObject) args[1];</span>
+<span class="fc" id="L97">                            String string = fieldName.toString();</span>
+<span class="fc" id="L98">                            String[] strings = string.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L99">                            Object bufObject = iObject;</span>
+                            try {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                                for (String fieldString : strings) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                                    if (!(bufObject instanceof IObject)) {</span>
+<span class="fc" id="L103">                                        return null;</span>
+                                    }
+<span class="fc" id="L105">                                    IFieldName bufFieldName =</span>
+<span class="fc" id="L106">                                            IOC.resolve(</span>
+<span class="fc" id="L107">                                                    Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+                                                    fieldString
+                                            );
+<span class="fc" id="L110">                                    bufObject = ((IObject) bufObject).getValue(bufFieldName);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">                                    if (null == bufObject) {</span>
+<span class="fc" id="L112">                                        return null;</span>
+                                    }
+                                }
+<span class="fc" id="L115">                                return bufObject;</span>
+<span class="nc" id="L116">                            } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                            }
+<span class="nc" id="L118">                            return null;</span>
+                        }
+                )
+        );
+<span class="fc" id="L122">    }</span>
+
+    private static void initVerifierMap(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L125">        initGeneralResolver(verifierMap);</span>
+<span class="fc" id="L126">        initEqOperations(verifierMap);</span>
+<span class="fc" id="L127">        initGtLtOperations(verifierMap);</span>
+<span class="fc" id="L128">        initDateOperations(verifierMap);</span>
+<span class="fc" id="L129">        initInOperation(verifierMap);</span>
+<span class="fc" id="L130">        initIsNullOperation(verifierMap);</span>
+<span class="fc" id="L131">        initHasTagOperation(verifierMap);</span>
+<span class="fc" id="L132">        initFullTextOperation(verifierMap);</span>
+<span class="fc" id="L133">        initConditions(verifierMap);</span>
+<span class="fc" id="L134">    }</span>
+
+    private static void initGeneralResolver(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L137">        verifierMap.put(&quot;$general_resolver&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L138">                    Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; mainIterator = condition.iterator();</span>
+<span class="fc" id="L139">                    List&lt;IObject&gt; and = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                    while (mainIterator.hasNext()) {</span>
+<span class="fc" id="L141">                        Map.Entry&lt;IFieldName, Object&gt; entry = mainIterator.next();</span>
+                        try {
+<span class="fc" id="L143">                            IObject iObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L144">                            iObject.setValue(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L145">                            and.add(iObject);</span>
+<span class="nc" id="L146">                        } catch (ResolutionException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L147">                        }</span>
+<span class="fc" id="L148">                    }</span>
+<span class="fc" id="L149">                    IObject newCondition = condition;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                    if (and.size() &gt; 1) {</span>
+                        IFieldName andFieldName;
+                        try {
+<span class="fc" id="L153">                            newCondition = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L154">                            andFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;$and&quot;);</span>
+<span class="fc" id="L155">                            newCondition.setValue(andFieldName, and);</span>
+<span class="nc" id="L156">                        } catch (ResolutionException | InvalidArgumentException | ChangeValueException e) {</span>
+<span class="fc" id="L157">                        }</span>
+                    }
+<span class="fc" id="L159">                    condition = newCondition;</span>
+<span class="fc" id="L160">                    Iterator&lt;Map.Entry&lt;IFieldName, Object&gt;&gt; iterator = condition.iterator();</span>
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                    if (!iterator.hasNext()) {</span>
+<span class="fc" id="L163">                        return true;</span>
+                    }
+
+<span class="fc" id="L166">                    String key = null;</span>
+                    do {
+<span class="fc" id="L168">                        Map.Entry&lt;IFieldName, Object&gt; entry = iterator.next();</span>
+<span class="fc" id="L169">                        key = entry.getKey().toString();</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                        if (entry.getValue() instanceof IObject) {</span>
+<span class="fc" id="L171">                            iterator = ((IObject) entry.getValue()).iterator();</span>
+                        }
+<span class="pc bpc" id="L173" title="1 of 4 branches missed.">                    } while (iterator.hasNext() &amp;&amp; !verifierMap.containsKey(key));</span>
+<span class="fc" id="L174">                    return verifierMap.get(key).verify(condition, document);</span>
+                }
+        );
+<span class="fc" id="L177">    }</span>
+
+    private static void initEqOperations(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L180">        verifierMap.put(&quot;$eq&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L181">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L183">                        Object entry = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), fieldName, document);</span>
+<span class="fc" id="L184">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L185">                                .getValue(new FieldName(&quot;$eq&quot;));</span>
+<span class="fc" id="L186">                        return reference.equals(entry);</span>
+<span class="nc" id="L187">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L189">                    return false;</span>
+                }
+        );
+<span class="fc" id="L192">        verifierMap.put(&quot;$neq&quot;, (condition, document) -&gt; {</span>
+<span class="nc" id="L193">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="nc" id="L195">                        Object entry = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), fieldName, document);</span>
+<span class="nc" id="L196">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="nc" id="L197">                                .getValue(new FieldName(&quot;$neq&quot;));</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">                        return !reference.equals(entry);</span>
+<span class="nc" id="L199">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L201">                    return false;</span>
+                }
+        );
+<span class="fc" id="L204">    }</span>
+
+    private static void initGtLtOperations(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L207">        verifierMap.put(&quot;$gt&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L208">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L210">                        Object entry = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), fieldName, document);</span>
+<span class="fc" id="L211">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L212">                                .getValue(new FieldName(&quot;$gt&quot;));</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                        return ((Integer) IOC.resolve(</span>
+<span class="fc" id="L214">                                Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), entry, reference)</span>
+                        ) &gt; 0;
+<span class="nc" id="L216">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L218">                    return false;</span>
+                }
+        );
+<span class="fc" id="L221">        verifierMap.put(&quot;$lt&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L222">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L224">                        Object entry = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), fieldName, document);</span>
+<span class="fc" id="L225">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L226">                                .getValue(new FieldName(&quot;$lt&quot;));</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                        return (Integer) IOC.resolve(</span>
+<span class="fc" id="L228">                                Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), entry, reference</span>
+                        ) &lt; 0;
+<span class="nc" id="L230">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L232">                    return false;</span>
+                }
+        );
+<span class="fc" id="L235">        verifierMap.put(&quot;$gte&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L236">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L238">                        Object entry = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), fieldName, document);</span>
+<span class="fc" id="L239">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L240">                                .getValue(new FieldName(&quot;$gte&quot;));</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">                        return (Integer) IOC.resolve(</span>
+<span class="fc" id="L242">                                Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), entry, reference</span>
+                        ) &gt;= 0;
+<span class="nc" id="L244">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L246">                    return false;</span>
+                }
+        );
+<span class="fc" id="L249">        verifierMap.put(&quot;$lte&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L250">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L252">                        Object entry = IOC.resolve(</span>
+<span class="fc" id="L253">                                Keys.getOrAdd(&quot;NestedFieldName&quot;),</span>
+                                fieldName,
+                                document
+                        );
+<span class="fc" id="L257">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L258">                                .getValue(new FieldName(&quot;$lte&quot;));</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">                        return (Integer) IOC.resolve(</span>
+<span class="fc" id="L260">                                Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), entry, reference</span>
+                        ) &lt;= 0;
+<span class="nc" id="L262">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L264">                    return false;</span>
+                }
+        );
+<span class="fc" id="L267">    }</span>
+
+    private static void initDateOperations(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L270">        verifierMap.put(&quot;$date-from&quot;, (condition, document) -&gt; {</span>
+<span class="nc" id="L271">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="nc" id="L273">                        String entry = (String) document.getValue(fieldName);</span>
+<span class="nc" id="L274">                        String reference = String.valueOf(</span>
+<span class="nc" id="L275">                                ((IObject) condition.getValue(fieldName))</span>
+<span class="nc" id="L276">                                        .getValue(new FieldName(&quot;$date-from&quot;))</span>
+                        );
+<span class="nc bnc" id="L278" title="All 4 branches missed.">                        return reference.compareTo(entry) == -1 || reference.equals(entry);</span>
+<span class="nc" id="L279">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+                    }
+<span class="nc" id="L281">                    return false;</span>
+                }
+        );
+<span class="fc" id="L284">        verifierMap.put(&quot;$date-to&quot;, (condition, document) -&gt; {</span>
+<span class="nc" id="L285">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="nc" id="L287">                        String entry = (String) document.getValue(fieldName);</span>
+<span class="nc" id="L288">                        String reference = String.valueOf(</span>
+<span class="nc" id="L289">                                ((IObject) condition.getValue(fieldName))</span>
+<span class="nc" id="L290">                                        .getValue(new FieldName(&quot;$date-to&quot;))</span>
+                        );
+<span class="nc bnc" id="L292" title="All 4 branches missed.">                        return reference.compareTo(entry) == 1 || reference.equals(entry);</span>
+<span class="nc" id="L293">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+                    }
+<span class="nc" id="L295">                    return false;</span>
+                }
+        );
+<span class="fc" id="L298">    }</span>
+
+    private static void initInOperation(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L301">        verifierMap.put(&quot;$in&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L302">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L304">                        Object entry = IOC.resolve(</span>
+<span class="fc" id="L305">                                Keys.getOrAdd(&quot;NestedFieldName&quot;),</span>
+                                fieldName,
+                                document
+                        );
+<span class="fc" id="L309">                        List&lt;Object&gt; references = (List&lt;Object&gt;)</span>
+<span class="fc" id="L310">                                ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L311">                                        .getValue(new FieldName(&quot;$in&quot;));</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">                        for (Object reference : references) {</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                            if (reference.equals(entry)) {</span>
+<span class="fc" id="L314">                                return true;</span>
+                            }
+<span class="fc" id="L316">                        }</span>
+<span class="nc" id="L317">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+<span class="fc" id="L318">                    }</span>
+<span class="fc" id="L319">                    return false;</span>
+                }
+        );
+<span class="fc" id="L322">    }</span>
+
+    private static void initIsNullOperation(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L325">        verifierMap.put(&quot;$isNull&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L326">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L328">                        Object entry = IOC.resolve(</span>
+<span class="fc" id="L329">                                Keys.getOrAdd(&quot;NestedFieldName&quot;),</span>
+                                fieldName,
+                                document
+                        );
+<span class="fc" id="L333">                        Boolean references = (Boolean)</span>
+<span class="fc" id="L334">                                ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L335">                                        .getValue(new FieldName(&quot;$isNull&quot;));</span>
+<span class="fc bfc" id="L336" title="All 4 branches covered.">                        return (null == entry) == references;</span>
+<span class="nc" id="L337">                    } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {</span>
+                    }
+<span class="nc" id="L339">                    return false;</span>
+                }
+        );
+<span class="fc" id="L342">    }</span>
+
+    private static void initHasTagOperation(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L345">        verifierMap.put(&quot;$hasTag&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L346">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L348">                        Object entry = IOC.resolve(</span>
+<span class="fc" id="L349">                                Keys.getOrAdd(&quot;NestedFieldName&quot;),</span>
+                                fieldName,
+                                document
+                        );
+<span class="fc bfc" id="L353" title="All 2 branches covered.">                        if (null == entry) {</span>
+<span class="fc" id="L354">                            return false;</span>
+                        }
+<span class="fc" id="L356">                        Object reference = ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L357">                                .getValue(new FieldName(&quot;$hasTag&quot;));</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">                        if (entry instanceof List) {</span>
+<span class="fc" id="L359">                            List&lt;Object&gt; entryList = (List&lt;Object&gt;) entry;</span>
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                            for (Object entryItem : entryList) {</span>
+<span class="pc bpc" id="L361" title="1 of 2 branches missed.">                                if (entryItem.equals(reference)) {</span>
+<span class="fc" id="L362">                                    return true;</span>
+                                }
+<span class="nc" id="L364">                            }</span>
+<span class="nc" id="L365">                            return false;</span>
+                        }
+
+<span class="fc" id="L368">                        IFieldName tagFieldName = IOC.resolve(</span>
+<span class="fc" id="L369">                                Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+                                reference
+                        );
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">                        return null != ((IObject) entry).getValue(tagFieldName);</span>
+<span class="fc" id="L373">                    } catch (Exception e) {</span>
+<span class="fc" id="L374">                        return false;</span>
+                    }
+                }
+        );
+<span class="fc" id="L378">    }</span>
+
+    private static void initFullTextOperation(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L381">        verifierMap.put(&quot;$fulltext&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L382">                    IFieldName fieldName = condition.iterator().next().getKey();</span>
+                    try {
+<span class="fc" id="L384">                        Object entry = IOC.resolve(</span>
+<span class="fc" id="L385">                                Keys.getOrAdd(&quot;NestedFieldName&quot;),</span>
+                                fieldName,
+                                document
+                        );
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                        if (null == entry) {</span>
+<span class="nc" id="L390">                            return false;</span>
+                        }
+<span class="fc" id="L392">                        String reference = String.valueOf(</span>
+<span class="fc" id="L393">                                ((IObject) condition.getValue(fieldName))</span>
+<span class="fc" id="L394">                                        .getValue(new FieldName(&quot;$fulltext&quot;))</span>
+                        );
+<span class="fc" id="L396">                        SimpleFullTextMatcher matcher = new SimpleFullTextMatcher(reference);</span>
+<span class="fc" id="L397">                        return matcher.matches(String.valueOf(entry));</span>
+<span class="nc" id="L398">                    } catch (Exception e) {</span>
+<span class="nc" id="L399">                        return false;</span>
+                    }
+                }
+        );
+<span class="fc" id="L403">    }</span>
+
+    private static void initConditions(final Map&lt;String, IConditionVerifier&gt; verifierMap) {
+<span class="fc" id="L406">        verifierMap.put(&quot;$and&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L407">                    boolean result = true;</span>
+                    try {
+<span class="fc" id="L409">                        List&lt;IObject&gt; conditions = (List&lt;IObject&gt;) condition</span>
+<span class="fc" id="L410">                                .getValue(new FieldName(&quot;$and&quot;));</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">                        for (IObject conditionItem : conditions) {</span>
+<span class="fc" id="L412">                            result &amp;= verifierMap.get(&quot;$general_resolver&quot;)</span>
+<span class="fc" id="L413">                                    .verify(conditionItem, document);</span>
+<span class="fc" id="L414">                        }</span>
+<span class="nc" id="L415">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L416">                    }</span>
+<span class="fc" id="L417">                    return result;</span>
+                }
+        );
+<span class="fc" id="L420">        verifierMap.put(&quot;$or&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L421">                    boolean result = false;</span>
+                    try {
+<span class="fc" id="L423">                        List&lt;IObject&gt; conditions = (List&lt;IObject&gt;) condition</span>
+<span class="fc" id="L424">                                .getValue(new FieldName(&quot;$or&quot;));</span>
+<span class="fc bfc" id="L425" title="All 2 branches covered.">                        for (IObject conditionItem : conditions) {</span>
+<span class="fc" id="L426">                            result |= verifierMap.get(&quot;$general_resolver&quot;)</span>
+<span class="fc" id="L427">                                    .verify(conditionItem, document);</span>
+<span class="fc" id="L428">                        }</span>
+<span class="nc" id="L429">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L430">                    }</span>
+<span class="fc" id="L431">                    return result;</span>
+                }
+        );
+<span class="fc" id="L434">        verifierMap.put(&quot;$not&quot;, (condition, document) -&gt; {</span>
+<span class="fc" id="L435">                    boolean result = true;</span>
+                    try {
+<span class="fc" id="L437">                        List&lt;IObject&gt; conditions = (List&lt;IObject&gt;) condition</span>
+<span class="fc" id="L438">                                .getValue(new FieldName(&quot;$not&quot;));</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">                        for (IObject conditionItem : conditions) {</span>
+<span class="fc" id="L440">                            result &amp;= !verifierMap.get(&quot;$general_resolver&quot;)</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">                                    .verify(conditionItem, document);</span>
+<span class="fc" id="L442">                        }</span>
+<span class="nc" id="L443">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L444">                    }</span>
+<span class="fc" id="L445">                    return result;</span>
+                }
+        );
+<span class="fc" id="L448">    }</span>
+
+    private static void registerVerifierMapCalls(final Map&lt;String, IConditionVerifier&gt; verifierMap)
+            throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L452">        IOC.register(</span>
+<span class="fc" id="L453">                Keys.getOrAdd(&quot;ResolveDataBaseCondition&quot;),</span>
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -&gt;
+<span class="fc" id="L456">                                verifierMap.get(args[0])</span>
+<span class="fc" id="L457">                                        .verify((IObject) args[1], (IObject) args[2])</span>
+                )
+        );
+
+<span class="fc" id="L461">        IOC.register(Keys.getOrAdd(&quot;ContainsResolveDataBaseCondition&quot;),</span>
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -&gt;
+<span class="nc" id="L464">                                verifierMap.containsKey(args[0])</span>
+                )
+        );
+<span class="fc" id="L467">    }</span>
+
+    private static void registerPagingForDatabaseCollection() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L470">        IOC.register(Keys.getOrAdd(&quot;PagingForDatabaseCollection&quot;),</span>
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -&gt; {
+<span class="fc" id="L473">                            Integer pageNumber = 1;</span>
+<span class="fc" id="L474">                            Integer pageSize = DEFAULT_PAGE_SIZE;</span>
+                            try {
+<span class="fc" id="L476">                                IFieldName pageFieldName = IOC.resolve(</span>
+<span class="fc" id="L477">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+                                        &quot;page&quot;
+                                );
+<span class="fc" id="L480">                                IFieldName pageNumberFieldName = IOC.resolve(</span>
+<span class="fc" id="L481">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+                                        &quot;number&quot;
+                                );
+<span class="fc" id="L484">                                IFieldName pageSizeFieldName = IOC.resolve(</span>
+<span class="fc" id="L485">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+                                        &quot;size&quot;
+                                );
+<span class="fc" id="L488">                                IObject page = (IObject) ((IObject) args[0]).getValue(pageFieldName);</span>
+<span class="fc bfc" id="L489" title="All 2 branches covered.">                                if (null != page) {</span>
+<span class="fc" id="L490">                                    pageNumber = (Integer) page.getValue(pageNumberFieldName);</span>
+<span class="fc" id="L491">                                    pageSize = (Integer) page.getValue(pageSizeFieldName);</span>
+                                }
+<span class="nc" id="L493">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L494">                            }</span>
+<span class="fc" id="L495">                            Integer startNumber = (pageNumber - 1) * pageSize;</span>
+<span class="fc" id="L496">                            Integer finNumber = pageNumber * pageSize;</span>
+<span class="fc" id="L497">                            List&lt;IObject&gt; outputDocuments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L498">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
+<span class="fc bfc" id="L499" title="All 4 branches covered.">                            for (int i = startNumber; i &lt; finNumber &amp;&amp; i &lt; documents.size(); i++) {</span>
+<span class="fc" id="L500">                                outputDocuments.add(documents.get(i));</span>
+                            }
+<span class="fc" id="L502">                            return outputDocuments;</span>
+                        }
+                )
+        );
+<span class="fc" id="L506">    }</span>
+
+    private static void registerSortIObjects() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L509">        IOC.register(Keys.getOrAdd(&quot;SortIObjects&quot;), new ApplyFunctionToArgumentsStrategy(</span>
+                        (args) -&gt; {
+<span class="fc" id="L511">                            List&lt;IObject&gt; sortRules = null;</span>
+<span class="fc" id="L512">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
+
+                            try {
+<span class="fc" id="L515">                                IObject condition = (IObject) args[0];</span>
+<span class="fc" id="L516">                                IFieldName sortFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;sort&quot;);</span>
+<span class="fc" id="L517">                                sortRules = (List&lt;IObject&gt;) condition.getValue(sortFieldName);</span>
+<span class="nc" id="L518">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+                                // ignoring absence of sort rule
+<span class="fc" id="L520">                            }</span>
+
+<span class="fc bfc" id="L522" title="All 2 branches covered.">                            if (null == sortRules) {</span>
+<span class="fc" id="L523">                                return documents;</span>
+                            }
+
+<span class="fc" id="L526">                            List&lt;IFieldName&gt; sortingFields = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L527">                            List&lt;Integer&gt; sortingType = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">                            for (IObject sortRule : sortRules) {</span>
+<span class="fc" id="L529">                                sortingFields.add(sortRule.iterator().next().getKey());</span>
+<span class="fc bfc" id="L530" title="All 2 branches covered.">                                sortingType.add(sortRule.iterator().next().getValue().equals(&quot;asc&quot;) ? 1 : -1);</span>
+<span class="fc" id="L531">                            }</span>
+<span class="fc" id="L532">                            Comparator comparator = (o1, o2) -&gt; {</span>
+                                try {
+<span class="fc" id="L534">                                    Integer compare = 0;</span>
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; sortingFields.size(); i++) {</span>
+<span class="fc" id="L536">                                        Object object1 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o1);</span>
+<span class="fc" id="L537">                                        Object object2 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o2);</span>
+<span class="fc" id="L538">                                        compare = IOC.resolve(Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), object1, object2);</span>
+<span class="fc bfc" id="L539" title="All 2 branches covered.">                                        if (compare != 0) {</span>
+<span class="fc" id="L540">                                            return compare * sortingType.get(i);</span>
+                                        }
+                                    }
+<span class="nc" id="L543">                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L544">                                }</span>
+<span class="nc" id="L545">                                return 0;</span>
+                            };
+<span class="fc" id="L547">                            documents.sort(comparator);</span>
+<span class="fc" id="L548">                            return documents;</span>
+
+                        }
+                )
+        );
+<span class="fc" id="L553">    }</span>
+
+    private static void registerDataBaseItem() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L556">        IOC.register(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), new CreateNewInstanceStrategy(</span>
+                        (args) -&gt; {
+                            try {
+<span class="fc" id="L559">                                return new DataBaseItem((IObject) args[0], (String) args[1]);</span>
+<span class="nc" id="L560">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+                            }
+<span class="nc" id="L562">                            return null;</span>
+                        }
+                )
+        );
+<span class="fc" id="L566">    }</span>
+
+    private static void registerInMemoryDatabase()
+            throws IDatabaseException, RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L570">        InMemoryDatabase database = new InMemoryDatabase();</span>
+<span class="fc" id="L571">        IOC.register(</span>
+<span class="fc" id="L572">                Keys.getOrAdd(InMemoryDatabase.class.getCanonicalName()),</span>
+                new SingletonStrategy(database)
+        );
+<span class="fc" id="L575">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
