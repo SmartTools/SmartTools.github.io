@@ -43,6 +43,9 @@ info.smart_tools.smartactors.actors.mailing.wrapper
 info.smart_tools.smartactors.actors.sample_other_actor
 info.smart_tools.smartactors.actors.sample_other_actor.exception
 info.smart_tools.smartactors.actors.sample_other_actor.wrapper
+info.smart_tools.smartactors.actors.save_session
+info.smart_tools.smartactors.actors.save_session.exception
+info.smart_tools.smartactors.actors.save_session.wrapper
 info.smart_tools.smartactors.actors.validate_form_data
 info.smart_tools.smartactors.actors.validate_form_data.exception
 info.smart_tools.smartactors.actors.validate_form_data.parser
@@ -338,6 +341,7 @@ info.smart_tools.smartactors.plugin.response_content_json_strategy
 info.smart_tools.smartactors.plugin.response_environment_http_strategy.response_content_json_strategy
 info.smart_tools.smartactors.plugin.response_sender_actor
 info.smart_tools.smartactors.plugin.sample_actor
+info.smart_tools.smartactors.plugin.save_session_actor
 info.smart_tools.smartactors.plugin.scope_provider
 info.smart_tools.smartactors.plugin.scoped_ioc
 info.smart_tools.smartactors.plugin.standard_object_creators

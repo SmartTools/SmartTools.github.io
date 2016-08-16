@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 891,
+      <title>File: 897,
              Errors: 0,
-             Warnings: 1675,
+             Warnings: 1681,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -3392,6 +3392,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.save_session.wrapper.SaveSessionMessage.java">info/smart_tools/smartactors/actors/save_session/wrapper/SaveSessionMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.in_memory_db_section_processing_strategy.package-info.java">info/smart_tools/smartactors/core/in_memory_db_section_processing_strategy/package-info.java</a>
                 </td>
                 <td>
@@ -3743,6 +3757,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ireceiver_generator.exception.ReceiverGeneratorException.java">info/smart_tools/smartactors/core/ireceiver_generator/exception/ReceiverGeneratorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.save_session.exception.package-info.java">info/smart_tools/smartactors/actors/save_session/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -4281,6 +4309,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.save_session.SaveSessionActor.java">info/smart_tools/smartactors/actors/save_session/SaveSessionActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0
@@ -7172,6 +7214,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.save_session_actor.SaveSessionActorPlugin.java">info/smart_tools/smartactors/plugin/save_session_actor/SaveSessionActorPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.in_memory_db_delete_task.package-info.java">info/smart_tools/smartactors/core/in_memory_db_delete_task/package-info.java</a>
                 </td>
                 <td>
@@ -7187,6 +7243,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.chain_call_receiver.package-info.java">info/smart_tools/smartactors/plugin/chain_call_receiver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.save_session.package-info.java">info/smart_tools/smartactors/actors/save_session/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -10197,6 +10267,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.ImmutableReceiverChainResolutionStrategy.java">info/smart_tools/smartactors/core/receiver_chain/ImmutableReceiverChainResolutionStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.save_session.exception.SaveSessionException.java">info/smart_tools/smartactors/actors/save_session/exception/SaveSessionException.java</a>
                 </td>
                 <td>
                   0
