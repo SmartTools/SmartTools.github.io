@@ -63,23 +63,21 @@ public class CreateAsyncOperationActor {
 <span class="fc" id="L63">            String token = String.valueOf(UUID.randomUUID());</span>
 <span class="fc" id="L64">            Integer amountOfHoursToExpireFromNow = message.getExpiredTime();</span>
 <span class="fc" id="L65">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(FORMATTER);</span>
-<span class="fc" id="L66">            message.setSessionIdInData(message.getSessionId());</span>
-<span class="fc" id="L67">            IObject authOperationData = message.getOperationData();</span>
-<span class="fc" id="L68">            collection.createAsyncOperation(authOperationData, token, expiredTime);</span>
+<span class="fc" id="L66">            IObject authOperationData = message.getOperationData();</span>
+<span class="fc" id="L67">            collection.createAsyncOperation(authOperationData, token, expiredTime);</span>
 
-            //NOTE: this setter should set token to session and to response!
-<span class="fc" id="L71">            message.setAsyncOperationToken(token);</span>
+<span class="fc" id="L69">            message.setAsyncOperationToken(token);</span>
 
-<span class="fc" id="L73">            List&lt;String&gt; availableTokens = message.getOperationTokens();</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (availableTokens == null) {</span>
-<span class="nc" id="L75">                message.setOperationTokens(Collections.singletonList(token));</span>
+<span class="fc" id="L71">            List&lt;String&gt; availableTokens = message.getOperationTokens();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (availableTokens == null) {</span>
+<span class="nc" id="L73">                message.setOperationTokens(Collections.singletonList(token));</span>
             } else {
-<span class="fc" id="L77">                availableTokens.add(token);</span>
-<span class="fc" id="L78">                message.setOperationTokens(availableTokens);</span>
+<span class="fc" id="L75">                availableTokens.add(token);</span>
+<span class="fc" id="L76">                message.setOperationTokens(availableTokens);</span>
             }
-<span class="fc" id="L80">        } catch (ReadValueException | ChangeValueException | CreateAsyncOperationException e) {</span>
-<span class="fc" id="L81">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
-<span class="fc" id="L82">        }</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L78">        } catch (ReadValueException | ChangeValueException | CreateAsyncOperationException e) {</span>
+<span class="fc" id="L79">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

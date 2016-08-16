@@ -3,12 +3,14 @@
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
+
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
  * Rule that extract cookie from request
  */
-<span class="fc" id="L11">public class GetCookieFromRequestRule implements IResolveDependencyStrategy {</span>
+<span class="fc" id="L13">public class GetCookieFromRequestRule implements IResolveDependencyStrategy {</span>
 
     /**
      * Extracts cookie from given HTTP request.
@@ -19,14 +21,18 @@ import java.util.stream.Stream;
      */
     @Override
     public &lt;T&gt; T resolve(final Object... args) {
-<span class="fc" id="L22">        String cookieString = ((FullHttpRequest) args[0]).headers().get(HttpHeaders.Names.COOKIE);</span>
+<span class="fc" id="L24">        String cookieString = ((FullHttpRequest) args[0]).headers().get(HttpHeaders.Names.COOKIE);</span>
 
-<span class="fc" id="L24">        String cookie = Stream.of(cookieString.split(&quot;;&quot;))</span>
-<span class="fc" id="L25">                .map(x -&gt; x.split(&quot;=&quot;))</span>
-<span class="fc" id="L26">                .filter(x -&gt; x[0].trim().equals(((String) args[1])))</span>
-<span class="fc" id="L27">                .findFirst().get()[1];</span>
+<span class="fc" id="L26">        String[] cookie = Stream.of(cookieString.split(&quot;;&quot;))</span>
+<span class="fc" id="L27">                .map(x -&gt; x.split(&quot;=&quot;))</span>
+<span class="fc" id="L28">                .filter(x -&gt; x[0].trim().equals(((String) args[1])))</span>
+<span class="fc" id="L29">                .findFirst().orElse(null);</span>
 
-<span class="fc" id="L29">        return (T) cookie;</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (cookie == null) {</span>
+<span class="fc" id="L32">            return null;</span>
+        }
+
+<span class="fc" id="L35">        return (T) cookie[1];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
