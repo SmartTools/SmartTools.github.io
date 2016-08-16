@@ -227,6 +227,9 @@
                       <li>      <a href="../core.postgres_upsert_task/index.html"  title="core.postgres_upsert_task">core.postgres_upsert_task</a>
 </li>
                   
+                      <li>      <a href="../core.postgres_insert_task/index.html"  title="core.postgres_insert_task">core.postgres_insert_task</a>
+</li>
+                  
                       <li>      <a href="../core.postgres_getbyid_task/index.html"  title="core.postgres_getbyid_task">core.postgres_getbyid_task</a>
 </li>
                   
@@ -1269,6 +1272,13 @@
                           <a href="../core.postgres_upsert_task/index.html" title="core.postgres_upsert_task">
           <span class="none"></span>
         core.postgres_upsert_task</a>
+            </li>
+                
+      <li>
+  
+                          <a href="../core.postgres_insert_task/index.html" title="core.postgres_insert_task">
+          <span class="none"></span>
+        core.postgres_insert_task</a>
             </li>
                 
       <li>
@@ -2897,7 +2907,7 @@ task.execute();
 <h3><a name="Insert"></a>Insert</h3>
 <p>Adds new object to the collection.</p>
 <p>Command name: <tt>db.collection.insert</tt></p>
-<p>If the document contains the field &#x201c;collection_nameID&#x201d; the command throws a successor of <tt>TaskExecutionException</tt>. In other cases it&#x2019;s behavior is the same as of Upsert command.</p>
+<p>If the document contains the field &#x201c;collection_nameID&#x201d; the command throws a successor of <tt>TaskPrepareException</tt>. In other cases it&#x2019;s behavior is the same as of Upsert command.</p>
 <p>It&#x2019;s recommended to use Upsert if there is no strong necessity to use Insert.</p></div>
 <div class="section">
 <h3><a name="Delete"></a>Delete</h3>
@@ -3061,7 +3071,8 @@ task.execute();
 <div class="section">
 <h5><a name="Page"></a>Page</h5>
 <p>Page criterion is used for pagination. You may define the page size and page number.</p>
-<p>This is equivalent of SQL LIMIT and OFFSET clauses. However, here you must work in terms of pages, while SQL works in terms of rows to skip.</p></div>
+<p>This is equivalent of SQL LIMIT and OFFSET clauses. However, here you must work in terms of pages, while SQL works in terms of rows to skip.</p>
+<p>If the pagination is not defined, only first 100 documents from the collection are returned, i.e. page number 1 of size 100. Also if the page size is more than 1000, it&#x2019;s limited to 1000.</p></div>
 <div class="section">
 <h5><a name="Sort"></a>Sort</h5>
 <p>Sort criterion is used to determine the order of documents in the result. It&#x2019;s the equivalent of SQL ORDER BY clause.</p>

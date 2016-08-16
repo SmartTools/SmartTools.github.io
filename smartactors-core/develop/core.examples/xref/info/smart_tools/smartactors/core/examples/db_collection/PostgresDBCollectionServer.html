@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">try</strong> (PoolGuard guard = <strong class="jxr_keyword">new</strong> PoolGuard(pool)) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>                  ITask task = IOC.resolve(
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                          Keys.getOrAdd(<span class="jxr_string">"db.collection.upsert"</span>),
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                          Keys.getOrAdd(<span class="jxr_string">"db.collection.insert"</span>),
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>                          guard.getObject(),
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>                          collection,
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                          document

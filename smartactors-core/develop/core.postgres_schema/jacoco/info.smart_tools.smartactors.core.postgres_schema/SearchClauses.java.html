@@ -12,80 +12,113 @@ import info.smart_tools.smartactors.core.postgres_schema.search.OrderWriter;
 import info.smart_tools.smartactors.core.postgres_schema.search.PagingWriter;
 import info.smart_tools.smartactors.core.postgres_schema.search.PostgresQueryWriterResolver;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
 /**
  * A set of methods to write parts of search SQL query.
  */
-class SearchClauses {
+final class SearchClauses {
 
     /**
      * Private constructor to avoid instantiation.
      */
-<span class="nc" id="L26">    private SearchClauses() {</span>
-<span class="nc" id="L27">    }</span>
+<span class="nc" id="L27">    private SearchClauses() {</span>
+<span class="nc" id="L28">    }</span>
 
-    static void writeSearchWhere(QueryStatement statement, IObject criteria) throws Exception {
-<span class="fc" id="L30">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
-<span class="fc" id="L31">        Writer body = statement.getBodyWriter();</span>
+    /**
+     * Writes WHERE clause of the select statement.
+     * @param statement statement which body to write and which parameters to set
+     * @param criteria search criteria
+     * @throws Exception if the clause cannot be written
+     */
+    static void writeSearchWhere(final QueryStatement statement, final IObject criteria) throws Exception {
+<span class="fc" id="L37">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L38">        Writer body = statement.getBodyWriter();</span>
         try {
-<span class="fc" id="L33">            IFieldName filterField = IOC.resolve(fieldNameKey, &quot;filter&quot;);</span>
-<span class="fc" id="L34">            IObject filter = (IObject) criteria.getValue(filterField);</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (filter == null) {</span>
-<span class="fc" id="L36">                return; // no filter in the criteria, ignoring</span>
+<span class="fc" id="L40">            IFieldName filterField = IOC.resolve(fieldNameKey, &quot;filter&quot;);</span>
+<span class="fc" id="L41">            IObject filter = (IObject) criteria.getValue(filterField);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (filter == null) {</span>
+<span class="fc" id="L43">                return; // no filter in the criteria, ignoring</span>
             }
-<span class="fc" id="L38">            body.write(&quot; WHERE &quot;);</span>
-<span class="fc" id="L39">            PostgresQueryWriterResolver resolver = new PostgresQueryWriterResolver();</span>
-<span class="fc" id="L40">            resolver.resolve(null).write(statement, resolver, null, filter);</span>
-<span class="nc" id="L41">        } catch (ReadValueException e) {</span>
+<span class="fc" id="L45">            body.write(&quot; WHERE &quot;);</span>
+<span class="fc" id="L46">            PostgresQueryWriterResolver resolver = new PostgresQueryWriterResolver();</span>
+<span class="fc" id="L47">            resolver.resolve(null).write(statement, resolver, null, filter);</span>
+<span class="nc" id="L48">        } catch (ReadValueException e) {</span>
             // no filter in the criteria, ignoring
-<span class="fc" id="L43">        }</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
 
-    static void writeSearchOrder(QueryStatement statement, IObject criteria) throws Exception {
-<span class="fc" id="L47">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
-<span class="fc" id="L48">        Writer body = statement.getBodyWriter();</span>
+    /**
+     * Writes ORDER BY clause of the select statement.
+     * @param statement statement which body to write and which parameters to set
+     * @param criteria search criteria
+     * @throws Exception if the clause cannot be written
+     */
+    static void writeSearchOrder(final QueryStatement statement, final IObject criteria) throws Exception {
+<span class="fc" id="L60">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L61">        Writer body = statement.getBodyWriter();</span>
         try {
-<span class="fc" id="L50">            IFieldName sortField = IOC.resolve(fieldNameKey, &quot;sort&quot;);</span>
-<span class="fc" id="L51">            List&lt;IObject&gt; sortItems = (List&lt;IObject&gt;) criteria.getValue(sortField);</span>
-<span class="pc bpc" id="L52" title="1 of 4 branches missed.">            if (sortItems == null || sortItems.isEmpty()) {</span>
-<span class="fc" id="L53">                return; // no sort in the criteria, ignoring</span>
+<span class="fc" id="L63">            IFieldName sortField = IOC.resolve(fieldNameKey, &quot;sort&quot;);</span>
+<span class="fc" id="L64">            List&lt;IObject&gt; sortItems = (List&lt;IObject&gt;) criteria.getValue(sortField);</span>
+<span class="pc bpc" id="L65" title="1 of 4 branches missed.">            if (sortItems == null || sortItems.isEmpty()) {</span>
+<span class="fc" id="L66">                return; // no sort in the criteria, ignoring</span>
             }
-<span class="fc" id="L55">            body.write(&quot; &quot;);</span>
-<span class="fc" id="L56">            OrderWriter order = new OrderWriter();</span>
-<span class="fc" id="L57">            order.write(statement, sortItems);</span>
-<span class="nc" id="L58">        } catch (ReadValueException e) {</span>
+<span class="fc" id="L68">            body.write(&quot; &quot;);</span>
+<span class="fc" id="L69">            OrderWriter order = new OrderWriter();</span>
+<span class="fc" id="L70">            order.write(statement, sortItems);</span>
+<span class="nc" id="L71">        } catch (ReadValueException e) {</span>
             // no sort in the criteria, ignoring
-<span class="fc" id="L60">        }</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">    }</span>
 
-    static void writeSearchPaging(QueryStatement statement, IObject criteria) throws Exception {
-<span class="fc" id="L64">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
-<span class="fc" id="L65">        Writer body = statement.getBodyWriter();</span>
+    /**
+     * Writes OFFSET and LIMIT clauses of the select statement.
+     * @param statement statement which body to write and which parameters to set
+     * @param criteria search criteria
+     * @throws Exception if the clause cannot be written
+     */
+    static void writeSearchPaging(final QueryStatement statement, final IObject criteria) throws Exception {
+<span class="fc" id="L83">        IKey fieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L84">        Writer body = statement.getBodyWriter();</span>
         try {
-<span class="fc" id="L67">            IFieldName pageField = IOC.resolve(fieldNameKey, &quot;page&quot;);</span>
-<span class="fc" id="L68">            IObject page = (IObject) criteria.getValue(pageField);</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">            if (page == null) {</span>
-<span class="fc" id="L70">                return; // no page in the criteria, ignoring</span>
+<span class="fc" id="L86">            IFieldName pageField = IOC.resolve(fieldNameKey, &quot;page&quot;);</span>
+<span class="fc" id="L87">            IObject page = (IObject) criteria.getValue(pageField);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (page == null) {</span>
+<span class="fc" id="L89">                writeDefaultPaging(statement);</span>
+<span class="fc" id="L90">                return; // no page in the criteria, ignoring</span>
             }
-<span class="fc" id="L72">            body.write(&quot; &quot;);</span>
-            Integer size;
-            Integer number;
+
             try {
-<span class="fc" id="L76">                IFieldName sizeField = IOC.resolve(fieldNameKey, &quot;size&quot;);</span>
-<span class="fc" id="L77">                size = (Integer) page.getValue(sizeField);</span>
-<span class="fc" id="L78">                IFieldName numberField = IOC.resolve(fieldNameKey, &quot;number&quot;);</span>
-<span class="fc" id="L79">                number = (Integer) page.getValue(numberField);</span>
-<span class="nc" id="L80">            } catch (Exception e) {</span>
-<span class="nc" id="L81">                throw new QueryBuildException(&quot;wrong page format: &quot; + page.serialize(), e);</span>
-<span class="fc" id="L82">            }</span>
-<span class="fc" id="L83">            PagingWriter paging = new PagingWriter();</span>
-<span class="fc" id="L84">            paging.write(statement, number, size);</span>
-<span class="nc" id="L85">        } catch (ReadValueException e) {</span>
+<span class="fc" id="L94">                body.write(&quot; &quot;);</span>
+<span class="fc" id="L95">                PagingWriter paging = new PagingWriter();</span>
+<span class="fc" id="L96">                IFieldName sizeField = IOC.resolve(fieldNameKey, &quot;size&quot;);</span>
+<span class="fc" id="L97">                Integer size = (Integer) page.getValue(sizeField);</span>
+<span class="fc" id="L98">                IFieldName numberField = IOC.resolve(fieldNameKey, &quot;number&quot;);</span>
+<span class="fc" id="L99">                Integer number = (Integer) page.getValue(numberField);</span>
+<span class="fc" id="L100">                paging.write(statement, number, size);</span>
+<span class="nc" id="L101">            } catch (Exception e) {</span>
+<span class="nc" id="L102">                throw new QueryBuildException(&quot;wrong page format: &quot; + page.serialize(), e);</span>
+<span class="fc" id="L103">            }</span>
+<span class="nc" id="L104">        } catch (ReadValueException e) {</span>
+<span class="nc" id="L105">            writeDefaultPaging(statement);</span>
             // no page in the criteria, ignoring
-<span class="fc" id="L87">        }</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Writes default paging (LIMIT) of default size of 100.
+     * @param statement statement which body to write and which parameters to set
+     * @throws IOException if write to body failed
+     * @throws QueryBuildException if query cannot be formatted
+     */
+    static void writeDefaultPaging(final QueryStatement statement) throws IOException, QueryBuildException {
+<span class="fc" id="L117">        Writer body = statement.getBodyWriter();</span>
+<span class="fc" id="L118">        body.write(&quot; &quot;);</span>
+<span class="fc" id="L119">        PagingWriter paging = new PagingWriter();</span>
+<span class="fc" id="L120">        paging.write(statement, 1, PostgresSchema.DEFAULT_PAGE_SIZE);</span>
+<span class="fc" id="L121">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

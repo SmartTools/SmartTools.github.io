@@ -239,6 +239,7 @@ info.smart_tools.smartactors.core.postgres_connection.wrapper
 info.smart_tools.smartactors.core.postgres_create_task
 info.smart_tools.smartactors.core.postgres_delete_task
 info.smart_tools.smartactors.core.postgres_getbyid_task
+info.smart_tools.smartactors.core.postgres_insert_task
 info.smart_tools.smartactors.core.postgres_schema
 info.smart_tools.smartactors.core.postgres_schema.indexes
 info.smart_tools.smartactors.core.postgres_schema.search

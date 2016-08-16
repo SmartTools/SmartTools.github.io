@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 897,
+      <title>File: 900,
              Errors: 0,
-             Warnings: 1682,
+             Warnings: 1668,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -836,7 +836,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   0
@@ -2026,7 +2026,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -4065,6 +4065,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_by_composite_name_ioc_with_lambda_strategy.package-info.java">info/smart_tools/smartactors/core/resolve_by_composite_name_ioc_with_lambda_strategy/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_insert_task.package-info.java">info/smart_tools/smartactors/core/postgres_insert_task/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -6422,7 +6436,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  10
+                  0
                 </td>
                 <td>
                   0
@@ -8153,6 +8167,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.package-info.java">info/smart_tools/smartactors/core/postgres_schema/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_insert_task.InsertMessage.java">info/smart_tools/smartactors/core/postgres_insert_task/InsertMessage.java</a>
                 </td>
                 <td>
                   0
@@ -11695,6 +11723,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processing.IMessageProcessingSequence.java">info/smart_tools/smartactors/core/message_processing/IMessageProcessingSequence.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_insert_task.PostgresInsertTask.java">info/smart_tools/smartactors/core/postgres_insert_task/PostgresInsertTask.java</a>
                 </td>
                 <td>
                   0

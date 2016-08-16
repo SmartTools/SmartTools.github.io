@@ -11,7 +11,7 @@ import java.io.IOException;
 public class PagingWriter {
 
     /** Const param for paging */
-    private static final int MAX_PAGE_SIZE = 10000;
+    private static final int MAX_PAGE_SIZE = 1000;
     private static final int MIN_PAGE_SIZE = 1;
 
     /**
