@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">private</strong> IFieldName callbackFieldName;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     * Collection where the document should be upserted.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     * Collection where to search the documents.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">private</strong> String collection;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_javadoccomment">/**</em>
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">private</strong> IObject criteria;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * Callback function to call when the object is found.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * Callback function to call when the documents are found.</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">private</strong> IAction&lt;IObject[]&gt; callback;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>             <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TaskExecutionException(<span class="jxr_string">"Select failed: criteria = "</span> + criteria.serialize(), e);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>             } <strong class="jxr_keyword">catch</strong> (SerializeException e1) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>             } <strong class="jxr_keyword">catch</strong> (SerializeException | NullPointerException e1) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TaskExecutionException(<span class="jxr_string">"Select failed"</span>, e);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>             }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>         }

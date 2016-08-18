@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-plugin.in_memory_db_tasks,info.smart_tools.smartactors.plugin.in_memory_db_tasks,PluginInMemoryDBTasks,243,230,0,0,58,58,5,8,5,8
+plugin.in_memory_db_tasks,info.smart_tools.smartactors.plugin.in_memory_db_tasks,PluginInMemoryDBTasks,338,315,0,0,80,76,7,10,7,10

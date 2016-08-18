@@ -186,5 +186,27 @@ public class InMemoryDatabase implements IDatabase {
 <span class="nc" id="L186">            throw new IDatabaseException(&quot;Failed to create DataBaseItem&quot;, e);</span>
 <span class="nc" id="L187">        }</span>
 <span class="nc" id="L188">    }</span>
+
+    @Override
+    public Long count(final IObject condition, final String collectionName) throws IDatabaseException {
+        try {
+<span class="fc" id="L193">            List&lt;DataBaseItem&gt; list = dataBase.get(collectionName);</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">            if (condition == null) {</span>
+<span class="fc" id="L195">                return Long.valueOf(list.size());</span>
+            }
+
+<span class="fc" id="L198">            IObject filter = (IObject) condition.getValue(filterFieldName);</span>
+<span class="fc" id="L199">            long count = 0;</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (DataBaseItem item : list) {</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">                if (generalConditionParser(filter, item.getDocument())) {</span>
+<span class="fc" id="L202">                    count++;</span>
+                }
+<span class="fc" id="L204">            }</span>
+<span class="fc" id="L205">            return count;</span>
+<span class="nc" id="L206">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L207">            throw new IDatabaseException(&quot;Failed to get filter from select condition&quot;, e);</span>
+        }
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

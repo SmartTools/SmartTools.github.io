@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InMemoryDBCountTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.in_memory_db_count_task</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.in_memory_db_count_task</a> &gt; <span class="el_source">InMemoryDBCountTask.java</span></div><h1>InMemoryDBCountTask.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.in_memory_db_count_task;
+
+import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.idatabase.IDatabase;
+import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.in_memory_database.InMemoryDatabase;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.iobject.exception.SerializeException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+
+/**
+ * The database task which is to count documents in {@link InMemoryDatabase} by multiple search criteria.
+ * The search criteria are passed in the complex IObject to the {@link #prepare(IObject)} method.
+ * &lt;p&gt;
+ * The example of prepare object:
+ * &lt;pre&gt;
+ *  {
+ *      &quot;collectionName&quot;: CollectionName object,
+ *      &quot;criteria&quot;: {
+ *          &quot;filter&quot;: {
+ *              &quot;$or&quot;: [
+ *                  { &quot;a&quot;: { &quot;$eq&quot;: &quot;b&quot; } },
+ *                  { &quot;b&quot;: { &quot;$gt&quot;: 42 } }
+ *              ]
+ *          }
+ *      },
+ *      &quot;callback&quot;: IAction callback to receive count
+ *  }
+ *     &lt;/pre&gt;
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * The criteria is the IObject which contains a set of conditions and operators.
+ * Conditions joins operators together.
+ * Operators match the specified document field against the specified criteria.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Available conditions:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;code&gt;$and&lt;/code&gt; — ANDs operators and nested conditions&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$or&lt;/code&gt; — ORs operators and nested conditions&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$not&lt;/code&gt; — negate all nested operators and conditions, is equivalent to NOT(conditionA) AND NOT(conditionB)&lt;/li&gt;
+ * &lt;/ul&gt;
+ * Available operators:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;code&gt;$eq&lt;/code&gt; — test for equality of the document field and the specified value&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$neq&lt;/code&gt; — test for not equality&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$lt&lt;/code&gt; — &quot;less than&quot;, the document field is less than the specified value&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$gt&lt;/code&gt; — &quot;greater than&quot;, the document field is larger than the specified value&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$lte&lt;/code&gt; — less or equal&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$gte&lt;/code&gt; — greater or equal&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$isNull&lt;/code&gt; — checks for null if the specified value is &quot;true&quot; or checks for not null if &quot;false&quot;&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$date-from&lt;/code&gt; — greater or equal for datetime fields&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$date-to&lt;/code&gt; — less or equal for datetime fields&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$in&lt;/code&gt; — checks for equality to any of the specified values in the array&lt;/li&gt;
+ * &lt;li&gt;&lt;code&gt;$hasTag&lt;/code&gt; — check the document field is JSON document contains the specified value as field name or value&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;/p&gt;
+ */
+
+public class InMemoryDBCountTask implements IDatabaseTask {
+
+    private IFieldName collectionFieldName;
+    private IFieldName criteriaFieldName;
+    private IFieldName callbackFieldName;
+
+    /**
+     * Collection where the document should be counted.
+     */
+    private String collection;
+    /**
+     * Criteria to count the documents.
+     */
+    private IObject criteria;
+    /**
+     * Callback function to call when the documents are counted.
+     */
+    private IAction&lt;Long&gt; callback;
+
+    /**
+     * Creates the task.
+     * @throws TaskPrepareException if cannot resolve IFieldName
+     */
+<span class="fc" id="L90">    public InMemoryDBCountTask() throws TaskPrepareException {</span>
+        try {
+<span class="fc" id="L92">            collectionFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L93">            criteriaFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;criteria&quot;);</span>
+<span class="fc" id="L94">            callbackFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="nc" id="L95">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L96">            throw new TaskPrepareException(&quot;Failed to resolve \&quot;IFieldName\&quot;&quot;, e);</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">    }</span>
+
+    @Override
+    public void prepare(final IObject query) throws TaskPrepareException {
+        try {
+<span class="fc" id="L103">            collection = (String) query.getValue(collectionFieldName);</span>
+<span class="fc" id="L104">            criteria = (IObject) query.getValue(criteriaFieldName);</span>
+<span class="fc" id="L105">            callback = (IAction&lt;Long&gt;) query.getValue(callbackFieldName);</span>
+<span class="nc" id="L106">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L107">            throw new TaskPrepareException(&quot;Failed to getting values from query&quot;, e);</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
+
+    @Override
+    public void execute() throws TaskExecutionException {
+        try {
+<span class="fc" id="L114">            IDatabase dataBase = IOC.resolve(Keys.getOrAdd(InMemoryDatabase.class.getCanonicalName()));</span>
+<span class="fc" id="L115">            Long result = dataBase.count(criteria, collection);</span>
+<span class="fc" id="L116">            callback.execute(result);</span>
+<span class="nc" id="L117">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L118">            throw new TaskExecutionException(&quot;Failed to resolve InMemoryDatabase&quot;, e);</span>
+<span class="nc" id="L119">        } catch (Exception e) {</span>
+            try {
+<span class="nc" id="L121">                throw new TaskExecutionException(&quot;Count failed: criteria = &quot; + criteria.serialize(), e);</span>
+<span class="nc" id="L122">            } catch (SerializeException | NullPointerException e1) {</span>
+<span class="nc" id="L123">                throw new TaskExecutionException(&quot;Count failed&quot;, e);</span>
+            }
+<span class="fc" id="L125">        }</span>
+<span class="fc" id="L126">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -18,6 +18,8 @@ import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_count_task.CountMessage;
+import info.smart_tools.smartactors.core.postgres_count_task.PostgresCountTask;
 import info.smart_tools.smartactors.core.postgres_create_task.CreateCollectionMessage;
 import info.smart_tools.smartactors.core.postgres_create_task.PostgresCreateTask;
 import info.smart_tools.smartactors.core.postgres_delete_task.DeleteMessage;
@@ -44,424 +46,495 @@ public class PostgresDBTasksPlugin implements IPlugin {
      * Constructor
      * @param bootstrap bootstrap element
      */
-<span class="fc" id="L47">    public PostgresDBTasksPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="fc" id="L48">        this.bootstrap = bootstrap;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L49">    public PostgresDBTasksPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="fc" id="L50">        this.bootstrap = bootstrap;</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void load() throws PluginException {
 
         try {
-<span class="fc" id="L55">            BootstrapItem item = new BootstrapItem(&quot;PostgresDBTasksPlugin&quot;);</span>
-<span class="fc" id="L56">            item</span>
-<span class="fc" id="L57">                .after(&quot;IOC&quot;)</span>
-<span class="fc" id="L58">                .after(&quot;IFieldPlugin&quot;)</span>
-<span class="fc" id="L59">                .after(&quot;iobject&quot;)</span>
-<span class="fc" id="L60">                .process(() -&gt; {</span>
+<span class="fc" id="L57">            BootstrapItem item = new BootstrapItem(&quot;PostgresDBTasksPlugin&quot;);</span>
+<span class="fc" id="L58">            item</span>
+<span class="fc" id="L59">                .after(&quot;IOC&quot;)</span>
+<span class="fc" id="L60">                .after(&quot;IFieldPlugin&quot;)</span>
+<span class="fc" id="L61">                .after(&quot;iobject&quot;)</span>
+<span class="fc" id="L62">                .process(() -&gt; {</span>
                     try {
-<span class="fc" id="L62">                        registerCreateTask();</span>
-<span class="fc" id="L63">                        registerNextIdStrategy();</span>
-<span class="fc" id="L64">                        registerUpsertTask();</span>
-<span class="fc" id="L65">                        registerInsertTask();</span>
-<span class="fc" id="L66">                        registerGetByIdTask();</span>
-<span class="fc" id="L67">                        registerSearchTask();</span>
-<span class="fc" id="L68">                        registerDeleteTask();</span>
-<span class="nc" id="L69">                    } catch (ResolutionException e) {</span>
-<span class="nc" id="L70">                        throw new ActionExecuteException(&quot;Can't resolve fields for db task.&quot;, e);</span>
-<span class="nc" id="L71">                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L72">                        throw new ActionExecuteException(&quot;Can't create strategy for db task.&quot;, e);</span>
-<span class="nc" id="L73">                    } catch (RegistrationException e) {</span>
-<span class="nc" id="L74">                        throw new ActionExecuteException(&quot;Can't register strategy for db task.&quot;, e);</span>
-<span class="fc" id="L75">                    }</span>
-<span class="fc" id="L76">                });</span>
-<span class="fc" id="L77">            bootstrap.add(item);</span>
-<span class="nc" id="L78">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L79">            throw new PluginException(&quot;Can't get BootstrapItem.&quot;, e);</span>
-<span class="fc" id="L80">        }</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L64">                        registerCreateTask();</span>
+<span class="fc" id="L65">                        registerNextIdStrategy();</span>
+<span class="fc" id="L66">                        registerUpsertTask();</span>
+<span class="fc" id="L67">                        registerInsertTask();</span>
+<span class="fc" id="L68">                        registerGetByIdTask();</span>
+<span class="fc" id="L69">                        registerSearchTask();</span>
+<span class="fc" id="L70">                        registerDeleteTask();</span>
+<span class="fc" id="L71">                        registerCountTask();</span>
+<span class="nc" id="L72">                    } catch (ResolutionException e) {</span>
+<span class="nc" id="L73">                        throw new ActionExecuteException(&quot;Can't resolve fields for db task.&quot;, e);</span>
+<span class="nc" id="L74">                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L75">                        throw new ActionExecuteException(&quot;Can't create strategy for db task.&quot;, e);</span>
+<span class="nc" id="L76">                    } catch (RegistrationException e) {</span>
+<span class="nc" id="L77">                        throw new ActionExecuteException(&quot;Can't register strategy for db task.&quot;, e);</span>
+<span class="fc" id="L78">                    }</span>
+<span class="fc" id="L79">                });</span>
+<span class="fc" id="L80">            bootstrap.add(item);</span>
+<span class="nc" id="L81">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L82">            throw new PluginException(&quot;Can't get BootstrapItem.&quot;, e);</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">    }</span>
 
     private void registerCreateTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L84">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L85">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L86">        IField optionsField = IOC.resolve(</span>
-<span class="fc" id="L87">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;options&quot;);</span>
+<span class="fc" id="L87">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L88">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L89">        IField optionsField = IOC.resolve(</span>
+<span class="fc" id="L90">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;options&quot;);</span>
 
-<span class="fc" id="L89">        IOC.register(</span>
-<span class="fc" id="L90">                Keys.getOrAdd(CreateCollectionMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L92">        IOC.register(</span>
+<span class="fc" id="L93">                Keys.getOrAdd(CreateCollectionMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L93">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L94">                            return new CreateCollectionMessage() {</span>
+<span class="fc" id="L96">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L97">                            return new CreateCollectionMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L98">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L99">                                    } catch (Exception e) {</span>
-<span class="nc" id="L100">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L101">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L102">                                    } catch (Exception e) {</span>
+<span class="nc" id="L103">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IObject getOptions() throws ReadValueException {
                                     try {
-<span class="fc" id="L106">                                        return (IObject) optionsField.in(message);</span>
-<span class="nc" id="L107">                                    } catch (Exception e) {</span>
-<span class="nc" id="L108">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L109">                                        return (IObject) optionsField.in(message);</span>
+<span class="nc" id="L110">                                    } catch (Exception e) {</span>
+<span class="nc" id="L111">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L115">        IOC.register(</span>
-<span class="fc" id="L116">                Keys.getOrAdd(&quot;db.collection.create&quot;),</span>
+<span class="fc" id="L118">        IOC.register(</span>
+<span class="fc" id="L119">                Keys.getOrAdd(&quot;db.collection.create&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L121">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L122">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L123">                                IObject options = null;</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered.">                                if (args.length &gt; 2) {</span>
-<span class="fc" id="L125">                                     options = (IObject) args[2];</span>
+<span class="fc" id="L124">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L125">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L126">                                IObject options = null;</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                                if (args.length &gt; 2) {</span>
+<span class="fc" id="L128">                                     options = (IObject) args[2];</span>
                                 }
-<span class="fc" id="L127">                                IDatabaseTask task = new PostgresCreateTask(connection);</span>
+<span class="fc" id="L130">                                IDatabaseTask task = new PostgresCreateTask(connection);</span>
 
-<span class="fc" id="L129">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L132">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L131">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L132">                                optionsField.out(query, options);</span>
+<span class="fc" id="L134">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L135">                                optionsField.out(query, options);</span>
 
-<span class="fc" id="L134">                                task.prepare(query);</span>
-<span class="fc" id="L135">                                return task;</span>
-<span class="nc" id="L136">                            } catch (Exception e) {</span>
-<span class="nc" id="L137">                                throw new RuntimeException(&quot;Can't resolve create db task.&quot;, e);</span>
+<span class="fc" id="L137">                                task.prepare(query);</span>
+<span class="fc" id="L138">                                return task;</span>
+<span class="nc" id="L139">                            } catch (Exception e) {</span>
+<span class="nc" id="L140">                                throw new RuntimeException(&quot;Can't resolve create db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L145">    }</span>
 
     private void registerNextIdStrategy() throws RegistrationException, ResolutionException {
-<span class="fc" id="L145">        IOC.register(</span>
-<span class="fc" id="L146">                Keys.getOrAdd(&quot;db.collection.nextid&quot;),</span>
+<span class="fc" id="L148">        IOC.register(</span>
+<span class="fc" id="L149">                Keys.getOrAdd(&quot;db.collection.nextid&quot;),</span>
                 new UuidNextIdStrategy()
         );
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L152">    }</span>
 
     private void registerUpsertTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L152">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L153">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L154">        IField documentField = IOC.resolve(</span>
-<span class="fc" id="L155">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="fc" id="L155">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L156">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L157">        IField documentField = IOC.resolve(</span>
+<span class="fc" id="L158">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
 
-<span class="fc" id="L157">        registerNextIdStrategy();</span>
-<span class="fc" id="L158">        IOC.register(</span>
-<span class="fc" id="L159">                Keys.getOrAdd(UpsertMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L160">        registerNextIdStrategy();</span>
+<span class="fc" id="L161">        IOC.register(</span>
+<span class="fc" id="L162">                Keys.getOrAdd(UpsertMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L162">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L163">                            return new UpsertMessage() {</span>
+<span class="fc" id="L165">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L166">                            return new UpsertMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L167">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L168">                                    } catch (Exception e) {</span>
-<span class="nc" id="L169">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L170">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L171">                                    } catch (Exception e) {</span>
+<span class="nc" id="L172">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IObject getDocument() throws ReadValueException {
                                     try {
-<span class="fc" id="L175">                                        return (IObject) documentField.in(message);</span>
-<span class="nc" id="L176">                                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L177">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L178">                                        return (IObject) documentField.in(message);</span>
+<span class="nc" id="L179">                                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L180">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L184">        IOC.register(</span>
-<span class="fc" id="L185">                Keys.getOrAdd(&quot;db.collection.upsert&quot;),</span>
+<span class="fc" id="L187">        IOC.register(</span>
+<span class="fc" id="L188">                Keys.getOrAdd(&quot;db.collection.upsert&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L190">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L191">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L192">                                IObject document = (IObject) args[2];</span>
-<span class="fc" id="L193">                                IDatabaseTask task = new PostgresUpsertTask(connection);</span>
+<span class="fc" id="L193">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L194">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L195">                                IObject document = (IObject) args[2];</span>
+<span class="fc" id="L196">                                IDatabaseTask task = new PostgresUpsertTask(connection);</span>
 
-<span class="fc" id="L195">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L198">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L197">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L198">                                documentField.out(query, document);</span>
+<span class="fc" id="L200">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L201">                                documentField.out(query, document);</span>
 
-<span class="fc" id="L200">                                task.prepare(query);</span>
-<span class="fc" id="L201">                                return task;</span>
-<span class="nc" id="L202">                            } catch (Exception e) {</span>
-<span class="nc" id="L203">                                throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
+<span class="fc" id="L203">                                task.prepare(query);</span>
+<span class="fc" id="L204">                                return task;</span>
+<span class="nc" id="L205">                            } catch (Exception e) {</span>
+<span class="nc" id="L206">                                throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L211">    }</span>
 
     private void registerGetByIdTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L211">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L212">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L213">        IField idField = IOC.resolve(</span>
-<span class="fc" id="L214">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;id&quot;);</span>
-<span class="fc" id="L215">        IField callbackField = IOC.resolve(</span>
-<span class="fc" id="L216">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="fc" id="L214">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L215">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L216">        IField idField = IOC.resolve(</span>
+<span class="fc" id="L217">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;id&quot;);</span>
+<span class="fc" id="L218">        IField callbackField = IOC.resolve(</span>
+<span class="fc" id="L219">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
 
-<span class="fc" id="L218">        IOC.register(</span>
-<span class="fc" id="L219">                Keys.getOrAdd(GetByIdMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L221">        IOC.register(</span>
+<span class="fc" id="L222">                Keys.getOrAdd(GetByIdMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L222">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L223">                            return new GetByIdMessage() {</span>
+<span class="fc" id="L225">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L226">                            return new GetByIdMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L227">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L228">                                    } catch (Exception e) {</span>
-<span class="nc" id="L229">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L230">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L231">                                    } catch (Exception e) {</span>
+<span class="nc" id="L232">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public Object getId() throws ReadValueException {
                                     try {
-<span class="fc" id="L235">                                        return idField.in(message);</span>
-<span class="nc" id="L236">                                    } catch (Exception e) {</span>
-<span class="nc" id="L237">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L238">                                        return idField.in(message);</span>
+<span class="nc" id="L239">                                    } catch (Exception e) {</span>
+<span class="nc" id="L240">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IAction&lt;IObject&gt; getCallback() throws ReadValueException {
                                     try {
-<span class="fc" id="L243">                                        return (IAction&lt;IObject&gt;) callbackField.in(message);</span>
-<span class="nc" id="L244">                                    } catch (Exception e) {</span>
-<span class="nc" id="L245">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L246">                                        return (IAction&lt;IObject&gt;) callbackField.in(message);</span>
+<span class="nc" id="L247">                                    } catch (Exception e) {</span>
+<span class="nc" id="L248">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L252">        IOC.register(</span>
-<span class="fc" id="L253">                Keys.getOrAdd(&quot;db.collection.getbyid&quot;),</span>
+<span class="fc" id="L255">        IOC.register(</span>
+<span class="fc" id="L256">                Keys.getOrAdd(&quot;db.collection.getbyid&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L258">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L259">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L260">                                Object id = args[2];</span>
-<span class="fc" id="L261">                                IAction&lt;IObject&gt; callback = (IAction&lt;IObject&gt;) args[3];</span>
-<span class="fc" id="L262">                                IDatabaseTask task = new PostgresGetByIdTask(connection);</span>
+<span class="fc" id="L261">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L262">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L263">                                Object id = args[2];</span>
+<span class="fc" id="L264">                                IAction&lt;IObject&gt; callback = (IAction&lt;IObject&gt;) args[3];</span>
+<span class="fc" id="L265">                                IDatabaseTask task = new PostgresGetByIdTask(connection);</span>
 
-<span class="fc" id="L264">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L267">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L266">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L267">                                idField.out(query, id);</span>
-<span class="fc" id="L268">                                callbackField.out(query, callback);</span>
+<span class="fc" id="L269">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L270">                                idField.out(query, id);</span>
+<span class="fc" id="L271">                                callbackField.out(query, callback);</span>
 
-<span class="fc" id="L270">                                task.prepare(query);</span>
-<span class="fc" id="L271">                                return task;</span>
-<span class="nc" id="L272">                            } catch (Exception e) {</span>
-<span class="nc" id="L273">                                throw new RuntimeException(&quot;Can't resolve getbyid db task.&quot;, e);</span>
+<span class="fc" id="L273">                                task.prepare(query);</span>
+<span class="fc" id="L274">                                return task;</span>
+<span class="nc" id="L275">                            } catch (Exception e) {</span>
+<span class="nc" id="L276">                                throw new RuntimeException(&quot;Can't resolve getbyid db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L278">    }</span>
+<span class="fc" id="L281">    }</span>
 
     private void registerSearchTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L281">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L282">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L283">        IField criteriaField = IOC.resolve(</span>
-<span class="fc" id="L284">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria&quot;);</span>
-<span class="fc" id="L285">        IField callbackField = IOC.resolve(</span>
-<span class="fc" id="L286">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="fc" id="L284">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L285">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L286">        IField criteriaField = IOC.resolve(</span>
+<span class="fc" id="L287">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria&quot;);</span>
+<span class="fc" id="L288">        IField callbackField = IOC.resolve(</span>
+<span class="fc" id="L289">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
 
-<span class="fc" id="L288">        IOC.register(</span>
-<span class="fc" id="L289">                Keys.getOrAdd(SearchMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L291">        IOC.register(</span>
+<span class="fc" id="L292">                Keys.getOrAdd(SearchMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L292">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L293">                            return new SearchMessage() {</span>
+<span class="fc" id="L295">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L296">                            return new SearchMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L297">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L298">                                    } catch (Exception e) {</span>
-<span class="nc" id="L299">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L300">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L301">                                    } catch (Exception e) {</span>
+<span class="nc" id="L302">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IObject getCriteria() throws ReadValueException {
                                     try {
-<span class="fc" id="L305">                                        return criteriaField.in(message);</span>
-<span class="nc" id="L306">                                    } catch (Exception e) {</span>
-<span class="nc" id="L307">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L308">                                        return criteriaField.in(message);</span>
+<span class="nc" id="L309">                                    } catch (Exception e) {</span>
+<span class="nc" id="L310">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IAction&lt;IObject[]&gt; getCallback() throws ReadValueException {
                                     try {
-<span class="fc" id="L313">                                        return (IAction&lt;IObject[]&gt;) callbackField.in(message);</span>
-<span class="nc" id="L314">                                    } catch (Exception e) {</span>
-<span class="nc" id="L315">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L316">                                        return (IAction&lt;IObject[]&gt;) callbackField.in(message);</span>
+<span class="nc" id="L317">                                    } catch (Exception e) {</span>
+<span class="nc" id="L318">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L322">        IOC.register(</span>
-<span class="fc" id="L323">                Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
+<span class="fc" id="L325">        IOC.register(</span>
+<span class="fc" id="L326">                Keys.getOrAdd(&quot;db.collection.search&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L328">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L329">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L330">                                IObject criteria = (IObject) args[2];</span>
-<span class="fc" id="L331">                                IAction&lt;IObject[]&gt; callback = (IAction&lt;IObject[]&gt;) args[3];</span>
-<span class="fc" id="L332">                                IDatabaseTask task = new PostgresSearchTask(connection);</span>
+<span class="fc" id="L331">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L332">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L333">                                IObject criteria = (IObject) args[2];</span>
+<span class="fc" id="L334">                                IAction&lt;IObject[]&gt; callback = (IAction&lt;IObject[]&gt;) args[3];</span>
+<span class="fc" id="L335">                                IDatabaseTask task = new PostgresSearchTask(connection);</span>
 
-<span class="fc" id="L334">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L337">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L336">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L337">                                criteriaField.out(query, criteria);</span>
-<span class="fc" id="L338">                                callbackField.out(query, callback);</span>
+<span class="fc" id="L339">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L340">                                criteriaField.out(query, criteria);</span>
+<span class="fc" id="L341">                                callbackField.out(query, callback);</span>
 
-<span class="fc" id="L340">                                task.prepare(query);</span>
-<span class="fc" id="L341">                                return task;</span>
-<span class="nc" id="L342">                            } catch (Exception e) {</span>
-<span class="nc" id="L343">                                throw new RuntimeException(&quot;Can't resolve search db task.&quot;, e);</span>
+<span class="fc" id="L343">                                task.prepare(query);</span>
+<span class="fc" id="L344">                                return task;</span>
+<span class="nc" id="L345">                            } catch (Exception e) {</span>
+<span class="nc" id="L346">                                throw new RuntimeException(&quot;Can't resolve search db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L348">    }</span>
+<span class="fc" id="L351">    }</span>
 
     private void registerDeleteTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L351">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L352">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L353">        IField documentField = IOC.resolve(</span>
-<span class="fc" id="L354">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="fc" id="L354">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L355">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L356">        IField documentField = IOC.resolve(</span>
+<span class="fc" id="L357">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
 
-<span class="fc" id="L356">        IOC.register(</span>
-<span class="fc" id="L357">                Keys.getOrAdd(DeleteMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L359">        IOC.register(</span>
+<span class="fc" id="L360">                Keys.getOrAdd(DeleteMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L360">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L361">                            return new DeleteMessage() {</span>
+<span class="fc" id="L363">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L364">                            return new DeleteMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L365">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L366">                                    } catch (Exception e) {</span>
-<span class="nc" id="L367">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L368">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L369">                                    } catch (Exception e) {</span>
+<span class="nc" id="L370">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IObject getDocument() throws ReadValueException {
                                     try {
-<span class="fc" id="L373">                                        return documentField.in(message);</span>
-<span class="nc" id="L374">                                    } catch (Exception e) {</span>
-<span class="nc" id="L375">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L376">                                        return documentField.in(message);</span>
+<span class="nc" id="L377">                                    } catch (Exception e) {</span>
+<span class="nc" id="L378">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L382">        IOC.register(</span>
-<span class="fc" id="L383">                Keys.getOrAdd(&quot;db.collection.delete&quot;),</span>
+<span class="fc" id="L385">        IOC.register(</span>
+<span class="fc" id="L386">                Keys.getOrAdd(&quot;db.collection.delete&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L388">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L389">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L390">                                IObject document = (IObject) args[2];</span>
-<span class="fc" id="L391">                                IDatabaseTask task = new PostgresDeleteTask(connection);</span>
+<span class="fc" id="L391">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L392">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L393">                                IObject document = (IObject) args[2];</span>
+<span class="fc" id="L394">                                IDatabaseTask task = new PostgresDeleteTask(connection);</span>
 
-<span class="fc" id="L393">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L396">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L395">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L396">                                documentField.out(query, document);</span>
+<span class="fc" id="L398">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L399">                                documentField.out(query, document);</span>
 
-<span class="fc" id="L398">                                task.prepare(query);</span>
-<span class="fc" id="L399">                                return task;</span>
-<span class="nc" id="L400">                            } catch (Exception e) {</span>
-<span class="nc" id="L401">                                throw new RuntimeException(&quot;Can't resolve delete db task.&quot;, e);</span>
+<span class="fc" id="L401">                                task.prepare(query);</span>
+<span class="fc" id="L402">                                return task;</span>
+<span class="nc" id="L403">                            } catch (Exception e) {</span>
+<span class="nc" id="L404">                                throw new RuntimeException(&quot;Can't resolve delete db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L406">    }</span>
+<span class="fc" id="L409">    }</span>
 
     private void registerInsertTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L409">        IField collectionNameField = IOC.resolve(</span>
-<span class="fc" id="L410">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L411">        IField documentField = IOC.resolve(</span>
-<span class="fc" id="L412">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="fc" id="L412">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L413">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L414">        IField documentField = IOC.resolve(</span>
+<span class="fc" id="L415">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
 
-<span class="fc" id="L414">        IOC.register(</span>
-<span class="fc" id="L415">                Keys.getOrAdd(InsertMessage.class.getCanonicalName()),</span>
+<span class="fc" id="L417">        IOC.register(</span>
+<span class="fc" id="L418">                Keys.getOrAdd(InsertMessage.class.getCanonicalName()),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L418">                            IObject message = (IObject) args[0];</span>
-<span class="fc" id="L419">                            return new InsertMessage() {</span>
+<span class="fc" id="L421">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L422">                            return new InsertMessage() {</span>
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
-<span class="fc" id="L423">                                        return (CollectionName) collectionNameField.in(message);</span>
-<span class="nc" id="L424">                                    } catch (Exception e) {</span>
-<span class="nc" id="L425">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L426">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L427">                                    } catch (Exception e) {</span>
+<span class="nc" id="L428">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                                 @Override
                                 public IObject getDocument() throws ReadValueException {
                                     try {
-<span class="fc" id="L431">                                        return (IObject) documentField.in(message);</span>
-<span class="nc" id="L432">                                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L433">                                        throw new ReadValueException(e);</span>
+<span class="fc" id="L434">                                        return (IObject) documentField.in(message);</span>
+<span class="nc" id="L435">                                    } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L436">                                        throw new ReadValueException(e);</span>
                                     }
                                 }
                             };
                         }
                 )
         );
-<span class="fc" id="L440">        IOC.register(</span>
-<span class="fc" id="L441">                Keys.getOrAdd(&quot;db.collection.insert&quot;),</span>
+<span class="fc" id="L443">        IOC.register(</span>
+<span class="fc" id="L444">                Keys.getOrAdd(&quot;db.collection.insert&quot;),</span>
                 //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
                             try {
-<span class="fc" id="L446">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="fc" id="L447">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="fc" id="L448">                                IObject document = (IObject) args[2];</span>
-<span class="fc" id="L449">                                IDatabaseTask task = new PostgresInsertTask(connection);</span>
+<span class="fc" id="L449">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L450">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L451">                                IObject document = (IObject) args[2];</span>
+<span class="fc" id="L452">                                IDatabaseTask task = new PostgresInsertTask(connection);</span>
 
-<span class="fc" id="L451">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L454">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="fc" id="L453">                                collectionNameField.out(query, collectionName);</span>
-<span class="fc" id="L454">                                documentField.out(query, document);</span>
+<span class="fc" id="L456">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L457">                                documentField.out(query, document);</span>
 
-<span class="fc" id="L456">                                task.prepare(query);</span>
-<span class="fc" id="L457">                                return task;</span>
-<span class="nc" id="L458">                            } catch (Exception e) {</span>
-<span class="nc" id="L459">                                throw new RuntimeException(&quot;Can't resolve insert db task.&quot;, e);</span>
+<span class="fc" id="L459">                                task.prepare(query);</span>
+<span class="fc" id="L460">                                return task;</span>
+<span class="nc" id="L461">                            } catch (Exception e) {</span>
+<span class="nc" id="L462">                                throw new RuntimeException(&quot;Can't resolve insert db task.&quot;, e);</span>
                             }
                         }
                 )
         );
-<span class="fc" id="L464">    }</span>
+<span class="fc" id="L467">    }</span>
+
+    private void registerCountTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
+<span class="fc" id="L470">        IField collectionNameField = IOC.resolve(</span>
+<span class="fc" id="L471">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L472">        IField criteriaField = IOC.resolve(</span>
+<span class="fc" id="L473">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;criteria&quot;);</span>
+<span class="fc" id="L474">        IField callbackField = IOC.resolve(</span>
+<span class="fc" id="L475">                Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+
+<span class="fc" id="L477">        IOC.register(</span>
+<span class="fc" id="L478">                Keys.getOrAdd(CountMessage.class.getCanonicalName()),</span>
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -&gt; {
+<span class="fc" id="L481">                            IObject message = (IObject) args[0];</span>
+<span class="fc" id="L482">                            return new CountMessage() {</span>
+                                @Override
+                                public CollectionName getCollectionName() throws ReadValueException {
+                                    try {
+<span class="fc" id="L486">                                        return (CollectionName) collectionNameField.in(message);</span>
+<span class="nc" id="L487">                                    } catch (Exception e) {</span>
+<span class="nc" id="L488">                                        throw new ReadValueException(e);</span>
+                                    }
+                                }
+                                @Override
+                                public IObject getCriteria() throws ReadValueException {
+                                    try {
+<span class="fc" id="L494">                                        return criteriaField.in(message);</span>
+<span class="nc" id="L495">                                    } catch (Exception e) {</span>
+<span class="nc" id="L496">                                        throw new ReadValueException(e);</span>
+                                    }
+                                }
+                                @Override
+                                public IAction&lt;Long&gt; getCallback() throws ReadValueException {
+                                    try {
+<span class="fc" id="L502">                                        return (IAction&lt;Long&gt;) callbackField.in(message);</span>
+<span class="nc" id="L503">                                    } catch (Exception e) {</span>
+<span class="nc" id="L504">                                        throw new ReadValueException(e);</span>
+                                    }
+                                }
+                            };
+                        }
+                )
+        );
+<span class="fc" id="L511">        IOC.register(</span>
+<span class="fc" id="L512">                Keys.getOrAdd(&quot;db.collection.count&quot;),</span>
+                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -&gt; {
+                            try {
+<span class="fc" id="L517">                                IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="fc" id="L518">                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="fc" id="L519">                                IObject criteria = (IObject) args[2];</span>
+<span class="fc" id="L520">                                IAction&lt;Long&gt; callback = (IAction&lt;Long&gt;) args[3];</span>
+<span class="fc" id="L521">                                IDatabaseTask task = new PostgresCountTask(connection);</span>
+
+<span class="fc" id="L523">                                IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+
+<span class="fc" id="L525">                                collectionNameField.out(query, collectionName);</span>
+<span class="fc" id="L526">                                criteriaField.out(query, criteria);</span>
+<span class="fc" id="L527">                                callbackField.out(query, callback);</span>
+
+<span class="fc" id="L529">                                task.prepare(query);</span>
+<span class="fc" id="L530">                                return task;</span>
+<span class="nc" id="L531">                            } catch (Exception e) {</span>
+<span class="nc" id="L532">                                throw new RuntimeException(&quot;Can't resolve count db task.&quot;, e);</span>
+                            }
+                        }
+                )
+        );
+<span class="fc" id="L537">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -74,7 +74,16 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      List&lt;IObject&gt; select(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> condition, <strong class="jxr_keyword">final</strong> String collectionName) <strong class="jxr_keyword">throws</strong> IDatabaseException;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * Counts the documents in the collection using the specified conditions</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @param condition criteria of search</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * @param collectionName name of the collection</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * @return number of found documents</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * @throws IDatabaseException if selection failed</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      Long count(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> condition, <strong class="jxr_keyword">final</strong> String collectionName) <strong class="jxr_keyword">throws</strong> IDatabaseException;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

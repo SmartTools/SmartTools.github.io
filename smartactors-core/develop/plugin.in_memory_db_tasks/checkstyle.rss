@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 2,
              Errors: 0,
-             Warnings: 3,
+             Warnings: 4,
              Infos: 0
       </title>
             <link>plugin.in_memory_db_tasks/plugin.in_memory_db_tasks//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0

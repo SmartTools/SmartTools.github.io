@@ -194,7 +194,29 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/idatabase/exception/IDatabaseException.html">IDatabaseException</a>(<span class="jxr_string">"Failed to create DataBaseItem"</span>, e);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>         }
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>     }
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     @Override
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">public</strong> Long count(<strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> condition, <strong class="jxr_keyword">final</strong> String collectionName) <strong class="jxr_keyword">throws</strong> IDatabaseException {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>             List&lt;DataBaseItem&gt; list = dataBase.get(collectionName);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>             <strong class="jxr_keyword">if</strong> (condition == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>                 <strong class="jxr_keyword">return</strong> Long.valueOf(list.size());
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>             }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>             <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> filter = (IObject) condition.getValue(filterFieldName);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>             <strong class="jxr_keyword">long</strong> count = 0;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">for</strong> (DataBaseItem item : list) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                 <strong class="jxr_keyword">if</strong> (generalConditionParser(filter, item.getDocument())) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>                     count++;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>                 }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>             }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>             <strong class="jxr_keyword">return</strong> count;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>         } <strong class="jxr_keyword">catch</strong> (ReadValueException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/idatabase/exception/IDatabaseException.html">IDatabaseException</a>(<span class="jxr_string">"Failed to get filter from select condition"</span>, e);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     }
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

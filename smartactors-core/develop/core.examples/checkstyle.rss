@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 24,
+      <title>File: 25,
              Errors: 0,
              Warnings: 2,
              Infos: 0
@@ -60,20 +60,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActorException.java">info/smart_tools/smartactors/core/examples/actor/HelloActorException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.GreetingMessage.java">info/smart_tools/smartactors/core/examples/actor/GreetingMessage.java</a>
                 </td>
                 <td>
@@ -88,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.package-info.java">info/smart_tools/smartactors/core/examples/package-info.java</a>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.CollectionOperations.java">info/smart_tools/smartactors/core/examples/db_collection/CollectionOperations.java</a>
                 </td>
                 <td>
                   0
@@ -130,20 +116,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.PostgresDBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/PostgresDBCollectionServer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.PluginServer.java">info/smart_tools/smartactors/core/examples/plugin/PluginServer.java</a>
                 </td>
                 <td>
@@ -158,63 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePluginVisitor.java">info/smart_tools/smartactors/core/examples/plugin/SamplePluginVisitor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.Plugin2.java">info/smart_tools/smartactors/core/examples/feature/Plugin2.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.FarewellMessage.java">info/smart_tools/smartactors/core/examples/actor/FarewellMessage.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePlugin.java">info/smart_tools/smartactors/core/examples/plugin/SamplePlugin.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.RecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/RecursiveContainer.java</a>
                 </td>
                 <td>
                   0
@@ -270,34 +186,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.FeatureServer.java">info/smart_tools/smartactors/core/examples/feature/FeatureServer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.package-info.java">info/smart_tools/smartactors/core/examples/plugin/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.package-info.java">info/smart_tools/smartactors/core/examples/feature/package-info.java</a>
                 </td>
                 <td>
@@ -319,20 +207,6 @@ under the License.
                 </td>
                 <td>
                   1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActor.java">info/smart_tools/smartactors/core/examples/actor/HelloActor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
                 <td>
                   0
@@ -369,6 +243,146 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.SimpleIOC.java">info/smart_tools/smartactors/core/examples/scope/SimpleIOC.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActorException.java">info/smart_tools/smartactors/core/examples/actor/HelloActorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.package-info.java">info/smart_tools/smartactors/core/examples/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.PostgresDBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/PostgresDBCollectionServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePluginVisitor.java">info/smart_tools/smartactors/core/examples/plugin/SamplePluginVisitor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.Plugin2.java">info/smart_tools/smartactors/core/examples/feature/Plugin2.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.SamplePlugin.java">info/smart_tools/smartactors/core/examples/plugin/SamplePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.scope.RecursiveContainer.java">info/smart_tools/smartactors/core/examples/scope/RecursiveContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.feature.FeatureServer.java">info/smart_tools/smartactors/core/examples/feature/FeatureServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.package-info.java">info/smart_tools/smartactors/core/examples/plugin/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.actor.HelloActor.java">info/smart_tools/smartactors/core/examples/actor/HelloActor.java</a>
                 </td>
                 <td>
                   0

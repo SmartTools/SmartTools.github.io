@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 2,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 3,
              Infos: 0
       </title>
             <link>plugin.postgres_db_tasks/plugin.postgres_db_tasks//checkstyle.html</link>
@@ -66,7 +66,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
                 <td>
                   0

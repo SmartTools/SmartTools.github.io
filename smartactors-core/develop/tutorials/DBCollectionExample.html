@@ -239,6 +239,9 @@
                       <li>      <a href="../core.postgres_delete_task/index.html"  title="core.postgres_delete_task">core.postgres_delete_task</a>
 </li>
                   
+                      <li>      <a href="../core.postgres_count_task/index.html"  title="core.postgres_count_task">core.postgres_count_task</a>
+</li>
+                  
                       <li>      <a href="../core.examples/index.html"  title="core.examples">core.examples</a>
 </li>
                   
@@ -874,6 +877,12 @@
                   
                       <li>      <a href="../strategy.uuid_nextid_strategy/index.html"  title="strategy.uuid_nextid_strategy">strategy.uuid_nextid_strategy</a>
 </li>
+                  
+                      <li>      <a href="../core.in_memory_db_count_task/index.html"  title="core.in_memory_db_count_task">core.in_memory_db_count_task</a>
+</li>
+                  
+                      <li>      <a href="../core.in_memory_db_insert_task/index.html"  title="core.in_memory_db_insert_task">core.in_memory_db_insert_task</a>
+</li>
                           </ul>
       </li>
                   </ul>
@@ -1300,6 +1309,13 @@
                           <a href="../core.postgres_delete_task/index.html" title="core.postgres_delete_task">
           <span class="none"></span>
         core.postgres_delete_task</a>
+            </li>
+                
+      <li>
+  
+                          <a href="../core.postgres_count_task/index.html" title="core.postgres_count_task">
+          <span class="none"></span>
+        core.postgres_count_task</a>
             </li>
                 
       <li>
@@ -2785,6 +2801,20 @@
           <span class="none"></span>
         strategy.uuid_nextid_strategy</a>
             </li>
+                
+      <li>
+  
+                          <a href="../core.in_memory_db_count_task/index.html" title="core.in_memory_db_count_task">
+          <span class="none"></span>
+        core.in_memory_db_count_task</a>
+            </li>
+                
+      <li>
+  
+                          <a href="../core.in_memory_db_insert_task/index.html" title="core.in_memory_db_insert_task">
+          <span class="none"></span>
+        core.in_memory_db_insert_task</a>
+            </li>
             </ul>
               
                 
@@ -3104,7 +3134,22 @@ task.execute();
         }
 );
 task.execute();    
-</pre></div></div></div></div></div>
+</pre></div></div></div></div>
+<div class="section">
+<h3><a name="Count"></a>Count</h3>
+<p>Counts the number of documents in the collection matching specified criteria.</p>
+<p>Command name: <tt>db.collection.count</tt></p>
+<p>Additional parameters:</p>
+
+<ul>
+  
+<li>criteria &#x2014; search criteria for documents which should be counted in the collection, the <tt>IObject</tt> document</li>
+  
+<li>callback &#x2014; lambda of type <tt>IAction&lt;Long&gt;</tt> which receives the count of found documents</li>
+</ul>
+<p>Search criteria are the same as for Search command described above. However, only <tt>filter</tt> part of it is taken.</p>
+<p>If no documents for the specified criteria were found, the callback function receives zero.</p>
+<p>It&#x2019;s recommended to avoid to use this task because the counting can be as slow as selecting the same documents using Search task. Try to store and update the desired counter separately and explicitly.</p></div></div>
 <div class="section">
 <h2><a name="More_complete_example"></a>More complete example</h2>
 <p>Get the document by id.</p>
@@ -3120,7 +3165,7 @@ public class MessageHandler {
 
     void Handle(final IGetDocumentMessage mes) {
 
-        IPool pool = IOC.resolve(Keys.getOrAdd(&quot;PostgresConnectionPool&quot;));
+        IPool pool = IOC.resolve(Keys.getOrAdd(&quot;DatabaseConnectionPool&quot;));
         try (PoolGuard guard = new PoolGuard(pool)) {
 
             ITask task = IOC.resolve(
