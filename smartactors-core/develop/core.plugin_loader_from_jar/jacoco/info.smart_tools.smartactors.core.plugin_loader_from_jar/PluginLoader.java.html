@@ -89,29 +89,28 @@ public class PluginLoader implements IPluginLoader&lt;Collection&lt;IPath&gt;&gt
                     try {
 <span class="fc" id="L90">                        clazz = classLoader.loadClass(className);</span>
 <span class="nc" id="L91">                    } catch (Throwable e) {</span>
-<span class="nc" id="L92">                        System.err.println(&quot;\n\n\nError loading class &quot; + className + &quot;:&quot;);</span>
-<span class="nc" id="L93">                        e.printStackTrace();</span>
-<span class="nc" id="L94">                        continue;</span>
-<span class="fc" id="L95">                    }</span>
+                        // ignoring, because the plugin which class cannot be loaded cannot be loaded
+<span class="nc" id="L93">                        continue;</span>
+<span class="fc" id="L94">                    }</span>
 
-<span class="pc bpc" id="L97" title="1 of 2 branches missed.">                    if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {</span>
-<span class="fc" id="L98">                        creator.execute(clazz);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                    if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {</span>
+<span class="fc" id="L97">                        creator.execute(clazz);</span>
                     }
-<span class="fc" id="L100">                }</span>
-<span class="fc" id="L101">            } catch (Throwable e) {</span>
-<span class="fc" id="L102">                visitor.pluginLoadingFail(pathToJar, e);</span>
-<span class="fc" id="L103">                throw new PluginLoaderException(&quot;Plugin loading failed: &quot; + pathToJar, e);</span>
+<span class="fc" id="L99">                }</span>
+<span class="fc" id="L100">            } catch (Throwable e) {</span>
+<span class="fc" id="L101">                visitor.pluginLoadingFail(pathToJar, e);</span>
+<span class="fc" id="L102">                throw new PluginLoaderException(&quot;Plugin loading failed: &quot; + pathToJar, e);</span>
             } finally {
-<span class="pc bpc" id="L105" title="2 of 4 branches missed.">                if (null != jarFile) {</span>
+<span class="pc bpc" id="L104" title="2 of 4 branches missed.">                if (null != jarFile) {</span>
                     try {
-<span class="pc" id="L107">                        jarFile.close();</span>
-<span class="nc" id="L108">                    } catch (IOException e) {</span>
+<span class="pc" id="L106">                        jarFile.close();</span>
+<span class="nc" id="L107">                    } catch (IOException e) {</span>
                         //TODO: replace throw by other logic
-<span class="pc" id="L110">                        throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
-<span class="pc" id="L111">                    }</span>
+<span class="pc" id="L109">                        throw new PluginLoaderException(&quot;Error on close instance of JarFile .&quot;, e);</span>
+<span class="pc" id="L110">                    }</span>
                 }
             }
-<span class="fc" id="L114">        }</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
