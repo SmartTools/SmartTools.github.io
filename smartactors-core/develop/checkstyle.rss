@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 908,
+      <title>File: 909,
              Errors: 0,
              Warnings: 1670,
              Infos: 0
@@ -1559,6 +1559,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.class_generator_java_compile_api.DynamicClassLoader.java">info/smart_tools/smartactors/core/class_generator_java_compile_api/DynamicClassLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.CreateClauses.java">info/smart_tools/smartactors/core/postgres_schema/CreateClauses.java</a>
                 </td>
                 <td>
                   0
@@ -4694,6 +4708,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.db-init.properties">info/smart_tools/smartactors/core/postgres_schema/db-init.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.check_user_is_new_actor.package-info.java">info/smart_tools/smartactors/plugin/check_user_is_new_actor/package-info.java</a>
                 </td>
                 <td>
@@ -6641,20 +6669,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.thread_pool.package-info.java">info/smart_tools/smartactors/core/thread_pool/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_connection.db-init.properties">info/smart_tools/smartactors/core/postgres_connection/db-init.properties</a>
                 </td>
                 <td>
                   0

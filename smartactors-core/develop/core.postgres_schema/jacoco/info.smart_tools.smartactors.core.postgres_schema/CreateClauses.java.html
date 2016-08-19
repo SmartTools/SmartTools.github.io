@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateClauses.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.postgres_schema</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.postgres_schema</a> &gt; <span class="el_source">CreateClauses.java</span></div><h1>CreateClauses.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.postgres_schema;
+
+import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
+import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.core.ioc.IOC;
+import info.smart_tools.smartactors.core.named_keys_storage.Keys;
+import info.smart_tools.smartactors.core.postgres_schema.search.FieldPath;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.Properties;
+
+/**
+ * A set of methods to write some SQL statements during the collection/table creation.
+ */
+final class CreateClauses {
+
+<span class="fc" id="L25">    private static final Properties INIT_PROPS = new Properties();</span>
+    static {
+<span class="pc" id="L27">        try (InputStream src = CreateClauses.class.getResourceAsStream(&quot;db-init.properties&quot;)) {</span>
+<span class="fc" id="L28">            INIT_PROPS.load(src);</span>
+<span class="pc bpc" id="L29" title="6 of 8 branches missed.">        } catch (IOException e) {</span>
+<span class="nc" id="L30">            throw new RuntimeException(e);</span>
+<span class="fc" id="L31">        }</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Private constructor to avoid instantiation.
+     */
+<span class="nc" id="L37">    private CreateClauses() {</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * Writes a set of common functions.
+     * @param body body of SQL query to write
+     * @throws IOException if failed to write to body
+     */
+    static void writeFunctions(final Writer body) throws IOException {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (Object key : INIT_PROPS.keySet()) {</span>
+<span class="fc" id="L47">            body.write(INIT_PROPS.getProperty((String) key));</span>
+<span class="fc" id="L48">            body.write(&quot;\n&quot;);</span>
+<span class="fc" id="L49">        }</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Writes the primary key definition.
+     * @param body body of SQL query to write
+     * @param collection name of the collection/table
+     * @throws IOException if write to body is not possible
+     * @throws QueryBuildException if there is a syntax error
+     */
+    static void writePrimaryKey(final Writer body, final CollectionName collection) throws IOException, QueryBuildException {
+<span class="fc" id="L60">        String collectionName = collection.toString();</span>
+<span class="fc" id="L61">        FieldPath idPath = PostgresSchema.getIdFieldPath(collection);</span>
+<span class="fc" id="L62">        body.write(&quot;CREATE UNIQUE INDEX &quot;);</span>
+<span class="fc" id="L63">        body.write(collectionName);</span>
+<span class="fc" id="L64">        body.write(&quot;_pkey ON &quot;);</span>
+<span class="fc" id="L65">        body.write(collectionName);</span>
+<span class="fc" id="L66">        body.write(&quot; USING BTREE ((&quot;);</span>
+<span class="fc" id="L67">        body.write(idPath.toSQL());</span>
+<span class="fc" id="L68">        body.write(&quot;));\n&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Writes definition of full text column, i.e. &quot;, fulltext tsvector&quot;.
+     * @param body SQL query body to write
+     * @param options collection create options to check for fulltext index
+     * @throws ResolutionException if failed to resolve field names from IOC
+     * @throws InvalidArgumentException if failed to get fulltext field from options
+     * @throws IOException if failed to write the body
+     */
+    static void writeFullTextColumn(final Writer body, final IObject options)
+            throws ResolutionException, InvalidArgumentException, IOException {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (options == null) {</span>
+            // ignoring absence of fulltext option
+<span class="fc" id="L83">            return;</span>
+        }
+        try {
+<span class="fc" id="L86">            IKey fieldKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());</span>
+<span class="fc" id="L87">            IFieldName fullTextField = IOC.resolve(fieldKey, &quot;fulltext&quot;);</span>
+<span class="fc" id="L88">            Object fullTextDefinition = options.getValue(fullTextField);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            if (fullTextDefinition == null) {</span>
+                // ignoring absence of fulltext option
+<span class="nc" id="L91">                return;</span>
+            }
+<span class="nc" id="L93">        } catch (ReadValueException e) {</span>
+            // ignoring absence of fulltext option
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        body.write(&quot;, &quot;);</span>
+<span class="fc" id="L97">        body.write(PostgresSchema.FULLTEXT_COLUMN);</span>
+<span class="fc" id="L98">        body.write(&quot; tsvector&quot;);</span>
+<span class="fc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

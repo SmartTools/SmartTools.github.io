@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 17,
+      <title>File: 19,
              Errors: 0,
              Warnings: 22,
              Infos: 0
@@ -172,6 +172,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core.postgres_schema/core.postgres_schema//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.db-init.properties">info/smart_tools/smartactors/core/postgres_schema/db-init.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core.postgres_schema/core.postgres_schema//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.search.Operators.java">info/smart_tools/smartactors/core/postgres_schema/search/Operators.java</a>
                 </td>
                 <td>
@@ -243,6 +257,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.postgres_schema/core.postgres_schema//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.package-info.java">info/smart_tools/smartactors/core/postgres_schema/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.postgres_schema/core.postgres_schema//checkstyle.html#info.smart_tools.smartactors.core.postgres_schema.CreateClauses.java">info/smart_tools/smartactors/core/postgres_schema/CreateClauses.java</a>
                 </td>
                 <td>
                   0
