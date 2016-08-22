@@ -200,6 +200,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.LongArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/LongArrayToListResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.IocPlugin.java">info/smart_tools/smartactors/core/examples/plugin/IocPlugin.java</a>
                 </td>
                 <td>
@@ -221,20 +235,6 @@ under the License.
                 </td>
                 <td>
                   1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.LongArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/LongArrayToListResolveDependencyStrategy.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
                 <td>
                   0
@@ -2552,7 +2552,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_bus.MessageBus.java">info/smart_tools/smartactors/core/message_bus/MessageBus.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ShortToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ShortToStringResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -2566,7 +2566,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ShortToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ShortToStringResolveDependencyStrategy.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_bus.MessageBus.java">info/smart_tools/smartactors/core/message_bus/MessageBus.java</a>
                 </td>
                 <td>
                   0
@@ -6290,7 +6290,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.async_operation_collection.exception.GetAsyncOperationException.java">info/smart_tools/smartactors/core/async_operation_collection/exception/GetAsyncOperationException.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.StringToBigDecimalResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_bigdecimal/StringToBigDecimalResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -6304,7 +6304,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_bigdecimal.StringToBigDecimalResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_bigdecimal/StringToBigDecimalResolveDependencyStrategy.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.async_operation_collection.exception.GetAsyncOperationException.java">info/smart_tools/smartactors/core/async_operation_collection/exception/GetAsyncOperationException.java</a>
                 </td>
                 <td>
                   0
@@ -7508,7 +7508,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.exception.package-info.java">info/smart_tools/smartactors/actors/create_async_operation/exception/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ByteToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ByteToStringResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -7522,7 +7522,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ByteToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ByteToStringResolveDependencyStrategy.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.exception.package-info.java">info/smart_tools/smartactors/actors/create_async_operation/exception/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -8152,7 +8152,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.security.encoding.codecs.ICharSequenceCodec.java">info/smart_tools/smartactors/core/security/encoding/codecs/ICharSequenceCodec.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.BooleanArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/BooleanArrayToListResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -8166,7 +8166,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_list_strategies.BooleanArrayToListResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_list_strategies/BooleanArrayToListResolveDependencyStrategy.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.security.encoding.codecs.ICharSequenceCodec.java">info/smart_tools/smartactors/core/security/encoding/codecs/ICharSequenceCodec.java</a>
                 </td>
                 <td>
                   0
@@ -9972,7 +9972,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/UpsertIntoCachedCollectionTask.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.DoubleToIntResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/DoubleToIntResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -9986,7 +9986,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.DoubleToIntResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/DoubleToIntResolveDependencyStrategy.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/UpsertIntoCachedCollectionTask.java</a>
                 </td>
                 <td>
                   0
@@ -10056,7 +10056,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.CreateCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/CreateCachedCollectionTask.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.resolve_standard_types_strategies.package-info.java">info/smart_tools/smartactors/plugin/resolve_standard_types_strategies/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -10070,7 +10070,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.resolve_standard_types_strategies.package-info.java">info/smart_tools/smartactors/plugin/resolve_standard_types_strategies/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.task.CreateCachedCollectionTask.java">info/smart_tools/smartactors/core/cached_collection/task/CreateCachedCollectionTask.java</a>
                 </td>
                 <td>
                   0
@@ -10294,7 +10294,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.dependency_resolving_feature_manager.package-info.java">info/smart_tools/smartactors/core/dependency_resolving_feature_manager/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -10308,7 +10308,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_integer_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_integer_strategies/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.dependency_resolving_feature_manager.package-info.java">info/smart_tools/smartactors/core/dependency_resolving_feature_manager/package-info.java</a>
                 </td>
                 <td>
                   0
