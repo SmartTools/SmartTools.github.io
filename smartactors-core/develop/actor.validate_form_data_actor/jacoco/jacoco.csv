@@ -2,9 +2,9 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data,ValidateFormDataActor,16,115,4,6,5,25,4,3,0,2
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.exception,ValidateFormException,9,4,0,0,4,2,2,1,2,1
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,SimpleCharStream,812,244,47,13,137,57,52,15,24,12
-actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,ParserTokenManager,816,813,142,73,191,161,126,48,10,19
+actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,ParserTokenManager,786,843,136,79,185,167,121,53,10,19
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,ParseException,371,0,32,0,66,0,25,0,5,0
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,Token,11,23,0,0,4,8,3,4,3,4
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,TokenMgrError,173,0,18,0,37,0,19,0,6,0
-actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,Parser,737,309,77,24,142,65,65,18,12,11
+actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,Parser,713,317,77,25,142,68,65,19,12,11
 actor.validate_form_data_actor,info.smart_tools.smartactors.actors.validate_form_data.parser,ParserConstants,112,0,0,0,1,0,1,0,1,0

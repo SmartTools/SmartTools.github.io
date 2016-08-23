@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 909,
+      <title>File: 912,
              Errors: 0,
-             Warnings: 1670,
+             Warnings: 1683,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -1088,7 +1088,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -2922,7 +2922,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  223
+                  228
                 </td>
                 <td>
                   0
@@ -4449,6 +4449,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.prepare_mail_registration_actor.PrepareMailRegistrationPlugin.java">info/smart_tools/smartactors/plugin/prepare_mail_registration_actor/PrepareMailRegistrationPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
                 </td>
                 <td>
                   0
@@ -6920,6 +6934,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.prepare_registration_mail.PrepareRegistrationMailActor.java">info/smart_tools/smartactors/actors/prepare_registration_mail/PrepareRegistrationMailActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.db_storage.interfaces.wrapper.package-info.java">info/smart_tools/smartactors/core/db_storage/interfaces/wrapper/package-info.java</a>
                 </td>
                 <td>
@@ -7570,7 +7598,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
                 <td>
                   0
@@ -11575,6 +11603,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.prepare_registration_mail.wrapper.PrepareMailMessage.java">info/smart_tools/smartactors/actors/prepare_registration_mail/wrapper/PrepareMailMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0

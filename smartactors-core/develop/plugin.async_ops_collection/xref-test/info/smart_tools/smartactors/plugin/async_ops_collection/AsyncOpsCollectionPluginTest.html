@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          verifyNew(BootstrapItem.<strong class="jxr_keyword">class</strong>).withArguments(<span class="jxr_string">"AsyncOpsCollectionPlugin"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          verify(item).after(<span class="jxr_string">"IOC"</span>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          verify(item).before(<span class="jxr_string">"configure"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          verify(item).before(<span class="jxr_string">"starter"</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          verify(item).process(actionArgumentCaptor.capture());
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          verify(bootstrap).add(item);
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>         verifyNew(BootstrapItem.<strong class="jxr_keyword">class</strong>).withArguments(<span class="jxr_string">"AsyncOpsCollectionPlugin"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>         verify(item).after(<span class="jxr_string">"IOC"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>         verify(item).before(<span class="jxr_string">"configure"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         verify(item).before(<span class="jxr_string">"starter"</span>);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>         verify(item).process(actionArgumentCaptor.capture());
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>         verify(bootstrap).add(item);

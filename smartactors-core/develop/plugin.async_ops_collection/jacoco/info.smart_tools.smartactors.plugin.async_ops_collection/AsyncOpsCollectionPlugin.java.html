@@ -42,7 +42,7 @@ public class AsyncOpsCollectionPlugin implements IPlugin {
 
 <span class="nc" id="L43">            item</span>
 <span class="nc" id="L44">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L45">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L45">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L46">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L48">                            IKey asyncCollectionKey = Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName());</span>

@@ -23,8 +23,8 @@ import java.util.stream.Stream;
     public &lt;T&gt; T resolve(final Object... args) {
 <span class="fc" id="L24">        String cookieString = ((FullHttpRequest) args[0]).headers().get(HttpHeaders.Names.COOKIE);</span>
 
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (cookieString == null)</span>
-<span class="nc" id="L27">            return null;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (cookieString == null)</span>
+<span class="fc" id="L27">            return null;</span>
 
 <span class="fc" id="L29">        String[] cookie = Stream.of(cookieString.split(&quot;;&quot;))</span>
 <span class="fc" id="L30">                .map(x -&gt; x.split(&quot;=&quot;))</span>

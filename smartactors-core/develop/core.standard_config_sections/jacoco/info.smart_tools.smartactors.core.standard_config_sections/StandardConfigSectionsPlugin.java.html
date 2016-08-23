@@ -37,7 +37,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 <span class="nc" id="L37">                    .after(&quot;configuration_manager&quot;)</span>
 <span class="nc" id="L38">                    .after(&quot;router&quot;)</span>
 <span class="nc" id="L39">                    .after(&quot;IFieldNamePlugin&quot;)</span>
-<span class="nc" id="L40">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L40">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L41">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L43">                            IConfigurationManager configurationManager =</span>
@@ -59,7 +59,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 <span class="nc" id="L59">                    .after(&quot;receiver_chains_storage&quot;)</span>
 <span class="nc" id="L60">                    .after(&quot;receiver_chain&quot;)</span>
 <span class="nc" id="L61">                    .after(&quot;IFieldNamePlugin&quot;)</span>
-<span class="nc" id="L62">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L62">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L63">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L65">                            IConfigurationManager configurationManager =</span>
@@ -79,7 +79,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 <span class="nc" id="L79">            executorSectionItem</span>
 <span class="nc" id="L80">                    .after(&quot;configuration_manager&quot;)</span>
 <span class="nc" id="L81">                    .after(&quot;IFieldNamePlugin&quot;)</span>
-<span class="nc" id="L82">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L82">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L83">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L85">                            IConfigurationManager configurationManager =</span>
@@ -101,7 +101,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 <span class="nc" id="L101">                    .after(&quot;config_section:maps&quot;)</span>
 <span class="nc" id="L102">                    .after(&quot;config_section:executor&quot;)</span>
 <span class="nc" id="L103">                    .after(&quot;IFieldNamePlugin&quot;)</span>
-<span class="nc" id="L104">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L104">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L105">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L107">                            IConfigurationManager configurationManager =</span>
@@ -123,7 +123,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 <span class="nc" id="L123">                    .after(&quot;config_section:maps&quot;)</span>
 <span class="nc" id="L124">                    .after(&quot;config_section:executor&quot;)</span>
 <span class="nc" id="L125">                    .after(&quot;IFieldNamePlugin&quot;)</span>
-<span class="nc" id="L126">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L126">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L127">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L129">                            IConfigurationManager configurationManager =</span>

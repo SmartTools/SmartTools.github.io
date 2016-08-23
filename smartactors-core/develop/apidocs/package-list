@@ -40,6 +40,8 @@ info.smart_tools.smartactors.actors.mailing
 info.smart_tools.smartactors.actors.mailing.email
 info.smart_tools.smartactors.actors.mailing.exception
 info.smart_tools.smartactors.actors.mailing.wrapper
+info.smart_tools.smartactors.actors.prepare_registration_mail
+info.smart_tools.smartactors.actors.prepare_registration_mail.wrapper
 info.smart_tools.smartactors.actors.sample_other_actor
 info.smart_tools.smartactors.actors.sample_other_actor.exception
 info.smart_tools.smartactors.actors.sample_other_actor.wrapper
@@ -335,6 +337,7 @@ info.smart_tools.smartactors.plugin.messaging_identifiers
 info.smart_tools.smartactors.plugin.null_connection_pool
 info.smart_tools.smartactors.plugin.postgres_connection_pool
 info.smart_tools.smartactors.plugin.postgres_db_tasks
+info.smart_tools.smartactors.plugin.prepare_mail_registration_actor
 info.smart_tools.smartactors.plugin.read_config_file
 info.smart_tools.smartactors.plugin.receiver_chains_storage
 info.smart_tools.smartactors.plugin.receiver_generator

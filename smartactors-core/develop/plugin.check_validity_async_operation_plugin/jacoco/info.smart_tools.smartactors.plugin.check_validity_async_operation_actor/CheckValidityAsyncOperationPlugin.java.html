@@ -38,7 +38,7 @@ public class CheckValidityAsyncOperationPlugin implements IPlugin {
 
 <span class="nc" id="L39">            item</span>
 <span class="nc" id="L40">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L41">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L41">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L42">                    .process(() -&gt; {</span>
                 try {
 <span class="nc" id="L44">                    IKey operationKey = Keys.getOrAdd(CheckValidityAsyncOperationActor.class.getCanonicalName());</span>

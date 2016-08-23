@@ -37,7 +37,7 @@ public class CreateAsyncOpPlugin implements IPlugin {
 
 <span class="nc" id="L38">            item</span>
 <span class="nc" id="L39">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L40">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L40">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L41">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L43">                            IKey createAsyncOpKey = Keys.getOrAdd(CreateAsyncOperationActor.class.getCanonicalName());</span>

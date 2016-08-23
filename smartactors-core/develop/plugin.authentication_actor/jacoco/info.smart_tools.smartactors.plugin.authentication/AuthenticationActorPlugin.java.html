@@ -41,7 +41,7 @@ public class AuthenticationActorPlugin implements IPlugin {
 
 <span class="nc" id="L42">            item</span>
 <span class="nc" id="L43">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L44">                    .before(&quot;configure&quot;)</span>
+<span class="nc" id="L44">                    .before(&quot;starter&quot;)</span>
 <span class="nc" id="L45">                    .process(() -&gt; {</span>
                         try {
 <span class="nc" id="L47">                            IOC.register(Keys.getOrAdd(AuthenticationActor.class.getCanonicalName()), new ApplyFunctionToArgumentsStrategy(</span>

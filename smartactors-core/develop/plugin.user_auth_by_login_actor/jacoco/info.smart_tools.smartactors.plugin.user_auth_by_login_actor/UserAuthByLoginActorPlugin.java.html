@@ -43,7 +43,7 @@ public class UserAuthByLoginActorPlugin implements IPlugin {
 <span class="nc" id="L43">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;UserAuthByLoginActorPlugin&quot;);</span>
 <span class="nc" id="L44">            item</span>
 <span class="nc" id="L45">                .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L46">                .before(&quot;configure&quot;)</span>
+<span class="nc" id="L46">                .before(&quot;starter&quot;)</span>
 <span class="nc" id="L47">                .process(() -&gt; {</span>
                     try {
 <span class="nc" id="L49">                        IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
