@@ -316,6 +316,7 @@ info.smart_tools.smartactors.plugin.exception_handler_actor
 info.smart_tools.smartactors.plugin.fieldname
 info.smart_tools.smartactors.plugin.get_async_operation
 info.smart_tools.smartactors.plugin.get_cookie_rule
+info.smart_tools.smartactors.plugin.get_first_not_null_rule
 info.smart_tools.smartactors.plugin.get_form_actor
 info.smart_tools.smartactors.plugin.get_header_from_request_rule
 info.smart_tools.smartactors.plugin.get_query_parameter_rule
@@ -369,5 +370,6 @@ info.smart_tools.smartactors.strategy.respons_status_extractor
 info.smart_tools.smartactors.strategy.to_wrapper_converter_strategy
 info.smart_tools.smartactors.strategy.uuid_nextid_strategy
 info.smart_tools.smartactors.transformation_rules.get_cookie_from_request
+info.smart_tools.smartactors.transformation_rules.get_first_not_null
 info.smart_tools.smartactors.transformation_rules.get_header_from_request
 info.smart_tools.smartactors.transformation_rules.get_query_parameter
