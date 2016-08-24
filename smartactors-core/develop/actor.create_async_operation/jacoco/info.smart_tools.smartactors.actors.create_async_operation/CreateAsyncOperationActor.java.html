@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Actor for creation asynchronous operation
@@ -27,25 +26,25 @@ public class CreateAsyncOperationActor {
     private IAsyncOperationCollection collection;
 
     //TODO:: this format should be setted for whole project?
-<span class="fc" id="L30">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+<span class="fc" id="L29">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
 
     /**
      * Constructor needed for registry actor
      * @param params iobject
      * @throws CreateAsyncOperationActorException if any error is occurred
      */
-<span class="fc" id="L37">    public CreateAsyncOperationActor(final IObject params) throws CreateAsyncOperationActorException {</span>
+<span class="fc" id="L36">    public CreateAsyncOperationActor(final IObject params) throws CreateAsyncOperationActorException {</span>
         try {
-<span class="fc" id="L39">            IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="fc" id="L40">            collection = IOC.resolve(</span>
-<span class="fc" id="L41">                Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()), (String) collectionNameField.in(params)</span>
+<span class="fc" id="L38">            IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="fc" id="L39">            collection = IOC.resolve(</span>
+<span class="fc" id="L40">                Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()), (String) collectionNameField.in(params)</span>
             );
-<span class="nc" id="L43">        } catch (ReadValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L44">            throw new CreateAsyncOperationActorException(&quot;Can't read collection name from message&quot;, e);</span>
-<span class="nc" id="L45">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L46">            throw new CreateAsyncOperationActorException(&quot;Can't get key or resolve dependency&quot;, e);</span>
-<span class="fc" id="L47">        }</span>
-<span class="fc" id="L48">    }</span>
+<span class="nc" id="L42">        } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L43">            throw new CreateAsyncOperationActorException(&quot;Can't read collection name from message&quot;, e);</span>
+<span class="nc" id="L44">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L45">            throw new CreateAsyncOperationActorException(&quot;Can't get key or resolve dependency&quot;, e);</span>
+<span class="fc" id="L46">        }</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Generates token and creates asynchronous operation.
@@ -59,26 +58,25 @@ public class CreateAsyncOperationActor {
     public void create(final CreateAsyncOperationMessage message) throws CreateAsyncOperationActorException {
 
         try {
-            //TODO:: move generate to util class and add server number
-<span class="fc" id="L63">            String token = String.valueOf(UUID.randomUUID());</span>
-<span class="fc" id="L64">            Integer amountOfHoursToExpireFromNow = message.getExpiredTime();</span>
-<span class="fc" id="L65">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(FORMATTER);</span>
-<span class="fc" id="L66">            message.setSessionIdInData(message.getSessionId());</span>
-<span class="fc" id="L67">            IObject authOperationData = message.getOperationData();</span>
-<span class="fc" id="L68">            collection.createAsyncOperation(authOperationData, token, expiredTime);</span>
+<span class="fc" id="L61">            String token = IOC.resolve(Keys.getOrAdd(&quot;db.collection.nextid&quot;));</span>
+<span class="fc" id="L62">            Integer amountOfHoursToExpireFromNow = message.getExpiredTime();</span>
+<span class="fc" id="L63">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(FORMATTER);</span>
+<span class="fc" id="L64">            message.setSessionIdInData(message.getSessionId());</span>
+<span class="fc" id="L65">            IObject authOperationData = message.getOperationData();</span>
+<span class="fc" id="L66">            collection.createAsyncOperation(authOperationData, token, expiredTime);</span>
 
-<span class="fc" id="L70">            message.setAsyncOperationToken(token);</span>
+<span class="fc" id="L68">            message.setAsyncOperationToken(token);</span>
 
-<span class="fc" id="L72">            List&lt;String&gt; availableTokens = message.getOperationTokens();</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if (availableTokens == null) {</span>
-<span class="nc" id="L74">                message.setOperationTokens(Collections.singletonList(token));</span>
+<span class="fc" id="L70">            List&lt;String&gt; availableTokens = message.getOperationTokens();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (availableTokens == null) {</span>
+<span class="nc" id="L72">                message.setOperationTokens(Collections.singletonList(token));</span>
             } else {
-<span class="fc" id="L76">                availableTokens.add(token);</span>
-<span class="fc" id="L77">                message.setOperationTokens(availableTokens);</span>
+<span class="fc" id="L74">                availableTokens.add(token);</span>
+<span class="fc" id="L75">                message.setOperationTokens(availableTokens);</span>
             }
-<span class="fc" id="L79">        } catch (ReadValueException | ChangeValueException | CreateAsyncOperationException e) {</span>
-<span class="fc" id="L80">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
-<span class="fc" id="L81">        }</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L77">        } catch (ResolutionException | ReadValueException | ChangeValueException | CreateAsyncOperationException e) {</span>
+<span class="fc" id="L78">            throw new CreateAsyncOperationActorException(&quot;Can't create async operation.&quot;, e);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

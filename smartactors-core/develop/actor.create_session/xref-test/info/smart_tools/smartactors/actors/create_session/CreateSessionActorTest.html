@@ -97,20 +97,24 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          IOC.register(keyDBTask, <strong class="jxr_keyword">new</strong> ApplyFunctionToArgumentsStrategy(
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>                  (args) -&gt; task
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          ));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          IObject params = <strong class="jxr_keyword">new</strong> DSObject(<span class="jxr_string">"{ \&quot;collectionName\&quot;: \&quot;session\&quot; }"</span>);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          actor = <strong class="jxr_keyword">new</strong> CreateSessionActor(params);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          IKey keyNextId = Keys.getOrAdd(<span class="jxr_string">"db.collection.nextid"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          IOC.register(keyNextId, <strong class="jxr_keyword">new</strong> ApplyFunctionToArgumentsStrategy(
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  (args) -&gt; <span class="jxr_string">"123"</span>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          ));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      @Test
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> Should_insertNewSessionInMessage_When_SessionIdIsNull() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          CreateSessionMessage inputMessage = mock(CreateSessionMessage.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         when(inputMessage.getSessionId()).thenReturn(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>         actor.resolveSession(inputMessage);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>         verify(inputMessage).setSession(any(IObject.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> }
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          IObject params = <strong class="jxr_keyword">new</strong> DSObject(<span class="jxr_string">"{ \&quot;collectionName\&quot;: \&quot;session\&quot; }"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          actor = <strong class="jxr_keyword">new</strong> CreateSessionActor(params);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      }
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     @Test
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> Should_insertNewSessionInMessage_When_SessionIdIsNull() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         CreateSessionMessage inputMessage = mock(CreateSessionMessage.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         when(inputMessage.getSessionId()).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         actor.resolveSession(inputMessage);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         verify(inputMessage).setSession(any(IObject.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>
