@@ -142,27 +142,29 @@ import java.util.HashMap;
                     &quot;info.smart_tools.smartactors:plugin.change_password_actor:0.2.0-SNAPSHOT&quot;,
                     &quot;info.smart_tools.smartactors:plugin.connection_options:0.2.0-SNAPSHOT&quot;,
 
-                    &quot;info.smart_tools.smartactors:plugin.create_user:0.2.0-SNAPSHOT&quot;
+                    &quot;info.smart_tools.smartactors:plugin.create_user:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.get_first_not_null_rule:0.2.0-SNAPSHOT&quot;,
+                    &quot;info.smart_tools.smartactors:plugin.starter:0.2.0-SNAPSHOT&quot;
             };
 
-<span class="nc bnc" id="L148" title="All 2 branches missed.">            for (String artifact : coreArtifacts) {</span>
-<span class="nc" id="L149">                coreFeature.requireFile(artifact);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (String artifact : coreArtifacts) {</span>
+<span class="nc" id="L151">                coreFeature.requireFile(artifact);</span>
             }
 
-<span class="nc" id="L152">            coreFeature.listen();</span>
+<span class="nc" id="L154">            coreFeature.listen();</span>
 
-<span class="nc bnc" id="L154" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
-<span class="nc" id="L155">                Thread.sleep(1L);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            while (!Thread.interrupted()) {</span>
+<span class="nc" id="L157">                Thread.sleep(1L);</span>
             }
-<span class="nc" id="L157">        } catch (Throwable e) {</span>
-<span class="nc" id="L158">            e.printStackTrace();</span>
-<span class="nc" id="L159">            throw new ServerInitializeException(e);</span>
-<span class="nc" id="L160">        }</span>
-<span class="nc" id="L161">    }</span>
+<span class="nc" id="L159">        } catch (Throwable e) {</span>
+<span class="nc" id="L160">            e.printStackTrace();</span>
+<span class="nc" id="L161">            throw new ServerInitializeException(e);</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    }</span>
 
     @Override
     public void start() throws ServerExecutionException {
 
-<span class="nc" id="L166">    }</span>
+<span class="nc" id="L168">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
