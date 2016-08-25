@@ -11,6 +11,7 @@ import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgum
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.transformation_rules.get_first_not_null.GetFirstNotNullRule;
@@ -19,33 +20,32 @@ public class GetFirstNotNullRulePlugin implements IPlugin {
 
     private final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap;
 
-<span class="nc" id="L22">    public GetFirstNotNullRulePlugin(IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
-<span class="nc" id="L23">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L24">    }</span>
+<span class="nc" id="L23">    public GetFirstNotNullRulePlugin(IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap) {</span>
+<span class="nc" id="L24">        this.bootstrap = bootstrap;</span>
+<span class="nc" id="L25">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L29">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;GetFirstNotNullRulePlugin&quot;);</span>
+<span class="nc" id="L30">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;GetFirstNotNullRulePlugin&quot;);</span>
 
-<span class="nc" id="L31">            item</span>
-<span class="nc" id="L32">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L33">                    .before(&quot;starter&quot;)</span>
-<span class="nc" id="L34">                    .process(()-&gt; {</span>
+<span class="nc" id="L32">            item</span>
+<span class="nc" id="L33">                    .after(&quot;IOC&quot;)</span>
+<span class="nc" id="L34">                    .after(&quot;wds_object&quot;)</span>
+<span class="nc" id="L35">                    .before(&quot;starter&quot;)</span>
+<span class="nc" id="L36">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L36">                            IKey ruleKey = Keys.getOrAdd(GetFirstNotNullRule.class.getCanonicalName());</span>
-<span class="nc" id="L37">                            IOC.register(ruleKey, new ApplyFunctionToArgumentsStrategy(</span>
-<span class="nc" id="L38">                                    (args) -&gt; new GetFirstNotNullRule()</span>
-                            ));
-<span class="nc" id="L40">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L41">                            throw new ActionExecuteException(&quot;Can't get key for load&quot;, e);</span>
-<span class="nc" id="L42">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L43">                            throw new ActionExecuteException(&quot;Can't apply lambda&quot;, e);</span>
-<span class="nc" id="L44">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L45">                            throw new ActionExecuteException(&quot;Can't register the strategy&quot;, e);</span>
-<span class="nc" id="L46">                        }</span>
-<span class="nc" id="L47">                    });</span>
-
+<span class="nc" id="L38">                            IOC.resolve(</span>
+<span class="nc" id="L39">                                    Keys.getOrAdd(IResolveDependencyStrategy.class.getCanonicalName()),</span>
+                                    &quot;getFirstNotNullRule&quot;,
+                                    new GetFirstNotNullRule()
+                            );
+<span class="nc" id="L43">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L44">                            throw new ActionExecuteException(</span>
+                                    &quot;GetFirstNotNullRule plugin can't load: can't get GetFirstNotNullRule key&quot;, e
+                            );
+<span class="nc" id="L47">                        }</span>
+<span class="nc" id="L48">                    });</span>
 <span class="nc" id="L49">            bootstrap.add(item);</span>
 <span class="nc" id="L50">        } catch (InvalidArgumentException e) {</span>
 <span class="nc" id="L51">            throw new PluginException(&quot;Can't create BootstrapItem&quot;, e);</span>

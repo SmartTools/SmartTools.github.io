@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 1,
              Errors: 0,
-             Warnings: 4,
+             Warnings: 7,
              Infos: 0
       </title>
             <link>plugin.get_first_not_null_rule/plugin.get_first_not_null_rule//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  7
                 </td>
                 <td>
                   0
