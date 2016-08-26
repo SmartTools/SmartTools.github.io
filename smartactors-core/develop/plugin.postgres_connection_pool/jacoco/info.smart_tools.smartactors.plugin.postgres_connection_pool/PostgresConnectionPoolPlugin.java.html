@@ -4,7 +4,6 @@ import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
-import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -12,12 +11,14 @@ import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.core.ipool.IPool;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.istorage_connection.exception.StorageException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.pool.Pool;
 import info.smart_tools.smartactors.core.postgres_connection.PostgresConnection;
 import info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+import info.smart_tools.smartactors.core.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
 /**
@@ -36,61 +37,79 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
      * @throws InvalidArgumentException if any errors occurred
      */
     public PostgresConnectionPoolPlugin(final IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt; bootstrap)
-<span class="nc" id="L39">            throws InvalidArgumentException {</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (null == bootstrap) {</span>
-<span class="nc" id="L41">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+<span class="fc" id="L40">            throws InvalidArgumentException {</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (null == bootstrap) {</span>
+<span class="nc" id="L42">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
         }
-<span class="nc" id="L43">        this.bootstrap = bootstrap;</span>
-<span class="nc" id="L44">    }</span>
+<span class="fc" id="L44">        this.bootstrap = bootstrap;</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     public void load() throws PluginException {
         try {
-<span class="nc" id="L49">            IBootstrapItem&lt;String&gt; item = new BootstrapItem(&quot;PostgresConnectionPoolPlugin&quot;);</span>
-<span class="nc" id="L50">            item</span>
-<span class="nc" id="L51">                .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L52">                .before(&quot;CreateCachedCollectionPlugin&quot;)</span>
-<span class="nc" id="L53">                .process(() -&gt; {</span>
+<span class="fc" id="L50">            BootstrapItem item = new BootstrapItem(&quot;PostgresConnectionPoolPlugin&quot;);</span>
+<span class="fc" id="L51">            item</span>
+<span class="fc" id="L52">                .after(&quot;IOC&quot;)</span>
+<span class="fc" id="L53">                .after(&quot;ioc_keys&quot;)</span>
+<span class="fc" id="L54">                .before(&quot;CreateCachedCollectionPlugin&quot;)</span>
+<span class="fc" id="L55">                .process(() -&gt; {</span>
                     try {
-<span class="nc" id="L55">                        IResolveDependencyStrategy poolStrategy = new ApplyFunctionToArgumentsStrategy(</span>
+<span class="fc" id="L57">                        IResolveDependencyStrategy poolStrategy = new ApplyFunctionToArgumentsStrategy(</span>
                                 (args) -&gt; {
-<span class="nc" id="L57">                                    ConnectionOptions connectionOptions = (ConnectionOptions) args[0];</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">                                    if (connectionOptions == null) {</span>
-<span class="nc" id="L59">                                        throw new RuntimeException(&quot;Can't resolve connection pool: connectionOptions is null&quot;);</span>
-                                    }
+<span class="fc" id="L59">                                    ConnectionOptions connectionOptions = (ConnectionOptions) args[0];</span>
+
+                                    final IKey poolKey;
+                                    try {
+<span class="fc" id="L63">                                        poolKey = getPoolKey(connectionOptions);</span>
+<span class="nc" id="L64">                                    } catch (Exception e) {</span>
+<span class="nc" id="L65">                                        throw new RuntimeException(&quot;Can't build the pool key: connectionOptions = &quot; + connectionOptions, e);</span>
+<span class="fc" id="L66">                                    }</span>
 
                                     try {
-<span class="nc" id="L63">                                        return new Pool(connectionOptions.getMaxConnections(), () -&gt; {</span>
-                                            try {
-<span class="nc" id="L65">                                                return new PostgresConnection(connectionOptions);</span>
-<span class="nc" id="L66">                                            } catch (StorageException e) {</span>
-<span class="nc" id="L67">                                                throw new RuntimeException(e);</span>
-                                            }
-                                        });
-<span class="nc" id="L70">                                    } catch (ReadValueException e) {</span>
-<span class="nc" id="L71">                                        throw new RuntimeException(&quot;Can't create PostgresConnectionPool&quot;, e);</span>
+<span class="fc" id="L69">                                        return IOC.resolve(poolKey);</span>
+<span class="fc" id="L70">                                    } catch (ResolutionException re) {      // pool not found</span>
+                                        try {
+<span class="fc" id="L72">                                            IPool pool = new Pool(connectionOptions.getMaxConnections(), () -&gt; {</span>
+                                                try {
+<span class="nc" id="L74">                                                    return new PostgresConnection(connectionOptions);</span>
+<span class="nc" id="L75">                                                } catch (StorageException se) {</span>
+<span class="nc" id="L76">                                                    throw new RuntimeException(</span>
+                                                            &quot;Cannot create PostgresConnection: poolKey = &quot; + poolKey, se);
+                                                }
+                                            });
+<span class="fc" id="L80">                                            IOC.register(poolKey, new SingletonStrategy(pool));</span>
+<span class="fc" id="L81">                                            return pool;</span>
+<span class="nc" id="L82">                                        } catch (Exception e) {</span>
+<span class="nc" id="L83">                                            throw new RuntimeException(&quot;Can't create PostgresConnectionPool: poolKey = &quot; + poolKey, e);</span>
+                                        }
                                     }
-
                                 });
-<span class="nc" id="L75">                        IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
-<span class="nc" id="L76">                        IKey databaseConnectionPoolKey = Keys.getOrAdd(&quot;DatabaseConnectionPool&quot;);</span>
-<span class="nc" id="L77">                        IOC.register(postgresConnectionPoolKey, poolStrategy);</span>
-<span class="nc" id="L78">                        IOC.register(databaseConnectionPoolKey, poolStrategy);</span>
-<span class="nc" id="L79">                    } catch (ResolutionException e) {</span>
-<span class="nc" id="L80">                        throw new ActionExecuteException(</span>
-                                &quot;PostgresConnectionPool plugin can't load: can't get PostgresConnectionPool key&quot;, e);
-<span class="nc" id="L82">                    } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L83">                        throw new ActionExecuteException(</span>
-                                &quot;PostgresConnectionPool plugin can't load: can't create strategy&quot;, e);
-<span class="nc" id="L85">                    } catch (RegistrationException e) {</span>
-<span class="nc" id="L86">                        throw new ActionExecuteException(</span>
-                                &quot;PostgresConnectionPool plugin can't load: can't register new strategy&quot;, e);
-<span class="nc" id="L88">                    }</span>
-<span class="nc" id="L89">            });</span>
-<span class="nc" id="L90">            bootstrap.add(item);</span>
-<span class="nc" id="L91">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L92">            throw new PluginException(&quot;Can't load postgres connection pool plugin&quot;, e);</span>
-<span class="nc" id="L93">        }</span>
-<span class="nc" id="L94">    }</span>
+<span class="fc" id="L87">                        IKey postgresConnectionPoolKey = Keys.getOrAdd(&quot;PostgresConnectionPool&quot;);</span>
+<span class="fc" id="L88">                        IKey databaseConnectionPoolKey = Keys.getOrAdd(&quot;DatabaseConnectionPool&quot;);</span>
+<span class="fc" id="L89">                        IOC.register(postgresConnectionPoolKey, poolStrategy);</span>
+<span class="fc" id="L90">                        IOC.register(databaseConnectionPoolKey, poolStrategy);</span>
+<span class="nc" id="L91">                    } catch (Exception e) {</span>
+<span class="nc" id="L92">                        throw new ActionExecuteException(</span>
+                                &quot;PostgresConnectionPool plugin can't load&quot;, e);
+<span class="fc" id="L94">                    }</span>
+<span class="fc" id="L95">            });</span>
+<span class="fc" id="L96">            bootstrap.add(item);</span>
+<span class="nc" id="L97">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L98">            throw new PluginException(&quot;Can't load postgres connection pool plugin&quot;, e);</span>
+<span class="fc" id="L99">        }</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Calculates the pool key from the connection options
+     * to resolve the same pool when it's requested.
+     * Note, the password is not used to construct the key.
+     * @param options connection options to construct the key from
+     * @return the IOC key to store the pool in
+     */
+    private IKey getPoolKey(final ConnectionOptions options) throws ReadValueException, ResolutionException {
+<span class="fc" id="L110">        return Keys.getOrAdd(String.format(&quot;postgres_connection_%s_%s_%d&quot;,</span>
+<span class="fc" id="L111">                options.getUrl(), options.getUsername(), options.getMaxConnections()));</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
