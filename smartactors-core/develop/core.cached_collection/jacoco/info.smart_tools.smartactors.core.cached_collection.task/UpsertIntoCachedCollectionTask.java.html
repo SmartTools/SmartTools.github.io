@@ -28,16 +28,16 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
     private IField startDateTimeField;
     private IField collectionNameField;
     private IField documentField;
-    //TODO:: this format should be setted for whole project?
-<span class="fc" id="L32">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+    private DateTimeFormatter formatter;
 
     /**
      * @param connection storage connection for executing query
      * @throws CreateCachedCollectionTaskException for create task error
      */
-<span class="fc" id="L38">    public UpsertIntoCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
-<span class="fc" id="L39">        this.connection = connection;</span>
+<span class="fc" id="L37">    public UpsertIntoCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
+<span class="fc" id="L38">        this.connection = connection;</span>
         try {
+<span class="fc" id="L40">            this.formatter = IOC.resolve(Keys.getOrAdd(&quot;datetime_formatter&quot;));</span>
 <span class="fc" id="L41">            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document/startDateTime&quot;);</span>
 <span class="fc" id="L42">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
 <span class="fc" id="L43">            this.documentField  = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
@@ -64,7 +64,7 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
         try {
 <span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (startDateTimeField.in(query) == null) {</span>
-<span class="fc" id="L67">                startDateTimeField.out(query, LocalDateTime.now().format(FORMATTER));</span>
+<span class="fc" id="L67">                startDateTimeField.out(query, LocalDateTime.now().format(formatter));</span>
             }
 <span class="fc" id="L69">            upsertTask = IOC.resolve(</span>
 <span class="fc" id="L70">                Keys.getOrAdd(&quot;db.collection.upsert&quot;),</span>

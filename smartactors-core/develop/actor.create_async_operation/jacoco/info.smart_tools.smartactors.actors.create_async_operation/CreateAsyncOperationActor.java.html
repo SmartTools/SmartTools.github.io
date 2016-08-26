@@ -25,16 +25,16 @@ public class CreateAsyncOperationActor {
 
     private IAsyncOperationCollection collection;
 
-    //TODO:: this format should be setted for whole project?
-<span class="fc" id="L29">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+    private DateTimeFormatter formatter;
 
     /**
      * Constructor needed for registry actor
      * @param params iobject
      * @throws CreateAsyncOperationActorException if any error is occurred
      */
-<span class="fc" id="L36">    public CreateAsyncOperationActor(final IObject params) throws CreateAsyncOperationActorException {</span>
+<span class="fc" id="L35">    public CreateAsyncOperationActor(final IObject params) throws CreateAsyncOperationActorException {</span>
         try {
+<span class="fc" id="L37">            formatter = IOC.resolve(Keys.getOrAdd(&quot;datetime_formatter&quot;));</span>
 <span class="fc" id="L38">            IField collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
 <span class="fc" id="L39">            collection = IOC.resolve(</span>
 <span class="fc" id="L40">                Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()), (String) collectionNameField.in(params)</span>
@@ -60,7 +60,7 @@ public class CreateAsyncOperationActor {
         try {
 <span class="fc" id="L61">            String token = IOC.resolve(Keys.getOrAdd(&quot;db.collection.nextid&quot;));</span>
 <span class="fc" id="L62">            Integer amountOfHoursToExpireFromNow = message.getExpiredTime();</span>
-<span class="fc" id="L63">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(FORMATTER);</span>
+<span class="fc" id="L63">            String expiredTime = LocalDateTime.now().plusHours(amountOfHoursToExpireFromNow).format(formatter);</span>
 <span class="fc" id="L64">            message.setSessionIdInData(message.getSessionId());</span>
 <span class="fc" id="L65">            IObject authOperationData = message.getOperationData();</span>
 <span class="fc" id="L66">            collection.createAsyncOperation(authOperationData, token, expiredTime);</span>

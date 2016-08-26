@@ -36,16 +36,16 @@ public class GetItemFromCachedCollectionTask implements IDatabaseTask {
     private IField dateToField;
     private IField startDateTimeField;
 
-    //TODO:: this format should be setted for whole project?
-<span class="fc" id="L40">    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm:ss&quot;);</span>
+    private DateTimeFormatter formatter;
 
     /**
      * @param connection storage connection for executing query
      * @throws CreateCachedCollectionTaskException for error during creating
      */
-<span class="fc" id="L46">    public GetItemFromCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
-<span class="fc" id="L47">        this.connection = connection;</span>
+<span class="fc" id="L45">    public GetItemFromCachedCollectionTask(final IStorageConnection connection) throws CreateCachedCollectionTaskException {</span>
+<span class="fc" id="L46">        this.connection = connection;</span>
         try {
+<span class="fc" id="L48">            this.formatter = IOC.resolve(Keys.getOrAdd(&quot;datetime_formatter&quot;));</span>
 <span class="fc" id="L49">            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
 <span class="fc" id="L50">            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyName&quot;);</span>
 <span class="fc" id="L51">            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), &quot;key&quot;);</span>
@@ -105,7 +105,7 @@ public class GetItemFromCachedCollectionTask implements IDatabaseTask {
 <span class="fc" id="L105">            isActiveField.out(filterObject, isActiveObject);</span>
 
 <span class="fc" id="L107">            IObject dateObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
-<span class="fc" id="L108">            dateToField.out(dateObject, LocalDateTime.now().format(FORMATTER));</span>
+<span class="fc" id="L108">            dateToField.out(dateObject, LocalDateTime.now().format(formatter));</span>
 <span class="fc" id="L109">            startDateTimeField.out(filterObject, dateObject);</span>
 
 <span class="fc" id="L111">            filterField.out(queryForNestedTask, filterObject);</span>

@@ -37,30 +37,31 @@ public class CreateAsyncOpPlugin implements IPlugin {
 
 <span class="nc" id="L38">            item</span>
 <span class="nc" id="L39">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L40">                    .before(&quot;starter&quot;)</span>
-<span class="nc" id="L41">                    .process(() -&gt; {</span>
+<span class="nc" id="L40">                    .after(&quot;datetime_formatter_plugin&quot;)</span>
+<span class="nc" id="L41">                    .before(&quot;starter&quot;)</span>
+<span class="nc" id="L42">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L43">                            IKey createAsyncOpKey = Keys.getOrAdd(CreateAsyncOperationActor.class.getCanonicalName());</span>
-<span class="nc" id="L44">                            IOC.register(createAsyncOpKey, new CreateNewInstanceStrategy(</span>
+<span class="nc" id="L44">                            IKey createAsyncOpKey = Keys.getOrAdd(CreateAsyncOperationActor.class.getCanonicalName());</span>
+<span class="nc" id="L45">                            IOC.register(createAsyncOpKey, new CreateNewInstanceStrategy(</span>
                                     (args) -&gt; {
                                         try {
-<span class="nc" id="L47">                                            return new CreateAsyncOperationActor((IObject) args[0]);</span>
-<span class="nc" id="L48">                                        } catch (Exception e) {</span>
-<span class="nc" id="L49">                                            throw new RuntimeException(e);</span>
+<span class="nc" id="L48">                                            return new CreateAsyncOperationActor((IObject) args[0]);</span>
+<span class="nc" id="L49">                                        } catch (Exception e) {</span>
+<span class="nc" id="L50">                                            throw new RuntimeException(e);</span>
                                         }
                                     }));
-<span class="nc" id="L52">                        } catch (ResolutionException e) {</span>
-<span class="nc" id="L53">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't get CreateAsyncOperationActor key&quot;, e);</span>
-<span class="nc" id="L54">                        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L55">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
-<span class="nc" id="L56">                        } catch (RegistrationException e) {</span>
-<span class="nc" id="L57">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
-<span class="nc" id="L58">                        }</span>
-<span class="nc" id="L59">                    });</span>
-<span class="nc" id="L60">            bootstrap.add(item);</span>
-<span class="nc" id="L61">        } catch (Exception e) {</span>
-<span class="nc" id="L62">            throw new PluginException(&quot;Can't load CreateAsyncOperationActor plugin&quot;, e);</span>
-<span class="nc" id="L63">        }</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L53">                        } catch (ResolutionException e) {</span>
+<span class="nc" id="L54">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't get CreateAsyncOperationActor key&quot;, e);</span>
+<span class="nc" id="L55">                        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L56">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't create strategy&quot;, e);</span>
+<span class="nc" id="L57">                        } catch (RegistrationException e) {</span>
+<span class="nc" id="L58">                            throw new ActionExecuteException(&quot;CreateAsyncOperationActor plugin can't load: can't register new strategy&quot;, e);</span>
+<span class="nc" id="L59">                        }</span>
+<span class="nc" id="L60">                    });</span>
+<span class="nc" id="L61">            bootstrap.add(item);</span>
+<span class="nc" id="L62">        } catch (Exception e) {</span>
+<span class="nc" id="L63">            throw new PluginException(&quot;Can't load CreateAsyncOperationActor plugin&quot;, e);</span>
+<span class="nc" id="L64">        }</span>
+<span class="nc" id="L65">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

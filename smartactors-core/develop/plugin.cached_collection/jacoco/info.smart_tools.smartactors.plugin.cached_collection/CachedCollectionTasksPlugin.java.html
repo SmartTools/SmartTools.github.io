@@ -45,103 +45,104 @@ public class CachedCollectionTasksPlugin implements IPlugin {
 
 <span class="nc" id="L46">            item</span>
 <span class="nc" id="L47">                    .after(&quot;IOC&quot;)</span>
-<span class="nc" id="L48">                    .after(&quot;IFieldPlugin&quot;)</span>
-<span class="nc" id="L49">                    .process(() -&gt; {</span>
+<span class="nc" id="L48">                    .after(&quot;datetime_formatter_plugin&quot;)</span>
+<span class="nc" id="L49">                    .after(&quot;IFieldPlugin&quot;)</span>
+<span class="nc" id="L50">                    .process(() -&gt; {</span>
                         try {
-<span class="nc" id="L51">                            IField collectionNameField = IOC.resolve(</span>
-<span class="nc" id="L52">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
-<span class="nc" id="L53">                            IField documentField = IOC.resolve(</span>
-<span class="nc" id="L54">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
-<span class="nc" id="L55">                            IField callbackField = IOC.resolve(</span>
-<span class="nc" id="L56">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
-<span class="nc" id="L57">                            IField keyNameField = IOC.resolve(</span>
-<span class="nc" id="L58">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyName&quot;);</span>
-<span class="nc" id="L59">                            IField keyField = IOC.resolve(</span>
-<span class="nc" id="L60">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;key&quot;);</span>
+<span class="nc" id="L52">                            IField collectionNameField = IOC.resolve(</span>
+<span class="nc" id="L53">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;collectionName&quot;);</span>
+<span class="nc" id="L54">                            IField documentField = IOC.resolve(</span>
+<span class="nc" id="L55">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;document&quot;);</span>
+<span class="nc" id="L56">                            IField callbackField = IOC.resolve(</span>
+<span class="nc" id="L57">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;callback&quot;);</span>
+<span class="nc" id="L58">                            IField keyNameField = IOC.resolve(</span>
+<span class="nc" id="L59">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;keyName&quot;);</span>
+<span class="nc" id="L60">                            IField keyField = IOC.resolve(</span>
+<span class="nc" id="L61">                                    Keys.getOrAdd(IField.class.getCanonicalName()), &quot;key&quot;);</span>
 
 
-<span class="nc" id="L63">                            IOC.register(</span>
-<span class="nc" id="L64">                                    Keys.getOrAdd(&quot;db.cached_collection.upsert&quot;),</span>
+<span class="nc" id="L64">                            IOC.register(</span>
+<span class="nc" id="L65">                                    Keys.getOrAdd(&quot;db.cached_collection.upsert&quot;),</span>
                                     //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                                     new ApplyFunctionToArgumentsStrategy(
                                             (args) -&gt; {
                                                 try {
-<span class="nc" id="L69">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="nc" id="L70">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="nc" id="L71">                                                    IObject document = (IObject) args[2];</span>
-<span class="nc" id="L72">                                                    IDatabaseTask task = new UpsertIntoCachedCollectionTask(connection);</span>
+<span class="nc" id="L70">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="nc" id="L71">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="nc" id="L72">                                                    IObject document = (IObject) args[2];</span>
+<span class="nc" id="L73">                                                    IDatabaseTask task = new UpsertIntoCachedCollectionTask(connection);</span>
 
-<span class="nc" id="L74">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L75">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="nc" id="L76">                                                    collectionNameField.out(query, collectionName);</span>
-<span class="nc" id="L77">                                                    documentField.out(query, document);</span>
+<span class="nc" id="L77">                                                    collectionNameField.out(query, collectionName);</span>
+<span class="nc" id="L78">                                                    documentField.out(query, document);</span>
 
-<span class="nc" id="L79">                                                    task.prepare(query);</span>
-<span class="nc" id="L80">                                                    return task;</span>
-<span class="nc" id="L81">                                                } catch (Exception e) {</span>
-<span class="nc" id="L82">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
+<span class="nc" id="L80">                                                    task.prepare(query);</span>
+<span class="nc" id="L81">                                                    return task;</span>
+<span class="nc" id="L82">                                                } catch (Exception e) {</span>
+<span class="nc" id="L83">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
                                                 }
                                             }
                                     )
                             );
 
-<span class="nc" id="L88">                            IOC.register(</span>
-<span class="nc" id="L89">                                    Keys.getOrAdd(&quot;db.cached_collection.delete&quot;),</span>
+<span class="nc" id="L89">                            IOC.register(</span>
+<span class="nc" id="L90">                                    Keys.getOrAdd(&quot;db.cached_collection.delete&quot;),</span>
                                     //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                                     new ApplyFunctionToArgumentsStrategy(
                                             (args) -&gt; {
                                                 try {
-<span class="nc" id="L94">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="nc" id="L95">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="nc" id="L96">                                                    IObject document = (IObject) args[2];</span>
-<span class="nc" id="L97">                                                    IDatabaseTask task = new DeleteFromCachedCollectionTask(connection);</span>
+<span class="nc" id="L95">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="nc" id="L96">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="nc" id="L97">                                                    IObject document = (IObject) args[2];</span>
+<span class="nc" id="L98">                                                    IDatabaseTask task = new DeleteFromCachedCollectionTask(connection);</span>
 
-<span class="nc" id="L99">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L100">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="nc" id="L101">                                                    collectionNameField.out(query, collectionName);</span>
-<span class="nc" id="L102">                                                    documentField.out(query, document);</span>
+<span class="nc" id="L102">                                                    collectionNameField.out(query, collectionName);</span>
+<span class="nc" id="L103">                                                    documentField.out(query, document);</span>
 
-<span class="nc" id="L104">                                                    task.prepare(query);</span>
-<span class="nc" id="L105">                                                    return task;</span>
-<span class="nc" id="L106">                                                } catch (Exception e) {</span>
-<span class="nc" id="L107">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
+<span class="nc" id="L105">                                                    task.prepare(query);</span>
+<span class="nc" id="L106">                                                    return task;</span>
+<span class="nc" id="L107">                                                } catch (Exception e) {</span>
+<span class="nc" id="L108">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
                                                 }
                                             }
                                     )
                             );
 
-<span class="nc" id="L113">                            IOC.register(</span>
-<span class="nc" id="L114">                                    Keys.getOrAdd(&quot;db.cached_collection.get_item&quot;),</span>
+<span class="nc" id="L114">                            IOC.register(</span>
+<span class="nc" id="L115">                                    Keys.getOrAdd(&quot;db.cached_collection.get_item&quot;),</span>
                                     //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
                                     new ApplyFunctionToArgumentsStrategy(
                                             (args) -&gt; {
                                                 try {
-<span class="nc" id="L119">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
-<span class="nc" id="L120">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
-<span class="nc" id="L121">                                                    IDatabaseTask task = new GetItemFromCachedCollectionTask(connection);</span>
+<span class="nc" id="L120">                                                    IStorageConnection connection = (IStorageConnection) args[0];</span>
+<span class="nc" id="L121">                                                    CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));</span>
+<span class="nc" id="L122">                                                    IDatabaseTask task = new GetItemFromCachedCollectionTask(connection);</span>
 
-<span class="nc" id="L123">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
-<span class="nc" id="L124">                                                    collectionNameField.out(query, collectionName);</span>
-<span class="nc" id="L125">                                                    keyNameField.out(query, args[2]);</span>
-<span class="nc" id="L126">                                                    keyField.out(query, args[3]);</span>
-<span class="nc" id="L127">                                                    callbackField.out(query, args[4]);</span>
+<span class="nc" id="L124">                                                    IObject query = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L125">                                                    collectionNameField.out(query, collectionName);</span>
+<span class="nc" id="L126">                                                    keyNameField.out(query, args[2]);</span>
+<span class="nc" id="L127">                                                    keyField.out(query, args[3]);</span>
+<span class="nc" id="L128">                                                    callbackField.out(query, args[4]);</span>
 
-<span class="nc" id="L129">                                                    task.prepare(query);</span>
-<span class="nc" id="L130">                                                    return task;</span>
-<span class="nc" id="L131">                                                } catch (Exception e) {</span>
-<span class="nc" id="L132">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
+<span class="nc" id="L130">                                                    task.prepare(query);</span>
+<span class="nc" id="L131">                                                    return task;</span>
+<span class="nc" id="L132">                                                } catch (Exception e) {</span>
+<span class="nc" id="L133">                                                    throw new RuntimeException(&quot;Can't resolve upsert db task.&quot;, e);</span>
                                                 }
                                             }
                                     )
                             );
-<span class="nc" id="L137">                        } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
-<span class="nc" id="L138">                            throw new RuntimeException(e);</span>
-<span class="nc" id="L139">                        }</span>
-<span class="nc" id="L140">                    });</span>
-<span class="nc" id="L141">            bootstrap.add(item);</span>
-<span class="nc" id="L142">        } catch (InvalidArgumentException e) {</span>
-<span class="nc" id="L143">            throw new PluginException(&quot;Can't load CachedCollectionTasksPlugin plugin&quot;, e);</span>
-<span class="nc" id="L144">        }</span>
-<span class="nc" id="L145">    }</span>
+<span class="nc" id="L138">                        } catch (RegistrationException | InvalidArgumentException | ResolutionException e) {</span>
+<span class="nc" id="L139">                            throw new RuntimeException(e);</span>
+<span class="nc" id="L140">                        }</span>
+<span class="nc" id="L141">                    });</span>
+<span class="nc" id="L142">            bootstrap.add(item);</span>
+<span class="nc" id="L143">        } catch (InvalidArgumentException e) {</span>
+<span class="nc" id="L144">            throw new PluginException(&quot;Can't load CachedCollectionTasksPlugin plugin&quot;, e);</span>
+<span class="nc" id="L145">        }</span>
+<span class="nc" id="L146">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

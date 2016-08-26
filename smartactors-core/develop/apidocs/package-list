@@ -310,6 +310,7 @@ info.smart_tools.smartactors.plugin.connection_options
 info.smart_tools.smartactors.plugin.create_async_operation
 info.smart_tools.smartactors.plugin.create_session
 info.smart_tools.smartactors.plugin.create_user
+info.smart_tools.smartactors.plugin.datetime_formatter_strategy
 info.smart_tools.smartactors.plugin.dsobject
 info.smart_tools.smartactors.plugin.encoder
 info.smart_tools.smartactors.plugin.exception_handler_actor
