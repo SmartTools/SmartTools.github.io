@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 916,
+      <title>File: 920,
              Errors: 0,
-             Warnings: 1688,
+             Warnings: 1689,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -4918,7 +4918,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_bus_container_with_scope.MessageBusContainer.java">info/smart_tools/smartactors/core/message_bus_container_with_scope/MessageBusContainer.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.wrapper_generator.package-info.java">info/smart_tools/smartactors/plugin/wrapper_generator/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -4932,7 +4932,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.wrapper_generator.package-info.java">info/smart_tools/smartactors/plugin/wrapper_generator/package-info.java</a>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_bus_container_with_scope.MessageBusContainer.java">info/smart_tools/smartactors/core/message_bus_container_with_scope/MessageBusContainer.java</a>
                 </td>
                 <td>
                   0
@@ -9622,6 +9622,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.ConcatSplitRulesPlugin.java">info/smart_tools/smartactors/core/examples/wrapper/ConcatSplitRulesPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.encoding.codec.package-info.java">info/smart_tools/smartactors/core/encoding/codec/package-info.java</a>
                 </td>
                 <td>
@@ -10266,6 +10280,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.HelloActorException.java">info/smart_tools/smartactors/core/examples/wrapper/HelloActorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.response.PluginResponse.java">info/smart_tools/smartactors/plugin/response/PluginResponse.java</a>
                 </td>
                 <td>
@@ -10525,6 +10553,20 @@ under the License.
                 </td>
                 <td>
                   5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.GreetingMessage.java">info/smart_tools/smartactors/core/examples/wrapper/GreetingMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -12451,6 +12493,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.message_processor.MessageProcessor.java">info/smart_tools/smartactors/core/message_processor/MessageProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.HelloActor.java">info/smart_tools/smartactors/core/examples/wrapper/HelloActor.java</a>
                 </td>
                 <td>
                   0

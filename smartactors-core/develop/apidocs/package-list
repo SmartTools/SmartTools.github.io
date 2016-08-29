@@ -102,6 +102,7 @@ info.smart_tools.smartactors.core.examples.db_collection
 info.smart_tools.smartactors.core.examples.feature
 info.smart_tools.smartactors.core.examples.plugin
 info.smart_tools.smartactors.core.examples.scope
+info.smart_tools.smartactors.core.examples.wrapper
 info.smart_tools.smartactors.core.exception_handling_receivers
 info.smart_tools.smartactors.core.exceptions
 info.smart_tools.smartactors.core.feature_manager

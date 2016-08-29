@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 25,
+      <title>File: 29,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 3,
              Infos: 0
       </title>
             <link>core.examples/core.examples//checkstyle.html</link>
@@ -116,7 +116,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.HelloActorException.java">info/smart_tools/smartactors/core/examples/wrapper/HelloActorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.plugin.PluginServer.java">info/smart_tools/smartactors/core/examples/plugin/PluginServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.ConcatSplitRulesPlugin.java">info/smart_tools/smartactors/core/examples/wrapper/ConcatSplitRulesPlugin.java</a>
                 </td>
                 <td>
                   0
@@ -159,6 +187,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.db_collection.InMemoryDBCollectionServer.java">info/smart_tools/smartactors/core/examples/db_collection/InMemoryDBCollectionServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.HelloActor.java">info/smart_tools/smartactors/core/examples/wrapper/HelloActor.java</a>
                 </td>
                 <td>
                   0
@@ -319,6 +361,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.examples/core.examples//checkstyle.html#info.smart_tools.smartactors.core.examples.wrapper.GreetingMessage.java">info/smart_tools/smartactors/core/examples/wrapper/GreetingMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
