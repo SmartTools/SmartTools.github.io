@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 926,
+      <title>File: 928,
              Errors: 0,
-             Warnings: 1624,
+             Warnings: 1630,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -3322,6 +3322,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.nested_field.NestedField.java">info/smart_tools/smartactors/core/nested_field/NestedField.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.strategy.respons_status_extractor.package-info.java">info/smart_tools/smartactors/strategy/respons_status_extractor/package-info.java</a>
                 </td>
                 <td>
@@ -3413,6 +3427,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.nested_field.NestedFieldPlugin.java">info/smart_tools/smartactors/plugin/nested_field/NestedFieldPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -3804,7 +3832,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  13
+                  14
                 </td>
                 <td>
                   0

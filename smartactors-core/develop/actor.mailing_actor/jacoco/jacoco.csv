@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 actor.mailing_actor,info.smart_tools.smartactors.actors.mailing,MailingActor.new HashMap() {...},29,0,0,0,5,0,4,0,4,0
-actor.mailing_actor,info.smart_tools.smartactors.actors.mailing,MailingActor,322,0,2,0,56,0,7,0,6,0
+actor.mailing_actor,info.smart_tools.smartactors.actors.mailing,MailingActor,338,0,4,0,59,0,8,0,6,0
 actor.mailing_actor,info.smart_tools.smartactors.actors.mailing.email,SMTPMessageAdaptor,11,48,0,0,5,12,2,6,2,6
 actor.mailing_actor,info.smart_tools.smartactors.actors.mailing.email,MessageAttributeSetters,31,84,0,2,9,22,1,6,1,5
 actor.mailing_actor,info.smart_tools.smartactors.actors.mailing.email,MessagePartCreators,74,119,0,2,22,26,2,5,2,4

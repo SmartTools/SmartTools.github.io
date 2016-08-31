@@ -231,6 +231,7 @@ info.smart_tools.smartactors.core.message_processing_sequence
 info.smart_tools.smartactors.core.message_processor
 info.smart_tools.smartactors.core.message_to_bytes_mapper
 info.smart_tools.smartactors.core.named_keys_storage
+info.smart_tools.smartactors.core.nested_field
 info.smart_tools.smartactors.core.netty_client
 info.smart_tools.smartactors.core.netty_server
 info.smart_tools.smartactors.core.path
@@ -339,6 +340,7 @@ info.smart_tools.smartactors.plugin.load_scope_povider
 info.smart_tools.smartactors.plugin.mailing_actor
 info.smart_tools.smartactors.plugin.map_router
 info.smart_tools.smartactors.plugin.messaging_identifiers
+info.smart_tools.smartactors.plugin.nested_field
 info.smart_tools.smartactors.plugin.null_connection_pool
 info.smart_tools.smartactors.plugin.postgres_connection_pool
 info.smart_tools.smartactors.plugin.postgres_db_tasks

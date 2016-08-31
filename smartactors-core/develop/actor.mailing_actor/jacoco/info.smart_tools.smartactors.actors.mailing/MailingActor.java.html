@@ -17,11 +17,13 @@ import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import me.normanmaurer.niosmtp.delivery.Authentication;
+import me.normanmaurer.niosmtp.delivery.DeliveryRecipientStatus;
 import me.normanmaurer.niosmtp.delivery.SMTPDeliveryAgent;
 import me.normanmaurer.niosmtp.delivery.SMTPDeliveryEnvelope;
 import me.normanmaurer.niosmtp.delivery.impl.AuthenticationImpl;
 import me.normanmaurer.niosmtp.delivery.impl.SMTPDeliveryAgentConfigImpl;
 import me.normanmaurer.niosmtp.delivery.impl.SMTPDeliveryEnvelopeImpl;
+import me.normanmaurer.niosmtp.transport.FutureResult;
 import me.normanmaurer.niosmtp.transport.SMTPClientTransport;
 import me.normanmaurer.niosmtp.transport.netty.NettyLMTPClientTransportFactory;
 import me.normanmaurer.niosmtp.transport.netty.NettySMTPClientTransportFactory;
@@ -34,9 +36,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -166,23 +166,27 @@ public class MailingActor {
 <span class="nc" id="L166">            SMTPDeliveryEnvelope deliveryEnvelope = new SMTPDeliveryEnvelopeImpl(</span>
 <span class="nc" id="L167">                    senderAddress_Context_F.in(mailingContext, String.class), recipients, smtpMessage);</span>
 
-<span class="nc" id="L169">            deliveryAgent.deliver(serverHost, deliveryAgentConfig, deliveryEnvelope);</span>
-<span class="nc" id="L170">        } catch (Exception e) {</span>
-<span class="nc" id="L171">            throw new RuntimeException(e);</span>
-<span class="nc" id="L172">        }</span>
-<span class="nc" id="L173">    }</span>
+<span class="nc" id="L169">            Collection&lt;FutureResult&lt;Iterator&lt;DeliveryRecipientStatus&gt;&gt;&gt; cfr = deliveryAgent.deliver(serverHost, deliveryAgentConfig, deliveryEnvelope).get();</span>
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            for (FutureResult&lt;Iterator&lt;DeliveryRecipientStatus&gt;&gt; fr : cfr) {</span>
+<span class="nc" id="L172">                System.out.println(fr);</span>
+<span class="nc" id="L173">            }</span>
+<span class="nc" id="L174">        } catch (Exception e) {</span>
+<span class="nc" id="L175">            throw new RuntimeException(e);</span>
+<span class="nc" id="L176">        }</span>
+<span class="nc" id="L177">    }</span>
 
     private void setMessageAttributes(final SMTPMessageAdaptor smtpMessage, final IObject attributes, final List&lt;String&gt; recipients)
             throws Exception {
-<span class="nc" id="L177">        smtpMessage.getMimeMessage().setFrom(</span>
-<span class="nc" id="L178">                new InternetAddress(senderAddress_Context_F.in(mailingContext, String.class)));</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">        for (String recipient : recipients) {</span>
-<span class="nc" id="L180">            smtpMessage.getMimeMessage().addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));</span>
-<span class="nc" id="L181">        }</span>
+<span class="nc" id="L181">        smtpMessage.getMimeMessage().setFrom(</span>
+<span class="nc" id="L182">                new InternetAddress(senderAddress_Context_F.in(mailingContext, String.class)));</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        for (String recipient : recipients) {</span>
+<span class="nc" id="L184">            smtpMessage.getMimeMessage().addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));</span>
+<span class="nc" id="L185">        }</span>
 
-<span class="nc" id="L183">        MessageAttributeSetters.applyAll(</span>
+<span class="nc" id="L187">        MessageAttributeSetters.applyAll(</span>
                 attributes,
                 mailingContext, smtpMessage);
-<span class="nc" id="L186">    }</span>
+<span class="nc" id="L190">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
