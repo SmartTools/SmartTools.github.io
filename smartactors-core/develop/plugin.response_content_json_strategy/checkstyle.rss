@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 1,
              Errors: 0,
-             Warnings: 3,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>plugin.response_content_json_strategy/plugin.response_content_json_strategy//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   0

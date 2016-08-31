@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 920,
+      <title>File: 926,
              Errors: 0,
-             Warnings: 1689,
+             Warnings: 1624,
              Infos: 0
       </title>
             <link>core//checkstyle.html</link>
@@ -248,7 +248,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -956,6 +956,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.actor_collection_receiver.ActorCollectionReceiver.java">info/smart_tools/smartactors/core/actor_collection_receiver/ActorCollectionReceiver.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.create_async_operation.exception.CreateAsyncOperationActorException.java">info/smart_tools/smartactors/actors/create_async_operation/exception/CreateAsyncOperationActorException.java</a>
                 </td>
                 <td>
@@ -1074,7 +1088,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -1298,7 +1312,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -1774,7 +1788,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  560
+                  559
                 </td>
                 <td>
                   0
@@ -1992,6 +2006,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.actor_collection_receiver.package-info.java">info/smart_tools/smartactors/plugin/actor_collection_receiver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.receiver_chain.ImmutableReceiverChain.java">info/smart_tools/smartactors/core/receiver_chain/ImmutableReceiverChain.java</a>
                 </td>
                 <td>
@@ -2110,7 +2138,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -2286,6 +2314,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.actor_collection_receiver.ActorCollectionRouter.java">info/smart_tools/smartactors/core/actor_collection_receiver/ActorCollectionRouter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.get_header_from_request_rule.package-info.java">info/smart_tools/smartactors/plugin/get_header_from_request_rule/package-info.java</a>
                 </td>
                 <td>
@@ -2390,7 +2432,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -2922,7 +2964,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  228
+                  225
                 </td>
                 <td>
                   0
@@ -3356,7 +3398,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -4042,7 +4084,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0
@@ -4168,7 +4210,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -4462,7 +4504,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   0
@@ -4518,7 +4560,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -5330,7 +5372,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -5521,6 +5563,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_delete_task.package-info.java">info/smart_tools/smartactors/core/postgres_delete_task/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.wds_object.package-info.java">info/smart_tools/smartactors/plugin/wds_object/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -5820,7 +5876,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0
@@ -5988,7 +6044,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -6366,7 +6422,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -6534,7 +6590,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -7668,7 +7724,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
@@ -7710,7 +7766,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -7850,7 +7906,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -7864,7 +7920,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -8102,7 +8158,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  302
+                  300
                 </td>
                 <td>
                   0
@@ -8214,7 +8270,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   0
@@ -8354,7 +8410,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -8550,7 +8606,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -8852,6 +8908,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.actor_collection_receiver.package-info.java">info/smart_tools/smartactors/core/actor_collection_receiver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.recursive_scope.Scope.java">info/smart_tools/smartactors/core/recursive_scope/Scope.java</a>
                 </td>
                 <td>
@@ -9040,7 +9110,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -9068,7 +9138,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -9516,7 +9586,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   0
@@ -9530,7 +9600,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  51
+                  50
                 </td>
                 <td>
                   0
@@ -9796,7 +9866,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  0
                 </td>
                 <td>
                   0
@@ -10636,7 +10706,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -10958,7 +11028,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
@@ -10986,7 +11056,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  2
                 </td>
                 <td>
                   0
@@ -11602,7 +11672,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  38
+                  28
                 </td>
                 <td>
                   0
@@ -11625,6 +11695,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.get_form.GetFormActor.java">info/smart_tools/smartactors/actors/get_form/GetFormActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.actor_collection_receiver.ActorCollectionReceiverPlugin.java">info/smart_tools/smartactors/plugin/actor_collection_receiver/ActorCollectionReceiverPlugin.java</a>
                 </td>
                 <td>
                   0
@@ -11826,7 +11910,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  12
+                  11
                 </td>
                 <td>
                   0
@@ -12148,7 +12232,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  4
                 </td>
                 <td>
                   0
@@ -12834,7 +12918,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0
@@ -12904,7 +12988,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0

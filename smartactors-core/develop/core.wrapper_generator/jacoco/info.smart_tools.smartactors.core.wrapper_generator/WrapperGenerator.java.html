@@ -230,7 +230,7 @@ public class WrapperGenerator implements IWrapperGenerator {
                                 methodPrefix +
                                 &quot;_&quot; +
 <span class="fc" id="L232">                                m.getName() +</span>
-<span class="fc" id="L233">                                &quot;.in(this.env, &quot;+ m.getReturnType().getSimpleName() + &quot;.class);&quot;</span>
+<span class="fc" id="L233">                                &quot;.in(this.env, &quot; + m.getReturnType().getSimpleName() + &quot;.class);&quot;</span>
                         )
 <span class="fc" id="L235">                        .addStringToBody(&quot;} catch(Throwable e) {&quot;)</span>
 <span class="fc" id="L236">                        .addStringToBody(&quot;\tthrow new ReadValueException(\&quot;Could not get value from iobject.\&quot;, e);&quot;)</span>

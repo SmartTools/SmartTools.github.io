@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 14,
              Errors: 0,
-             Warnings: 50,
+             Warnings: 49,
              Infos: 0
       </title>
             <link>core.sql_commons/core.sql_commons//checkstyle.html</link>
@@ -192,7 +192,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  4
                 </td>
                 <td>
                   0

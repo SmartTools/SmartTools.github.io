@@ -14,6 +14,7 @@ import java.util.function.Function;
  *
  * @since 1.8
  */
+@Deprecated
 public class CreateNewInstanceStrategy implements IResolveDependencyStrategy {
 
     /**
@@ -28,12 +29,12 @@ public class CreateNewInstanceStrategy implements IResolveDependencyStrategy {
      * @throws InvalidArgumentException if any errors occurred
      */
     public CreateNewInstanceStrategy(final Function&lt;Object[], Object&gt; func)
-<span class="fc" id="L31">            throws InvalidArgumentException {</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (null == func) {</span>
-<span class="fc" id="L33">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
+<span class="fc" id="L32">            throws InvalidArgumentException {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (null == func) {</span>
+<span class="fc" id="L34">            throw new InvalidArgumentException(&quot;Incoming argument should not be null.&quot;);</span>
         }
-<span class="fc" id="L35">        this.creationFunction = func;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L36">        this.creationFunction = func;</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * Represent new instance of class by given param
@@ -45,9 +46,9 @@ public class CreateNewInstanceStrategy implements IResolveDependencyStrategy {
     public &lt;T&gt; T resolve(final Object ... args)
             throws ResolveDependencyStrategyException {
         try {
-<span class="fc" id="L48">            return (T) creationFunction.apply(args);</span>
-<span class="fc" id="L49">        } catch (Exception e) {</span>
-<span class="fc" id="L50">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
+<span class="fc" id="L49">            return (T) creationFunction.apply(args);</span>
+<span class="fc" id="L50">        } catch (Exception e) {</span>
+<span class="fc" id="L51">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
         }
     }
 }

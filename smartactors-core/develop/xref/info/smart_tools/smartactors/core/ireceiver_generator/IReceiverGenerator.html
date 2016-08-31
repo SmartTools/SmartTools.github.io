@@ -9,32 +9,31 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> info.smart_tools.smartactors.core.ireceiver_generator;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iobject.IObject;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ireceiver_generator.exception.ReceiverGeneratorException;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * IReceiverGenerator interface</em>
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../info/smart_tools/smartactors/core/ireceiver_generator/IReceiverGenerator.html">IReceiverGenerator</a> {
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment">     * Generates instance of {@link IMessageReceiver}.</em>
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment">     * @param instance the instance of users class</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">     * @param wrapperResolutionStrategy the strategy for resolve wrapper</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment">     * @param methodName the name of method</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">     * @return the new instance of {@link IMessageReceiver}</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment">     * @throws InvalidArgumentException if {@code params} responds inherent requirements</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">     * @throws ReceiverGeneratorException if class could not be generated</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <a href="../../../../../info/smart_tools/smartactors/core/message_processing/IMessageReceiver.html">IMessageReceiver</a> generate(
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>              Object instance,
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>              <a href="../../../../../info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html">IResolveDependencyStrategy</a> wrapperResolutionStrategy,
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>              String methodName
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>      )
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>              <strong class="jxr_keyword">throws</strong> InvalidArgumentException, ReceiverGeneratorException;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  }
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.ireceiver_generator.exception.ReceiverGeneratorException;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> * IReceiverGenerator interface</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../info/smart_tools/smartactors/core/ireceiver_generator/IReceiverGenerator.html">IReceiverGenerator</a> {
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment">     * Generates instance of {@link IMessageReceiver}.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment">     * @param instance the instance of users class</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment">     * @param wrapperResolutionStrategy the strategy for resolve wrapper</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">     * @param methodName the name of method</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment">     * @return the new instance of {@link IMessageReceiver}</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">     * @throws InvalidArgumentException if {@code params} responds inherent requirements</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment">     * @throws ReceiverGeneratorException if class could not be generated</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>      <a href="../../../../../info/smart_tools/smartactors/core/message_processing/IMessageReceiver.html">IMessageReceiver</a> generate(
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>              Object instance,
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>              <a href="../../../../../info/smart_tools/smartactors/core/iresolve_dependency_strategy/IResolveDependencyStrategy.html">IResolveDependencyStrategy</a> wrapperResolutionStrategy,
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>              String methodName
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      )
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>              <strong class="jxr_keyword">throws</strong> InvalidArgumentException, ReceiverGeneratorException;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

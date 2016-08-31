@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 1,
              Errors: 0,
-             Warnings: 2,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>plugin.messaging_identifiers/plugin.messaging_identifiers//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   0

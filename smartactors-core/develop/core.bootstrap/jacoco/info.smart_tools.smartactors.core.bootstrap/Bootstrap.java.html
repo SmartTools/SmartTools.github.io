@@ -30,7 +30,7 @@ public class Bootstrap implements IBootstrap&lt;IBootstrapItem&lt;String&gt;&gt;
      */
 <span class="fc" id="L31">    public Bootstrap(final List&lt;IBootstrapItem&lt;String&gt;&gt; loadedItems) {</span>
 <span class="fc bfc" id="L32" title="All 2 branches covered.">        for (IBootstrapItem&lt;String&gt; item : loadedItems) {</span>
-<span class="pc" id="L33">            this.itemStorage.add(item.process(() -&gt; {}));</span>
+<span class="pc" id="L33">            this.itemStorage.add(item.process(() -&gt; { }));</span>
 <span class="fc" id="L34">        }</span>
 <span class="fc" id="L35">    }</span>
 
