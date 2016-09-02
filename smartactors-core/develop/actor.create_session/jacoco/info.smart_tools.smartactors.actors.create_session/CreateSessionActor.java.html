@@ -120,55 +120,54 @@ public class CreateSessionActor {
 <span class="nc" id="L120">                    searchTask.execute();</span>
 
 <span class="nc bnc" id="L122" title="All 2 branches missed.">                    if (items.isEmpty()) {</span>
-                        //TODO:: Should we create new session here?
-<span class="nc" id="L124">                        return;</span>
+<span class="nc" id="L123">                        throw new CreateSessionException(&quot;No session has been found by id: &quot; + sessionId);</span>
                     }
-<span class="nc" id="L126">                    session = items.get(0);</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (session == null) {</span>
-<span class="nc" id="L128">                        throw new CreateSessionException(&quot;Find session is null&quot;);</span>
+<span class="nc" id="L125">                    session = items.get(0);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                    if (session == null) {</span>
+<span class="nc" id="L127">                        throw new CreateSessionException(&quot;Find session is null&quot;);</span>
                     }
-<span class="nc bnc" id="L130" title="All 12 branches missed.">                } catch (PoolGuardException e) {</span>
-<span class="nc" id="L131">                    throw new CreateSessionException(&quot;Cannot get connection from pool.&quot;, e);</span>
-<span class="nc" id="L132">                } catch (Exception e) {</span>
-<span class="nc" id="L133">                    throw new CreateSessionException(&quot;Error during find session by sessionId: &quot; + inputMessage.getSessionId(), e);</span>
-<span class="nc" id="L134">                }</span>
+<span class="nc bnc" id="L129" title="All 8 branches missed.">                } catch (PoolGuardException e) {</span>
+<span class="nc" id="L130">                    throw new CreateSessionException(&quot;Cannot get connection from pool.&quot;, e);</span>
+<span class="nc" id="L131">                } catch (Exception e) {</span>
+<span class="nc" id="L132">                    throw new CreateSessionException(&quot;Error during find session by sessionId: &quot; + inputMessage.getSessionId(), e);</span>
+<span class="nc" id="L133">                }</span>
             }
-<span class="fc" id="L136">            inputMessage.setSession(session);</span>
+<span class="fc" id="L135">            inputMessage.setSession(session);</span>
 
-<span class="fc" id="L138">            List&lt;IObject&gt; cookies = inputMessage.getCookies();</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            if (cookies == null) {</span>
-<span class="nc" id="L140">                cookies = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L137">            List&lt;IObject&gt; cookies = inputMessage.getCookies();</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (cookies == null) {</span>
+<span class="nc" id="L139">                cookies = new ArrayList&lt;&gt;();</span>
             }
-<span class="fc" id="L142">            IObject sessionCookie = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
-<span class="fc" id="L143">            cookieNameF.out(sessionCookie, &quot;sessionId&quot;);</span>
-<span class="fc" id="L144">            cookieValueF.out(sessionCookie, sessionId);</span>
-<span class="fc" id="L145">            maxAgeF.out(sessionCookie, cookiesTTL);</span>
+<span class="fc" id="L141">            IObject sessionCookie = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="fc" id="L142">            cookieNameF.out(sessionCookie, &quot;sessionId&quot;);</span>
+<span class="fc" id="L143">            cookieValueF.out(sessionCookie, sessionId);</span>
+<span class="fc" id="L144">            maxAgeF.out(sessionCookie, cookiesTTL);</span>
 
-<span class="fc" id="L147">            cookies.add(sessionCookie);</span>
-<span class="fc" id="L148">            inputMessage.setCookies(cookies);</span>
-<span class="nc" id="L149">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
-<span class="nc" id="L150">            throw new CreateSessionException(&quot;Cannot create or find session by sessionId&quot;, e);</span>
-<span class="nc" id="L151">        } catch (ResolutionException e) {</span>
-<span class="nc" id="L152">            throw new CreateSessionException(&quot;Resolution error&quot;, e);</span>
-<span class="fc" id="L153">        }</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L146">            cookies.add(sessionCookie);</span>
+<span class="fc" id="L147">            inputMessage.setCookies(cookies);</span>
+<span class="nc" id="L148">        } catch (ReadValueException | ChangeValueException | InvalidArgumentException e) {</span>
+<span class="nc" id="L149">            throw new CreateSessionException(&quot;Cannot create or find session by sessionId&quot;, e);</span>
+<span class="nc" id="L150">        } catch (ResolutionException e) {</span>
+<span class="nc" id="L151">            throw new CreateSessionException(&quot;Resolution error&quot;, e);</span>
+<span class="fc" id="L152">        }</span>
+<span class="fc" id="L153">    }</span>
 
     private void prepareSearchQuery(final IObject searchQuery, final CreateSessionMessage inputMessage)
             throws ChangeValueException, InvalidArgumentException, ResolutionException, ReadValueException {
-<span class="nc" id="L158">        IObject filter = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
-<span class="nc" id="L159">        IObject sessionIdObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
-<span class="nc" id="L160">        IObject page = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L157">        IObject filter = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L158">        IObject sessionIdObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
+<span class="nc" id="L159">        IObject page = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));</span>
 
-<span class="nc" id="L162">        equalsF.out(sessionIdObject, inputMessage.getSessionId());</span>
-<span class="nc" id="L163">        sessionIdF.out(filter, sessionIdObject);</span>
+<span class="nc" id="L161">        equalsF.out(sessionIdObject, inputMessage.getSessionId());</span>
+<span class="nc" id="L162">        sessionIdF.out(filter, sessionIdObject);</span>
 
-<span class="nc" id="L165">        collectionNameF.out(searchQuery, this.collectionName);</span>
-<span class="nc" id="L166">        pageSizeF.out(page, 1);</span>
-<span class="nc" id="L167">        pageNumberF.out(page, 1);</span>
-<span class="nc" id="L168">        pageF.out(searchQuery, page);</span>
+<span class="nc" id="L164">        collectionNameF.out(searchQuery, this.collectionName);</span>
+<span class="nc" id="L165">        pageSizeF.out(page, 1);</span>
+<span class="nc" id="L166">        pageNumberF.out(page, 1);</span>
+<span class="nc" id="L167">        pageF.out(searchQuery, page);</span>
 
-<span class="nc" id="L170">        filterF.out(searchQuery, filter);</span>
+<span class="nc" id="L169">        filterF.out(searchQuery, filter);</span>
 
-<span class="nc" id="L172">    }</span>
+<span class="nc" id="L171">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
