@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/message_processing/IMessageReceiver.html">IMessageReceiver</a>[] receivers;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a>[] arguments;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IReceiverChain&gt; exceptionalChains;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IObject&gt; exceptionalChains;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment">     * The constructor.</em>
@@ -30,12 +30,12 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">     * @param name                        name of the chain</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">     * @param receivers                   sequence (array) of receivers</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">     * @param arguments                   array of argument objects for receivers in the chain</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">     * @param exceptionalChains           mapping from exception class to exceptional chain to use when it occurs</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">     * @param exceptionalChainsAndEnv           mapping from exception class to exceptional chain to use when it occurs</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     * @throws InvalidArgumentException if name is {@code null}</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * @throws InvalidArgumentException if receivers is {@code null}</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../info/smart_tools/smartactors/core/receiver_chain/ImmutableReceiverChain.html">ImmutableReceiverChain</a>(<strong class="jxr_keyword">final</strong> String name, <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/message_processing/IMessageReceiver.html">IMessageReceiver</a>[] receivers, <strong class="jxr_keyword">final</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a>[] arguments,
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>                                    <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IReceiverChain&gt; exceptionalChains)
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>                                    <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IObject&gt; exceptionalChainsAndEnv)
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == name) {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a>(<span class="jxr_string">"Chain name should not be null."</span>);
@@ -53,14 +53,14 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a>(<span class="jxr_string">"Length of arguments list  does not match length of receivers list."</span>);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          }
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == exceptionalChains) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == exceptionalChainsAndEnv) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a>(<span class="jxr_string">"Exceptional chains list should not be null"</span>);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">this</strong>.name = name;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">this</strong>.receivers = receivers;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">this</strong>.arguments = arguments;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">this</strong>.exceptionalChains = exceptionalChains;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">this</strong>.exceptionalChains = exceptionalChainsAndEnv;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Override
@@ -87,11 +87,11 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      @Override
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../info/smart_tools/smartactors/core/message_processing/IReceiverChain.html">IReceiverChain</a> getExceptionalChain(<strong class="jxr_keyword">final</strong> Throwable exception) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> getExceptionalChainAndEnvironments(<strong class="jxr_keyword">final</strong> Throwable exception) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          Throwable e = exception;
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IReceiverChain&gt; entry : <strong class="jxr_keyword">this</strong>.exceptionalChains.entrySet()) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IObject&gt; entry : <strong class="jxr_keyword">this</strong>.exceptionalChains.entrySet()) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                  <strong class="jxr_keyword">if</strong> (entry.getKey().isAssignableFrom(e.getClass())) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>                      <strong class="jxr_keyword">return</strong> entry.getValue();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>                  }

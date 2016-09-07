@@ -14,7 +14,7 @@ public class ImmutableReceiverChain implements IReceiverChain {
     private final String name;
     private final IMessageReceiver[] receivers;
     private final IObject[] arguments;
-    private final Map&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; exceptionalChains;
+    private final Map&lt;Class&lt;? extends Throwable&gt;, IObject&gt; exceptionalChains;
 
     /**
      * The constructor.
@@ -22,12 +22,12 @@ public class ImmutableReceiverChain implements IReceiverChain {
      * @param name                        name of the chain
      * @param receivers                   sequence (array) of receivers
      * @param arguments                   array of argument objects for receivers in the chain
-     * @param exceptionalChains           mapping from exception class to exceptional chain to use when it occurs
+     * @param exceptionalChainsAndEnv           mapping from exception class to exceptional chain to use when it occurs
      * @throws InvalidArgumentException if name is {@code null}
      * @throws InvalidArgumentException if receivers is {@code null}
      */
     public ImmutableReceiverChain(final String name, final IMessageReceiver[] receivers, final IObject[] arguments,
-                                  final Map&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; exceptionalChains)
+                                  final Map&lt;Class&lt;? extends Throwable&gt;, IObject&gt; exceptionalChainsAndEnv)
 <span class="fc" id="L31">            throws InvalidArgumentException {</span>
 <span class="fc bfc" id="L32" title="All 2 branches covered.">        if (null == name) {</span>
 <span class="fc" id="L33">            throw new InvalidArgumentException(&quot;Chain name should not be null.&quot;);</span>
@@ -45,14 +45,14 @@ public class ImmutableReceiverChain implements IReceiverChain {
 <span class="fc" id="L45">            throw new InvalidArgumentException(&quot;Length of arguments list  does not match length of receivers list.&quot;);</span>
         }
 
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (null == exceptionalChains) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (null == exceptionalChainsAndEnv) {</span>
 <span class="fc" id="L49">            throw new InvalidArgumentException(&quot;Exceptional chains list should not be null&quot;);</span>
         }
 
 <span class="fc" id="L52">        this.name = name;</span>
 <span class="fc" id="L53">        this.receivers = receivers;</span>
 <span class="fc" id="L54">        this.arguments = arguments;</span>
-<span class="fc" id="L55">        this.exceptionalChains = exceptionalChains;</span>
+<span class="fc" id="L55">        this.exceptionalChains = exceptionalChainsAndEnv;</span>
 <span class="fc" id="L56">    }</span>
 
     @Override
@@ -79,11 +79,11 @@ public class ImmutableReceiverChain implements IReceiverChain {
     }
 
     @Override
-    public IReceiverChain getExceptionalChain(final Throwable exception) {
+    public IObject getExceptionalChainAndEnvironments(final Throwable exception) {
 <span class="fc" id="L83">        Throwable e = exception;</span>
 
         do {
-<span class="fc bfc" id="L86" title="All 2 branches covered.">            for (Map.Entry&lt;Class&lt;? extends Throwable&gt;, IReceiverChain&gt; entry : this.exceptionalChains.entrySet()) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            for (Map.Entry&lt;Class&lt;? extends Throwable&gt;, IObject&gt; entry : this.exceptionalChains.entrySet()) {</span>
 <span class="fc bfc" id="L87" title="All 2 branches covered.">                if (entry.getKey().isAssignableFrom(e.getClass())) {</span>
 <span class="fc" id="L88">                    return entry.getValue();</span>
                 }

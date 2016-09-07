@@ -88,8 +88,8 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      @Test
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> Should_getExceptionalChainUsingMappingMap()
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IReceiverChain&gt; mappingMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IReceiverChain&gt;() {{
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>              put(InvalidArgumentException.<strong class="jxr_keyword">class</strong>, mock(IReceiverChain.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          Map&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IObject&gt; mappingMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;, IObject&gt;() {{
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              put(InvalidArgumentException.<strong class="jxr_keyword">class</strong>, mock(IObject.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          }};
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          Throwable selfCaused = mock(Throwable.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
@@ -97,11 +97,11 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          IReceiverChain chain = <strong class="jxr_keyword">new</strong> ImmutableReceiverChain(<span class="jxr_string">"theChain"</span>, <strong class="jxr_keyword">new</strong> IMessageReceiver[0], <strong class="jxr_keyword">new</strong> IObject[0], mappingMap);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          assertNull(chain.getExceptionalChain(<strong class="jxr_keyword">new</strong> NullPointerException()));
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          assertNull(chain.getExceptionalChain(<strong class="jxr_keyword">new</strong> IllegalStateException()));
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          assertNull(chain.getExceptionalChain(selfCaused));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          assertSame(mappingMap.get(InvalidArgumentException.<strong class="jxr_keyword">class</strong>), chain.getExceptionalChain(<strong class="jxr_keyword">new</strong> InvalidArgumentException(<span class="jxr_string">"invalid"</span>)));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          assertSame(mappingMap.get(InvalidArgumentException.<strong class="jxr_keyword">class</strong>), chain.getExceptionalChain(
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          assertNull(chain.getExceptionalChainAndEnvironments(<strong class="jxr_keyword">new</strong> NullPointerException()));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          assertNull(chain.getExceptionalChainAndEnvironments(<strong class="jxr_keyword">new</strong> IllegalStateException()));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          assertNull(chain.getExceptionalChainAndEnvironments(selfCaused));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          assertSame(mappingMap.get(InvalidArgumentException.<strong class="jxr_keyword">class</strong>), chain.getExceptionalChainAndEnvironments(<strong class="jxr_keyword">new</strong> InvalidArgumentException(<span class="jxr_string">"invalid"</span>)));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          assertSame(mappingMap.get(InvalidArgumentException.<strong class="jxr_keyword">class</strong>), chain.getExceptionalChainAndEnvironments(
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                  <strong class="jxr_keyword">new</strong> IllegalStateException(<strong class="jxr_keyword">new</strong> InvalidArgumentException(<strong class="jxr_keyword">new</strong> Throwable()))));
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
