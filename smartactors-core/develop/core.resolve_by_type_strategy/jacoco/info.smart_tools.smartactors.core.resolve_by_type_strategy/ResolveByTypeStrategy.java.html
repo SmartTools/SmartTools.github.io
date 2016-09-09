@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResolveByTypeStrategy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.resolve_by_type_strategy</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.resolve_by_type_strategy</a> &gt; <span class="el_source">ResolveByTypeStrategy.java</span></div><h1>ResolveByTypeStrategy.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.resolve_by_type_strategy;
 
+import info.smart_tools.smartactors.core.i_addition_dependency_strategy.IAdditionDependencyStrategy;
+import info.smart_tools.smartactors.core.i_addition_dependency_strategy.exception.AdditionDependencyStrategyException;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
 
@@ -10,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Strategy for resolving by type
  */
-public class ResolveByTypeStrategy implements IResolveDependencyStrategy {
+public class ResolveByTypeStrategy implements IResolveDependencyStrategy, IAdditionDependencyStrategy {
     /**
      * Specific strategies for resolve
      */
@@ -21,38 +23,48 @@ public class ResolveByTypeStrategy implements IResolveDependencyStrategy {
     /**
      * Default constructor
      */
-<span class="fc" id="L24">    public ResolveByTypeStrategy() {</span>
-<span class="fc" id="L25">        this.resolveStrategies = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="fc" id="L26">        this.cacheStrategiesMap = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L26">    public ResolveByTypeStrategy() {</span>
+<span class="fc" id="L27">        this.resolveStrategies = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L28">        this.cacheStrategiesMap = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L29">    }</span>
 
     /**
      * Put strategy for specific output type
      * @param key the key for output type
      * @param strategy the strategy for specific output type
      */
-    public void register(final Class key, final IResolveDependencyStrategy strategy) {
-<span class="nc" id="L35">        resolveStrategies.put(key, strategy);</span>
-<span class="nc" id="L36">    }</span>
+    @Override
+    public void register(final Object key, final IResolveDependencyStrategy strategy) {
+<span class="nc" id="L38">        resolveStrategies.put((Class) key, strategy);</span>
+<span class="nc" id="L39">    }</span>
+
+    /**
+     * Remove strategy for specific output type
+     * @param key the key for output type
+     */
+    @Override
+    public void remove(final Object key) throws AdditionDependencyStrategyException {
+<span class="nc" id="L47">        resolveStrategies.remove(key);</span>
+<span class="nc" id="L48">    }</span>
 
     @Override
     public &lt;T&gt; T resolve(final Object... args) throws ResolveDependencyStrategyException {
         try {
-<span class="nc" id="L41">            IResolveDependencyStrategy strategy = cacheStrategiesMap.get(args[0].getClass());</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (strategy == null) {</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">                for (Map.Entry&lt;Class, IResolveDependencyStrategy&gt; entry : resolveStrategies.entrySet()) {</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">                    if (entry.getKey().isInstance(args[0])) {</span>
-<span class="nc" id="L45">                        strategy = entry.getValue();</span>
-<span class="nc" id="L46">                        cacheStrategiesMap.put(args[0].getClass(), strategy);</span>
-<span class="nc" id="L47">                        break;</span>
+<span class="nc" id="L53">            IResolveDependencyStrategy strategy = cacheStrategiesMap.get(args[0].getClass());</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (strategy == null) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                for (Map.Entry&lt;Class, IResolveDependencyStrategy&gt; entry : resolveStrategies.entrySet()) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                    if (entry.getKey().isInstance(args[0])) {</span>
+<span class="nc" id="L57">                        strategy = entry.getValue();</span>
+<span class="nc" id="L58">                        cacheStrategiesMap.put(args[0].getClass(), strategy);</span>
+<span class="nc" id="L59">                        break;</span>
                     }
-<span class="nc" id="L49">                }</span>
+<span class="nc" id="L61">                }</span>
             }
 
-<span class="nc" id="L52">            Object result = strategy.resolve(args[0]);</span>
-<span class="nc" id="L53">            return (T) result;</span>
-<span class="fc" id="L54">        } catch (Exception e) {</span>
-<span class="fc" id="L55">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
+<span class="nc" id="L64">            Object result = strategy.resolve(args[0]);</span>
+<span class="nc" id="L65">            return (T) result;</span>
+<span class="fc" id="L66">        } catch (Exception e) {</span>
+<span class="fc" id="L67">            throw new ResolveDependencyStrategyException(&quot;Object resolution failed.&quot;, e);</span>
         }
     }
 }

@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.resolve_by_type_strategy,info.smart_tools.smartactors.core.resolve_by_type_strategy,ResolveByTypeStrategy,66,20,6,0,12,6,4,2,1,2
+core.resolve_by_type_strategy,info.smart_tools.smartactors.core.resolve_by_type_strategy,ResolveByTypeStrategy,73,20,6,0,14,6,5,2,2,2
