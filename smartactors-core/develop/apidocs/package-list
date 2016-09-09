@@ -3,6 +3,7 @@ info.smart_tools.smartactors.actor.change_password.exception
 info.smart_tools.smartactors.actor.change_password.wrapper
 info.smart_tools.smartactors.actor.exception_handler_actor
 info.smart_tools.smartactors.actor.exception_handler_actor.wrapper
+info.smart_tools.smartactors.actor.repeater
 info.smart_tools.smartactors.actor.response_sender_actor
 info.smart_tools.smartactors.actor.response_sender_actor.exceptions
 info.smart_tools.smartactors.actor.response_sender_actor.wrapper
@@ -351,6 +352,7 @@ info.smart_tools.smartactors.plugin.prepare_mail_registration_actor
 info.smart_tools.smartactors.plugin.read_config_file
 info.smart_tools.smartactors.plugin.receiver_chains_storage
 info.smart_tools.smartactors.plugin.receiver_generator
+info.smart_tools.smartactors.plugin.repeater_actor
 info.smart_tools.smartactors.plugin.resolve_iobject_strategies
 info.smart_tools.smartactors.plugin.resolve_standard_types_strategies
 info.smart_tools.smartactors.plugin.response

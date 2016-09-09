@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 934,
+      <title>File: 939,
              Errors: 0,
              Warnings: 1633,
              Infos: 0
@@ -270,6 +270,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.repeater.package-info.java">info/smart_tools/smartactors/actor/repeater/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.istrategy_container.IStrategyContainer.java">info/smart_tools/smartactors/core/istrategy_container/IStrategyContainer.java</a>
                 </td>
                 <td>
@@ -389,6 +403,20 @@ under the License.
                 </td>
                 <td>
                   6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.repeater_actor.package-info.java">info/smart_tools/smartactors/plugin/repeater_actor/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -5338,6 +5366,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.repeater_actor.RepeaterActorPlugin.java">info/smart_tools/smartactors/plugin/repeater_actor/RepeaterActorPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.exception_handling_receivers.SkipReceiverExceptionHandler.java">info/smart_tools/smartactors/core/exception_handling_receivers/SkipReceiverExceptionHandler.java</a>
                 </td>
                 <td>
@@ -10098,6 +10140,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.repeater.RepeaterActor.java">info/smart_tools/smartactors/actor/repeater/RepeaterActor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.actors.authentication.users.package-info.java">info/smart_tools/smartactors/actors/authentication/users/package-info.java</a>
                 </td>
                 <td>
@@ -11862,6 +11918,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.actor.repeater.IRepeatRequest.java">info/smart_tools/smartactors/actor/repeater/IRepeatRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.ssl_engine_provider.SslEngineProvider.java">info/smart_tools/smartactors/core/ssl_engine_provider/SslEngineProvider.java</a>
                 </td>
                 <td>
@@ -12134,7 +12204,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   0
