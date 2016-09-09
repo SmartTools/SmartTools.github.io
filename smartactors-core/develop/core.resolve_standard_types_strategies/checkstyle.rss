@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 28,
+      <title>File: 30,
              Errors: 0,
              Warnings: 0,
              Infos: 0
@@ -61,6 +61,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.FloatToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/FloatToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_character_strategies.package-info.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_character_strategies/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -299,6 +313,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_string_strategies.ByteToStringResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_string_strategies/ByteToStringResolveDependencyStrategy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core.resolve_standard_types_strategies/core.resolve_standard_types_strategies//checkstyle.html#info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_character_strategies.StringToCharacterResolveDependencyStrategy.java">info/smart_tools/smartactors/core/resolve_standard_types_strategies/to_character_strategies/StringToCharacterResolveDependencyStrategy.java</a>
                 </td>
                 <td>
                   0

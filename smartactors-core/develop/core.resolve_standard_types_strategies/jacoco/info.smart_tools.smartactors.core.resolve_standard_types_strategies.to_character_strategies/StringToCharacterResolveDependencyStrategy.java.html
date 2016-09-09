@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>StringToCharacterResolveDependencyStrategy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core.resolve_standard_types_strategies</a> &gt; <a href="index.source.html" class="el_package">info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_character_strategies</a> &gt; <span class="el_source">StringToCharacterResolveDependencyStrategy.java</span></div><h1>StringToCharacterResolveDependencyStrategy.java</h1><pre class="source lang-java linenums">package info.smart_tools.smartactors.core.resolve_standard_types_strategies.to_character_strategies;
+
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.core.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
+
+/**
+ * Converts from String to Character
+ */
+<span class="nc" id="L9">public class StringToCharacterResolveDependencyStrategy implements IResolveDependencyStrategy {</span>
+
+    @Override
+    public &lt;T&gt; T resolve(final Object... args) throws ResolveDependencyStrategyException {
+        try {
+<span class="nc" id="L14">            return (T) new Character(String.valueOf(args[0]).charAt(0));</span>
+<span class="nc" id="L15">        } catch (Exception e) {</span>
+<span class="nc" id="L16">            throw new ResolveDependencyStrategyException(e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
