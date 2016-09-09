@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 930,
+      <title>File: 934,
              Errors: 0,
              Warnings: 1633,
              Infos: 0
@@ -1768,6 +1768,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.i_addition_dependency_strategy.package-info.java">info/smart_tools/smartactors/core/i_addition_dependency_strategy/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.postgres_getbyid_task.package-info.java">info/smart_tools/smartactors/core/postgres_getbyid_task/package-info.java</a>
                 </td>
                 <td>
@@ -2833,6 +2847,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.cached_collection.wrapper.get_item.EQMessage.java">info/smart_tools/smartactors/core/cached_collection/wrapper/get_item/EQMessage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.i_addition_dependency_strategy.exception.AdditionDependencyStrategyException.java">info/smart_tools/smartactors/core/i_addition_dependency_strategy/exception/AdditionDependencyStrategyException.java</a>
                 </td>
                 <td>
                   0
@@ -6795,6 +6823,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.core.thread_pool.package-info.java">info/smart_tools/smartactors/core/thread_pool/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.i_addition_dependency_strategy.IAdditionDependencyStrategy.java">info/smart_tools/smartactors/core/i_addition_dependency_strategy/IAdditionDependencyStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -10995,6 +11037,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="core//checkstyle.html#info.smart_tools.smartactors.plugin.get_cookie_rule.GetCookieFromRequestRulePlugin.java">info/smart_tools/smartactors/plugin/get_cookie_rule/GetCookieFromRequestRulePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="core//checkstyle.html#info.smart_tools.smartactors.core.i_addition_dependency_strategy.exception.package-info.java">info/smart_tools/smartactors/core/i_addition_dependency_strategy/exception/package-info.java</a>
                 </td>
                 <td>
                   0

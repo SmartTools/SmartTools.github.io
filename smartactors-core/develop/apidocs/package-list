@@ -118,6 +118,8 @@ info.smart_tools.smartactors.core.http_response_sender
 info.smart_tools.smartactors.core.http_server
 info.smart_tools.smartactors.core.https_endpoint
 info.smart_tools.smartactors.core.https_server
+info.smart_tools.smartactors.core.i_addition_dependency_strategy
+info.smart_tools.smartactors.core.i_addition_dependency_strategy.exception
 info.smart_tools.smartactors.core.iaction
 info.smart_tools.smartactors.core.iaction.exception
 info.smart_tools.smartactors.core.iasync_service
