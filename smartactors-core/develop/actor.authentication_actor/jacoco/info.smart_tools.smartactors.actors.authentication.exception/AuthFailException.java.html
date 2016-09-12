@@ -12,5 +12,22 @@ public class AuthFailException extends Exception {
     public AuthFailException(final String message) {
 <span class="fc" id="L13">        super(message);</span>
 <span class="fc" id="L14">    }</span>
+
+    /**
+     * Constructor with specific error message and specific cause as arguments
+     * @param message specific error message
+     * @param cause specific cause
+     */
+    public AuthFailException(final String message, final Throwable cause) {
+<span class="nc" id="L22">        super(message, cause);</span>
+<span class="nc" id="L23">    }</span>
+
+    /**
+     * Constructor with specific cause as argument
+     * @param cause specific cause
+     */
+    public AuthFailException(final Throwable cause) {
+<span class="nc" id="L30">        super(cause);</span>
+<span class="nc" id="L31">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
