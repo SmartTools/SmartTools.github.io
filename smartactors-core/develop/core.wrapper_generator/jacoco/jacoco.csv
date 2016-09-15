@@ -1,2 +1,2 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,WrapperGenerator,7,738,0,30,2,200,0,19,0,4
+core.wrapper_generator,info.smart_tools.smartactors.core.wrapper_generator,WrapperGenerator,7,744,0,30,2,203,0,19,0,4
