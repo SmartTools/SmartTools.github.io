@@ -440,151 +440,152 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>                 }
 <a class="jxr_linenumber" name="L433" href="#L433">433</a>         );
 <a class="jxr_linenumber" name="L434" href="#L434">434</a>         verifierMap.put(<span class="jxr_string">"$not"</span>, (condition, document) -&gt; {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>                     <strong class="jxr_keyword">boolean</strong> result = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>                     <strong class="jxr_keyword">boolean</strong> result = false;
 <a class="jxr_linenumber" name="L436" href="#L436">436</a>                     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L437" href="#L437">437</a>                         List&lt;IObject&gt; conditions = (List&lt;IObject&gt;) condition
 <a class="jxr_linenumber" name="L438" href="#L438">438</a>                                 .getValue(<strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/field_name/FieldName.html">FieldName</a>(<span class="jxr_string">"$not"</span>));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>                         <strong class="jxr_keyword">for</strong> (IObject conditionItem : conditions) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>                             result &amp;= !verifierMap.get(<span class="jxr_string">"$general_resolver"</span>)
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>                                     .verify(conditionItem, document);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>                         }
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>                     } <strong class="jxr_keyword">catch</strong> (ReadValueException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>                     }
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>                     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>                 }
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>         );
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>     }
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerVerifierMapCalls(<strong class="jxr_keyword">final</strong> Map&lt;String, IConditionVerifier&gt; verifierMap)
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>             <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a> {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         IOC.register(
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                 Keys.getOrAdd(<span class="jxr_string">"ResolveDataBaseCondition"</span>),
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>                         (args) -&gt;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>                                 verifierMap.get(args[0])
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>                                         .verify((IObject) args[1], (IObject) args[2])
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>                 )
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>         );
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"ContainsResolveDataBaseCondition"</span>),
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>                         (args) -&gt;
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>                                 verifierMap.containsKey(args[0])
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>                 )
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>         );
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>     }
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerPagingForDatabaseCollection() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"PagingForDatabaseCollection"</span>),
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                         (args) -&gt; {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                             Integer pageNumber = 1;
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>                             Integer pageSize = DEFAULT_PAGE_SIZE;
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>                             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageFieldName = IOC.resolve(
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>                                         <span class="jxr_string">"page"</span>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>                                 );
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageNumberFieldName = IOC.resolve(
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>                                         <span class="jxr_string">"number"</span>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>                                 );
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageSizeFieldName = IOC.resolve(
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>                                         <span class="jxr_string">"size"</span>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>                                 );
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> page = (IObject) ((IObject) args[0]).getValue(pageFieldName);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>                                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> != page) {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>                                     pageNumber = (Integer) page.getValue(pageNumberFieldName);
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>                                     pageSize = (Integer) page.getValue(pageSizeFieldName);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>                                 }
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>                             }
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>                             Integer startNumber = (pageNumber - 1) * pageSize;
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>                             Integer finNumber = pageNumber * pageSize;
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>                             List&lt;IObject&gt; outputDocuments = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>                             List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>                             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = startNumber; i &lt; finNumber &amp;&amp; i &lt; documents.size(); i++) {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>                                 outputDocuments.add(documents.get(i));
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>                             }
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>                             <strong class="jxr_keyword">return</strong> outputDocuments;
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>                         }
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>                 )
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>         );
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     }
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerSortIObjects() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"SortIObjects"</span>), <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>                         (args) -&gt; {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>                             List&lt;IObject&gt; sortRules = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>                             List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>                             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> condition = (IObject) args[0];
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> sortFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"sort"</span>);
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>                                 sortRules = (List&lt;IObject&gt;) condition.getValue(sortFieldName);
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>                                 <em class="jxr_comment">// ignoring absence of sort rule</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>                             }
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>                             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == sortRules) {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>                                 <strong class="jxr_keyword">return</strong> documents;
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>                             }
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>                             List&lt;IFieldName&gt; sortingFields = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>                             List&lt;Integer&gt; sortingType = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>                             <strong class="jxr_keyword">for</strong> (IObject sortRule : sortRules) {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>                                 sortingFields.add(sortRule.iterator().next().getKey());
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>                                 sortingType.add(sortRule.iterator().next().getValue().equals(<span class="jxr_string">"asc"</span>) ? 1 : -1);
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>                             }
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>                             Comparator comparator = (o1, o2) -&gt; {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>                                 <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>                                     Integer compare = 0;
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>                                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortingFields.size(); i++) {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>                                         Object object1 = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"NestedFieldName"</span>), sortingFields.get(i), o1);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>                                         Object object2 = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"NestedFieldName"</span>), sortingFields.get(i), o2);
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>                                         compare = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"CompareSimpleObjects"</span>), object1, object2);
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>                                         <strong class="jxr_keyword">if</strong> (compare != 0) {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>                                             <strong class="jxr_keyword">return</strong> compare * sortingType.get(i);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>                                         }
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>                                     }
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>                                 } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>                                 }
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>                                 <strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>                             };
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>                             documents.sort(comparator);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>                             <strong class="jxr_keyword">return</strong> documents;
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>                         }
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>                 )
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>         );
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>     }
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerDataBaseItem() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>         IOC.register(Keys.getOrAdd(DataBaseItem.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>                         (args) -&gt; {
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>                             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>                                 <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/DataBaseItem.html">DataBaseItem</a>((IObject) args[0], (String) args[1]);
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>                             }
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>                             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>                         }
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>                 )
-<a class="jxr_linenumber" name="L565" href="#L565">565</a>         );
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>     }
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerInMemoryDatabase()
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>             <strong class="jxr_keyword">throws</strong> IDatabaseException, RegistrationException, ResolutionException, <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a> {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>         <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/InMemoryDatabase.html">InMemoryDatabase</a> database = <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/InMemoryDatabase.html">InMemoryDatabase</a>();
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>         IOC.register(
-<a class="jxr_linenumber" name="L572" href="#L572">572</a>                 Keys.getOrAdd(InMemoryDatabase.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html">SingletonStrategy</a>(database)
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>         );
-<a class="jxr_linenumber" name="L575" href="#L575">575</a>     }
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>                             <em class="jxr_comment">// using De Morgan's laws: !(A &amp; B) == !A | !B</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>                             result |= !verifierMap.get(<span class="jxr_string">"$general_resolver"</span>)
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>                                     .verify(conditionItem, document);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                         }
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                     } <strong class="jxr_keyword">catch</strong> (ReadValueException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>                     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>                 }
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>         );
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>     }
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerVerifierMapCalls(<strong class="jxr_keyword">final</strong> Map&lt;String, IConditionVerifier&gt; verifierMap)
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>             <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a> {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>         IOC.register(
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>                 Keys.getOrAdd(<span class="jxr_string">"ResolveDataBaseCondition"</span>),
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>                         (args) -&gt;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>                                 verifierMap.get(args[0])
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>                                         .verify((IObject) args[1], (IObject) args[2])
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>                 )
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>         );
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"ContainsResolveDataBaseCondition"</span>),
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>                         (args) -&gt;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>                                 verifierMap.containsKey(args[0])
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>                 )
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         );
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>     }
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerPagingForDatabaseCollection() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"PagingForDatabaseCollection"</span>),
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>                         (args) -&gt; {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>                             Integer pageNumber = 1;
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>                             Integer pageSize = DEFAULT_PAGE_SIZE;
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>                             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageFieldName = IOC.resolve(
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>                                         <span class="jxr_string">"page"</span>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>                                 );
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageNumberFieldName = IOC.resolve(
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>                                         <span class="jxr_string">"number"</span>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>                                 );
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> pageSizeFieldName = IOC.resolve(
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>                                         Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>                                         <span class="jxr_string">"size"</span>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>                                 );
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> page = (IObject) ((IObject) args[0]).getValue(pageFieldName);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>                                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> != page) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>                                     pageNumber = (Integer) page.getValue(pageNumberFieldName);
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>                                     pageSize = (Integer) page.getValue(pageSizeFieldName);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>                                 }
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>                             }
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>                             Integer startNumber = (pageNumber - 1) * pageSize;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>                             Integer finNumber = pageNumber * pageSize;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>                             List&lt;IObject&gt; outputDocuments = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>                             List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>                             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = startNumber; i &lt; finNumber &amp;&amp; i &lt; documents.size(); i++) {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>                                 outputDocuments.add(documents.get(i));
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>                             }
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>                             <strong class="jxr_keyword">return</strong> outputDocuments;
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>                         }
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>                 )
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>         );
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>     }
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerSortIObjects() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>         IOC.register(Keys.getOrAdd(<span class="jxr_string">"SortIObjects"</span>), <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/strategy/apply_function_to_arguments/ApplyFunctionToArgumentsStrategy.html">ApplyFunctionToArgumentsStrategy</a>(
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>                         (args) -&gt; {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>                             List&lt;IObject&gt; sortRules = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>                             List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>                             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/iobject/IObject.html">IObject</a> condition = (IObject) args[0];
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>                                 <a href="../../../../../info/smart_tools/smartactors/core/ifield_name/IFieldName.html">IFieldName</a> sortFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <span class="jxr_string">"sort"</span>);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>                                 sortRules = (List&lt;IObject&gt;) condition.getValue(sortFieldName);
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>                                 <em class="jxr_comment">// ignoring absence of sort rule</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>                             }
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>                             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == sortRules) {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>                                 <strong class="jxr_keyword">return</strong> documents;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>                             }
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>                             List&lt;IFieldName&gt; sortingFields = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>                             List&lt;Integer&gt; sortingType = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>                             <strong class="jxr_keyword">for</strong> (IObject sortRule : sortRules) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>                                 sortingFields.add(sortRule.iterator().next().getKey());
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>                                 sortingType.add(sortRule.iterator().next().getValue().equals(<span class="jxr_string">"asc"</span>) ? 1 : -1);
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>                             }
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>                             Comparator comparator = (o1, o2) -&gt; {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>                                 <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>                                     Integer compare = 0;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>                                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortingFields.size(); i++) {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>                                         Object object1 = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"NestedFieldName"</span>), sortingFields.get(i), o1);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>                                         Object object2 = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"NestedFieldName"</span>), sortingFields.get(i), o2);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>                                         compare = IOC.resolve(Keys.getOrAdd(<span class="jxr_string">"CompareSimpleObjects"</span>), object1, object2);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>                                         <strong class="jxr_keyword">if</strong> (compare != 0) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>                                             <strong class="jxr_keyword">return</strong> compare * sortingType.get(i);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>                                         }
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>                                     }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>                                 } <strong class="jxr_keyword">catch</strong> (ResolutionException e) {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>                                 }
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>                                 <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>                             };
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>                             documents.sort(comparator);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>                             <strong class="jxr_keyword">return</strong> documents;
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>                         }
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>                 )
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>         );
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>     }
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerDataBaseItem() <strong class="jxr_keyword">throws</strong> RegistrationException, ResolutionException, InvalidArgumentException {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         IOC.register(Keys.getOrAdd(DataBaseItem.<strong class="jxr_keyword">class</strong>.getCanonicalName()), <strong class="jxr_keyword">new</strong> CreateNewInstanceStrategy(
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>                         (args) -&gt; {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>                             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>                                 <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/DataBaseItem.html">DataBaseItem</a>((IObject) args[0], (String) args[1]);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>                             } <strong class="jxr_keyword">catch</strong> (ResolutionException | ReadValueException | InvalidArgumentException e) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>                             }
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>                             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>                         }
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>                 )
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>         );
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>     }
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> registerInMemoryDatabase()
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>             <strong class="jxr_keyword">throws</strong> IDatabaseException, RegistrationException, ResolutionException, <a href="../../../../../info/smart_tools/smartactors/core/invalid_argument_exception/InvalidArgumentException.html">InvalidArgumentException</a> {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/InMemoryDatabase.html">InMemoryDatabase</a> database = <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/in_memory_database/InMemoryDatabase.html">InMemoryDatabase</a>();
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>         IOC.register(
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>                 Keys.getOrAdd(InMemoryDatabase.<strong class="jxr_keyword">class</strong>.getCanonicalName()),
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html">SingletonStrategy</a>(database)
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>         );
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>     }
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> }
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016. All rights reserved.</div>

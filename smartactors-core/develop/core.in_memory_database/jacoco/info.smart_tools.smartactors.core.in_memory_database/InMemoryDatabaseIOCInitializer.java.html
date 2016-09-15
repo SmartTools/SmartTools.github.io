@@ -432,147 +432,148 @@ public final class InMemoryDatabaseIOCInitializer {
                 }
         );
 <span class="fc" id="L434">        verifierMap.put(&quot;$not&quot;, (condition, document) -&gt; {</span>
-<span class="fc" id="L435">                    boolean result = true;</span>
+<span class="fc" id="L435">                    boolean result = false;</span>
                     try {
 <span class="fc" id="L437">                        List&lt;IObject&gt; conditions = (List&lt;IObject&gt;) condition</span>
 <span class="fc" id="L438">                                .getValue(new FieldName(&quot;$not&quot;));</span>
 <span class="fc bfc" id="L439" title="All 2 branches covered.">                        for (IObject conditionItem : conditions) {</span>
-<span class="fc" id="L440">                            result &amp;= !verifierMap.get(&quot;$general_resolver&quot;)</span>
-<span class="fc bfc" id="L441" title="All 2 branches covered.">                                    .verify(conditionItem, document);</span>
-<span class="fc" id="L442">                        }</span>
-<span class="nc" id="L443">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
-<span class="fc" id="L444">                    }</span>
-<span class="fc" id="L445">                    return result;</span>
+                            // using De Morgan's laws: !(A &amp; B) == !A | !B
+<span class="fc" id="L441">                            result |= !verifierMap.get(&quot;$general_resolver&quot;)</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">                                    .verify(conditionItem, document);</span>
+<span class="fc" id="L443">                        }</span>
+<span class="nc" id="L444">                    } catch (ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L445">                    }</span>
+<span class="fc" id="L446">                    return result;</span>
                 }
         );
-<span class="fc" id="L448">    }</span>
+<span class="fc" id="L449">    }</span>
 
     private static void registerVerifierMapCalls(final Map&lt;String, IConditionVerifier&gt; verifierMap)
             throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L452">        IOC.register(</span>
-<span class="fc" id="L453">                Keys.getOrAdd(&quot;ResolveDataBaseCondition&quot;),</span>
+<span class="fc" id="L453">        IOC.register(</span>
+<span class="fc" id="L454">                Keys.getOrAdd(&quot;ResolveDataBaseCondition&quot;),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt;
-<span class="fc" id="L456">                                verifierMap.get(args[0])</span>
-<span class="fc" id="L457">                                        .verify((IObject) args[1], (IObject) args[2])</span>
+<span class="fc" id="L457">                                verifierMap.get(args[0])</span>
+<span class="fc" id="L458">                                        .verify((IObject) args[1], (IObject) args[2])</span>
                 )
         );
 
-<span class="fc" id="L461">        IOC.register(Keys.getOrAdd(&quot;ContainsResolveDataBaseCondition&quot;),</span>
+<span class="fc" id="L462">        IOC.register(Keys.getOrAdd(&quot;ContainsResolveDataBaseCondition&quot;),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt;
-<span class="nc" id="L464">                                verifierMap.containsKey(args[0])</span>
+<span class="nc" id="L465">                                verifierMap.containsKey(args[0])</span>
                 )
         );
-<span class="fc" id="L467">    }</span>
+<span class="fc" id="L468">    }</span>
 
     private static void registerPagingForDatabaseCollection() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L470">        IOC.register(Keys.getOrAdd(&quot;PagingForDatabaseCollection&quot;),</span>
+<span class="fc" id="L471">        IOC.register(Keys.getOrAdd(&quot;PagingForDatabaseCollection&quot;),</span>
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -&gt; {
-<span class="fc" id="L473">                            Integer pageNumber = 1;</span>
-<span class="fc" id="L474">                            Integer pageSize = DEFAULT_PAGE_SIZE;</span>
+<span class="fc" id="L474">                            Integer pageNumber = 1;</span>
+<span class="fc" id="L475">                            Integer pageSize = DEFAULT_PAGE_SIZE;</span>
                             try {
-<span class="fc" id="L476">                                IFieldName pageFieldName = IOC.resolve(</span>
-<span class="fc" id="L477">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+<span class="fc" id="L477">                                IFieldName pageFieldName = IOC.resolve(</span>
+<span class="fc" id="L478">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
                                         &quot;page&quot;
                                 );
-<span class="fc" id="L480">                                IFieldName pageNumberFieldName = IOC.resolve(</span>
-<span class="fc" id="L481">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+<span class="fc" id="L481">                                IFieldName pageNumberFieldName = IOC.resolve(</span>
+<span class="fc" id="L482">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
                                         &quot;number&quot;
                                 );
-<span class="fc" id="L484">                                IFieldName pageSizeFieldName = IOC.resolve(</span>
-<span class="fc" id="L485">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
+<span class="fc" id="L485">                                IFieldName pageSizeFieldName = IOC.resolve(</span>
+<span class="fc" id="L486">                                        Keys.getOrAdd(IFieldName.class.getCanonicalName()),</span>
                                         &quot;size&quot;
                                 );
-<span class="fc" id="L488">                                IObject page = (IObject) ((IObject) args[0]).getValue(pageFieldName);</span>
-<span class="fc bfc" id="L489" title="All 2 branches covered.">                                if (null != page) {</span>
-<span class="fc" id="L490">                                    pageNumber = (Integer) page.getValue(pageNumberFieldName);</span>
-<span class="fc" id="L491">                                    pageSize = (Integer) page.getValue(pageSizeFieldName);</span>
+<span class="fc" id="L489">                                IObject page = (IObject) ((IObject) args[0]).getValue(pageFieldName);</span>
+<span class="fc bfc" id="L490" title="All 2 branches covered.">                                if (null != page) {</span>
+<span class="fc" id="L491">                                    pageNumber = (Integer) page.getValue(pageNumberFieldName);</span>
+<span class="fc" id="L492">                                    pageSize = (Integer) page.getValue(pageSizeFieldName);</span>
                                 }
-<span class="nc" id="L493">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
-<span class="fc" id="L494">                            }</span>
-<span class="fc" id="L495">                            Integer startNumber = (pageNumber - 1) * pageSize;</span>
-<span class="fc" id="L496">                            Integer finNumber = pageNumber * pageSize;</span>
-<span class="fc" id="L497">                            List&lt;IObject&gt; outputDocuments = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L498">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
-<span class="fc bfc" id="L499" title="All 4 branches covered.">                            for (int i = startNumber; i &lt; finNumber &amp;&amp; i &lt; documents.size(); i++) {</span>
-<span class="fc" id="L500">                                outputDocuments.add(documents.get(i));</span>
+<span class="nc" id="L494">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L495">                            }</span>
+<span class="fc" id="L496">                            Integer startNumber = (pageNumber - 1) * pageSize;</span>
+<span class="fc" id="L497">                            Integer finNumber = pageNumber * pageSize;</span>
+<span class="fc" id="L498">                            List&lt;IObject&gt; outputDocuments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L499">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
+<span class="fc bfc" id="L500" title="All 4 branches covered.">                            for (int i = startNumber; i &lt; finNumber &amp;&amp; i &lt; documents.size(); i++) {</span>
+<span class="fc" id="L501">                                outputDocuments.add(documents.get(i));</span>
                             }
-<span class="fc" id="L502">                            return outputDocuments;</span>
+<span class="fc" id="L503">                            return outputDocuments;</span>
                         }
                 )
         );
-<span class="fc" id="L506">    }</span>
+<span class="fc" id="L507">    }</span>
 
     private static void registerSortIObjects() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L509">        IOC.register(Keys.getOrAdd(&quot;SortIObjects&quot;), new ApplyFunctionToArgumentsStrategy(</span>
+<span class="fc" id="L510">        IOC.register(Keys.getOrAdd(&quot;SortIObjects&quot;), new ApplyFunctionToArgumentsStrategy(</span>
                         (args) -&gt; {
-<span class="fc" id="L511">                            List&lt;IObject&gt; sortRules = null;</span>
-<span class="fc" id="L512">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
+<span class="fc" id="L512">                            List&lt;IObject&gt; sortRules = null;</span>
+<span class="fc" id="L513">                            List&lt;IObject&gt; documents = (List&lt;IObject&gt;) args[1];</span>
 
                             try {
-<span class="fc" id="L515">                                IObject condition = (IObject) args[0];</span>
-<span class="fc" id="L516">                                IFieldName sortFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;sort&quot;);</span>
-<span class="fc" id="L517">                                sortRules = (List&lt;IObject&gt;) condition.getValue(sortFieldName);</span>
-<span class="nc" id="L518">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L516">                                IObject condition = (IObject) args[0];</span>
+<span class="fc" id="L517">                                IFieldName sortFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), &quot;sort&quot;);</span>
+<span class="fc" id="L518">                                sortRules = (List&lt;IObject&gt;) condition.getValue(sortFieldName);</span>
+<span class="nc" id="L519">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
                                 // ignoring absence of sort rule
-<span class="fc" id="L520">                            }</span>
+<span class="fc" id="L521">                            }</span>
 
-<span class="fc bfc" id="L522" title="All 2 branches covered.">                            if (null == sortRules) {</span>
-<span class="fc" id="L523">                                return documents;</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">                            if (null == sortRules) {</span>
+<span class="fc" id="L524">                                return documents;</span>
                             }
 
-<span class="fc" id="L526">                            List&lt;IFieldName&gt; sortingFields = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L527">                            List&lt;Integer&gt; sortingType = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L528" title="All 2 branches covered.">                            for (IObject sortRule : sortRules) {</span>
-<span class="fc" id="L529">                                sortingFields.add(sortRule.iterator().next().getKey());</span>
-<span class="fc bfc" id="L530" title="All 2 branches covered.">                                sortingType.add(sortRule.iterator().next().getValue().equals(&quot;asc&quot;) ? 1 : -1);</span>
-<span class="fc" id="L531">                            }</span>
-<span class="fc" id="L532">                            Comparator comparator = (o1, o2) -&gt; {</span>
+<span class="fc" id="L527">                            List&lt;IFieldName&gt; sortingFields = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L528">                            List&lt;Integer&gt; sortingType = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">                            for (IObject sortRule : sortRules) {</span>
+<span class="fc" id="L530">                                sortingFields.add(sortRule.iterator().next().getKey());</span>
+<span class="fc bfc" id="L531" title="All 2 branches covered.">                                sortingType.add(sortRule.iterator().next().getValue().equals(&quot;asc&quot;) ? 1 : -1);</span>
+<span class="fc" id="L532">                            }</span>
+<span class="fc" id="L533">                            Comparator comparator = (o1, o2) -&gt; {</span>
                                 try {
-<span class="fc" id="L534">                                    Integer compare = 0;</span>
-<span class="pc bpc" id="L535" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; sortingFields.size(); i++) {</span>
-<span class="fc" id="L536">                                        Object object1 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o1);</span>
-<span class="fc" id="L537">                                        Object object2 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o2);</span>
-<span class="fc" id="L538">                                        compare = IOC.resolve(Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), object1, object2);</span>
-<span class="fc bfc" id="L539" title="All 2 branches covered.">                                        if (compare != 0) {</span>
-<span class="fc" id="L540">                                            return compare * sortingType.get(i);</span>
+<span class="fc" id="L535">                                    Integer compare = 0;</span>
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; sortingFields.size(); i++) {</span>
+<span class="fc" id="L537">                                        Object object1 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o1);</span>
+<span class="fc" id="L538">                                        Object object2 = IOC.resolve(Keys.getOrAdd(&quot;NestedFieldName&quot;), sortingFields.get(i), o2);</span>
+<span class="fc" id="L539">                                        compare = IOC.resolve(Keys.getOrAdd(&quot;CompareSimpleObjects&quot;), object1, object2);</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">                                        if (compare != 0) {</span>
+<span class="fc" id="L541">                                            return compare * sortingType.get(i);</span>
                                         }
                                     }
-<span class="nc" id="L543">                                } catch (ResolutionException e) {</span>
-<span class="nc" id="L544">                                }</span>
-<span class="nc" id="L545">                                return 0;</span>
+<span class="nc" id="L544">                                } catch (ResolutionException e) {</span>
+<span class="nc" id="L545">                                }</span>
+<span class="nc" id="L546">                                return 0;</span>
                             };
-<span class="fc" id="L547">                            documents.sort(comparator);</span>
-<span class="fc" id="L548">                            return documents;</span>
+<span class="fc" id="L548">                            documents.sort(comparator);</span>
+<span class="fc" id="L549">                            return documents;</span>
 
                         }
                 )
         );
-<span class="fc" id="L553">    }</span>
+<span class="fc" id="L554">    }</span>
 
     private static void registerDataBaseItem() throws RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L556">        IOC.register(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), new CreateNewInstanceStrategy(</span>
+<span class="fc" id="L557">        IOC.register(Keys.getOrAdd(DataBaseItem.class.getCanonicalName()), new CreateNewInstanceStrategy(</span>
                         (args) -&gt; {
                             try {
-<span class="fc" id="L559">                                return new DataBaseItem((IObject) args[0], (String) args[1]);</span>
-<span class="nc" id="L560">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
+<span class="fc" id="L560">                                return new DataBaseItem((IObject) args[0], (String) args[1]);</span>
+<span class="nc" id="L561">                            } catch (ResolutionException | ReadValueException | InvalidArgumentException e) {</span>
                             }
-<span class="nc" id="L562">                            return null;</span>
+<span class="nc" id="L563">                            return null;</span>
                         }
                 )
         );
-<span class="fc" id="L566">    }</span>
+<span class="fc" id="L567">    }</span>
 
     private static void registerInMemoryDatabase()
             throws IDatabaseException, RegistrationException, ResolutionException, InvalidArgumentException {
-<span class="fc" id="L570">        InMemoryDatabase database = new InMemoryDatabase();</span>
-<span class="fc" id="L571">        IOC.register(</span>
-<span class="fc" id="L572">                Keys.getOrAdd(InMemoryDatabase.class.getCanonicalName()),</span>
+<span class="fc" id="L571">        InMemoryDatabase database = new InMemoryDatabase();</span>
+<span class="fc" id="L572">        IOC.register(</span>
+<span class="fc" id="L573">                Keys.getOrAdd(InMemoryDatabase.class.getCanonicalName()),</span>
                 new SingletonStrategy(database)
         );
-<span class="fc" id="L575">    }</span>
+<span class="fc" id="L576">    }</span>
 
 
 
