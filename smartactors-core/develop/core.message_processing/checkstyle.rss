@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 10,
              Errors: 0,
-             Warnings: 0,
+             Warnings: 1,
              Infos: 0
       </title>
             <link>core.message_processing/core.message_processing//checkstyle.html</link>
@@ -164,7 +164,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
